@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.ESPN.Types.Responses
 {
-    internal class MStatusResponse
+    public class MNavResponse
     {
-        public ESPNLeagueStatus Status { get; set; } = new();
+        public List<ESPNFantasyMember> Members { get; set; } = [];
+        public List<ESPNFantasyTeam> Teams { get; set; } = [];
     }
 }

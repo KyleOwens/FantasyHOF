@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FantasyHOF.Infrastructure\FantasyHOF.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11222.15 d18.0
+VisualStudioVersion = 18.0.11222.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyHOF", "FantasyHOF\FantasyHOF.csproj", "{AB6699FC-8663-4B14-8D24-A5F5105F3E31}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyHOF.Domain", "FantasyHOF.Domain\FantasyHOF.Domain.csproj", "{C1BDFE93-6E16-4A51-B041-8A70D434B247}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyHOF.ESPN", "FantasyHOF.ESPN\FantasyHOF.ESPN.csproj", "{C6F38A00-1C40-4409-8306-602430970C46}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyHOF.Infrastructure", "FantasyHOF.Infrastructure\FantasyHOF.Infrastructure.csproj", "{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyHOF.Application", "FantasyHOF.Application\FantasyHOF.Application.csproj", "{477D0DD3-E0FB-4F72-9913-FDE0D572632C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,30 @@ Global
 		{C6F38A00-1C40-4409-8306-602430970C46}.Release|x64.Build.0 = Release|Any CPU
 		{C6F38A00-1C40-4409-8306-602430970C46}.Release|x86.ActiveCfg = Release|Any CPU
 		{C6F38A00-1C40-4409-8306-602430970C46}.Release|x86.Build.0 = Release|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Debug|x64.Build.0 = Debug|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Debug|x86.Build.0 = Debug|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Release|x64.ActiveCfg = Release|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Release|x64.Build.0 = Release|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Release|x86.ActiveCfg = Release|Any CPU
+		{98B8B4BC-4E43-47DA-8D9E-D44D2A825576}.Release|x86.Build.0 = Release|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Debug|x64.Build.0 = Debug|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Debug|x86.Build.0 = Debug|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|x64.ActiveCfg = Release|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|x64.Build.0 = Release|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|x86.ActiveCfg = Release|Any CPU
+		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

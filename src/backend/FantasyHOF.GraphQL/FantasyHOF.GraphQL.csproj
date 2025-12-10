@@ -7,20 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.11" />
 	<PackageReference Include="HotChocolate.Types.Analyzers" Version="15.1.11">
 		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		<PrivateAssets>all</PrivateAssets>
 	</PackageReference>
+	<PackageReference Include="MediatR" Version="14.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
     <Folder Include="Properties\" />
-    <Folder Include="Types\Extensions\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FantasyHOF.Application\FantasyHOF.Application.csproj" />
     <ProjectReference Include="..\FantasyHOF.ESPN\FantasyHOF.ESPN.csproj" />
   </ItemGroup>
 

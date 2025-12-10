@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FantasyHOF.ESPN.Types
+namespace FantasyHOF.Domain.Types
 {
-    internal class Status
+    public class FantasyleagueSeason
     {
-        public int[] previousSeasons { get; private set; } = [];
+        public List<FantasyMember> Members { get; init; } = [];
     }
 }
