@@ -20,6 +20,7 @@ namespace FantasyHOF.ESPN
         mSchedule,
         mTeam,
         mNav,
+        mBoxscore,
     }
     
     public class ESPNRequestBuilder

@@ -1,5 +1,6 @@
 ﻿using FantasyHOF.ESPN.Errors;
 using FantasyHOF.ESPN.Types.Inputs;
+using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
 using FantasyHOF.ESPN.Types.Responses;
 using FantasyHOF.Infrastructure.Extensions;
@@ -14,7 +15,7 @@ namespace FantasyHOF.ESPN
 {
     public interface IESPNAPIClient
     {
-        public Task<List<ESPNSeasonalLeagueData>> LoadLeagueData();
+        public Task<List<ESPNSeasonalLeagueData>> LoadSeasonalLeagueData();
     }
 
     public class ESPNAPIClient : IESPNAPIClient
@@ -52,10 +53,9 @@ namespace FantasyHOF.ESPN
             }
         }
 
-        public async Task<List<ESPNSeasonalLeagueData>> LoadLeagueData()
+        public async Task<List<ESPNSeasonalLeagueData>> LoadSeasonalLeagueData()
         {
-            IEnumerable<int> leagueYears = (await LoadLeagueYears())
-                .Where(year => year >= 2018); // temporary until pre-2018 API is fleshed out
+            IEnumerable<int> leagueYears = await LoadLeagueYears();
 
             List<ESPNSeasonalLeagueData> seasonalLeagueData = new();
 
@@ -73,6 +73,31 @@ namespace FantasyHOF.ESPN
             return seasonalLeagueData;
         }
 
+        public async Task<List<ESPNWeeklyLeagueData>> LoadWeeklyLeagueData()
+        {
+            IEnumerable<int> leagueYears = await LoadLeagueYears();
+
+            List<ESPNWeeklyLeagueData> weeklyLeagueData = new();
+
+            foreach (int year in leagueYears)
+            {
+                ESPNWeeklyStatus matchupWeeks = (await LoadMatchupWeeks(year)).Status;
+
+                for (int matchupWeek = matchupWeeks.FirstScoringPeriod; matchupWeek <= matchupWeeks.CurrentMatchupPeriod; matchupWeek++)
+                {
+                    WeeklyDataResponse matchupData = await LoadMatchup(year, matchupWeek);
+
+                    weeklyLeagueData.Add(new ESPNWeeklyLeagueData() { 
+                        Year = year,
+                        Week = matchupWeek,
+                        Matchups = matchupData.Schedule 
+                    });
+                }
+            }
+
+            return weeklyLeagueData;
+        }
+
         private async Task<List<int>> LoadLeagueYears()
         {
             if (_leagueYearCache is not null) return _leagueYearCache;
@@ -85,8 +110,11 @@ namespace FantasyHOF.ESPN
 
             PreviousYearsResponse response = await SendAPIRequestAsync<PreviousYearsResponse>(request);
 
-            _leagueYearCache = response.Status.PreviousSeasons.Append(mostRecentYear).ToList();
-            
+            _leagueYearCache = response.Status.PreviousSeasons
+                .Append(mostRecentYear)
+                .Where(year => year >= 2018) // temporary until pre-2018 API is fleshed out
+                .ToList();
+
             return _leagueYearCache;
         }
 
@@ -116,6 +144,25 @@ namespace FantasyHOF.ESPN
             }
 
             throw new ESPNNoActiveYearsException();
+        }
+
+        private async Task<WeeklyStatusResponse> LoadMatchupWeeks(int year)
+        {
+            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, year)
+                    .WithViews(ESPNView.mBoxscore)
+                    .Build();
+
+            return await SendAPIRequestAsync<WeeklyStatusResponse>(request);
+        }
+
+        private async Task<WeeklyDataResponse> LoadMatchup(int year, int week)
+        {
+            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, year)
+                .WithViews(ESPNView.mBoxscore)
+                .WithScoringPeriod(week)
+                .Build();
+
+            return await SendAPIRequestAsync<WeeklyDataResponse>(request);
         }
     }
 }
