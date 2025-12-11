@@ -4,8 +4,10 @@ using FantasyHOF.GraphQL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient<IESPNHTTPService, ESPNHTTPClient>();
+builder.Services.AddHttpClient();
+builder.Services.AddTransient<IESPNAPIClientBuilder, ESPNAPIClientBuilder>();
 builder.Services.AddSingleton<IESPNLeagueMapper, ESPNLeagueMapper>();
+
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(FantasyHOF.Application.AssemblyMarker).Assembly);

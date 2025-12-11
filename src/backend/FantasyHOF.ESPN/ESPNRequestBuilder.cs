@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.ESPN.Types.Headers;
+using FantasyHOF.ESPN.Types.Inputs;
 using FantasyHOF.Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;

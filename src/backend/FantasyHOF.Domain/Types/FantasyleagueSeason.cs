@@ -8,6 +8,8 @@ namespace FantasyHOF.Domain.Types
 {
     public class FantasyleagueSeason
     {
-        public List<FantasyMember> Members { get; init; } = [];
+        public required int Year { get; set; }
+        public required FantasyLeagueSettings Settings { get; init; }
+        public required List<FantasyMember> Members { get; init; }
     }
 }

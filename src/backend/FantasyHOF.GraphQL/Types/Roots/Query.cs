@@ -1,6 +1,7 @@
 using FantasyHOF.Application.Queries;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.ESPN;
+using FantasyHOF.ESPN.Types.Inputs;
 using FantasyHOF.GraphQL.Types.Extensions;
 using FantasyHOF.GraphQL.Types.Inputs;
 using MediatR;

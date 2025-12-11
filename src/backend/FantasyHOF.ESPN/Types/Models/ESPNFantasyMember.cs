@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FantasyHOF.ESPN.Types
+namespace FantasyHOF.ESPN.Types.Models
 {
     public class ESPNFantasyMember
     {

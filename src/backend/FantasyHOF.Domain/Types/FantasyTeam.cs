@@ -8,10 +8,12 @@ namespace FantasyHOF.Domain.Types
 {
     public class FantasyTeam
     {
-        public int Id { get; init; }
-        public string Abbreviation { get; init; } = default!;
-        public string LogoURL { get; init; } = default!;
-        public string Name { get; init; } = default!;
-        public List<string> OwnerIDs { get; init; } = [];
+        public required int Id { get; init; }
+        public required string Abbreviation { get; init; }
+        public required string LogoURL { get; init; }
+        public required string Name { get; init; }
+        public required FantasyTeamSeasonStats SeasonStats { get; init; }
+        public required List<FantasyMatchup> Matchups { get; init; }
+        public required List<string> OwnerIds { get; init; }
     }
 }

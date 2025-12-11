@@ -1,7 +1,8 @@
 ﻿using FantasyHOF.Application.Mappers;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.ESPN;
-using FantasyHOF.ESPN.Types;
+using FantasyHOF.ESPN.Types.Inputs;
+using FantasyHOF.ESPN.Types.Outputs;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,22 @@ namespace FantasyHOF.Application.Queries
     {
         public sealed class GetESPNLeagueQueryHandler : IRequestHandler<GetESPNLeagueQuery, FantasyLeague>
         {
-            private IESPNHTTPService _espnClient;
+            private IESPNAPIClientBuilder _espnClientBuilder;
             private IESPNLeagueMapper _espnMapper;
 
-            public GetESPNLeagueQueryHandler(IESPNHTTPService espnClient, IESPNLeagueMapper espnMapper)
+            public GetESPNLeagueQueryHandler(IESPNAPIClientBuilder espnClientBuilder, IESPNLeagueMapper espnMapper)
             {
-                _espnClient = espnClient;
+                _espnClientBuilder = espnClientBuilder;
                 _espnMapper = espnMapper;
             }
 
             public async Task<FantasyLeague> Handle(GetESPNLeagueQuery request, CancellationToken cancellationToken)
             {
-                List<ESPNLeagueYearMemberDetails> leagueYears = await _espnClient.LoadAllMemberData(request.Credentials);
+                ESPNAPIClient espnClient = _espnClientBuilder.Build(request.Credentials);
 
-                return _espnMapper.MapLeague(leagueYears);
+                List<ESPNSeasonalLeagueData> memberDetails = await espnClient.LoadLeagueData();
+
+                return _espnMapper.MapLeague(memberDetails);
             }
         }
     }

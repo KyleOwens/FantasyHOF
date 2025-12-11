@@ -8,13 +8,13 @@ namespace FantasyHOF.Domain.Types
 {
     public class FantasyMember
     {
-        public string Id { get; init; } = default!;
-        public string DisplayName { get; init; } = default!;
-        public string FirstName { get; init; } = default!;
-        public string LastName { get; set; } = default!;
-        public bool IsLeagueCreator { get; init; }
-        public bool IsLeagueManager { get; init; }
+        public required string Id { get; init; }
+        public required string DisplayName { get; init; }
+        public required string FirstName { get; init; }
+        public required string LastName { get; set; }
+        public required bool IsLeagueCreator { get; init; }
+        public required bool IsLeagueManager { get; init; }
 
-        public List<FantasyTeam> Teams { get; init; } = [];
+        public required List<FantasyTeam> Teams { get; init; }
     }
 }
