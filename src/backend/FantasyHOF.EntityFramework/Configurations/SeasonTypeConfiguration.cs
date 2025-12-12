@@ -9,28 +9,27 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.EntityFramework.Configurations
 {
-    internal class LeagueTypeConfiguration : IEntityTypeConfiguration<League>
+    internal class SeasonTypeConfiguration : IEntityTypeConfiguration<LeagueSeason>
     {
-        public void Configure(EntityTypeBuilder<League> builder)
+        public void Configure(EntityTypeBuilder<LeagueSeason> builder)
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.ProviderLeagueId).HasMaxLength(100);
-
-            builder.HasOne(x => x.FantasyProvider)
-                .WithMany()
-                .HasForeignKey(x => x.FantasyProviderId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(x => x.Seasons)
+            builder.HasOne(x => x.Settings)
                 .WithOne()
-                .HasForeignKey(x => x.LeagueId)
+                .HasForeignKey<LeagueSeasonSettings>(x => x.LeagueSeasonId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Members)
                 .WithOne()
-                .HasForeignKey(x => x.LeagueId)
+                .HasForeignKey(x => x.LeagueSeasonId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(x => x.Matchups)
+                .WithOne()
+                .HasForeignKey(x => x.SeasonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

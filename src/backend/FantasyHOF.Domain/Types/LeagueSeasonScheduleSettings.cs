@@ -1,6 +1,6 @@
 ﻿namespace FantasyHOF.Domain.Types
 {
-    public class FantasyLeagueScheduleSettings
+    public class LeagueSeasonScheduleSettings
     {
         public required int MatchupCount { get; set; }
         public required int MatchupLength { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace FantasyHOF.Domain.Types
 {
-    public class FantasyLeagueScoringSettings
+    public class LeagueSeasonScoringSettings
     {
         public required int HomeTeamBonusPoints { get; set; }
         public required string MatchupTieRule { get; set; }

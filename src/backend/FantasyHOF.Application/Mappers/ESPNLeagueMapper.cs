@@ -18,7 +18,7 @@ namespace FantasyHOF.Application.Mappers
     {
         public League MapLeague(string leagueId, List<ESPNSeasonalLeagueData> espnSeasons, List<ESPNWeeklyLeagueData> espnMatchups)
         {
-            List<FantasyleagueSeason> seasons = espnSeasons.Select(MapSeason).ToList();
+            List<LeagueSeason> seasons = espnSeasons.Select(MapSeason).ToList();
             
             return new League() { 
                 Seasons = seasons, 
@@ -28,7 +28,7 @@ namespace FantasyHOF.Application.Mappers
             };
         }
 
-        private FantasyleagueSeason MapSeason(ESPNSeasonalLeagueData espnSeason)
+        private LeagueSeason MapSeason(ESPNSeasonalLeagueData espnSeason)
         {
             List<FantasyTeam> teams = espnSeason.Teams.Select(MapTeam).ToList();
 
@@ -39,7 +39,7 @@ namespace FantasyHOF.Application.Mappers
 
             List<FantasyMember> members = espnSeason.Members.Select(member => MapMember(member, teamLookup)).ToList();
             
-            return new FantasyleagueSeason()
+            return new LeagueSeason()
             {
                 Year = espnSeason.Year,
                 Settings = MapSettings(espnSeason.LeagueSettings),
@@ -88,9 +88,9 @@ namespace FantasyHOF.Application.Mappers
             };
         }
 
-        private FantasyLeagueSettings MapSettings(ESPNLeagueSettings espnSettings)
+        private LeagueSeasonSettings MapSettings(ESPNLeagueSettings espnSettings)
         {
-            return new FantasyLeagueSettings()
+            return new LeagueSeasonSettings()
             {
                 Name = espnSettings.Name,
                 ScheduleSettings = MapScheduleSettings(espnSettings.ScheduleSettings),
@@ -98,9 +98,9 @@ namespace FantasyHOF.Application.Mappers
             };
         }
 
-        private FantasyLeagueScheduleSettings MapScheduleSettings(ESPNScheduleSettings espnScheduleSettings)
+        private LeagueSeasonScheduleSettings MapScheduleSettings(ESPNScheduleSettings espnScheduleSettings)
         {
-            return new FantasyLeagueScheduleSettings()
+            return new LeagueSeasonScheduleSettings()
             {
                 MatchupCount = espnScheduleSettings.MatchupPeriodCount,
                 MatchupLength = espnScheduleSettings.MatchupPeriodLength,
@@ -110,11 +110,11 @@ namespace FantasyHOF.Application.Mappers
             }; 
         }
 
-        private FantasyLeagueScoringSettings MapScoringSettings(ESPNScoringSettings espnScoringSettings)
+        private LeagueSeasonScoringSettings MapScoringSettings(ESPNScoringSettings espnScoringSettings)
         {
             List<FantasyScoringItem> scoringItems = espnScoringSettings.ScoringItems.Select(MapScoringItem).ToList();
 
-            return new FantasyLeagueScoringSettings()
+            return new LeagueSeasonScoringSettings()
             {
                 HomeTeamBonusPoints = espnScoringSettings.HomeTeamBonus,
                 MatchupTieRule = espnScoringSettings.MatchupTieRule,
