@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyHOF.Infrastructure",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyHOF.Application", "FantasyHOF.Application\FantasyHOF.Application.csproj", "{477D0DD3-E0FB-4F72-9913-FDE0D572632C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FantasyHOF.EntityFramework", "FantasyHOF.EntityFramework\FantasyHOF.EntityFramework.csproj", "{D2229BE1-80DC-46A8-9816-E3BC85C59708}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|x64.Build.0 = Release|Any CPU
 		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|x86.ActiveCfg = Release|Any CPU
 		{477D0DD3-E0FB-4F72-9913-FDE0D572632C}.Release|x86.Build.0 = Release|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Debug|x64.Build.0 = Debug|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Release|x64.ActiveCfg = Release|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Release|x64.Build.0 = Release|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2229BE1-80DC-46A8-9816-E3BC85C59708}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

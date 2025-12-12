@@ -11,16 +11,21 @@ namespace FantasyHOF.Application.Mappers
 {
     public interface IESPNLeagueMapper
     {
-        FantasyLeague MapLeague(List<ESPNSeasonalLeagueData> leagueDetails, List<ESPNWeeklyLeagueData> matchupDetails);
+        League MapLeague(string leagueId, List<ESPNSeasonalLeagueData> leagueDetails, List<ESPNWeeklyLeagueData> matchupDetails);
     }
 
     public class ESPNLeagueMapper : IESPNLeagueMapper
     {
-        public FantasyLeague MapLeague(List<ESPNSeasonalLeagueData> espnSeasons, List<ESPNWeeklyLeagueData> espnMatchups)
+        public League MapLeague(string leagueId, List<ESPNSeasonalLeagueData> espnSeasons, List<ESPNWeeklyLeagueData> espnMatchups)
         {
             List<FantasyleagueSeason> seasons = espnSeasons.Select(MapSeason).ToList();
             
-            return new FantasyLeague() { Seasons = seasons };
+            return new League() { 
+                Seasons = seasons, 
+                FantasyProviderId = FantasyProviderId.ESPN, 
+                ProviderLeagueId = leagueId, 
+                SportId = SportId.Football  
+            };
         }
 
         private FantasyleagueSeason MapSeason(ESPNSeasonalLeagueData espnSeason)

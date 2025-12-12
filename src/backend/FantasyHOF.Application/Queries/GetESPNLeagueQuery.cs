@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Application.Queries
 {
-    public sealed record GetESPNLeagueQuery(ESPNLeagueCredentials Credentials) : IRequest<List<ESPNWeeklyLeagueData>>
+    public sealed record GetESPNLeagueQuery(ESPNLeagueCredentials Credentials) : IRequest<League>
     {
-        public sealed class GetESPNLeagueQueryHandler : IRequestHandler<GetESPNLeagueQuery, List<ESPNWeeklyLeagueData>>
+        public sealed class GetESPNLeagueQueryHandler : IRequestHandler<GetESPNLeagueQuery, League>
         {
             private IESPNAPIClientBuilder _espnClientBuilder;
             private IESPNLeagueMapper _espnMapper;
@@ -25,15 +25,14 @@ namespace FantasyHOF.Application.Queries
                 _espnMapper = espnMapper;
             }
 
-            public async Task<List<ESPNWeeklyLeagueData>> Handle(GetESPNLeagueQuery request, CancellationToken cancellationToken)
+            public async Task<League> Handle(GetESPNLeagueQuery request, CancellationToken cancellationToken)
             {
                 ESPNAPIClient espnClient = _espnClientBuilder.Build(request.Credentials);
 
                 List<ESPNSeasonalLeagueData> memberDetails = await espnClient.LoadSeasonalLeagueData();
                 List<ESPNWeeklyLeagueData> matchupDetails = await espnClient.LoadWeeklyLeagueData();
 
-                return matchupDetails;
-                //return _espnMapper.MapLeague(memberDetails, matchupDetails);
+                return _espnMapper.MapLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
             }
         }
     }

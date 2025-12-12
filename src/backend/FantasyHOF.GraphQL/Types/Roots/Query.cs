@@ -12,7 +12,7 @@ namespace FantasyHOF.GraphQL.Types.Roots;
 [QueryType]
 public static class Query
 {
-    public static async Task<List<ESPNWeeklyLeagueData>> LoadESPNLeague(ESPNLeagueCredentialsInput input, IMediator mediator)
+    public static async Task<League> LoadESPNLeague(ESPNLeagueCredentialsInput input, IMediator mediator)
     {
         return await mediator.Send(new GetESPNLeagueQuery(new ESPNLeagueCredentials(input.LeagueId, input.SWID, input.ESPNS2Id)));
     }

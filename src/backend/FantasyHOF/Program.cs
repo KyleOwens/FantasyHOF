@@ -1,12 +1,21 @@
 using FantasyHOF.Application.Mappers;
+using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.GraphQL.Services;
+using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<IESPNAPIClientBuilder, ESPNAPIClientBuilder>();
 builder.Services.AddSingleton<IESPNLeagueMapper, ESPNLeagueMapper>();
+
+builder.Services.AddDbContext<FantasyHOFDBContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+        .UseSnakeCaseNamingConvention();
+});
 
 builder.Services.AddMediatR(cfg =>
 {
@@ -19,5 +28,18 @@ builder.AddGraphQL()
     
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    using (IServiceScope scope = app.Services.CreateScope())
+    {
+        FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
+
+        context.Database.Migrate();
+    }
+}
+
 app.MapGraphQL();
 app.RunWithGraphQLCommands(args);
+
+
+

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.Extensions
 {
-    [ExtendObjectType(typeof(FantasyLeague))]
+    [ExtendObjectType(typeof(League))]
     public class FantasyLeagueType
     {
     }
