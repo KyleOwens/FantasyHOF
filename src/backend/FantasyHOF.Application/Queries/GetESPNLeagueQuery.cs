@@ -40,29 +40,8 @@ namespace FantasyHOF.Application.Queries
                 List<ESPNSeasonalLeagueData> memberDetails = await espnClient.LoadSeasonalLeagueData();
                 List<ESPNWeeklyLeagueData> matchupDetails = await espnClient.LoadWeeklyLeagueData();
 
-                var league = _espnMapper.MapLeague(request.Credentials.LeagueId);
-
-                foreach (ESPNSeasonalLeagueData seasonData in memberDetails)
-                {
-                    var leagueSeason = _espnMapper.MapLeagueSeason(seasonData);
-                    var leagueSeasonSettings = _espnMapper.MapLeagueSeasonSettings(seasonData.LeagueSettings);
-                    var leagueSeasonScheduleSettings = _espnMapper.MapLeagueSeasonScheduleSettings(seasonData.LeagueSettings.ScheduleSettings);
-                    var leagueSeasonScoringSettings = _espnMapper.MapLeagueSeasonScoringSettings(seasonData.LeagueSettings.ScoringSettings);
-
-                    List<LeagueSeasonScoringItem> scoringItems = [];
-                    foreach (ESPNScoringItem scoringItem in seasonData.LeagueSettings.ScoringSettings.ScoringItems)
-                    {
-                        scoringItems.Add(_espnMapper.MapLeagueSeasonScoringItem(scoringItem));
-                    }
-
-                    leagueSeasonScoringSettings.ScoringItems = scoringItems;
-                    leagueSeasonSettings.ScheduleSettings = leagueSeasonScheduleSettings;
-                    leagueSeasonSettings.ScoringSettings = leagueSeasonScoringSettings;
-                    leagueSeason.Settings = leagueSeasonSettings;
-                    league.Seasons.Add(leagueSeason);
-                }
+                League league = CreateLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
                 
-
                 try
                 {
                     _context.Leagues.Add(league);
@@ -74,6 +53,60 @@ namespace FantasyHOF.Application.Queries
                 }
 
                 return league; 
+            }
+
+            public League CreateLeague(string espnLeagueId, List<ESPNSeasonalLeagueData> espnSeasons, List<ESPNWeeklyLeagueData> weeklyLeagueData)
+            {
+                League league = _espnMapper.MapLeague(espnLeagueId);
+
+                foreach (ESPNSeasonalLeagueData espnSeason in espnSeasons)
+                {
+                    league.Seasons.Add(CreateLeagueSeason(espnSeason));
+                }
+
+                return league;
+            }
+
+            public LeagueSeason CreateLeagueSeason(ESPNSeasonalLeagueData espnSeason)
+            {
+                LeagueSeason season = _espnMapper.MapLeagueSeason(espnSeason);
+
+                LeagueSeasonSettings leagueSeasonSettings = CreateLeagueSeasonSettings(espnSeason.LeagueSettings);
+
+                season.Settings = leagueSeasonSettings;
+
+                return season;
+            }
+
+            public LeagueSeasonSettings CreateLeagueSeasonSettings(ESPNLeagueSettings espnSettings)
+            {
+                LeagueSeasonSettings settings = _espnMapper.MapLeagueSeasonSettings(espnSettings);
+
+                settings.ScheduleSettings = _espnMapper.MapLeagueSeasonScheduleSettings(espnSettings.ScheduleSettings);
+                settings.ScoringSettings = CreateLeagueSeasonScoringSettings(espnSettings.ScoringSettings);
+
+                return settings;
+            }
+
+            public LeagueSeasonScoringSettings CreateLeagueSeasonScoringSettings(ESPNScoringSettings espnScoringSettings)
+            {
+                LeagueSeasonScoringSettings scoringSettings = _espnMapper.MapLeagueSeasonScoringSettings(espnScoringSettings);
+
+                scoringSettings.ScoringItems = CreateScoringItems(espnScoringSettings.ScoringItems);
+
+                return scoringSettings;
+            }
+
+            public List<LeagueSeasonScoringItem> CreateScoringItems(List<ESPNScoringItem> espnScoringItems)
+            {
+                List<LeagueSeasonScoringItem> scoringItems = [];
+
+                foreach (ESPNScoringItem scoringItem in espnScoringItems)
+                {
+                    scoringItems.Add(_espnMapper.MapLeagueSeasonScoringItem(scoringItem));
+                }
+
+                return scoringItems;
             }
         }
     }
