@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FantasyHOF.Domain\FantasyHOF.Domain.csproj" />
+    <ProjectReference Include="..\FantasyHOF.EntityFramework\FantasyHOF.EntityFramework.csproj" />
     <ProjectReference Include="..\FantasyHOF.ESPN\FantasyHOF.ESPN.csproj" />
   </ItemGroup>
 

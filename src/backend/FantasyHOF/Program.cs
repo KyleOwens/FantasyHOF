@@ -34,6 +34,7 @@ if (app.Environment.IsDevelopment())
     {
         FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
 
+        //context.Database.EnsureDeleted();
         context.Database.Migrate();
     }
 }

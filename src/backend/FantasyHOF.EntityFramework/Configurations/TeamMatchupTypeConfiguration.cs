@@ -9,22 +9,20 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.EntityFramework.Configurations
 {
-    internal class LeagueTypeConfiguration : IEntityTypeConfiguration<League>
+    internal class TeamMatchupTypeConfiguration : IEntityTypeConfiguration<TeamMatchup>
     {
-        public void Configure(EntityTypeBuilder<League> builder)
+        public void Configure(EntityTypeBuilder<TeamMatchup> builder)
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.ProviderLeagueId).HasMaxLength(100);
-
-            builder.HasOne(x => x.FantasyProvider)
+            builder.HasOne(x => x.Opponent)
                 .WithMany()
-                .HasForeignKey(x => x.FantasyProviderId)
+                .HasForeignKey(x => x.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(x => x.Seasons)
+            builder.HasMany(x => x.MatchupRosterSpots)
                 .WithOne()
-                .HasForeignKey(x => x.LeagueId)
+                .HasForeignKey(x => x.MatchupId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

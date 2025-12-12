@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Types
 {
-    public enum FantasyPositionId
+    public enum PositionId
     {
         QB = 0,
         TQB = 1,
@@ -36,12 +36,15 @@ namespace FantasyHOF.Domain.Types
         Rookie = 25
     }
 
-    public class FantasyRosterSpot
+    public class MatchupRosterSpot
     {
-        public required FantasyPositionId LineupSlotId { get; set; }
-        public required int PlayerId { get; set; }
-        public required FantasyPlayer Player { get; set; }
+        public int Id { get; private set; }
+        public int MatchupId { get; private set; }
+        public int PlayerId { get; private set; }
+
+        public required PositionId PositionId { get; set; }
+        public required Player Player { get; set; }
         public required float PointsScored { get; set; }
-        public required List<FantasyAccumulatedStat> Stats { get; set; }
+        public required List<AccumulatedStat> AccumulatedStats { get; set; }
     }
 }

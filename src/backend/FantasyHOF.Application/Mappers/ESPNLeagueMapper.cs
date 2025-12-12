@@ -11,94 +11,42 @@ namespace FantasyHOF.Application.Mappers
 {
     public interface IESPNLeagueMapper
     {
-        League MapLeague(string leagueId, List<ESPNSeasonalLeagueData> leagueDetails, List<ESPNWeeklyLeagueData> matchupDetails);
+        League MapLeague(string leagueId);
+        LeagueSeason MapLeagueSeason(ESPNSeasonalLeagueData seasonData);
+        LeagueSeasonSettings MapLeagueSeasonSettings(ESPNLeagueSettings espnSettings);
+        LeagueSeasonScheduleSettings MapLeagueSeasonScheduleSettings(ESPNScheduleSettings espnSettings);
+        LeagueSeasonScoringSettings MapLeagueSeasonScoringSettings(ESPNScoringSettings espnSettings);
+        LeagueSeasonScoringItem MapLeagueSeasonScoringItem(ESPNScoringItem espnItem);
     }
 
     public class ESPNLeagueMapper : IESPNLeagueMapper
     {
-        public League MapLeague(string leagueId, List<ESPNSeasonalLeagueData> espnSeasons, List<ESPNWeeklyLeagueData> espnMatchups)
+        public League MapLeague(string leagueId)
         {
-            List<LeagueSeason> seasons = espnSeasons.Select(MapSeason).ToList();
-            
-            return new League() { 
-                Seasons = seasons, 
+            return new League() {
                 FantasyProviderId = FantasyProviderId.ESPN, 
                 ProviderLeagueId = leagueId, 
                 SportId = SportId.Football  
             };
         }
 
-        private LeagueSeason MapSeason(ESPNSeasonalLeagueData espnSeason)
+        public LeagueSeason MapLeagueSeason(ESPNSeasonalLeagueData seasonData)
         {
-            List<FantasyTeam> teams = espnSeason.Teams.Select(MapTeam).ToList();
-
-            var teamLookup = teams
-                .SelectMany(team => team.OwnerIds
-                    .Select(ownerId => new { ownerId, team }))
-                .ToLookup(x => x.ownerId, x => x.team);
-
-            List<FantasyMember> members = espnSeason.Members.Select(member => MapMember(member, teamLookup)).ToList();
-            
             return new LeagueSeason()
             {
-                Year = espnSeason.Year,
-                Settings = MapSettings(espnSeason.LeagueSettings),
-                Members = members,
+                Year = seasonData.Year,
             };
         }
 
-        private FantasyTeam MapTeam(ESPNFantasyTeam espnTeam)
-        {
-            return new FantasyTeam()
-            {
-                Id = espnTeam.Id,
-                Name = espnTeam.Name,
-                Abbreviation = espnTeam.Abbrev,
-                LogoURL = espnTeam.Logo,
-                SeasonStats = MapTeamStats(espnTeam.Record.Overall),
-                OwnerIds = espnTeam.Owners,
-                Matchups = [] // UPDATE LATER
-            };
-        }
-
-        private FantasyTeamSeasonStats MapTeamStats(ESPNRecordDetails espnTeamStats)
-        {
-            return new FantasyTeamSeasonStats()
-            {
-                Wins = espnTeamStats.Wins,
-                Losses = espnTeamStats.Losses,
-                Ties = espnTeamStats.Ties,
-                WinPercentage = espnTeamStats.Percentage,
-                PointsFor = espnTeamStats.PointsFor,
-                PointsAgainst = espnTeamStats.PointsAgainst
-            };
-        }
-
-        private FantasyMember MapMember(ESPNFantasyMember member, ILookup<string, FantasyTeam> teamLookup)
-        {
-            return new FantasyMember()
-            {
-                Id = member.Id,
-                FirstName = member.FirstName,
-                LastName = member.LastName,
-                DisplayName = member.DisplayName,
-                IsLeagueCreator = member.IsLeagueCreator,
-                IsLeagueManager = member.IsLeagueManager,
-                Teams = teamLookup[member.Id].ToList()
-            };
-        }
-
-        private LeagueSeasonSettings MapSettings(ESPNLeagueSettings espnSettings)
+        public LeagueSeasonSettings MapLeagueSeasonSettings(ESPNLeagueSettings espnSettings)
         {
             return new LeagueSeasonSettings()
             {
-                Name = espnSettings.Name,
-                ScheduleSettings = MapScheduleSettings(espnSettings.ScheduleSettings),
-                ScoringSettings = MapScoringSettings(espnSettings.ScoringSettings)
+                LeagueName = espnSettings.Name,
             };
         }
 
-        private LeagueSeasonScheduleSettings MapScheduleSettings(ESPNScheduleSettings espnScheduleSettings)
+        public LeagueSeasonScheduleSettings MapLeagueSeasonScheduleSettings(ESPNScheduleSettings espnScheduleSettings)
         {
             return new LeagueSeasonScheduleSettings()
             {
@@ -107,13 +55,11 @@ namespace FantasyHOF.Application.Mappers
                 PlayoffMatchupLength = espnScheduleSettings.PlayoffMatchypPeriodLength,
                 PlayoffTeamCount = espnScheduleSettings.PlayoffTeamCount,
                 VariablePlayoffMatchupLength = espnScheduleSettings.VariablePlayoffMatchypPeriodLength
-            }; 
+            };
         }
 
-        private LeagueSeasonScoringSettings MapScoringSettings(ESPNScoringSettings espnScoringSettings)
+        public LeagueSeasonScoringSettings MapLeagueSeasonScoringSettings(ESPNScoringSettings espnScoringSettings)
         {
-            List<FantasyScoringItem> scoringItems = espnScoringSettings.ScoringItems.Select(MapScoringItem).ToList();
-
             return new LeagueSeasonScoringSettings()
             {
                 HomeTeamBonusPoints = espnScoringSettings.HomeTeamBonus,
@@ -124,19 +70,65 @@ namespace FantasyHOF.Application.Mappers
                 PlayoffMatchupTieRule = espnScoringSettings.PlayoffMatchupTieRule,
                 PlayoffMatchupTieRuleBy = espnScoringSettings.PlayoffMatchupTieRuleBy,
                 ScoringType = espnScoringSettings.ScoringType,
-                ScoringItems = scoringItems
             };
         }
 
-        private FantasyScoringItem MapScoringItem(ESPNScoringItem espnScoringItem)
+        public LeagueSeasonScoringItem MapLeagueSeasonScoringItem(ESPNScoringItem espnScoringItem)
         {
-            FantasyStatId statId = (FantasyStatId)espnScoringItem.StatId;
+            StatId statId = (StatId)espnScoringItem.StatId;
 
-            return new FantasyScoringItem()
+            return new LeagueSeasonScoringItem()
             {
-                Stat = new FantasyStat() { StatId = statId, Name = statId.ToString() },
-                Points = espnScoringItem.Points
+                StatId = statId,
+                Points = espnScoringItem.Points,
             };
         }
+
+        //private Team MapTeam(ESPNFantasyTeam espnTeam)
+        //{
+        //    return new Team()
+        //    {
+        //        Id = espnTeam.Id,
+        //        Name = espnTeam.Name,
+        //        Abbreviation = espnTeam.Abbrev,
+        //        LogoURL = espnTeam.Logo,
+        //        SeasonStats = MapTeamStats(espnTeam.Record.Overall),
+        //        OwnerIds = espnTeam.Owners,
+        //        Matchups = [] // UPDATE LATER
+        //    };
+        //}
+
+        private TeamSeasonStats MapTeamStats(ESPNRecordDetails espnTeamStats)
+        {
+            return new TeamSeasonStats()
+            {
+                Wins = espnTeamStats.Wins,
+                Losses = espnTeamStats.Losses,
+                Ties = espnTeamStats.Ties,
+                WinPercentage = espnTeamStats.Percentage,
+                PointsFor = espnTeamStats.PointsFor,
+                PointsAgainst = espnTeamStats.PointsAgainst
+            };
+        }
+
+        //private FantasyMember MapMember(ESPNFantasyMember member, ILookup<string, Team> teamLookup)
+        //{
+        //    return new FantasyMember()
+        //    {
+        //        Id = member.Id,
+        //        FirstName = member.FirstName,
+        //        LastName = member.LastName,
+        //        DisplayName = member.DisplayName,
+        //        IsLeagueCreator = member.IsLeagueCreator,
+        //        IsLeagueManager = member.IsLeagueManager,
+        //        Teams = teamLookup[member.Id].ToList()
+        //    };
+        //}
+
+
+
+
+
+
     }
 }

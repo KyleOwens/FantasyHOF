@@ -17,9 +17,8 @@
         public required FantasyProviderId FantasyProviderId { get; init; }
         public required string ProviderLeagueId { get; init; }
         public required SportId SportId { get; init; }
-        public required List<LeagueSeason> Seasons { get; init; }
 
+        public List<LeagueSeason> Seasons { get; set; } = new();
         public FantasyProvider FantasyProvider { get; private set; } = null!;
-        public List<LeagueSeasonMember> Members { get; private set; } = null!;
     }
 }

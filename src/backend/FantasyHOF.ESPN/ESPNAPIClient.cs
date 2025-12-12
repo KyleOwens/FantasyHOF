@@ -100,22 +100,24 @@ namespace FantasyHOF.ESPN
 
         private async Task<List<int>> LoadLeagueYears()
         {
-            if (_leagueYearCache is not null) return _leagueYearCache;
+            return [2025];
             
-            int mostRecentYear = await FindMostRecentLeagueYear();
+            //if (_leagueYearCache is not null) return _leagueYearCache;
+            
+            //int mostRecentYear = await FindMostRecentLeagueYear();
 
-            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, mostRecentYear)
-                .WithViews(ESPNView.mStatus)
-                .Build();
+            //HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, mostRecentYear)
+            //    .WithViews(ESPNView.mStatus)
+            //    .Build();
 
-            PreviousYearsResponse response = await SendAPIRequestAsync<PreviousYearsResponse>(request);
+            //PreviousYearsResponse response = await SendAPIRequestAsync<PreviousYearsResponse>(request);
 
-            _leagueYearCache = response.Status.PreviousSeasons
-                .Append(mostRecentYear)
-                .Where(year => year >= 2018) // temporary until pre-2018 API is fleshed out
-                .ToList();
+            //_leagueYearCache = response.Status.PreviousSeasons
+            //    .Append(mostRecentYear)
+            //    .Where(year => year >= 2018) // temporary until pre-2018 API is fleshed out
+            //    .ToList();
 
-            return _leagueYearCache;
+            //return _leagueYearCache;
         }
 
         private async Task<int> FindMostRecentLeagueYear()

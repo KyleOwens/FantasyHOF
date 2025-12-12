@@ -1,6 +1,6 @@
 ﻿namespace FantasyHOF.Domain.Types
 {
-    public enum FantasyStatId
+    public enum StatId
     {
         // Passing
         AttemptedPasses = 0,
@@ -282,9 +282,17 @@
         FieldGoalAttemptYardsPer100 = 234
     }
 
-    public class FantasyStat
+    public class Stat
     {
-        public required FantasyStatId StatId { get; set; }
-        public required string Name { get; set; } = default!;
+        public StatId Id { get; private set; }
+        public string Name { get; private set; } = null!;
+
+        protected Stat() { }
+
+        public Stat(StatId id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
     }
 }

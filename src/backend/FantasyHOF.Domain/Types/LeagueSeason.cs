@@ -12,8 +12,8 @@ namespace FantasyHOF.Domain.Types
         public int LeagueId { get; private set; }
 
         public required int Year { get; init; }
-        public required LeagueSeasonSettings Settings { get; init; }
-        public required List<LeagueSeasonMember> Members { get; init; }
-        public required List<FantasyMatchup> Matchups { get; init; }
+        public LeagueSeasonSettings Settings { get; set; } = null!;
+        //public List<LeagueSeasonMember> LeagueSeasonMembers { get; set; } = null!;
+        //public required List<TeamMatchup> Matchups { get; init; }
     }
 }

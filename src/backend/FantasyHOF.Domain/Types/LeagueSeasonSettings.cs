@@ -12,7 +12,8 @@ namespace FantasyHOF.Domain.Types
         public int LeagueSeasonId { get; set; }
         
         public required string LeagueName { get; set; }
-        public required LeagueSeasonScheduleSettings ScheduleSettings { get; set; }
-        public required LeagueSeasonScoringSettings ScoringSettings { get; set; }
+
+        public LeagueSeasonScheduleSettings ScheduleSettings { get; set; } = null!;
+        public LeagueSeasonScoringSettings ScoringSettings { get; set; } = null!;
     }
 }

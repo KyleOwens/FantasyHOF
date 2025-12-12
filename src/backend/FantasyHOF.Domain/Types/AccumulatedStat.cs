@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Types
 {
-    public class FantasyAccumulatedStat
+    public class AccumulatedStat
     {
-        public required FantasyStat Stat { get; init; }
+        public int Id { get; private set; }
+        public int MatchupRosterSpotId { get; private set; }
+        public StatId StatId { get; private set; }
+        
+        public required Stat Stat { get; init; }
         public required float StatValue { get; init; }
         public required float PointsScored { get; init; }
     }

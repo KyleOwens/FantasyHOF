@@ -10,15 +10,16 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.EntityFramework.Configurations
 {
-    internal class FantasyProviderTypeConfiguration : IEntityTypeConfiguration<FantasyProvider>
+    internal class StatTypeConfiguration : IEntityTypeConfiguration<Stat>
     {
-        public void Configure(EntityTypeBuilder<FantasyProvider> builder)
+        public void Configure(EntityTypeBuilder<Stat> builder)
         {
             builder.HasKey(x => x.Id);
 
-            builder.SeedFromEnum<FantasyProviderId, FantasyProvider>(id => new FantasyProvider(id, id.ToString()));
+            builder.SeedFromEnum<StatId, Stat>(id => new Stat(id, id.ToString()));
 
-            builder.Property(x => x.Name).HasMaxLength(256);
+            builder.Property(x => x.Id)
+                .ValueGeneratedNever();
         }
     }
 }
