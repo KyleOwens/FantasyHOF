@@ -2,6 +2,7 @@
 using FantasyHOF.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    partial class FantasyHOFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251213222139_teams")]
+    partial class teams
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -431,6 +434,9 @@ namespace FantasyHOF.EntityFramework.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_matchup_roster_spots");
+
+                    b.HasIndex("MatchupId")
+                        .HasDatabaseName("ix_matchup_roster_spots_matchup_id");
 
                     b.HasIndex("PlayerId")
                         .HasDatabaseName("ix_matchup_roster_spots_player_id");
@@ -1713,12 +1719,8 @@ namespace FantasyHOF.EntityFramework.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OpponentTeamId")
+                    b.Property<int>("Score")
                         .HasColumnType("integer")
-                        .HasColumnName("opponent_team_id");
-
-                    b.Property<double>("Score")
-                        .HasColumnType("double precision")
                         .HasColumnName("score");
 
                     b.Property<int>("TeamId")
@@ -1731,9 +1733,6 @@ namespace FantasyHOF.EntityFramework.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_team_matchups");
-
-                    b.HasIndex("OpponentTeamId")
-                        .HasDatabaseName("ix_team_matchups_opponent_team_id");
 
                     b.HasIndex("TeamId")
                         .HasDatabaseName("ix_team_matchups_team_id");
@@ -1930,6 +1929,13 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             modelBuilder.Entity("FantasyHOF.Domain.Types.MatchupRosterSpot", b =>
                 {
+                    b.HasOne("FantasyHOF.Domain.Types.TeamMatchup", null)
+                        .WithMany("MatchupRosterSpots")
+                        .HasForeignKey("MatchupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_matchup_roster_spots_team_matchups_matchup_id");
+
                     b.HasOne("FantasyHOF.Domain.Types.Player", "Player")
                         .WithMany()
                         .HasForeignKey("PlayerId")
@@ -1956,15 +1962,8 @@ namespace FantasyHOF.EntityFramework.Migrations
                 {
                     b.HasOne("FantasyHOF.Domain.Types.Team", "Opponent")
                         .WithMany()
-                        .HasForeignKey("OpponentTeamId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_team_matchups_teams_opponent_team_id");
-
-                    b.HasOne("FantasyHOF.Domain.Types.Team", null)
-                        .WithMany("Matchups")
                         .HasForeignKey("TeamId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_team_matchups_teams_team_id");
 
@@ -2020,10 +2019,13 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             modelBuilder.Entity("FantasyHOF.Domain.Types.Team", b =>
                 {
-                    b.Navigation("Matchups");
-
                     b.Navigation("SeasonStats")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FantasyHOF.Domain.Types.TeamMatchup", b =>
+                {
+                    b.Navigation("MatchupRosterSpots");
                 });
 #pragma warning restore 612, 618
         }

@@ -13,7 +13,7 @@ namespace FantasyHOF.EntityFramework.Configurations
     {
         public void Configure(EntityTypeBuilder<LeagueSeasonMemberTeam> builder)
         {
-            builder.HasKey(x => new { x.LeagueSeasonId, x.MemberId, x.TeamId });
+            builder.HasKey(x => new { x.MemberId, x.TeamId });
 
             builder.HasOne(x => x.Team)
                 .WithMany()

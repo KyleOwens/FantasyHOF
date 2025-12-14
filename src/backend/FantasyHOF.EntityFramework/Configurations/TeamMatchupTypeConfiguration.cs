@@ -17,13 +17,13 @@ namespace FantasyHOF.EntityFramework.Configurations
 
             builder.HasOne(x => x.Opponent)
                 .WithMany()
-                .HasForeignKey(x => x.TeamId)
+                .HasForeignKey(x => x.OpponentTeamId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(x => x.MatchupRosterSpots)
-                .WithOne()
-                .HasForeignKey(x => x.MatchupId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasMany(x => x.MatchupRosterSpots)
+            //    .WithOne()
+            //    .HasForeignKey(x => x.MatchupId)
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

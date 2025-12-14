@@ -17,6 +17,12 @@ namespace FantasyHOF.Application.Mappers
         LeagueSeasonScheduleSettings MapLeagueSeasonScheduleSettings(ESPNScheduleSettings espnSettings);
         LeagueSeasonScoringSettings MapLeagueSeasonScoringSettings(ESPNScoringSettings espnSettings);
         LeagueSeasonScoringItem MapLeagueSeasonScoringItem(ESPNScoringItem espnItem);
+        LeagueSeasonMember MapLeagueSeasonMember(ESPNFantasyMember espnMember);
+        FantasyMember MapFantasyMember(ESPNFantasyMember espnMember);
+        LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam();
+        Team MapTeam(ESPNFantasyTeam espnTeam);
+        TeamSeasonStats MapTeamSeasonStats(ESPNRecordDetails espnTeamStats);
+        TeamMatchup MapTeamMatchup(int week, ESPNMatchupTeam espnTeam);
     }
 
     public class ESPNLeagueMapper : IESPNLeagueMapper
@@ -81,6 +87,65 @@ namespace FantasyHOF.Application.Mappers
             {
                 StatId = statId,
                 Points = espnScoringItem.Points,
+            };
+        }
+
+        public LeagueSeasonMember MapLeagueSeasonMember(ESPNFantasyMember espnMember)
+        {
+            return new LeagueSeasonMember()
+            {
+                IsLeagueCreator = espnMember.IsLeagueCreator,
+                IsLeagueManager = espnMember.IsLeagueManager
+            };
+        }
+
+        public FantasyMember MapFantasyMember(ESPNFantasyMember espnMember)
+        {
+            return new FantasyMember()
+            {
+                FantasyProviderId = FantasyProviderId.ESPN,
+                ProviderMemberId = espnMember.Id,
+                DisplayName = espnMember.DisplayName,
+                FirstName = espnMember.FirstName,
+                LastName = espnMember.LastName
+            };
+        }
+
+        public LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam()
+        {
+            return new LeagueSeasonMemberTeam();
+        }
+
+        public Team MapTeam(ESPNFantasyTeam espnTeam)
+        {
+            return new Team()
+            {
+                ProviderTeamId = espnTeam.Id,
+                Abbreviation = espnTeam.Abbrev,
+                LogoURL = espnTeam.Logo,
+                Name = espnTeam.Name,
+            };
+        }
+
+        public TeamSeasonStats MapTeamSeasonStats(ESPNRecordDetails espnTeamStats)
+        {
+            return new TeamSeasonStats()
+            {
+                Wins = espnTeamStats.Wins,
+                Losses = espnTeamStats.Losses,
+                Ties = espnTeamStats.Ties,
+                WinPercentage = espnTeamStats.Percentage,
+                PointsAgainst = espnTeamStats.PointsAgainst,
+                PointsFor = espnTeamStats.PointsFor
+            };
+        }
+
+        public TeamMatchup MapTeamMatchup(int week, ESPNMatchupTeam espnTeam)
+        {
+            return new TeamMatchup()
+            {
+                Week = week,
+                Score = espnTeam.TotalPoints,
             };
         }
 

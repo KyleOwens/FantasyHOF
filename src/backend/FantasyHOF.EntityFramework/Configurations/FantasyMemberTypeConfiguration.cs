@@ -19,6 +19,11 @@ namespace FantasyHOF.EntityFramework.Configurations
             builder.Property(x => x.DisplayName).HasMaxLength(200);
             builder.Property(x => x.FirstName).HasMaxLength(200);
             builder.Property(x => x.LastName).HasMaxLength(200);
+
+            builder.HasOne(x => x.FantasyProvider)
+                .WithMany()
+                .HasForeignKey(x => x.FantasyProviderId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

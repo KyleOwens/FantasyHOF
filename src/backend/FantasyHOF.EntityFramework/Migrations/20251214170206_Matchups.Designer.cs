@@ -2,6 +2,7 @@
 using FantasyHOF.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    partial class FantasyHOFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251214170206_Matchups")]
+    partial class Matchups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1713,9 +1716,9 @@ namespace FantasyHOF.EntityFramework.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OpponentTeamId")
+                    b.Property<int>("OpponentId")
                         .HasColumnType("integer")
-                        .HasColumnName("opponent_team_id");
+                        .HasColumnName("opponent_id");
 
                     b.Property<double>("Score")
                         .HasColumnType("double precision")
@@ -1732,8 +1735,8 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.HasKey("Id")
                         .HasName("pk_team_matchups");
 
-                    b.HasIndex("OpponentTeamId")
-                        .HasDatabaseName("ix_team_matchups_opponent_team_id");
+                    b.HasIndex("OpponentId")
+                        .HasDatabaseName("ix_team_matchups_opponent_id");
 
                     b.HasIndex("TeamId")
                         .HasDatabaseName("ix_team_matchups_team_id");
@@ -1956,10 +1959,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                 {
                     b.HasOne("FantasyHOF.Domain.Types.Team", "Opponent")
                         .WithMany()
-                        .HasForeignKey("OpponentTeamId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("OpponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_team_matchups_teams_opponent_team_id");
+                        .HasConstraintName("fk_team_matchups_teams_opponent_id");
 
                     b.HasOne("FantasyHOF.Domain.Types.Team", null)
                         .WithMany("Matchups")
