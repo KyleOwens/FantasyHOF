@@ -15,6 +15,9 @@ namespace FantasyHOF.EntityFramework.Configurations
         {
             builder.HasKey(x => x.Id);
 
+            builder.HasIndex(x => new { x.FantasyProviderId, x.ProviderMemberId })
+                .IsUnique();
+
             builder.Property(x => x.ProviderMemberId).HasMaxLength(200);
             builder.Property(x => x.DisplayName).HasMaxLength(200);
             builder.Property(x => x.FirstName).HasMaxLength(200);

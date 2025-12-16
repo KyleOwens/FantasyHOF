@@ -20,11 +20,6 @@ namespace FantasyHOF.EntityFramework.Configurations
                 .HasForeignKey<LeagueSeasonSettings>(x => x.LeagueSeasonId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
-
-            //builder.HasMany(x => x.LeagueSeasonMembers)
-            //    .WithOne()
-            //    .HasForeignKey(x => x.LeagueSeasonId)
-            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

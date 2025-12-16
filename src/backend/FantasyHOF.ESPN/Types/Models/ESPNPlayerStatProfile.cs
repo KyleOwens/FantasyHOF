@@ -2,9 +2,9 @@
 {
     public class ESPNPlayerStatProfile
     {
-        public required float AppliedTotal { get; set; }
+        public required decimal AppliedTotal { get; set; }
         public required int StatSourceId { get; set; }
-        public required Dictionary<int, float> AppliedStats { get;set; }
-        public required Dictionary<int, float> Stats { get; set; }
+        public required Dictionary<int, decimal> AppliedStats { get;set; }
+        public required Dictionary<int, decimal> Stats { get; set; }
     }
 }

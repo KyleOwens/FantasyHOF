@@ -11,16 +11,15 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.EntityFramework.Configurations
 {
-    internal class StatTypeConfiguration : IEntityTypeConfiguration<Stat>
+    internal class PositionTypeConfiguration : IEntityTypeConfiguration<Position>
     {
-        public void Configure(EntityTypeBuilder<Stat> builder)
+        public void Configure(EntityTypeBuilder<Position> builder)
         {
             builder.HasKey(x => x.Id);
 
-            builder.SeedFromEnum<StatId, Stat>(id => new Stat(id, id.ToString()));
+            builder.Property(x => x.Name).HasMaxLength(100);
 
-            builder.Property(x => x.Id)
-                .ValueGeneratedNever();
+            builder.SeedFromEnum<PositionId, Position>(x => new Position(x, x.ToString()));
         }
     }
 }

@@ -24,6 +24,11 @@ namespace FantasyHOF.EntityFramework.Configurations
                 .WithOne()
                 .HasForeignKey(x => x.MatchupRosterSpotId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(x => x.Position)
+                .WithMany()
+                .HasForeignKey(x => x.PositionId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

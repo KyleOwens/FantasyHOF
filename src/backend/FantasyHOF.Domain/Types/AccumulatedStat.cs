@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FantasyHOF.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,10 +11,11 @@ namespace FantasyHOF.Domain.Types
     {
         public int Id { get; private set; }
         public int MatchupRosterSpotId { get; private set; }
-        public StatId StatId { get; private set; }
         
-        public required Stat Stat { get; init; }
-        public required float StatValue { get; init; }
-        public required float PointsScored { get; init; }
+        public required StatId StatId { get; init; }
+        public required decimal StatValue { get; init; }
+        public required decimal PointsScored { get; init; }
+
+        public Stat Stat { get; private set; } = null!;
     }
 }

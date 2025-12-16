@@ -16,4 +16,8 @@
     <ProjectReference Include="..\FantasyHOF.ESPN\FantasyHOF.ESPN.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Errors\" />
+  </ItemGroup>
+
 </Project>

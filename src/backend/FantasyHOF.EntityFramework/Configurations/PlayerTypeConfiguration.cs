@@ -15,6 +15,8 @@ namespace FantasyHOF.EntityFramework.Configurations
         {
             builder.HasKey(x => x.Id);
 
+            builder.HasIndex(x => new { x.ProviderId, x.ProviderPlayerId });
+
             builder.HasOne(x => x.Provider)
                 .WithMany()
                 .HasForeignKey(x => x.ProviderId)

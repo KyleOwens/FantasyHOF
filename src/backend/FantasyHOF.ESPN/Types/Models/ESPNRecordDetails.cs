@@ -6,8 +6,8 @@
         public int Wins { get; set; }
         public int Losses { get; set; }
         public int Ties { get; set; }
-        public double Percentage { get; set; }
-        public float PointsAgainst { get; set; }
-        public float PointsFor { get; set; }
+        public decimal Percentage { get; set; }
+        public decimal PointsAgainst { get; set; }
+        public decimal PointsFor { get; set; }
     }
 }

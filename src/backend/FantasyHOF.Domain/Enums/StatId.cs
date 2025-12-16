@@ -1,6 +1,6 @@
-﻿namespace FantasyHOF.ESPN.Types.Models
+﻿namespace FantasyHOF.Domain.Enums
 {
-    public enum ESPNStatId
+    public enum StatId
     {
         // Passing
         AttemptedPasses = 0,
@@ -280,15 +280,5 @@
         FieldGoalAttemptYardsPer25 = 232,
         FieldGoalAttemptYardsPer50 = 233,
         FieldGoalAttemptYardsPer100 = 234
-    }
-
-
-    public class ESPNScoringItem
-    {
-        public ESPNStatId StatId { get; set; }
-        public bool IsReverseItem { get; set; }
-        public decimal LeagueRanking { get; set; }
-        public decimal LeagueTotal { get; set; }
-        public decimal Points { get; set; }
     }
 }

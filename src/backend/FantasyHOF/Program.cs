@@ -15,6 +15,8 @@ builder.Services.AddDbContext<FantasyHOFDBContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
         .UseSnakeCaseNamingConvention();
+
+    options.EnableSensitiveDataLogging();
 });
 
 builder.Services.AddMediatR(cfg =>

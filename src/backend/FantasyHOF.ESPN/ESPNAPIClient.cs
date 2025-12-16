@@ -83,7 +83,9 @@ namespace FantasyHOF.ESPN
             {
                 ESPNWeeklyStatus matchupWeeks = (await LoadMatchupWeeks(year)).Status;
 
-                for (int matchupWeek = matchupWeeks.FirstScoringPeriod; matchupWeek <= matchupWeeks.CurrentMatchupPeriod; matchupWeek++)
+                int lastWeek = year == DateTime.Now.Year ? matchupWeeks.CurrentMatchupPeriod - 1 : matchupWeeks.CurrentMatchupPeriod;
+
+                for (int matchupWeek = matchupWeeks.FirstScoringPeriod; matchupWeek <= lastWeek; matchupWeek++)
                 {
                     WeeklyDataResponse matchupData = await LoadMatchup(year, matchupWeek);
 
@@ -100,24 +102,22 @@ namespace FantasyHOF.ESPN
 
         private async Task<List<int>> LoadLeagueYears()
         {
-            return [2025];
-            
-            //if (_leagueYearCache is not null) return _leagueYearCache;
-            
-            //int mostRecentYear = await FindMostRecentLeagueYear();
+            if (_leagueYearCache is not null) return _leagueYearCache;
 
-            //HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, mostRecentYear)
-            //    .WithViews(ESPNView.mStatus)
-            //    .Build();
+            int mostRecentYear = await FindMostRecentLeagueYear();
 
-            //PreviousYearsResponse response = await SendAPIRequestAsync<PreviousYearsResponse>(request);
+            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, mostRecentYear)
+                .WithViews(ESPNView.mStatus)
+                .Build();
 
-            //_leagueYearCache = response.Status.PreviousSeasons
-            //    .Append(mostRecentYear)
-            //    .Where(year => year >= 2018) // temporary until pre-2018 API is fleshed out
-            //    .ToList();
+            PreviousYearsResponse response = await SendAPIRequestAsync<PreviousYearsResponse>(request);
 
-            //return _leagueYearCache;
+            _leagueYearCache = response.Status.PreviousSeasons
+                .Append(mostRecentYear)
+                .Where(year => year >= 2018) // temporary until pre-2018 API is fleshed out
+                .ToList();
+
+            return _leagueYearCache;
         }
 
         private async Task<int> FindMostRecentLeagueYear()

@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Domain.Enums;
+using FantasyHOF.Domain.Types;
 using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
 using System;
@@ -23,6 +24,9 @@ namespace FantasyHOF.Application.Mappers
         Team MapTeam(ESPNFantasyTeam espnTeam);
         TeamSeasonStats MapTeamSeasonStats(ESPNRecordDetails espnTeamStats);
         TeamMatchup MapTeamMatchup(int week, ESPNMatchupTeam espnTeam);
+        MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot);
+        Player MapPlayer(ESPNPlayer espnPlayer);
+        AccumulatedStat MapAccumulatedStat(int statId, decimal statValue, decimal statScore);
     }
 
     public class ESPNLeagueMapper : IESPNLeagueMapper
@@ -134,9 +138,9 @@ namespace FantasyHOF.Application.Mappers
                 Wins = espnTeamStats.Wins,
                 Losses = espnTeamStats.Losses,
                 Ties = espnTeamStats.Ties,
-                WinPercentage = espnTeamStats.Percentage,
-                PointsAgainst = espnTeamStats.PointsAgainst,
-                PointsFor = espnTeamStats.PointsFor
+                WinPercentage = Math.Round(espnTeamStats.Percentage, 2, MidpointRounding.AwayFromZero),
+                PointsAgainst = Math.Round(espnTeamStats.PointsAgainst, 2, MidpointRounding.AwayFromZero),
+                PointsFor = Math.Round(espnTeamStats.PointsFor, 2, MidpointRounding.AwayFromZero)
             };
         }
 
@@ -145,55 +149,39 @@ namespace FantasyHOF.Application.Mappers
             return new TeamMatchup()
             {
                 Week = week,
-                Score = espnTeam.TotalPoints,
+                Score = Math.Round(espnTeam.TotalPoints, 2, MidpointRounding.AwayFromZero),
             };
         }
 
-        //private Team MapTeam(ESPNFantasyTeam espnTeam)
-        //{
-        //    return new Team()
-        //    {
-        //        Id = espnTeam.Id,
-        //        Name = espnTeam.Name,
-        //        Abbreviation = espnTeam.Abbrev,
-        //        LogoURL = espnTeam.Logo,
-        //        SeasonStats = MapTeamStats(espnTeam.Record.Overall),
-        //        OwnerIds = espnTeam.Owners,
-        //        Matchups = [] // UPDATE LATER
-        //    };
-        //}
-
-        private TeamSeasonStats MapTeamStats(ESPNRecordDetails espnTeamStats)
+        public MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot)
         {
-            return new TeamSeasonStats()
+            return new MatchupRosterSpot()
             {
-                Wins = espnTeamStats.Wins,
-                Losses = espnTeamStats.Losses,
-                Ties = espnTeamStats.Ties,
-                WinPercentage = espnTeamStats.Percentage,
-                PointsFor = espnTeamStats.PointsFor,
-                PointsAgainst = espnTeamStats.PointsAgainst
+                PositionId = (PositionId)espnRosterSpot.LineupSlotId,
+                PointsScored = Math.Round(espnRosterSpot.PlayerPoolEntry.AppliedStatTotal, 2, MidpointRounding.AwayFromZero)
             };
         }
 
-        //private FantasyMember MapMember(ESPNFantasyMember member, ILookup<string, Team> teamLookup)
-        //{
-        //    return new FantasyMember()
-        //    {
-        //        Id = member.Id,
-        //        FirstName = member.FirstName,
-        //        LastName = member.LastName,
-        //        DisplayName = member.DisplayName,
-        //        IsLeagueCreator = member.IsLeagueCreator,
-        //        IsLeagueManager = member.IsLeagueManager,
-        //        Teams = teamLookup[member.Id].ToList()
-        //    };
-        //}
+        public Player MapPlayer(ESPNPlayer espnPlayer)
+        {
+            return new Player()
+            {
+                ProviderId = FantasyProviderId.ESPN,
+                ProviderPlayerId = espnPlayer.Id,
+                FirstName = espnPlayer.FirstName,
+                LastName = espnPlayer.LastName,
+                FullName = espnPlayer.FullName,
+            };
+        }
 
-
-
-
-
-
+        public AccumulatedStat MapAccumulatedStat(int statId, decimal statValue, decimal statScore)
+        {
+            return new AccumulatedStat()
+            {
+                StatId = (StatId)statId,
+                StatValue = Math.Round(statValue, 2, MidpointRounding.AwayFromZero),
+                PointsScored = Math.Round(statScore, 2, MidpointRounding.AwayFromZero)
+            };
+        }
     }
 }
