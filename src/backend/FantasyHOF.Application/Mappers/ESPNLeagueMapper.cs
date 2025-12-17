@@ -24,7 +24,7 @@ namespace FantasyHOF.Application.Mappers
         Team MapTeam(ESPNFantasyTeam espnTeam);
         TeamSeasonStats MapTeamSeasonStats(ESPNRecordDetails espnTeamStats);
         TeamMatchup MapTeamMatchup(int week, ESPNMatchupTeam espnTeam);
-        MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot);
+        MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot, int year);
         Player MapPlayer(ESPNPlayer espnPlayer);
         AccumulatedStat MapAccumulatedStat(int statId, decimal statValue, decimal statScore);
     }
@@ -153,11 +153,11 @@ namespace FantasyHOF.Application.Mappers
             };
         }
 
-        public MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot)
+        public MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot, int leagueYear)
         {
             return new MatchupRosterSpot()
             {
-                PositionId = (PositionId)espnRosterSpot.LineupSlotId,
+                PositionId = leagueYear >= 2018 ? (PositionId)espnRosterSpot.lineupSlotId : PositionId.Unknown,
                 PointsScored = Math.Round(espnRosterSpot.PlayerPoolEntry.AppliedStatTotal, 2, MidpointRounding.AwayFromZero)
             };
         }

@@ -15,15 +15,15 @@ namespace FantasyHOF.ESPN
 {
     public interface IESPNAPIClient
     {
-        public Task<List<ESPNSeasonalLeagueData>> LoadSeasonalLeagueData();
-        public Task<List<ESPNWeeklyLeagueData>> LoadWeeklyLeagueData();
+        public Task<IEnumerable<ESPNSeasonalLeagueData>> LoadSeasonalLeagueData();
+        public Task<IEnumerable<ESPNWeeklyLeagueData>> LoadWeeklyLeagueData();
     }
 
     public class ESPNAPIClient : IESPNAPIClient
     {
         private readonly HttpClient _client;
         private readonly ESPNLeagueCredentials _credentials;
-        private static readonly JsonSerializerOptions _serializerOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        private static readonly JsonSerializerOptions _serializerOptions = new() { PropertyNameCaseInsensitive = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
         private List<int>? _leagueYearCache;
 
@@ -41,6 +41,8 @@ namespace FantasyHOF.ESPN
 
         private async Task<TAPIResponseType> SendAPIRequestAsync<TAPIResponseType>(HttpRequestMessage request)
         {
+            bool expectsOneResult = request.RequestUri?.AbsoluteUri.Contains("seasonId") == true;
+
             HttpResponseMessage apiResponse = await _client.SendAsync(request);
 
             switch (apiResponse.StatusCode)
@@ -60,173 +62,104 @@ namespace FantasyHOF.ESPN
 
             try
             {
-                return await apiResponse.Content.ReadFromJsonAsync<TAPIResponseType>(_serializerOptions)
-                    ?? throw new Exception();
-            }
-            catch (Exception)
-            {
-                throw new Exception($"Failed to deserialize result: {request.RequestUri}");
-            }
-        }
-
-        public async Task<List<ESPNSeasonalLeagueData>> LoadSeasonalLeagueData()
-        {
-            List<ESPNSeasonalLeagueData> allSeasonsData = [];
-
-            allSeasonsData.AddRange(await LoadHistoricalSeasonLeagueData());
-            
-            ESPNSeasonalLeagueData? currentSeasonData = await LoadCurrentSeasonLeagueData();
-            if (currentSeasonData is not null)
-            {
-                allSeasonsData.Add(currentSeasonData);
-            }
-
-            return allSeasonsData;
-        }
-
-        private async Task<List<ESPNSeasonalLeagueData>> LoadHistoricalSeasonLeagueData()
-        {
-            List<ESPNSeasonalLeagueData> historicalLeagueData = [];
-            
-            IEnumerable<int> previousLeagueYears = (await LoadLeagueYears())
-                .Where(year => year != DateTime.Now.Year);
-
-            if (!previousLeagueYears.Any()) return historicalLeagueData;
-
-            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials)
-                .WithViews(ESPNView.mNav, ESPNView.mTeam, ESPNView.mSettings)
-                .Build();
-
-            List<LeagueDataResponse> response = await SendAPIRequestAsync<List<LeagueDataResponse>>(request);
-
-            historicalLeagueData.AddRange(response.Select(leagueDataResponse => new ESPNSeasonalLeagueData(
-                leagueDataResponse.SeasonId, 
-                leagueDataResponse.Settings, 
-                leagueDataResponse.Members, 
-                leagueDataResponse.Teams)));
-
-            return historicalLeagueData;
-        }
-
-        private async Task<ESPNSeasonalLeagueData?> LoadCurrentSeasonLeagueData()
-        {
-            if (!(await LoadLeagueYears()).Contains(DateTime.Now.Year)) return null;
-
-            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials)
-                .WithViews(ESPNView.mNav, ESPNView.mTeam, ESPNView.mSettings)
-                .Build();
-
-            LeagueDataResponse response = await SendAPIRequestAsync<LeagueDataResponse>(request);
-
-            return new ESPNSeasonalLeagueData(response.SeasonId, response.Settings, response.Members, response.Teams);
-        }
-
-        public async Task<List<ESPNWeeklyLeagueData>> LoadWeeklyLeagueData()
-        {
-            List<ESPNWeeklyLeagueData> weeklyLeagueData = [];
-
-            weeklyLeagueData.AddRange(await LoadNonHistoricalWeeklyLeagueData());
-            weeklyLeagueData.AddRange(await LoadHistoricalWeeklyLeagueData());
-
-            return weeklyLeagueData;
-        }
-
-        private async Task<List<ESPNWeeklyLeagueData>> LoadHistoricalWeeklyLeagueData()
-        {
-            List<ESPNWeeklyLeagueData> historicalWeeklyData = [];
-
-            bool hasHistoricalYears = (await LoadLeagueYears())
-                .Where(year => year < 2018)
-                .Any();
-
-            if (!hasHistoricalYears) return historicalWeeklyData;
-
-            IEnumerable<Task<List<ESPNWeeklyLeagueData>>> weeklyLeagueDataTasks = Enumerable.Range(1, 16)
-                .Select(LoadHistoricalMatchups);
-
-            IEnumerable<ESPNWeeklyLeagueData> weeklyLeagueData = (await Task.WhenAll(weeklyLeagueDataTasks))
-                .SelectMany(weekData => weekData);
-
-            historicalWeeklyData.AddRange(weeklyLeagueData);
-
-            return historicalWeeklyData;
-        }
-
-        private async Task<List<ESPNWeeklyLeagueData>> LoadHistoricalMatchups(int matchupWeek)
-        {
-            List<ESPNWeeklyLeagueData> historicalWeeklyData = [];
-
-            HttpRequestMessage matchupRequest = ESPNRequestBuilder.ForLeague(_credentials)
-                .WithViews(ESPNView.mBoxscore)
-                .WithScoringPeriod(matchupWeek)
-                .Build();
-
-            List<WeeklyDataResponse> matchupWeekResponse = (await SendAPIRequestAsync<List<WeeklyDataResponse>>(matchupRequest))
-                .Where(response => response.SeasonId < 2018)
-                .Where(response => response.Schedule.Any())
-                .ToList();
-
-            historicalWeeklyData.AddRange(matchupWeekResponse.Select(weeklyDataResponse => new ESPNWeeklyLeagueData()
-            {
-                Year = weeklyDataResponse.SeasonId,
-                Week = matchupWeek,
-                Matchups = weeklyDataResponse.Schedule
-            }));
-
-            return historicalWeeklyData;
-        }
-
-        private async Task<List<ESPNWeeklyLeagueData>> LoadNonHistoricalWeeklyLeagueData()
-        {
-            IEnumerable<int> nonHistoricalLeagueYears = (await LoadLeagueYears())
-                .Where(year => year >= 2018);
-
-            List<ESPNWeeklyLeagueData> weeklyLeagueData = [];
-
-            foreach (int year in nonHistoricalLeagueYears)
-            {
-                ESPNWeeklyStatus matchupWeeks = (await LoadNonHistoricalMatchupWeeks(year)).Status;
-
-                int lastWeek = year == DateTime.Now.Year ? matchupWeeks.CurrentMatchupPeriod - 1 : matchupWeeks.CurrentMatchupPeriod;
-
-                IEnumerable<Task<WeeklyDataResponse>> matchupTasks = Enumerable.Range(matchupWeeks.FirstScoringPeriod, lastWeek - matchupWeeks.FirstScoringPeriod + 1)
-                    .Select(matchupWeek => LoadMatchup(year, matchupWeek));
-
-                IEnumerable<WeeklyDataResponse> weeklyResponses = await Task.WhenAll(matchupTasks);
-
-                foreach (WeeklyDataResponse matchupData in weeklyResponses)
+                if (expectsOneResult)
                 {
-                    weeklyLeagueData.Add(new ESPNWeeklyLeagueData()
-                    {
-                        Year = year,
-                        Week = matchupData.Schedule.First().MatchupPeriodId,
-                        Matchups = matchupData.Schedule
-                    });
+                    IEnumerable<TAPIResponseType> serializationResult = (await apiResponse.Content.ReadFromJsonAsync<IEnumerable<TAPIResponseType>>(_serializerOptions))
+                        ?? throw new Exception();
+
+                    return serializationResult.First();
+                }
+                else
+                {
+                    return await apiResponse.Content.ReadFromJsonAsync<TAPIResponseType>(_serializerOptions)
+                        ?? throw new Exception();
                 }
             }
-
-            return weeklyLeagueData;
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to deserialize result: {request.RequestUri} \n {ex.Message}");
+            }
         }
 
-        private async Task<WeeklyStatusResponse> LoadNonHistoricalMatchupWeeks(int year)
+        public async Task<IEnumerable<ESPNSeasonalLeagueData>> LoadSeasonalLeagueData()
         {
-            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials)
-                .ForYear(year)
+            IEnumerable<int> leagueYears = await LoadLeagueYears();
+
+            IEnumerable<Task<LeagueDataResponse>> seasonRequestTasks = leagueYears.Select(SendSeasonalLeagueDataRequest);
+
+            return (await Task.WhenAll(seasonRequestTasks))
+                .Select(leagueResponse => new ESPNSeasonalLeagueData
+                (
+                    leagueResponse.SeasonId,
+                    leagueResponse.Settings,
+                    leagueResponse.Members,
+                    leagueResponse.Teams
+                ));
+        }
+
+        private Task<LeagueDataResponse> SendSeasonalLeagueDataRequest(int year)
+        {
+            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, year)
+                .WithViews(ESPNView.mNav, ESPNView.mTeam, ESPNView.mSettings)
+                .Build();
+
+            return SendAPIRequestAsync<LeagueDataResponse>(request);
+        }
+
+        public async Task<IEnumerable<ESPNWeeklyLeagueData>> LoadWeeklyLeagueData()
+        {
+            List<ESPNWeeklyLeagueData> weeklyLeagueData = [];
+
+            IEnumerable<int> leagueYears = await LoadLeagueYears();
+
+            IEnumerable<Task<IEnumerable<ESPNWeeklyLeagueData>>> weeklyDataByYearTasks = leagueYears.Select(SendWeeklyDataRequestsForYear);
+
+            IEnumerable<ESPNWeeklyLeagueData> allLeagueWeeklyData = (await Task.WhenAll(weeklyDataByYearTasks)).SelectMany(weeklyDataByYear => weeklyDataByYear);
+
+            return allLeagueWeeklyData;
+        }
+
+        public async Task<IEnumerable<ESPNWeeklyLeagueData>> SendWeeklyDataRequestsForYear(int year)
+        {
+            ESPNWeeklyStatus matchupWeeks = await LoadSeasonMatchupWeeks(year);
+
+            int lastWeek = year == DateTime.Now.Year ? 
+                matchupWeeks.CurrentMatchupPeriod - 1 : 
+                matchupWeeks.CurrentMatchupPeriod;
+
+            List<Task<WeeklyDataResponse>> matchupTasks = [];
+            for (int week = matchupWeeks.FirstScoringPeriod; week <= lastWeek; week++)
+            {
+                matchupTasks.Add(SendWeeklyDataRequest(year, week));
+            }
+
+            return (await Task.WhenAll(matchupTasks))
+                .Where(weeklyResponse => weeklyResponse.Schedule.Count > 0)
+                .Select(weeklyResponse => new ESPNWeeklyLeagueData()
+                {
+                    Year = weeklyResponse.SeasonId,
+                    Week = weeklyResponse.Schedule.First().MatchupPeriodId,
+                    Matchups = weeklyResponse.Schedule
+                });
+        }
+
+        private async Task<ESPNWeeklyStatus> LoadSeasonMatchupWeeks(int year)
+        {
+            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, year)
                 .WithViews(ESPNView.mBoxscore)
                 .Build();
 
-            return await SendAPIRequestAsync<WeeklyStatusResponse>(request);
+            return (await SendAPIRequestAsync<WeeklyStatusResponse>(request)).Status;
         }
 
-        private async Task<WeeklyDataResponse> LoadMatchup(int year, int week)
+        public Task<WeeklyDataResponse> SendWeeklyDataRequest(int year, int week)
         {
-            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials)
-                .ForYear(year)
-                .WithViews(ESPNView.mBoxscore)
+            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, year)
                 .WithScoringPeriod(week)
+                .WithViews(ESPNView.mBoxscore)
                 .Build();
 
-            return await SendAPIRequestAsync<WeeklyDataResponse>(request);
+            return SendAPIRequestAsync<WeeklyDataResponse>(request);
         }
 
         private async Task<List<int>> LoadLeagueYears()
@@ -267,8 +200,7 @@ namespace FantasyHOF.ESPN
 
         private async Task<bool> HasActiveLeagueYear()
         {
-            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials)
-                .ForYear(DateTime.Now.Year)
+            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, DateTime.Now.Year)
                 .Build();
 
             try

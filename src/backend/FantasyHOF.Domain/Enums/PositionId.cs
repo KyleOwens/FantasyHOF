@@ -33,6 +33,7 @@ namespace FantasyHOF.Domain.Enums
         // 22 intentionally skipped
         RBWRTE = 23,
         ER = 24,
-        Rookie = 25
+        Rookie = 25,
+        Unknown = 999
     }
 }

@@ -28,34 +28,28 @@ namespace FantasyHOF.ESPN
         private readonly ESPNLeagueCredentials _credentials;
         private readonly List<ESPNView> _views = [];
 
-        private bool _isForRecentData = false;
-        private int  _requestYear = DateTime.Now.Year;
+        private int? _requestYear;
         private int? _scoringPeriod;
-        
-        private string BaseURL => !_isForRecentData ?
+
+        private bool IsLegacyRequest => _requestYear is null || _requestYear < 2018;
+
+        private string BaseURL => IsLegacyRequest ?
             "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/leagueHistory/" :
             "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/";
 
-        private string RequestURI => !_isForRecentData ?
+        private string RequestURI => IsLegacyRequest ?
             $"{BaseURL}{_credentials.LeagueId}" :
-            $"{BaseURL}{DateTime.Now.Year}/segments/0/leagues/{_credentials.LeagueId}";
+            $"{BaseURL}{_requestYear}/segments/0/leagues/{_credentials.LeagueId}";
             
-        private ESPNRequestBuilder(ESPNLeagueCredentials credentials)
+        private ESPNRequestBuilder(ESPNLeagueCredentials credentials, int? requestYear)
         {
             _credentials = credentials;
+            _requestYear = requestYear;
         }
 
-        public static ESPNRequestBuilder ForLeague(ESPNLeagueCredentials credentials)
+        public static ESPNRequestBuilder ForLeague(ESPNLeagueCredentials credentials, int? year = null)
         {
-            return new(credentials);
-        }
-
-        public ESPNRequestBuilder ForYear(int year)
-        {
-            _isForRecentData = true;
-            _requestYear = year;
-
-            return this;
+            return new(credentials, year);
         }
 
         public ESPNRequestBuilder WithViews(params ESPNView[] views)
@@ -86,9 +80,18 @@ namespace FantasyHOF.ESPN
         }
 
         private void AddQueryParameters(UriBuilder uriBuilder)
-        {
-            AddFilterParams(uriBuilder);
+        {   
             AddViewParams(uriBuilder);
+            AddFilterParams(uriBuilder);
+            AddLegacyParams(uriBuilder);
+        }
+
+        private void AddLegacyParams(UriBuilder uriBuilder)
+        {
+            if (!IsLegacyRequest) return;
+            if (_requestYear is null) return;
+
+            uriBuilder.AddQueryParameter("seasonId", _requestYear.Value.ToString());
         }
 
         private void AddFilterParams(UriBuilder uriBuilder)
@@ -101,7 +104,7 @@ namespace FantasyHOF.ESPN
 
         private void AddViewParams(UriBuilder uriBuilder)
         {
-            foreach (var view in _views)
+            foreach (ESPNView view in _views)
             {
                 uriBuilder.AddQueryParameter("view", view.ToString());
             }

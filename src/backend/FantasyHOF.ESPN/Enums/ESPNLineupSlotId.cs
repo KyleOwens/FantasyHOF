@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.ESPN.Enums
 {
-    public enum ESPNLineupSlotId
+    public enum ESPNLineupSlotId : int
     {
         QB = 0,
         TQB = 1,
@@ -32,6 +32,6 @@ namespace FantasyHOF.ESPN.Enums
         IR = 21,
         RBWRTE = 23,
         ER = 24,
-        Rookie = 25
+        Rookie = 25,
     }
 }

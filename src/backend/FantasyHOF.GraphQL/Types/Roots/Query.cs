@@ -17,11 +17,10 @@ public static class Query
         return await mediator.Send(new GetESPNLeagueQuery(new ESPNLeagueCredentials(input.LeagueId, input.SWID, input.ESPNS2Id)));
     }
 
-    public static async Task<List<ESPNWeeklyLeagueData>> TestESPNLeague(ESPNLeagueCredentialsInput input, IESPNAPIClientBuilder espnClientBuilder)
+    public static async Task<IEnumerable<ESPNSeasonalLeagueData>> TestESPNLeague(ESPNLeagueCredentialsInput input, IESPNAPIClientBuilder espnClientBuilder)
     {
         var test = espnClientBuilder.Build(new ESPNLeagueCredentials(input.LeagueId, input.SWID, input.ESPNS2Id));
 
-        return await test.LoadWeeklyLeagueData();
+        return await test.LoadSeasonalLeagueData();
     }
-
 }
