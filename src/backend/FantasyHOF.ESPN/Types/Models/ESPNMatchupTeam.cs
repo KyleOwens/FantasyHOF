@@ -4,6 +4,6 @@
     {
         public required int TeamId { get; set; }
         public required decimal TotalPoints { get; set; }
-        public required ESPNRoster rosterForCurrentScoringPeriod { get; set; }
+        public required ESPNRoster RosterForMatchupPeriod { get; set; } = null!;
     }
 }

@@ -1,4 +1,4 @@
-﻿using FantasyHOF.ESPN.Errors;
+﻿using FantasyHOF.ESPN.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

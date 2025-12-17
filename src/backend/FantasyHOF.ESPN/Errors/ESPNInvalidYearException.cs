@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Infrastructure.Exceptions;
+﻿using FantasyHOF.ESPN.Enums;
+using FantasyHOF.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

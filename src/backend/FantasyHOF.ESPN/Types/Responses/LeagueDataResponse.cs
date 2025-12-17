@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.ESPN.Types.Responses
 {
-    public class LeagueDataResposne
+    public class LeagueDataResponse
     {
+        public required int SeasonId { get; set; }
         public ESPNLeagueSettings Settings { get; set; } = default!;
         public List<ESPNFantasyMember> Members { get; set; } = [];
         public List<ESPNFantasyTeam> Teams { get; set; } = [];

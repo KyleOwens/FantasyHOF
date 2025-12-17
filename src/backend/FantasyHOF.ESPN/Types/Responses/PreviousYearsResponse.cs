@@ -9,6 +9,7 @@ namespace FantasyHOF.ESPN.Types.Responses
 {
     internal class PreviousYearsResponse
     {
-        public ESPNLeagueStatus Status { get; set; } = new();
+        public required int SeasonId { get; set; }
+        public required ESPNLeagueStatus Status { get; set; }
     }
 }

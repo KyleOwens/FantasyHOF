@@ -79,7 +79,7 @@ namespace FantasyHOF.Application.Queries
                     .SelectMany(espnWeeklyLeagueData => espnWeeklyLeagueData.Matchups)
                     .SelectMany(espnMatchup => new[] { espnMatchup.Home, espnMatchup.Away })
                     .Where(espnTeam => espnTeam is not null)
-                    .SelectMany(espnTeam => espnTeam!.rosterForCurrentScoringPeriod.Entries)
+                    .SelectMany(espnTeam => espnTeam!.RosterForMatchupPeriod.Entries)
                     .Select(espnRosterEntry => espnRosterEntry.PlayerPoolEntry.Player.Id)
                     .Distinct();
 
@@ -244,7 +244,7 @@ namespace FantasyHOF.Application.Queries
                         matchup.Opponent = _importContext.TeamLookup[opponentTeam.TeamId]; 
                     }
 
-                    matchup.MatchupRosterSpots = CreateMatchupRosterSpots(primaryTeam.rosterForCurrentScoringPeriod);
+                    matchup.MatchupRosterSpots = CreateMatchupRosterSpots(primaryTeam.RosterForMatchupPeriod);
                     
                     teamMatchups.Add(matchup);
                 }
@@ -317,13 +317,31 @@ namespace FantasyHOF.Application.Queries
 
             private async Task DeleteLeagueIfExists(string espnLeagueId, CancellationToken cancellationToken)
             {
-                League? existingLeague = await _context.Leagues.FirstOrDefaultAsync(league =>
-                    league.FantasyProviderId == FantasyProviderId.ESPN &&
-                    league.ProviderLeagueId == espnLeagueId,
-                    cancellationToken);
+                League? existingLeague = await _context.Leagues
+                    .Include(league => league.Seasons)
+                    .ThenInclude(season => season.LeagueSeasonMembers)
+                    .ThenInclude(member => member.LeagueSeasonMemberTeams)
+                    .ThenInclude(lsmt => lsmt.Team)
+                    .ThenInclude(team => team.Matchups)
+                    .FirstOrDefaultAsync(league =>
+                        league.FantasyProviderId == FantasyProviderId.ESPN &&
+                        league.ProviderLeagueId == espnLeagueId,
+                        cancellationToken);
 
                 if (existingLeague is null) return;
 
+                IEnumerable<Team> teams = existingLeague.Seasons
+                    .SelectMany(season => season.LeagueSeasonMembers)
+                    .SelectMany(member => member.LeagueSeasonMemberTeams)
+                    .Select(team => team.Team)
+                    .Distinct();
+
+                IEnumerable<TeamMatchup> matchups = teams
+                    .SelectMany(team => team.Matchups)
+                    .Distinct();
+
+                _context.TeamMatchups.RemoveRange(matchups);
+                _context.Teams.RemoveRange(teams);
                 _context.Leagues.Remove(existingLeague);
             }
         }

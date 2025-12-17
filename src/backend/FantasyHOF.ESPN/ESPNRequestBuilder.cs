@@ -26,23 +26,36 @@ namespace FantasyHOF.ESPN
     public class ESPNRequestBuilder
     {
         private readonly ESPNLeagueCredentials _credentials;
-        private readonly int _year;
-        private readonly List<ESPNView> _views = new();
+        private readonly List<ESPNView> _views = [];
 
+        private bool _isForRecentData = false;
+        private int  _requestYear = DateTime.Now.Year;
         private int? _scoringPeriod;
+        
+        private string BaseURL => !_isForRecentData ?
+            "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/leagueHistory/" :
+            "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/";
 
-        private const string BaseURL = "https://lm-api-reads.fantasy.espn.com/apis/v3/games/ffl/seasons/";
-
-
-        private ESPNRequestBuilder(ESPNLeagueCredentials credentials, int year)
+        private string RequestURI => !_isForRecentData ?
+            $"{BaseURL}{_credentials.LeagueId}" :
+            $"{BaseURL}{DateTime.Now.Year}/segments/0/leagues/{_credentials.LeagueId}";
+            
+        private ESPNRequestBuilder(ESPNLeagueCredentials credentials)
         {
             _credentials = credentials;
-            _year = year;
         }
 
-        public static ESPNRequestBuilder ForLeague(ESPNLeagueCredentials credentials, int year)
+        public static ESPNRequestBuilder ForLeague(ESPNLeagueCredentials credentials)
         {
-            return new(credentials, year);
+            return new(credentials);
+        }
+
+        public ESPNRequestBuilder ForYear(int year)
+        {
+            _isForRecentData = true;
+            _requestYear = year;
+
+            return this;
         }
 
         public ESPNRequestBuilder WithViews(params ESPNView[] views)
@@ -61,7 +74,7 @@ namespace FantasyHOF.ESPN
 
         public HttpRequestMessage Build()
         {
-            UriBuilder uriBuilder = new($"{BaseURL}{_year}/segments/0/leagues/{_credentials.LeagueId}");
+            UriBuilder uriBuilder = new(RequestURI);
 
             AddQueryParameters(uriBuilder);
 

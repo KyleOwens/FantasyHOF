@@ -2,6 +2,7 @@
 using FantasyHOF.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    partial class FantasyHOFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251216162502_TeamCascade")]
+    partial class TeamCascade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -498,9 +501,9 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnName("name");
 
                     b.HasKey("Id")
-                        .HasName("pk_positions");
+                        .HasName("pk_position");
 
-                    b.ToTable("positions", (string)null);
+                    b.ToTable("position", (string)null);
 
                     b.HasData(
                         new
@@ -2107,7 +2110,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_matchup_roster_spots_positions_position_id");
+                        .HasConstraintName("fk_matchup_roster_spots_position_position_id");
 
                     b.Navigation("Player");
 
