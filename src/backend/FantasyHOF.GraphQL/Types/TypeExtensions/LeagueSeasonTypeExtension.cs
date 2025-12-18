@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FantasyHOF.GraphQL.Types.Extensions
+namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
-    [ExtendObjectType(typeof(League))]
-    public class FantasyLeagueType
+    [ExtendObjectType(typeof(LeagueSeason))]
+    public class LeagueSeasonTypeExtension
     {
+
     }
 }

@@ -1,7 +1,8 @@
 using FantasyHOF.Application.Mappers;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
-using FantasyHOF.GraphQL.Services;
+using FantasyHOF.ESPN.Enums;
+using FantasyHOF.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
@@ -26,7 +27,8 @@ builder.Services.AddMediatR(cfg =>
 
 builder.AddGraphQL()
     .AddFantasyHOFTypes()
-    .AddErrorFilter<FantasyHOFErrorFilter>();
+    .AddMutationConventions(applyToAllMutations: true)
+    .AddErrorInterfaceType<ICodedException>();
     
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.ESPN.Enums;
+using FantasyHOF.Infrastructure.Enums;
 using FantasyHOF.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.ESPN.Errors
 {
-    public class ESPNAuthenticationException : CodedException<ESPNErrorCode>
+    public class ESPNAuthenticationException : CodedException
     {
         public ESPNAuthenticationException()
-            : base(ESPNErrorCode.AuthenticationFailed, "Authentication with ESPN failed") { }
+            : base(AppErrorCode.ESPNAuthenticationFailed, "Authentication with ESPN failed") { }
     }
 }

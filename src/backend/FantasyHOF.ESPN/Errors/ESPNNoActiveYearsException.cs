@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.ESPN.Enums;
+using FantasyHOF.Infrastructure.Enums;
 using FantasyHOF.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,9 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.ESPN.Errors
 {
-    internal class ESPNNoActiveYearsException : CodedException<ESPNErrorCode>
+    public class ESPNNoActiveYearsException : CodedException
     {
         public ESPNNoActiveYearsException() 
-            : base(ESPNErrorCode.NoActiveYears, "This league has no years to pull data for")
-        {
-            
-        }
+            : base(AppErrorCode.ESPNNoActiveYears, "This league has no years to pull data for") { }
     }
 }

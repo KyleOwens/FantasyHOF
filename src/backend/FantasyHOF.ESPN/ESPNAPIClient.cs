@@ -7,6 +7,7 @@ using FantasyHOF.Infrastructure.Extensions;
 using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http.Json;
+using System.Net.NetworkInformation;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
@@ -41,23 +42,22 @@ namespace FantasyHOF.ESPN
 
         private async Task<TAPIResponseType> SendAPIRequestAsync<TAPIResponseType>(HttpRequestMessage request)
         {
+            bool isHistoricalRequest = request.RequestUri?.AbsoluteUri.Contains("leagueHistory") == true;
             bool expectsOneResult = request.RequestUri?.AbsoluteUri.Contains("seasonId") == true;
 
             HttpResponseMessage apiResponse = await _client.SendAsync(request);
 
-            switch (apiResponse.StatusCode)
-            {
-                case HttpStatusCode.BadRequest:
-                    throw new ESPNLeagueInvalidException();
-                case HttpStatusCode.NotFound:
-                    throw new ESPNInvalidYearException();
-                case HttpStatusCode.Unauthorized:
-                    throw new ESPNAuthenticationException();
-            }
-
             if (!apiResponse.IsSuccessStatusCode)
             {
-                throw new ESPNHttpException(apiResponse.StatusCode, await apiResponse.Content.ReadAsStringAsync());
+                throw apiResponse.StatusCode switch
+                {
+                    HttpStatusCode.BadRequest => new ESPNLeagueInvalidException(),
+                    HttpStatusCode.Unauthorized => new ESPNAuthenticationException(),
+                    HttpStatusCode.NotFound when isHistoricalRequest => new ESPNAuthenticationException(),
+                    HttpStatusCode.NotFound => new ESPNInvalidYearException(),
+
+                    _ => new ESPNHttpException(apiResponse.StatusCode, await apiResponse.Content.ReadAsStringAsync()),
+                };
             }
 
             try

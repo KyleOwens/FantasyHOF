@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.ESPN.Enums;
+using FantasyHOF.Infrastructure.Enums;
 using FantasyHOF.Infrastructure.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.ESPN.Errors
 {
-    internal class ESPNInvalidYearException : CodedException<ESPNErrorCode>
+    public class ESPNInvalidYearException : CodedException
     {
         public ESPNInvalidYearException() 
-            : base(ESPNErrorCode.InvalidYear, "The year provided was not found for this league") { }
+            : base(AppErrorCode.ESPNInvalidYear, "The year provided was not found for this league") { }
     }
 }
