@@ -2,6 +2,7 @@
 using FantasyHOF.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    partial class FantasyHOFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251218013058_SeedDisplayNames")]
+    partial class SeedDisplayNames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -670,192 +673,192 @@ namespace FantasyHOF.EntityFramework.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "Passing yards"
+                            Name = "Quarterback"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Passing touchdowns"
+                            Name = "PassingTouchdowns"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Passing yards (per 5)"
+                            Name = "PassingYardsPer5"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Passing yards (per 10)"
+                            Name = "PassingYardsPer10"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Passing yards (per 20)"
+                            Name = "PassingYardsPer20"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Passing yards (per 25)"
+                            Name = "PassingYardsPer25"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Passing yards (per 50)"
+                            Name = "PassingYardsPer50"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "Passing yards (per 100)"
+                            Name = "PassingYardsPer100"
                         },
                         new
                         {
                             Id = 11,
-                            Name = "Pass completions (per 5)"
+                            Name = "PassCompletionsPer5"
                         },
                         new
                         {
                             Id = 12,
-                            Name = "Pass completions (per 10)"
+                            Name = "PassCompletionsPer10"
                         },
                         new
                         {
                             Id = 13,
-                            Name = "Pass incompletions (per 5)"
+                            Name = "PassIncompletionsPer5"
                         },
                         new
                         {
                             Id = 14,
-                            Name = "Pass incompletions (per 10)"
+                            Name = "PassIncompletionsPer10"
                         },
                         new
                         {
                             Id = 15,
-                            Name = "40+ yard passing TD bonus"
+                            Name = "PassingTD40PlusBonus"
                         },
                         new
                         {
                             Id = 16,
-                            Name = "50+ yard passing TD bonus"
+                            Name = "PassingTD50PlusBonus"
                         },
                         new
                         {
                             Id = 17,
-                            Name = "300–399 passing yard game"
+                            Name = "Passing300To399YardGame"
                         },
                         new
                         {
                             Id = 18,
-                            Name = "400+ passing yard game"
+                            Name = "Passing400PlusYardGame"
                         },
                         new
                         {
                             Id = 19,
-                            Name = "Passing two-point conversion"
+                            Name = "PassingTwoPointConversion"
                         },
                         new
                         {
                             Id = 20,
-                            Name = "Interceptions thrown"
+                            Name = "InterceptionsThrown"
                         },
                         new
                         {
                             Id = 21,
-                            Name = "Completion percentage"
+                            Name = "CompletionPercentage"
                         },
                         new
                         {
                             Id = 22,
-                            Name = "Passing yards per game"
+                            Name = "PassingYardsPerGame"
                         },
                         new
                         {
                             Id = 23,
-                            Name = "Rushing attempts"
+                            Name = "RushingAttempts"
                         },
                         new
                         {
                             Id = 24,
-                            Name = "Rushing yards"
+                            Name = "RushingYards"
                         },
                         new
                         {
                             Id = 25,
-                            Name = "Rushing touchdowns"
+                            Name = "RushingTouchdowns"
                         },
                         new
                         {
                             Id = 26,
-                            Name = "Rushing two-point conversion"
+                            Name = "RushingTwoPointConversion"
                         },
                         new
                         {
                             Id = 27,
-                            Name = "Rushing yards (per 5)"
+                            Name = "RushingYardsPer5"
                         },
                         new
                         {
                             Id = 28,
-                            Name = "Rushing yards (per 10)"
+                            Name = "RushingYardsPer10"
                         },
                         new
                         {
                             Id = 29,
-                            Name = "Rushing yards (per 20)"
+                            Name = "RushingYardsPer20"
                         },
                         new
                         {
                             Id = 30,
-                            Name = "Rushing yards (per 25)"
+                            Name = "RushingYardsPer25"
                         },
                         new
                         {
                             Id = 31,
-                            Name = "Rushing yards (per 50)"
+                            Name = "RushingYardsPer50"
                         },
                         new
                         {
                             Id = 32,
-                            Name = "Rushing yards (per 100)"
+                            Name = "RushingYardsPer100"
                         },
                         new
                         {
                             Id = 33,
-                            Name = "Rushing attempts (per 5)"
+                            Name = "RushingAttemptsPer5"
                         },
                         new
                         {
                             Id = 34,
-                            Name = "Rushing attempts (per 10)"
+                            Name = "RushingAttemptsPer10"
                         },
                         new
                         {
                             Id = 35,
-                            Name = "40+ yard rushing TD bonus"
+                            Name = "RushingTD40PlusBonus"
                         },
                         new
                         {
                             Id = 36,
-                            Name = "50+ yard rushing TD bonus"
+                            Name = "RushingTD50PlusBonus"
                         },
                         new
                         {
                             Id = 37,
-                            Name = "100–199 rushing yard game"
+                            Name = "Rushing100To199YardGame"
                         },
                         new
                         {
                             Id = 38,
-                            Name = "200+ rushing yard game"
+                            Name = "Rushing200PlusYardGame"
                         },
                         new
                         {
                             Id = 39,
-                            Name = "Rushing yards per attempt"
+                            Name = "RushingYardsPerAttempt"
                         },
                         new
                         {
                             Id = 40,
-                            Name = "Rushing yards per game"
+                            Name = "RushingYardsPerGame"
                         },
                         new
                         {
@@ -865,282 +868,282 @@ namespace FantasyHOF.EntityFramework.Migrations
                         new
                         {
                             Id = 42,
-                            Name = "Receiving yards"
+                            Name = "ReceivingYards"
                         },
                         new
                         {
                             Id = 43,
-                            Name = "Receiving touchdowns"
+                            Name = "ReceivingTouchdowns"
                         },
                         new
                         {
                             Id = 44,
-                            Name = "Receiving two-point conversion"
+                            Name = "ReceivingTwoPointConversion"
                         },
                         new
                         {
                             Id = 45,
-                            Name = "40+ yard receiving TD bonus"
+                            Name = "ReceivingTD40PlusBonus"
                         },
                         new
                         {
                             Id = 46,
-                            Name = "50+ yard receiving TD bonus"
+                            Name = "ReceivingTD50PlusBonus"
                         },
                         new
                         {
                             Id = 47,
-                            Name = "Receiving yards (per 5)"
+                            Name = "ReceivingYardsPer5"
                         },
                         new
                         {
                             Id = 48,
-                            Name = "Receiving yards (per 10)"
+                            Name = "ReceivingYardsPer10"
                         },
                         new
                         {
                             Id = 49,
-                            Name = "Receiving yards (per 20)"
+                            Name = "ReceivingYardsPer20"
                         },
                         new
                         {
                             Id = 50,
-                            Name = "Receiving yards (per 25)"
+                            Name = "ReceivingYardsPer25"
                         },
                         new
                         {
                             Id = 51,
-                            Name = "Receiving yards (per 50)"
+                            Name = "ReceivingYardsPer50"
                         },
                         new
                         {
                             Id = 52,
-                            Name = "Receiving yards (per 100)"
+                            Name = "ReceivingYardsPer100"
                         },
                         new
                         {
                             Id = 53,
-                            Name = "Each reception"
+                            Name = "EachReception"
                         },
                         new
                         {
                             Id = 54,
-                            Name = "Receptions (per 5)"
+                            Name = "ReceptionsPer5"
                         },
                         new
                         {
                             Id = 55,
-                            Name = "Receptions (per 10)"
+                            Name = "ReceptionsPer10"
                         },
                         new
                         {
                             Id = 56,
-                            Name = "100–199 receiving yard game"
+                            Name = "Receiving100To199YardGame"
                         },
                         new
                         {
                             Id = 57,
-                            Name = "200+ receiving yard game"
+                            Name = "Receiving200PlusYardGame"
                         },
                         new
                         {
                             Id = 58,
-                            Name = "Receiving targets"
+                            Name = "ReceivingTargets"
                         },
                         new
                         {
                             Id = 59,
-                            Name = "Yards after catch"
+                            Name = "ReceivingYardsAfterCatch"
                         },
                         new
                         {
                             Id = 60,
-                            Name = "Yards per reception"
+                            Name = "ReceivingYardsPerCatch"
                         },
                         new
                         {
                             Id = 61,
-                            Name = "Receiving yards per game"
+                            Name = "ReceivingYardsPerGame"
                         },
                         new
                         {
                             Id = 62,
-                            Name = "Total two-point conversions"
+                            Name = "TotalTwoPointConversions"
                         },
                         new
                         {
                             Id = 63,
-                            Name = "Fumble recovered for touchdown"
+                            Name = "FumbleRecoveredForTD"
                         },
                         new
                         {
                             Id = 64,
-                            Name = "Times sacked"
+                            Name = "Sacked"
                         },
                         new
                         {
                             Id = 65,
-                            Name = "Passing fumbles"
+                            Name = "PassingFumbles"
                         },
                         new
                         {
                             Id = 66,
-                            Name = "Rushing fumbles"
+                            Name = "RushingFumbles"
                         },
                         new
                         {
                             Id = 67,
-                            Name = "Receiving fumbles"
+                            Name = "ReceivingFumbles"
                         },
                         new
                         {
                             Id = 68,
-                            Name = "Total fumbles"
+                            Name = "TotalFumbles"
                         },
                         new
                         {
                             Id = 69,
-                            Name = "Passing fumbles lost"
+                            Name = "PassingFumblesLost"
                         },
                         new
                         {
                             Id = 70,
-                            Name = "Rushing fumbles lost"
+                            Name = "RushingFumblesLost"
                         },
                         new
                         {
                             Id = 71,
-                            Name = "Receiving fumbles lost"
+                            Name = "ReceivingFumblesLost"
                         },
                         new
                         {
                             Id = 72,
-                            Name = "Total fumbles lost"
+                            Name = "TotalFumblesLost"
                         },
                         new
                         {
                             Id = 73,
-                            Name = "Total turnovers"
+                            Name = "TotalTurnovers"
                         },
                         new
                         {
                             Id = 74,
-                            Name = "50+ yard field goals made"
+                            Name = "FieldGoalMade50Plus"
                         },
                         new
                         {
                             Id = 75,
-                            Name = "50+ yard field goals attempted"
+                            Name = "FieldGoalAttempted50Plus"
                         },
                         new
                         {
                             Id = 76,
-                            Name = "50+ yard field goals missed"
+                            Name = "FieldGoalMissed50Plus"
                         },
                         new
                         {
                             Id = 77,
-                            Name = "40–49 yard field goals made"
+                            Name = "FieldGoalMade40To49"
                         },
                         new
                         {
                             Id = 78,
-                            Name = "40–49 yard field goals attempted"
+                            Name = "FieldGoalAttempted40To49"
                         },
                         new
                         {
                             Id = 79,
-                            Name = "40–49 yard field goals missed"
+                            Name = "FieldGoalMissed40To49"
                         },
                         new
                         {
                             Id = 80,
-                            Name = "0–39 yard field goals made"
+                            Name = "FieldGoalMade0To39"
                         },
                         new
                         {
                             Id = 81,
-                            Name = "0–39 yard field goals attempted"
+                            Name = "FieldGoalAttempted0To39"
                         },
                         new
                         {
                             Id = 82,
-                            Name = "0–39 yard field goals missed"
+                            Name = "FieldGoalMissed0To39"
                         },
                         new
                         {
                             Id = 83,
-                            Name = "Total field goals made"
+                            Name = "TotalFieldGoalsMade"
                         },
                         new
                         {
                             Id = 84,
-                            Name = "Total field goals attempted"
+                            Name = "TotalFieldGoalsAttempted"
                         },
                         new
                         {
                             Id = 85,
-                            Name = "Total field goals missed"
+                            Name = "TotalFieldGoalsMissed"
                         },
                         new
                         {
                             Id = 86,
-                            Name = "Extra points made"
+                            Name = "PATMade"
                         },
                         new
                         {
                             Id = 87,
-                            Name = "Extra points attempted"
+                            Name = "PATAttempted"
                         },
                         new
                         {
                             Id = 88,
-                            Name = "Extra points missed"
+                            Name = "PATMissed"
                         },
                         new
                         {
                             Id = 89,
-                            Name = "0 points allowed"
+                            Name = "PointsAllowed0"
                         },
                         new
                         {
                             Id = 90,
-                            Name = "1–6 points allowed"
+                            Name = "PointsAllowed1To6"
                         },
                         new
                         {
                             Id = 91,
-                            Name = "7–13 points allowed"
+                            Name = "PointsAllowed7To13"
                         },
                         new
                         {
                             Id = 92,
-                            Name = "14–17 points allowed"
+                            Name = "PointsAllowed14To17"
                         },
                         new
                         {
                             Id = 93,
-                            Name = "Blocked kick returned for TD"
+                            Name = "BlockedKickReturnTD"
                         },
                         new
                         {
                             Id = 94,
-                            Name = "Fumble or interception return TD"
+                            Name = "FumbleOrIntReturnTD"
                         },
                         new
                         {
                             Id = 95,
-                            Name = "Defensive interception"
+                            Name = "DefenseInterception"
                         },
                         new
                         {
                             Id = 96,
-                            Name = "Defensive fumble recovered"
+                            Name = "DefenseFumbleRecovered"
                         },
                         new
                         {
                             Id = 97,
-                            Name = "Blocked kick"
+                            Name = "BlockedKick"
                         },
                         new
                         {
@@ -1155,192 +1158,192 @@ namespace FantasyHOF.EntityFramework.Migrations
                         new
                         {
                             Id = 100,
-                            Name = "Half sack"
+                            Name = "HalfSack"
                         },
                         new
                         {
                             Id = 101,
-                            Name = "Kickoff return TD"
+                            Name = "KickoffReturnTD"
                         },
                         new
                         {
                             Id = 102,
-                            Name = "Punt return TD"
+                            Name = "PuntReturnTD"
                         },
                         new
                         {
                             Id = 103,
-                            Name = "Interception return TD"
+                            Name = "InterceptionReturnTD"
                         },
                         new
                         {
                             Id = 104,
-                            Name = "Fumble return TD"
+                            Name = "FumbleReturnTD"
                         },
                         new
                         {
                             Id = 105,
-                            Name = "Total return TDs"
+                            Name = "TotalReturnTD"
                         },
                         new
                         {
                             Id = 106,
-                            Name = "Fumbles forced"
+                            Name = "FumbleForced"
                         },
                         new
                         {
                             Id = 107,
-                            Name = "Assisted tackles"
+                            Name = "AssistedTackles"
                         },
                         new
                         {
                             Id = 108,
-                            Name = "Solo tackles"
+                            Name = "SoloTackles"
                         },
                         new
                         {
                             Id = 109,
-                            Name = "Total tackles"
+                            Name = "TotalTackles"
                         },
                         new
                         {
                             Id = 110,
-                            Name = "Every 3 tackles"
+                            Name = "Every3Tackles"
                         },
                         new
                         {
                             Id = 111,
-                            Name = "Every 5 tackles"
+                            Name = "Every5Tackles"
                         },
                         new
                         {
                             Id = 112,
-                            Name = "Stuffs (tackles for loss)"
+                            Name = "Stuffs"
                         },
                         new
                         {
                             Id = 113,
-                            Name = "Passes defended"
+                            Name = "PassesDefended"
                         },
                         new
                         {
                             Id = 114,
-                            Name = "Kickoff return yards"
+                            Name = "KickoffReturnYards"
                         },
                         new
                         {
                             Id = 115,
-                            Name = "Punt return yards"
+                            Name = "PuntReturnYards"
                         },
                         new
                         {
                             Id = 116,
-                            Name = "Kickoff return yards (per 10)"
+                            Name = "KickoffReturnYardsPer10"
                         },
                         new
                         {
                             Id = 117,
-                            Name = "Kickoff return yards (per 25)"
+                            Name = "KickoffReturnYardsPer25"
                         },
                         new
                         {
                             Id = 118,
-                            Name = "Punt return yards (per 10)"
+                            Name = "PuntReturnYardsPer10"
                         },
                         new
                         {
                             Id = 119,
-                            Name = "Punt return yards (per 25)"
+                            Name = "PuntReturnYardsPer25"
                         },
                         new
                         {
                             Id = 120,
-                            Name = "Points allowed"
+                            Name = "PointsAllowed"
                         },
                         new
                         {
                             Id = 121,
-                            Name = "18–21 points allowed"
+                            Name = "PointsAllowed18To21"
                         },
                         new
                         {
                             Id = 122,
-                            Name = "22–27 points allowed"
+                            Name = "PointsAllowed22To27"
                         },
                         new
                         {
                             Id = 123,
-                            Name = "28–34 points allowed"
+                            Name = "PointsAllowed28To34"
                         },
                         new
                         {
                             Id = 124,
-                            Name = "35–45 points allowed"
+                            Name = "PointsAllowed35To45"
                         },
                         new
                         {
                             Id = 125,
-                            Name = "46+ points allowed"
+                            Name = "PointsAllowed46Plus"
                         },
                         new
                         {
                             Id = 126,
-                            Name = "Points allowed per game"
+                            Name = "PointsAllowedPerGame"
                         },
                         new
                         {
                             Id = 127,
-                            Name = "Yards allowed"
+                            Name = "YardsAllowed"
                         },
                         new
                         {
                             Id = 128,
-                            Name = "Under 100 yards allowed"
+                            Name = "YardsAllowedLessThan100"
                         },
                         new
                         {
                             Id = 129,
-                            Name = "100–199 yards allowed"
+                            Name = "YardsAllowed100To199"
                         },
                         new
                         {
                             Id = 130,
-                            Name = "200–299 yards allowed"
+                            Name = "YardsAllowed200To299"
                         },
                         new
                         {
                             Id = 131,
-                            Name = "300–349 yards allowed"
+                            Name = "YardsAllowed300To349"
                         },
                         new
                         {
                             Id = 132,
-                            Name = "350–399 yards allowed"
+                            Name = "YardsAllowed350To399"
                         },
                         new
                         {
                             Id = 133,
-                            Name = "400–449 yards allowed"
+                            Name = "YardsAllowed400To449"
                         },
                         new
                         {
                             Id = 134,
-                            Name = "450–499 yards allowed"
+                            Name = "YardsAllowed450To499"
                         },
                         new
                         {
                             Id = 135,
-                            Name = "500–549 yards allowed"
+                            Name = "YardsAllowed500To549"
                         },
                         new
                         {
                             Id = 136,
-                            Name = "550+ yards allowed"
+                            Name = "YardsAllowed550Plus"
                         },
                         new
                         {
                             Id = 137,
-                            Name = "Yards allowed per game"
+                            Name = "YardsAllowedPerGame"
                         },
                         new
                         {
@@ -1350,32 +1353,32 @@ namespace FantasyHOF.EntityFramework.Migrations
                         new
                         {
                             Id = 139,
-                            Name = "Punt yards"
+                            Name = "PuntYards"
                         },
                         new
                         {
                             Id = 140,
-                            Name = "Punts inside the 10"
+                            Name = "PuntsInside10"
                         },
                         new
                         {
                             Id = 141,
-                            Name = "Punts inside the 20"
+                            Name = "PuntsInside20"
                         },
                         new
                         {
                             Id = 142,
-                            Name = "Blocked punts"
+                            Name = "BlockedPunts"
                         },
                         new
                         {
                             Id = 143,
-                            Name = "Punts returned"
+                            Name = "PuntsReturned"
                         },
                         new
                         {
                             Id = 144,
-                            Name = "Punt return yards allowed"
+                            Name = "PuntingReturnYards"
                         },
                         new
                         {
@@ -1385,447 +1388,447 @@ namespace FantasyHOF.EntityFramework.Migrations
                         new
                         {
                             Id = 146,
-                            Name = "Fair catches"
+                            Name = "FairCatches"
                         },
                         new
                         {
                             Id = 147,
-                            Name = "Punt average"
+                            Name = "PuntAverage"
                         },
                         new
                         {
                             Id = 148,
-                            Name = "Punt average (44+ yards)"
+                            Name = "PuntAverage44Plus"
                         },
                         new
                         {
                             Id = 149,
-                            Name = "Punt average (42–43.9 yards)"
+                            Name = "PuntAverage42To43_9"
                         },
                         new
                         {
                             Id = 150,
-                            Name = "Punt average (40–41.9 yards)"
+                            Name = "PuntAverage40To41_9"
                         },
                         new
                         {
                             Id = 151,
-                            Name = "Punt average (38–39.9 yards)"
+                            Name = "PuntAverage38To39_9"
                         },
                         new
                         {
                             Id = 152,
-                            Name = "Punt average (36–37.9 yards)"
+                            Name = "PuntAverage36To37_9"
                         },
                         new
                         {
                             Id = 153,
-                            Name = "Punt average (34–35.9 yards)"
+                            Name = "PuntAverage34To35_9"
                         },
                         new
                         {
                             Id = 154,
-                            Name = "Punt average (33.9 yards or less)"
+                            Name = "PuntAverage33_9OrLess"
                         },
                         new
                         {
                             Id = 155,
-                            Name = "Team win"
+                            Name = "TeamWin"
                         },
                         new
                         {
                             Id = 156,
-                            Name = "Team loss"
+                            Name = "TeamLoss"
                         },
                         new
                         {
                             Id = 157,
-                            Name = "Team tie"
+                            Name = "TeamTie"
                         },
                         new
                         {
                             Id = 158,
-                            Name = "Points scored"
+                            Name = "PointsScored"
                         },
                         new
                         {
                             Id = 159,
-                            Name = "Points per game"
+                            Name = "PointsPerGame"
                         },
                         new
                         {
                             Id = 160,
-                            Name = "Margin of victory"
+                            Name = "MarginOfVictory"
                         },
                         new
                         {
                             Id = 161,
-                            Name = "Win margin 25+"
+                            Name = "WinMargin25Plus"
                         },
                         new
                         {
                             Id = 162,
-                            Name = "Win margin 20–24"
+                            Name = "WinMargin20To24"
                         },
                         new
                         {
                             Id = 163,
-                            Name = "Win margin 15–19"
+                            Name = "WinMargin15To19"
                         },
                         new
                         {
                             Id = 164,
-                            Name = "Win margin 10–14"
+                            Name = "WinMargin10To14"
                         },
                         new
                         {
                             Id = 165,
-                            Name = "Win margin 5–9"
+                            Name = "WinMargin5To9"
                         },
                         new
                         {
                             Id = 166,
-                            Name = "Win margin 1–4"
+                            Name = "WinMargin1To4"
                         },
                         new
                         {
                             Id = 167,
-                            Name = "Loss margin 1–4"
+                            Name = "LossMargin1To4"
                         },
                         new
                         {
                             Id = 168,
-                            Name = "Loss margin 5–9"
+                            Name = "LossMargin5To9"
                         },
                         new
                         {
                             Id = 169,
-                            Name = "Loss margin 10–14"
+                            Name = "LossMargin10To14"
                         },
                         new
                         {
                             Id = 170,
-                            Name = "Loss margin 15–19"
+                            Name = "LossMargin15To19"
                         },
                         new
                         {
                             Id = 171,
-                            Name = "Loss margin 20–24"
+                            Name = "LossMargin20To24"
                         },
                         new
                         {
                             Id = 172,
-                            Name = "Loss margin 25+"
+                            Name = "LossMargin25Plus"
                         },
                         new
                         {
                             Id = 173,
-                            Name = "Margin of victory per game"
+                            Name = "MarginOfVictoryPerGame"
                         },
                         new
                         {
                             Id = 174,
-                            Name = "Winning percentage"
+                            Name = "WinningPercentage"
                         },
                         new
                         {
                             Id = 175,
-                            Name = "Passing TD bonus (0–9 yards)"
+                            Name = "PassingTD0To9Bonus"
                         },
                         new
                         {
                             Id = 176,
-                            Name = "Passing TD bonus (10–19 yards)"
+                            Name = "PassingTD10To19Bonus"
                         },
                         new
                         {
                             Id = 177,
-                            Name = "Passing TD bonus (20–29 yards)"
+                            Name = "PassingTD20To29Bonus"
                         },
                         new
                         {
                             Id = 178,
-                            Name = "Passing TD bonus (30–39 yards)"
+                            Name = "PassingTD30To39Bonus"
                         },
                         new
                         {
                             Id = 179,
-                            Name = "Rushing TD bonus (0–9 yards)"
+                            Name = "RushingTD0To9Bonus"
                         },
                         new
                         {
                             Id = 180,
-                            Name = "Rushing TD bonus (10–19 yards)"
+                            Name = "RushingTD10To19Bonus"
                         },
                         new
                         {
                             Id = 181,
-                            Name = "Rushing TD bonus (20–29 yards)"
+                            Name = "RushingTD20To29Bonus"
                         },
                         new
                         {
                             Id = 182,
-                            Name = "Rushing TD bonus (30–39 yards)"
+                            Name = "RushingTD30To39Bonus"
                         },
                         new
                         {
                             Id = 183,
-                            Name = "Receiving TD bonus (0–9 yards)"
+                            Name = "ReceivingTD0To9Bonus"
                         },
                         new
                         {
                             Id = 184,
-                            Name = "Receiving TD bonus (10–19 yards)"
+                            Name = "ReceivingTD10To19Bonus"
                         },
                         new
                         {
                             Id = 185,
-                            Name = "Receiving TD bonus (20–29 yards)"
+                            Name = "ReceivingTD20To29Bonus"
                         },
                         new
                         {
                             Id = 186,
-                            Name = "Receiving TD bonus (30–39 yards)"
+                            Name = "ReceivingTD30To39Bonus"
                         },
                         new
                         {
                             Id = 187,
-                            Name = "D/ST points allowed"
+                            Name = "DSTPointsAllowed"
                         },
                         new
                         {
                             Id = 188,
-                            Name = "D/ST 0 points allowed"
+                            Name = "DSTPointsAllowed0"
                         },
                         new
                         {
                             Id = 189,
-                            Name = "D/ST 1–6 points allowed"
+                            Name = "DSTPointsAllowed1To6"
                         },
                         new
                         {
                             Id = 190,
-                            Name = "D/ST 7–13 points allowed"
+                            Name = "DSTPointsAllowed7To13"
                         },
                         new
                         {
                             Id = 191,
-                            Name = "D/ST 14–17 points allowed"
+                            Name = "DSTPointsAllowed14To17"
                         },
                         new
                         {
                             Id = 192,
-                            Name = "D/ST 18–21 points allowed"
+                            Name = "DSTPointsAllowed18To21"
                         },
                         new
                         {
                             Id = 193,
-                            Name = "D/ST 22–27 points allowed"
+                            Name = "DSTPointsAllowed22To27"
                         },
                         new
                         {
                             Id = 194,
-                            Name = "D/ST 28–34 points allowed"
+                            Name = "DSTPointsAllowed28To34"
                         },
                         new
                         {
                             Id = 195,
-                            Name = "D/ST 35–45 points allowed"
+                            Name = "DSTPointsAllowed35To45"
                         },
                         new
                         {
                             Id = 196,
-                            Name = "D/ST 46+ points allowed"
+                            Name = "DSTPointsAllowed46Plus"
                         },
                         new
                         {
                             Id = 197,
-                            Name = "D/ST points allowed per game"
+                            Name = "DSTPointsAllowedPerGame"
                         },
                         new
                         {
                             Id = 198,
-                            Name = "50–59 yard field goals made"
+                            Name = "FieldGoalMade50To59"
                         },
                         new
                         {
                             Id = 199,
-                            Name = "50–59 yard field goals attempted"
+                            Name = "FieldGoalAttempted50To59"
                         },
                         new
                         {
                             Id = 200,
-                            Name = "50–59 yard field goals missed"
+                            Name = "FieldGoalMissed50To59"
                         },
                         new
                         {
                             Id = 201,
-                            Name = "60+ yard field goals made"
+                            Name = "FieldGoalMade60Plus"
                         },
                         new
                         {
                             Id = 202,
-                            Name = "60+ yard field goals attempted"
+                            Name = "FieldGoalAttempted60Plus"
                         },
                         new
                         {
                             Id = 203,
-                            Name = "60+ yard field goals missed"
+                            Name = "FieldGoalMissed60Plus"
                         },
                         new
                         {
                             Id = 204,
-                            Name = "Offensive two-point return"
+                            Name = "OffensiveTwoPointReturn"
                         },
                         new
                         {
                             Id = 205,
-                            Name = "Defensive two-point return"
+                            Name = "DefensiveTwoPointReturn"
                         },
                         new
                         {
                             Id = 206,
-                            Name = "Two-point return"
+                            Name = "TwoPointReturn"
                         },
                         new
                         {
                             Id = 207,
-                            Name = "Offensive one-point safety"
+                            Name = "OffensiveOnePointSafety"
                         },
                         new
                         {
                             Id = 208,
-                            Name = "Defensive one-point safety"
+                            Name = "DefensiveOnePointSafety"
                         },
                         new
                         {
                             Id = 209,
-                            Name = "One-point safety"
+                            Name = "OnePointSafety"
                         },
                         new
                         {
                             Id = 210,
-                            Name = "Games played"
+                            Name = "GamesPlayed"
                         },
                         new
                         {
                             Id = 211,
-                            Name = "Passing first downs"
+                            Name = "PassingFirstDown"
                         },
                         new
                         {
                             Id = 212,
-                            Name = "Rushing first downs"
+                            Name = "RushingFirstDown"
                         },
                         new
                         {
                             Id = 213,
-                            Name = "Receiving first downs"
+                            Name = "ReceivingFirstDown"
                         },
                         new
                         {
                             Id = 214,
-                            Name = "Field goal made yards"
+                            Name = "FieldGoalMadeYards"
                         },
                         new
                         {
                             Id = 215,
-                            Name = "Field goal missed yards"
+                            Name = "FieldGoalMissedYards"
                         },
                         new
                         {
                             Id = 216,
-                            Name = "Field goal attempt yards"
+                            Name = "FieldGoalAttemptYards"
                         },
                         new
                         {
                             Id = 217,
-                            Name = "Field goal made yards (per 5)"
+                            Name = "FieldGoalMadeYardsPer5"
                         },
                         new
                         {
                             Id = 218,
-                            Name = "Field goal made yards (per 10)"
+                            Name = "FieldGoalMadeYardsPer10"
                         },
                         new
                         {
                             Id = 219,
-                            Name = "Field goal made yards (per 20)"
+                            Name = "FieldGoalMadeYardsPer20"
                         },
                         new
                         {
                             Id = 220,
-                            Name = "Field goal made yards (per 25)"
+                            Name = "FieldGoalMadeYardsPer25"
                         },
                         new
                         {
                             Id = 221,
-                            Name = "Field goal made yards (per 50)"
+                            Name = "FieldGoalMadeYardsPer50"
                         },
                         new
                         {
                             Id = 222,
-                            Name = "Field goal made yards (per 100)"
+                            Name = "FieldGoalMadeYardsPer100"
                         },
                         new
                         {
                             Id = 223,
-                            Name = "Field goal missed yards (per 5)"
+                            Name = "FieldGoalMissedYardsPer5"
                         },
                         new
                         {
                             Id = 224,
-                            Name = "Field goal missed yards (per 10)"
+                            Name = "FieldGoalMissedYardsPer10"
                         },
                         new
                         {
                             Id = 225,
-                            Name = "Field goal missed yards (per 20)"
+                            Name = "FieldGoalMissedYardsPer20"
                         },
                         new
                         {
                             Id = 226,
-                            Name = "Field goal missed yards (per 25)"
+                            Name = "FieldGoalMissedYardsPer25"
                         },
                         new
                         {
                             Id = 227,
-                            Name = "Field goal missed yards (per 50)"
+                            Name = "FieldGoalMissedYardsPer50"
                         },
                         new
                         {
                             Id = 228,
-                            Name = "Field goal missed yards (per 100)"
+                            Name = "FieldGoalMissedYardsPer100"
                         },
                         new
                         {
                             Id = 229,
-                            Name = "Field goal attempt yards (per 5)"
+                            Name = "FieldGoalAttemptYardsPer5"
                         },
                         new
                         {
                             Id = 230,
-                            Name = "Field goal attempt yards (per 10)"
+                            Name = "FieldGoalAttemptYardsPer10"
                         },
                         new
                         {
                             Id = 231,
-                            Name = "Field goal attempt yards (per 20)"
+                            Name = "FieldGoalAttemptYardsPer20"
                         },
                         new
                         {
                             Id = 232,
-                            Name = "Field goal attempt yards (per 25)"
+                            Name = "FieldGoalAttemptYardsPer25"
                         },
                         new
                         {
                             Id = 233,
-                            Name = "Field goal attempt yards (per 50)"
+                            Name = "FieldGoalAttemptYardsPer50"
                         },
                         new
                         {
                             Id = 234,
-                            Name = "Field goal attempt yards (per 100)"
+                            Name = "FieldGoalAttemptYardsPer100"
                         });
                 });
 

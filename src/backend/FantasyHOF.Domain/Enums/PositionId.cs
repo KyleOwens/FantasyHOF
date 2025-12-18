@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +32,6 @@ namespace FantasyHOF.Domain.Enums
         HC = 19,
         BE = 20,
         IR = 21,
-        // 22 intentionally skipped
         RBWRTE = 23,
         ER = 24,
         Rookie = 25,

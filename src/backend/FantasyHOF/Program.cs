@@ -32,13 +32,12 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    using (IServiceScope scope = app.Services.CreateScope())
-    {
-        FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
+    using IServiceScope scope = app.Services.CreateScope();
 
-        //context.Database.EnsureDeleted();
-        context.Database.Migrate();
-    }
+    FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
+
+    //context.Database.EnsureDeleted();
+    context.Database.Migrate();
 }
 
 app.MapGraphQL();

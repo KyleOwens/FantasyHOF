@@ -17,7 +17,7 @@ namespace FantasyHOF.EntityFramework.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            builder.SeedFromEnum<StatId, Stat>(id => new Stat(id, id.ToString()));
+            builder.SeedFromEnum<StatId, Stat>(id => new Stat(id, id.GetDisplayName()));
 
             builder.Property(x => x.Id)
                 .ValueGeneratedNever();

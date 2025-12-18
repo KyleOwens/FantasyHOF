@@ -14,7 +14,7 @@ public static class Query
 {
     public static async Task<League> LoadESPNLeague(ESPNLeagueCredentialsInput input, IMediator mediator)
     {
-        return await mediator.Send(new GetESPNLeagueQuery(new ESPNLeagueCredentials(input.LeagueId, input.SWID, input.ESPNS2Id)));
+        return await mediator.Send(new LoadESPNLeagueQuery(new ESPNLeagueCredentials(input.LeagueId, input.SWID, input.ESPNS2Id)));
     }
 
     public static async Task<IEnumerable<ESPNSeasonalLeagueData>> TestESPNLeague(ESPNLeagueCredentialsInput input, IESPNAPIClientBuilder espnClientBuilder)

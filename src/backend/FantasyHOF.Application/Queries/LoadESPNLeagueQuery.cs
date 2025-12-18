@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Application.Queries
 {
-    public sealed record GetESPNLeagueQuery(ESPNLeagueCredentials Credentials) : IRequest<League>
+    public sealed record LoadESPNLeagueQuery(ESPNLeagueCredentials Credentials) : IRequest<League>
     {
         private sealed class ESPNImportContext
         {
@@ -33,7 +33,7 @@ namespace FantasyHOF.Application.Queries
             }
         }
         
-        public sealed class GetESPNLeagueQueryHandler : IRequestHandler<GetESPNLeagueQuery, League>
+        public sealed class GetESPNLeagueQueryHandler : IRequestHandler<LoadESPNLeagueQuery, League>
         {
             private readonly FantasyHOFDBContext _context;
             private readonly IESPNAPIClientBuilder _espnClientBuilder;
@@ -48,7 +48,7 @@ namespace FantasyHOF.Application.Queries
                 _espnMapper = espnMapper;
             }
 
-            public async Task<League> Handle(GetESPNLeagueQuery request, CancellationToken cancellationToken)
+            public async Task<League> Handle(LoadESPNLeagueQuery request, CancellationToken cancellationToken)
             {
                 ESPNAPIClient espnClient = _espnClientBuilder.Build(request.Credentials);
 

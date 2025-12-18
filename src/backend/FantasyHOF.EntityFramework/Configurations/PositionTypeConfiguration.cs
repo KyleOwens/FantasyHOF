@@ -19,7 +19,7 @@ namespace FantasyHOF.EntityFramework.Configurations
 
             builder.Property(x => x.Name).HasMaxLength(100);
 
-            builder.SeedFromEnum<PositionId, Position>(x => new Position(x, x.ToString()));
+            builder.SeedFromEnum<PositionId, Position>(x => new Position(x, x.GetDisplayName()));
         }
     }
 }

@@ -1,284 +1,521 @@
-﻿namespace FantasyHOF.Domain.Enums
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FantasyHOF.Domain.Enums
 {
     public enum StatId
     {
         // Passing
+        [Display(Name = "Attempted passes")]
         AttemptedPasses = 0,
+        [Display(Name = "Completed passes")]
         CompletedPasses = 1,
+        [Display(Name = "Incomplete passes")]
         IncompletePasses = 2,
+        [Display(Name = "Passing yards")]
         PassingYards = 3,
+        [Display(Name = "Passing touchdowns")]
         PassingTouchdowns = 4,
+        [Display(Name = "Passing yards (per 5)")]
         PassingYardsPer5 = 5,
+        [Display(Name = "Passing yards (per 10)")]
         PassingYardsPer10 = 6,
+        [Display(Name = "Passing yards (per 20)")]
         PassingYardsPer20 = 7,
+        [Display(Name = "Passing yards (per 25)")]
         PassingYardsPer25 = 8,
+        [Display(Name = "Passing yards (per 50)")]
         PassingYardsPer50 = 9,
+        [Display(Name = "Passing yards (per 100)")]
         PassingYardsPer100 = 10,
+        [Display(Name = "Pass completions (per 5)")]
         PassCompletionsPer5 = 11,
+        [Display(Name = "Pass completions (per 10)")]
         PassCompletionsPer10 = 12,
+        [Display(Name = "Pass incompletions (per 5)")]
         PassIncompletionsPer5 = 13,
+        [Display(Name = "Pass incompletions (per 10)")]
         PassIncompletionsPer10 = 14,
+        [Display(Name = "40+ yard passing TD bonus")]
         PassingTD40PlusBonus = 15,
+        [Display(Name = "50+ yard passing TD bonus")]
         PassingTD50PlusBonus = 16,
+        [Display(Name = "300–399 passing yard game")]
         Passing300To399YardGame = 17,
+        [Display(Name = "400+ passing yard game")]
         Passing400PlusYardGame = 18,
+        [Display(Name = "Passing two-point conversion")]
         PassingTwoPointConversion = 19,
+        [Display(Name = "Interceptions thrown")]
         InterceptionsThrown = 20,
+        [Display(Name = "Completion percentage")]
         CompletionPercentage = 21,
+        [Display(Name = "Passing yards per game")]
         PassingYardsPerGame = 22,
 
         // Rushing
+        [Display(Name = "Rushing attempts")]
         RushingAttempts = 23,
+        [Display(Name = "Rushing yards")]
         RushingYards = 24,
+        [Display(Name = "Rushing touchdowns")]
         RushingTouchdowns = 25,
+        [Display(Name = "Rushing two-point conversion")]
         RushingTwoPointConversion = 26,
+        [Display(Name = "Rushing yards (per 5)")]
         RushingYardsPer5 = 27,
+        [Display(Name = "Rushing yards (per 10)")]
         RushingYardsPer10 = 28,
+        [Display(Name = "Rushing yards (per 20)")]
         RushingYardsPer20 = 29,
+        [Display(Name = "Rushing yards (per 25)")]
         RushingYardsPer25 = 30,
+        [Display(Name = "Rushing yards (per 50)")]
         RushingYardsPer50 = 31,
+        [Display(Name = "Rushing yards (per 100)")]
         RushingYardsPer100 = 32,
+        [Display(Name = "Rushing attempts (per 5)")]
         RushingAttemptsPer5 = 33,
+        [Display(Name = "Rushing attempts (per 10)")]
         RushingAttemptsPer10 = 34,
+        [Display(Name = "40+ yard rushing TD bonus")]
         RushingTD40PlusBonus = 35,
+        [Display(Name = "50+ yard rushing TD bonus")]
         RushingTD50PlusBonus = 36,
+        [Display(Name = "100–199 rushing yard game")]
         Rushing100To199YardGame = 37,
+        [Display(Name = "200+ rushing yard game")]
         Rushing200PlusYardGame = 38,
+        [Display(Name = "Rushing yards per attempt")]
         RushingYardsPerAttempt = 39,
+        [Display(Name = "Rushing yards per game")]
         RushingYardsPerGame = 40,
 
         // Receiving
+        [Display(Name = "Receptions")]
         Receptions = 41,
+        [Display(Name = "Receiving yards")]
         ReceivingYards = 42,
+        [Display(Name = "Receiving touchdowns")]
         ReceivingTouchdowns = 43,
+        [Display(Name = "Receiving two-point conversion")]
         ReceivingTwoPointConversion = 44,
+        [Display(Name = "40+ yard receiving TD bonus")]
         ReceivingTD40PlusBonus = 45,
+        [Display(Name = "50+ yard receiving TD bonus")]
         ReceivingTD50PlusBonus = 46,
+        [Display(Name = "Receiving yards (per 5)")]
         ReceivingYardsPer5 = 47,
+        [Display(Name = "Receiving yards (per 10)")]
         ReceivingYardsPer10 = 48,
+        [Display(Name = "Receiving yards (per 20)")]
         ReceivingYardsPer20 = 49,
+        [Display(Name = "Receiving yards (per 25)")]
         ReceivingYardsPer25 = 50,
+        [Display(Name = "Receiving yards (per 50)")]
         ReceivingYardsPer50 = 51,
+        [Display(Name = "Receiving yards (per 100)")]
         ReceivingYardsPer100 = 52,
+        [Display(Name = "Each reception")]
         EachReception = 53,
+        [Display(Name = "Receptions (per 5)")]
         ReceptionsPer5 = 54,
+        [Display(Name = "Receptions (per 10)")]
         ReceptionsPer10 = 55,
+        [Display(Name = "100–199 receiving yard game")]
         Receiving100To199YardGame = 56,
+        [Display(Name = "200+ receiving yard game")]
         Receiving200PlusYardGame = 57,
+        [Display(Name = "Receiving targets")]
         ReceivingTargets = 58,
+        [Display(Name = "Yards after catch")]
         ReceivingYardsAfterCatch = 59,
+        [Display(Name = "Yards per reception")]
         ReceivingYardsPerCatch = 60,
+        [Display(Name = "Receiving yards per game")]
         ReceivingYardsPerGame = 61,
 
         // Conversions & Misc. Offense
+        [Display(Name = "Total two-point conversions")]
         TotalTwoPointConversions = 62,
+        [Display(Name = "Fumble recovered for touchdown")]
         FumbleRecoveredForTD = 63,
+        [Display(Name = "Times sacked")]
         Sacked = 64,
+        [Display(Name = "Passing fumbles")]
         PassingFumbles = 65,
+        [Display(Name = "Rushing fumbles")]
         RushingFumbles = 66,
+        [Display(Name = "Receiving fumbles")]
         ReceivingFumbles = 67,
+        [Display(Name = "Total fumbles")]
         TotalFumbles = 68,
+        [Display(Name = "Passing fumbles lost")]
         PassingFumblesLost = 69,
+        [Display(Name = "Rushing fumbles lost")]
         RushingFumblesLost = 70,
+        [Display(Name = "Receiving fumbles lost")]
         ReceivingFumblesLost = 71,
+        [Display(Name = "Total fumbles lost")]
         TotalFumblesLost = 72,
+        [Display(Name = "Total turnovers")]
         TotalTurnovers = 73,
 
         // Kicking (Field Goals)
+        [Display(Name = "50+ yard field goals made")]
         FieldGoalMade50Plus = 74,
+        [Display(Name = "50+ yard field goals attempted")]
         FieldGoalAttempted50Plus = 75,
+        [Display(Name = "50+ yard field goals missed")]
         FieldGoalMissed50Plus = 76,
+        [Display(Name = "40–49 yard field goals made")]
         FieldGoalMade40To49 = 77,
+        [Display(Name = "40–49 yard field goals attempted")]
         FieldGoalAttempted40To49 = 78,
+        [Display(Name = "40–49 yard field goals missed")]
         FieldGoalMissed40To49 = 79,
+        [Display(Name = "0–39 yard field goals made")]
         FieldGoalMade0To39 = 80,
+        [Display(Name = "0–39 yard field goals attempted")]
         FieldGoalAttempted0To39 = 81,
+        [Display(Name = "0–39 yard field goals missed")]
         FieldGoalMissed0To39 = 82,
+        [Display(Name = "Total field goals made")]
         TotalFieldGoalsMade = 83,
+        [Display(Name = "Total field goals attempted")]
         TotalFieldGoalsAttempted = 84,
+        [Display(Name = "Total field goals missed")]
         TotalFieldGoalsMissed = 85,
 
         // Kicking (PAT)
+        [Display(Name = "Extra points made")]
         PATMade = 86,
+        [Display(Name = "Extra points attempted")]
         PATAttempted = 87,
+        [Display(Name = "Extra points missed")]
         PATMissed = 88,
 
         // Defense / Special Teams: Points Allowed
+        [Display(Name = "0 points allowed")]
         PointsAllowed0 = 89,
+        [Display(Name = "1–6 points allowed")]
         PointsAllowed1To6 = 90,
+        [Display(Name = "7–13 points allowed")]
         PointsAllowed7To13 = 91,
+        [Display(Name = "14–17 points allowed")]
         PointsAllowed14To17 = 92,
 
         // Defensive TDs & Turnovers
+        [Display(Name = "Blocked kick returned for TD")]
         BlockedKickReturnTD = 93,
+        [Display(Name = "Fumble or interception return TD")]
         FumbleOrIntReturnTD = 94,
+        [Display(Name = "Defensive interception")]
         DefenseInterception = 95,
+        [Display(Name = "Defensive fumble recovered")]
         DefenseFumbleRecovered = 96,
+        [Display(Name = "Blocked kick")]
         BlockedKick = 97,
+        [Display(Name = "Safety")]
         Safety = 98,
+        [Display(Name = "Sack")]
         Sack = 99,
+        [Display(Name = "Half sack")]
         HalfSack = 100,
+        [Display(Name = "Kickoff return TD")]
         KickoffReturnTD = 101,
+        [Display(Name = "Punt return TD")]
         PuntReturnTD = 102,
+        [Display(Name = "Interception return TD")]
         InterceptionReturnTD = 103,
+        [Display(Name = "Fumble return TD")]
         FumbleReturnTD = 104,
+        [Display(Name = "Total return TDs")]
         TotalReturnTD = 105,
+        [Display(Name = "Fumbles forced")]
         FumbleForced = 106,
 
         // Tackles & Defensive Stats
+        [Display(Name = "Assisted tackles")]
         AssistedTackles = 107,
+        [Display(Name = "Solo tackles")]
         SoloTackles = 108,
+        [Display(Name = "Total tackles")]
         TotalTackles = 109,
+        [Display(Name = "Every 3 tackles")]
         Every3Tackles = 110,
+        [Display(Name = "Every 5 tackles")]
         Every5Tackles = 111,
+        [Display(Name = "Stuffs (tackles for loss)")]
         Stuffs = 112,
+        [Display(Name = "Passes defended")]
         PassesDefended = 113,
 
         // Return Yards
+        [Display(Name = "Kickoff return yards")]
         KickoffReturnYards = 114,
+        [Display(Name = "Punt return yards")]
         PuntReturnYards = 115,
+        [Display(Name = "Kickoff return yards (per 10)")]
         KickoffReturnYardsPer10 = 116,
+        [Display(Name = "Kickoff return yards (per 25)")]
         KickoffReturnYardsPer25 = 117,
+        [Display(Name = "Punt return yards (per 10)")]
         PuntReturnYardsPer10 = 118,
+        [Display(Name = "Punt return yards (per 25)")]
         PuntReturnYardsPer25 = 119,
 
         // Defense: Points Allowed Expanded
+        [Display(Name = "Points allowed")]
         PointsAllowed = 120,
+        [Display(Name = "18–21 points allowed")]
         PointsAllowed18To21 = 121,
+        [Display(Name = "22–27 points allowed")]
         PointsAllowed22To27 = 122,
+        [Display(Name = "28–34 points allowed")]
         PointsAllowed28To34 = 123,
+        [Display(Name = "35–45 points allowed")]
         PointsAllowed35To45 = 124,
+        [Display(Name = "46+ points allowed")]
         PointsAllowed46Plus = 125,
+        [Display(Name = "Points allowed per game")]
         PointsAllowedPerGame = 126,
 
         // Defense: Yards Allowed
+        [Display(Name = "Yards allowed")]
         YardsAllowed = 127,
+        [Display(Name = "Under 100 yards allowed")]
         YardsAllowedLessThan100 = 128,
+        [Display(Name = "100–199 yards allowed")]
         YardsAllowed100To199 = 129,
+        [Display(Name = "200–299 yards allowed")]
         YardsAllowed200To299 = 130,
+        [Display(Name = "300–349 yards allowed")]
         YardsAllowed300To349 = 131,
+        [Display(Name = "350–399 yards allowed")]
         YardsAllowed350To399 = 132,
+        [Display(Name = "400–449 yards allowed")]
         YardsAllowed400To449 = 133,
+        [Display(Name = "450–499 yards allowed")]
         YardsAllowed450To499 = 134,
+        [Display(Name = "500–549 yards allowed")]
         YardsAllowed500To549 = 135,
+        [Display(Name = "550+ yards allowed")]
         YardsAllowed550Plus = 136,
+        [Display(Name = "Yards allowed per game")]
         YardsAllowedPerGame = 137,
 
         // Punting
+        [Display(Name = "Punts")]
         Punts = 138,
+        [Display(Name = "Punt yards")]
         PuntYards = 139,
+        [Display(Name = "Punts inside the 10")]
         PuntsInside10 = 140,
+        [Display(Name = "Punts inside the 20")]
         PuntsInside20 = 141,
+        [Display(Name = "Blocked punts")]
         BlockedPunts = 142,
+        [Display(Name = "Punts returned")]
         PuntsReturned = 143,
+        [Display(Name = "Punt return yards allowed")]
         PuntingReturnYards = 144,
+        [Display(Name = "Touchbacks")]
         Touchbacks = 145,
+        [Display(Name = "Fair catches")]
         FairCatches = 146,
+        [Display(Name = "Punt average")]
         PuntAverage = 147,
+        [Display(Name = "Punt average (44+ yards)")]
         PuntAverage44Plus = 148,
+        [Display(Name = "Punt average (42–43.9 yards)")]
         PuntAverage42To43_9 = 149,
+        [Display(Name = "Punt average (40–41.9 yards)")]
         PuntAverage40To41_9 = 150,
+        [Display(Name = "Punt average (38–39.9 yards)")]
         PuntAverage38To39_9 = 151,
+        [Display(Name = "Punt average (36–37.9 yards)")]
         PuntAverage36To37_9 = 152,
+        [Display(Name = "Punt average (34–35.9 yards)")]
         PuntAverage34To35_9 = 153,
+        [Display(Name = "Punt average (33.9 yards or less)")]
         PuntAverage33_9OrLess = 154,
 
         // Team Outcomes
+        [Display(Name = "Team win")]
         TeamWin = 155,
+        [Display(Name = "Team loss")]
         TeamLoss = 156,
+        [Display(Name = "Team tie")]
         TeamTie = 157,
+        [Display(Name = "Points scored")]
         PointsScored = 158,
+        [Display(Name = "Points per game")]
         PointsPerGame = 159,
+        [Display(Name = "Margin of victory")]
         MarginOfVictory = 160,
+        [Display(Name = "Win margin 25+")]
         WinMargin25Plus = 161,
+        [Display(Name = "Win margin 20–24")]
         WinMargin20To24 = 162,
+        [Display(Name = "Win margin 15–19")]
         WinMargin15To19 = 163,
+        [Display(Name = "Win margin 10–14")]
         WinMargin10To14 = 164,
+        [Display(Name = "Win margin 5–9")]
         WinMargin5To9 = 165,
+        [Display(Name = "Win margin 1–4")]
         WinMargin1To4 = 166,
+        [Display(Name = "Loss margin 1–4")]
         LossMargin1To4 = 167,
+        [Display(Name = "Loss margin 5–9")]
         LossMargin5To9 = 168,
+        [Display(Name = "Loss margin 10–14")]
         LossMargin10To14 = 169,
+        [Display(Name = "Loss margin 15–19")]
         LossMargin15To19 = 170,
+        [Display(Name = "Loss margin 20–24")]
         LossMargin20To24 = 171,
+        [Display(Name = "Loss margin 25+")]
         LossMargin25Plus = 172,
+        [Display(Name = "Margin of victory per game")]
         MarginOfVictoryPerGame = 173,
+        [Display(Name = "Winning percentage")]
         WinningPercentage = 174,
 
         // Bonus Yardage TDs (Passing)
+        [Display(Name = "Passing TD bonus (0–9 yards)")]
         PassingTD0To9Bonus = 175,
+        [Display(Name = "Passing TD bonus (10–19 yards)")]
         PassingTD10To19Bonus = 176,
+        [Display(Name = "Passing TD bonus (20–29 yards)")]
         PassingTD20To29Bonus = 177,
+        [Display(Name = "Passing TD bonus (30–39 yards)")]
         PassingTD30To39Bonus = 178,
 
         // Bonus Yardage TDs (Rushing)
+        [Display(Name = "Rushing TD bonus (0–9 yards)")]
         RushingTD0To9Bonus = 179,
+        [Display(Name = "Rushing TD bonus (10–19 yards)")]
         RushingTD10To19Bonus = 180,
+        [Display(Name = "Rushing TD bonus (20–29 yards)")]
         RushingTD20To29Bonus = 181,
+        [Display(Name = "Rushing TD bonus (30–39 yards)")]
         RushingTD30To39Bonus = 182,
 
         // Bonus Yardage TDs (Receiving)
+        [Display(Name = "Receiving TD bonus (0–9 yards)")]
         ReceivingTD0To9Bonus = 183,
+        [Display(Name = "Receiving TD bonus (10–19 yards)")]
         ReceivingTD10To19Bonus = 184,
+        [Display(Name = "Receiving TD bonus (20–29 yards)")]
         ReceivingTD20To29Bonus = 185,
+        [Display(Name = "Receiving TD bonus (30–39 yards)")]
         ReceivingTD30To39Bonus = 186,
 
         // D/ST Points Allowed
+        [Display(Name = "D/ST points allowed")]
         DSTPointsAllowed = 187,
+        [Display(Name = "D/ST 0 points allowed")]
         DSTPointsAllowed0 = 188,
+        [Display(Name = "D/ST 1–6 points allowed")]
         DSTPointsAllowed1To6 = 189,
+        [Display(Name = "D/ST 7–13 points allowed")]
         DSTPointsAllowed7To13 = 190,
+        [Display(Name = "D/ST 14–17 points allowed")]
         DSTPointsAllowed14To17 = 191,
+        [Display(Name = "D/ST 18–21 points allowed")]
         DSTPointsAllowed18To21 = 192,
+        [Display(Name = "D/ST 22–27 points allowed")]
         DSTPointsAllowed22To27 = 193,
+        [Display(Name = "D/ST 28–34 points allowed")]
         DSTPointsAllowed28To34 = 194,
+        [Display(Name = "D/ST 35–45 points allowed")]
         DSTPointsAllowed35To45 = 195,
+        [Display(Name = "D/ST 46+ points allowed")]
         DSTPointsAllowed46Plus = 196,
+        [Display(Name = "D/ST points allowed per game")]
         DSTPointsAllowedPerGame = 197,
 
         // Additional Kicking Brackets
+        [Display(Name = "50–59 yard field goals made")]
         FieldGoalMade50To59 = 198,
+        [Display(Name = "50–59 yard field goals attempted")]
         FieldGoalAttempted50To59 = 199,
+        [Display(Name = "50–59 yard field goals missed")]
         FieldGoalMissed50To59 = 200,
+        [Display(Name = "60+ yard field goals made")]
         FieldGoalMade60Plus = 201,
+        [Display(Name = "60+ yard field goals attempted")]
         FieldGoalAttempted60Plus = 202,
+        [Display(Name = "60+ yard field goals missed")]
         FieldGoalMissed60Plus = 203,
 
         // 2pt Returns / Safeties
+        [Display(Name = "Offensive two-point return")]
         OffensiveTwoPointReturn = 204,
+        [Display(Name = "Defensive two-point return")]
         DefensiveTwoPointReturn = 205,
+        [Display(Name = "Two-point return")]
         TwoPointReturn = 206,
+        [Display(Name = "Offensive one-point safety")]
         OffensiveOnePointSafety = 207,
+        [Display(Name = "Defensive one-point safety")]
         DefensiveOnePointSafety = 208,
+        [Display(Name = "One-point safety")]
         OnePointSafety = 209,
 
         // Misc.
+        [Display(Name = "Games played")]
         GamesPlayed = 210,
+        [Display(Name = "Passing first downs")]
         PassingFirstDown = 211,
+        [Display(Name = "Rushing first downs")]
         RushingFirstDown = 212,
+        [Display(Name = "Receiving first downs")]
         ReceivingFirstDown = 213,
 
         // Field Goal Yardage Scaling
+        [Display(Name = "Field goal made yards")]
         FieldGoalMadeYards = 214,
+        [Display(Name = "Field goal missed yards")]
         FieldGoalMissedYards = 215,
+        [Display(Name = "Field goal attempt yards")]
         FieldGoalAttemptYards = 216,
+        [Display(Name = "Field goal made yards (per 5)")]
         FieldGoalMadeYardsPer5 = 217,
+        [Display(Name = "Field goal made yards (per 10)")]
         FieldGoalMadeYardsPer10 = 218,
+        [Display(Name = "Field goal made yards (per 20)")]
         FieldGoalMadeYardsPer20 = 219,
+        [Display(Name = "Field goal made yards (per 25)")]
         FieldGoalMadeYardsPer25 = 220,
+        [Display(Name = "Field goal made yards (per 50)")]
         FieldGoalMadeYardsPer50 = 221,
+        [Display(Name = "Field goal made yards (per 100)")]
         FieldGoalMadeYardsPer100 = 222,
+        [Display(Name = "Field goal missed yards (per 5)")]
         FieldGoalMissedYardsPer5 = 223,
+        [Display(Name = "Field goal missed yards (per 10)")]
         FieldGoalMissedYardsPer10 = 224,
+        [Display(Name = "Field goal missed yards (per 20)")]
         FieldGoalMissedYardsPer20 = 225,
+        [Display(Name = "Field goal missed yards (per 25)")]
         FieldGoalMissedYardsPer25 = 226,
+        [Display(Name = "Field goal missed yards (per 50)")]
         FieldGoalMissedYardsPer50 = 227,
+        [Display(Name = "Field goal missed yards (per 100)")]
         FieldGoalMissedYardsPer100 = 228,
+        [Display(Name = "Field goal attempt yards (per 5)")]
         FieldGoalAttemptYardsPer5 = 229,
+        [Display(Name = "Field goal attempt yards (per 10)")]
         FieldGoalAttemptYardsPer10 = 230,
+        [Display(Name = "Field goal attempt yards (per 20)")]
         FieldGoalAttemptYardsPer20 = 231,
+        [Display(Name = "Field goal attempt yards (per 25)")]
         FieldGoalAttemptYardsPer25 = 232,
+        [Display(Name = "Field goal attempt yards (per 50)")]
         FieldGoalAttemptYardsPer50 = 233,
-        FieldGoalAttemptYardsPer100 = 234
+        [Display(Name = "Field goal attempt yards (per 100)")]
+        FieldGoalAttemptYardsPer100 = 234,
     }
 }
