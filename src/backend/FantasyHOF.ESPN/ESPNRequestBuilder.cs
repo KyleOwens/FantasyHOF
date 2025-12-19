@@ -21,6 +21,7 @@ namespace FantasyHOF.ESPN
         mTeam,
         mNav,
         mBoxscore,
+        mMatchupScore,
     }
     
     public class ESPNRequestBuilder

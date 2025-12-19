@@ -234,10 +234,16 @@ namespace FantasyHOF.Application.Mutations
                 {
                     ESPNMatchup espnMatchup = espnTeamMatchup.Matchups.FirstOrDefault()!;
 
-                    ESPNMatchupTeam primaryTeam = espnMatchup.Home?.TeamId == espnTeamId ? espnMatchup.Home! : espnMatchup.Away!;
-                    ESPNMatchupTeam? opponentTeam = espnMatchup.Home?.TeamId != espnTeamId ? espnMatchup.Home : espnMatchup.Away;
+                    bool isPrimaryTeamHomeTeam = espnMatchup.Home?.TeamId == espnTeamId;
+                    ESPNMatchupTeam primaryTeam = isPrimaryTeamHomeTeam ? espnMatchup.Home! : espnMatchup.Away!;
+                    ESPNMatchupTeam? opponentTeam = isPrimaryTeamHomeTeam ? espnMatchup.Away : espnMatchup.Home;
 
-                    TeamMatchup matchup = _espnMapper.MapTeamMatchup(espnTeamMatchup.Week, primaryTeam);
+                    TeamMatchup matchup = _espnMapper.MapTeamMatchup(
+                        espnTeamMatchup.Week, 
+                        espnMatchup.PlayoffTierType, 
+                        isPrimaryTeamHomeTeam,
+                        espnMatchup.Winner,
+                        primaryTeam);
 
                     if (opponentTeam is not null) 
                     { 

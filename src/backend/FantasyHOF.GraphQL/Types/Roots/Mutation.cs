@@ -19,12 +19,20 @@ namespace FantasyHOF.GraphQL.Types.Roots
         [Error(typeof(ESPNLeagueInvalidException))]
         [Error(typeof(ESPNNoActiveYearsException))]
         [Error(typeof(ESPNInvalidYearException))]
-        public static async Task<League> LoadESPNLeague(string leagueId, string swid, string espnS2Id, IMediator mediator)
+        public static async Task<League> LoadESPNLeagueAsync(
+            string leagueId, 
+            string swid, 
+            string espnS2Id, 
+            IMediator mediator,
+            CancellationToken cancellationToken)
         {
-            return await mediator.Send(new LoadESPNLeagueCommand(new ESPNLeagueCredentials(
-                leagueId,
-                swid,
-                espnS2Id)));
+            return await mediator.Send(
+                new LoadESPNLeagueCommand(
+                    new ESPNLeagueCredentials(
+                        leagueId,
+                        swid,
+                        espnS2Id)), 
+                cancellationToken);
         }
     }
 }

@@ -156,7 +156,7 @@ namespace FantasyHOF.ESPN
         {
             HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, year)
                 .WithScoringPeriod(week)
-                .WithViews(ESPNView.mBoxscore)
+                .WithViews(ESPNView.mBoxscore, ESPNView.mMatchupScore)
                 .Build();
 
             return SendAPIRequestAsync<WeeklyDataResponse>(request);

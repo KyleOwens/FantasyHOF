@@ -27,6 +27,7 @@ builder.Services.AddMediatR(cfg =>
 
 builder.AddGraphQL()
     .AddFantasyHOFTypes()
+    .AddGlobalObjectIdentification()
     .AddMutationConventions(applyToAllMutations: true)
     .AddErrorInterfaceType<ICodedException>();
     

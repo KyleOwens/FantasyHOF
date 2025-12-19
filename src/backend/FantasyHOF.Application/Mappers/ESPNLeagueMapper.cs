@@ -1,5 +1,6 @@
 ﻿using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
+using FantasyHOF.ESPN.Constants;
 using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
 using System;
@@ -23,7 +24,7 @@ namespace FantasyHOF.Application.Mappers
         LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam();
         Team MapTeam(ESPNFantasyTeam espnTeam);
         TeamSeasonStats MapTeamSeasonStats(ESPNRecordDetails espnTeamStats);
-        TeamMatchup MapTeamMatchup(int week, ESPNMatchupTeam espnTeam);
+        TeamMatchup MapTeamMatchup(int week, string espnMatchupType, bool isHomeTeam, string matchWinner, ESPNMatchupTeam espnTeam);
         MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot, int year);
         Player MapPlayer(ESPNPlayer espnPlayer);
         AccumulatedStat MapAccumulatedStat(int statId, decimal statValue, decimal statScore);
@@ -144,12 +145,37 @@ namespace FantasyHOF.Application.Mappers
             };
         }
 
-        public TeamMatchup MapTeamMatchup(int week, ESPNMatchupTeam espnTeam)
+        public TeamMatchup MapTeamMatchup(
+            int week, 
+            string espnMatchupType, 
+            bool isHomeTeam, 
+            string matchWinner,
+            ESPNMatchupTeam espnTeam)
         {
+            MatchupTypeId matchupType = espnMatchupType switch
+            {
+                ESPNPlayoffTierTypes.None => MatchupTypeId.RegularSeason,
+                ESPNPlayoffTierTypes.WinnersBracket => MatchupTypeId.WinnersBracket,
+                ESPNPlayoffTierTypes.WinnersConsolationBracket => MatchupTypeId.WinnersConsolation,
+                ESPNPlayoffTierTypes.LosersConsolationBracket => MatchupTypeId.LosersBracket,
+                _ => MatchupTypeId.Unknown
+            };
+
+            MatchupOutcomeId matchOutcomeId = matchWinner switch
+            {
+                ESPNWinnerValues.Away => isHomeTeam ? MatchupOutcomeId.Loss : MatchupOutcomeId.Win,
+                ESPNWinnerValues.Home => isHomeTeam ? MatchupOutcomeId.Win : MatchupOutcomeId.Loss,
+                ESPNWinnerValues.Tie => MatchupOutcomeId.Tie,
+                ESPNWinnerValues.Undecided => MatchupOutcomeId.Undecided,
+                _ => MatchupOutcomeId.Unknown
+            };
+
             return new TeamMatchup()
             {
                 Week = week,
                 Score = Math.Round(espnTeam.TotalPoints, 2, MidpointRounding.AwayFromZero),
+                MatchupTypeId = matchupType,
+                MatchupOutcomeId = matchOutcomeId
             };
         }
 

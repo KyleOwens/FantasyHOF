@@ -20,6 +20,16 @@ namespace FantasyHOF.EntityFramework.Configurations
                 .HasForeignKey(x => x.OpponentTeamId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasOne(x => x.MatchupOutcome)
+                .WithMany()
+                .HasForeignKey(x => x.MatchupOutcomeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x => x.MatchupType)
+                .WithMany()
+                .HasForeignKey(x => x.MatchupTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasMany(x => x.MatchupRosterSpots)
                 .WithOne()
                 .HasForeignKey(x => x.MatchupId)

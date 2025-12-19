@@ -12,5 +12,7 @@ namespace FantasyHOF.ESPN.Types.Models
         public ESPNMatchupTeam? Away { get; set; }
         public ESPNMatchupTeam? Home { get; set; }
         public required int MatchupPeriodId { get; set; }   
+        public required string PlayoffTierType { get; set; }
+        public required string Winner { get; set; }
     }
 }

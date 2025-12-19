@@ -24,7 +24,9 @@ namespace FantasyHOF.EntityFramework
         public DbSet<AccumulatedStat> AccumulatedStats => Set<AccumulatedStat>();
         public DbSet<Stat> Stats => Set<Stat>();
         public DbSet<Position> Positions => Set<Position>();
-        
+        public DbSet<MatchupOutcome> MatchupOutcomes => Set<MatchupOutcome>();
+        public DbSet<MatchupType> MatchupTypes => Set<MatchupType>();
+
         public FantasyHOFDBContext(DbContextOptions<FantasyHOFDBContext> options) : base(options)
         {
         }
