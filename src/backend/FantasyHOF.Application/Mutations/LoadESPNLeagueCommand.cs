@@ -110,7 +110,7 @@ namespace FantasyHOF.Application.Mutations
                 LeagueSeason season = _espnMapper.MapLeagueSeason(espnSeason);
 
                 season.Settings = CreateLeagueSeasonSettings(espnSeason.LeagueSettings);
-                season.LeagueSeasonMembers = CreateLeagueSeasonMembers(espnSeason.Members, espnSeason.Teams, espnSeasonMatchupData);
+                season.Members = CreateLeagueSeasonMembers(espnSeason.Members, espnSeason.Teams, espnSeasonMatchupData);
 
                 return season;
             }
@@ -328,7 +328,7 @@ namespace FantasyHOF.Application.Mutations
             {
                 League? existingLeague = await _context.Leagues
                     .Include(league => league.Seasons)
-                    .ThenInclude(season => season.LeagueSeasonMembers)
+                    .ThenInclude(season => season.Members)
                     .ThenInclude(member => member.LeagueSeasonMemberTeams)
                     .ThenInclude(lsmt => lsmt.Team)
                     .ThenInclude(team => team.Matchups)
@@ -340,7 +340,7 @@ namespace FantasyHOF.Application.Mutations
                 if (existingLeague is null) return;
 
                 IEnumerable<Team> teams = existingLeague.Seasons
-                    .SelectMany(season => season.LeagueSeasonMembers)
+                    .SelectMany(season => season.Members)
                     .SelectMany(member => member.LeagueSeasonMemberTeams)
                     .Select(team => team.Team)
                     .Distinct();

@@ -15,6 +15,8 @@ namespace FantasyHOF.EntityFramework.Configurations
         {
             builder.HasKey(x => new { x.LeagueSeasonId, x.MemberId });
 
+            builder.Ignore(x => x.Id);
+
             builder.HasOne(x => x.Member)
                 .WithMany()
                 .HasForeignKey(x => x.MemberId)

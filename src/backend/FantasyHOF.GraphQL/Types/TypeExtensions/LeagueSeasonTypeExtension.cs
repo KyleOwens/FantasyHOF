@@ -1,6 +1,7 @@
 ﻿using FantasyHOF.Application.Queries.LeagueSeasons;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
+using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
     [ExtendObjectType(typeof(LeagueSeason))]
     public class LeagueSeasonTypeExtension
     {
-        [ID(nameof(League))]
+        [ID<League>]
         public int LeagueId([Parent] LeagueSeason season) => season.LeagueId;
 
         public async Task<LeagueSeasonSettings> GetSettingsAsync(
@@ -23,6 +24,14 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
             CancellationToken cancellationToken)
         {
             return await leagueSeasonSettings.LoadRequiredAsync(season.Id, cancellationToken);
+        }
+
+        public async Task<IEnumerable<LeagueSeasonMember>> GetMembersAsync(
+            [Parent] LeagueSeason season, 
+            ILeagueSeasonMembersByLeagueSeasonIdDataLoader seasonMembers, 
+            CancellationToken cancellationToken)
+        {
+            return await seasonMembers.LoadAsync(season.Id, cancellationToken) ?? [];
         }
         
         public static async Task<LeagueSeason?> GetLeagueSeasonAsync(

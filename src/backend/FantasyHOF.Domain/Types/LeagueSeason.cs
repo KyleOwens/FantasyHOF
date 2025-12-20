@@ -13,6 +13,6 @@ namespace FantasyHOF.Domain.Types
 
         public required int Year { get; init; }
         public LeagueSeasonSettings Settings { get; set; } = null!;
-        public List<LeagueSeasonMember> LeagueSeasonMembers { get; set; } = null!;
+        public List<LeagueSeasonMember> Members { get; set; } = null!;
     }
 }

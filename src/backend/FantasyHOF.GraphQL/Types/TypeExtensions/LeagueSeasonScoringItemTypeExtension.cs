@@ -15,10 +15,10 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
 	[ExtendObjectType(typeof(LeagueSeasonScoringItem))]
     internal class LeagueSeasonScoringItemTypeExtension
 	{
-        [ID(nameof(LeagueSeason))]
+        [ID<LeagueSeason>]
         public int LeagueSeasonId([Parent] LeagueSeasonScoringItem scoringItem) => scoringItem.LeagueSeasonId;
 
-        [ID(nameof(Stat))]
+        [ID<Stat>]
         public int StatId([Parent] LeagueSeasonScoringItem scoringItem) => (int)scoringItem.StatId;
 
         public async Task<Stat> GetStatAsync(

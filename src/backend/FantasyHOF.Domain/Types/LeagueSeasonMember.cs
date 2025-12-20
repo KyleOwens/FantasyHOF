@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FantasyHOF.Domain.ComplexIds;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,7 @@ namespace FantasyHOF.Domain.Types
 
         public FantasyMember Member { get; set; } = null!;
         public List<LeagueSeasonMemberTeam> LeagueSeasonMemberTeams { get; set; } = null!;
+
+        public LeagueSeasonMemberId Id => new(LeagueSeasonId, MemberId);
     }
 }
