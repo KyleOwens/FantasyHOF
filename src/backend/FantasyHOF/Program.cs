@@ -3,7 +3,6 @@ using FantasyHOF.Domain.ComplexIds;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Enums;
-using FantasyHOF.GraphQL.TypeConverters;
 using FantasyHOF.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
@@ -28,7 +27,6 @@ builder.Services.AddMediatR(cfg =>
 });
 
 builder.AddGraphQL()
-    .AddFantasyHOFTypeConverters()
     .AddFantasyHOFTypes()
     .AddGlobalObjectIdentification()
     .AddMutationConventions(applyToAllMutations: true)
