@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0"
+             xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<Header>
+		<Title>MediatR Single Query</Title>
+		<Shortcut>squery</Shortcut>
+		<Description>A Query that returns a single entity using MediatR</Description>
+		<Author>Kyle</Author>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>Entity</ID>
+				<Default>Entity</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="csharp"><![CDATA[
+using FantasyHOF.Domain.Types;
+using MediatR;
+
+namespace FantasyHOF.Application.Queries.$Entity$Queries
+{
+    public record Get$Entity$ByIdQuery(int $Entity$Id) : IRequest<$Entity$?>
+    {
+        public class Get$Entity$ByIdQueryHandler(IMediator mediator) 
+            : IRequestHandler<Get$Entity$ByIdQuery, $Entity$?>
+        {
+            private readonly IMediator _mediator = mediator;
+
+            public async Task<$Entity$?> Handle(Get$Entity$ByIdQuery request, CancellationToken cancellationToken)
+            {
+                return (await _mediator.Send(new Get$Entity$sByIdsQuery([request.$Entity$Id]), cancellationToken))
+                    .FirstOrDefault();
+            }
+        }
+    }
+}]]>
+		</Code>
+	</Snippet>
+</CodeSnippet>

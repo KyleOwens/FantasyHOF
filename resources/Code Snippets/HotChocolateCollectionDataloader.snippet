@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0"
+             xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<Header>
+		<Title>HotChocolate Collection DataLoader</Title>
+		<Shortcut>cdl</Shortcut>
+		<Description>HotChocolate Collection DataLoader using MediatR</Description>
+		<Author>Kyle</Author>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>Entity</ID>
+				<Default>Entity</Default>
+			</Literal>
+			<Literal>
+				<ID>CollectionName</ID>
+				<Default>CollectionName</Default>
+			</Literal>
+			<Literal>
+				<ID>LookupEntity</ID>
+				<Default>LookupEntity</Default>
+			</Literal>
+			<Literal>
+				<ID>Item</ID>
+				<Default>item</Default>
+			</Literal>
+		</Declarations>
+
+		<Code Language="csharp">
+	<![CDATA[
+using FantasyHOF.Application.Queries.$Entity$Queries;
+using FantasyHOF.Domain.Types;
+using MediatR;
+
+namespace FantasyHOF.GraphQL.Types.DataLoaders
+{
+    internal class $Entity$sBy$LookupEntity$IdsDataLoaderDefinition
+    {
+        [DataLoader]
+        public static async Task<Dictionary<int, List<$Entity$>>> $Entity$sAsync(
+			IReadOnlyList<int> ids,
+			IMediator mediator,
+			CancellationToken cancellationToken)
+        {
+            var $CollectionName$ = await mediator.Send(
+                new Get$Entity$sBy$LookupEntity$IdsQuery(ids),
+                cancellationToken);
+
+            return $CollectionName$.GroupBy($Item$ => $Item$.$LookupEntity$Id)
+                .Select(group => new { group.Key, Items = group.ToList() })
+                .ToDictionary(entry => entry.Key, entry => entry.Items);
+        }
+    }
+}]]>
+		</Code>
+	</Snippet>
+</CodeSnippet>

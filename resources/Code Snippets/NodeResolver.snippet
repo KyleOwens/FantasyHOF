@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0"
+             xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<Header>
+		<Title>Node resolver</Title>
+		<Shortcut>nr</Shortcut>
+		<Description>HotChocolate node resolver</Description>
+		<Author>Kyle</Author>
+		<SnippetTypes>
+			<SnippetType>Expansion</SnippetType>
+		</SnippetTypes>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>Entity</ID>
+				<Default>Entity</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="csharp">
+<![CDATA[public static async Task<$Entity$?> Get$Entity$Async(
+			int id,
+			IMediator mediator,
+			CancellationToken cancellationToken)
+		{
+			return await mediator.Send(new Get$Entity$ByIdQuery(id), cancellationToken);
+		}]]>
+		</Code>
+	</Snippet>
+</CodeSnippet>

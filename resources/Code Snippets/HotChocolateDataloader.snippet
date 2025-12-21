@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0"
+             xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<Header>
+		<Title>HotChocolate DataLoader</Title>
+		<Shortcut>dl</Shortcut>
+		<Description>HotChocolate DataLoader using MediatR</Description>
+		<Author>Kyle</Author>
+	</Header>
+
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>Entity</ID>
+				<Default>Entity</Default>
+			</Literal>
+			<Literal>
+				<ID>CollectionName</ID>
+				<Default>item</Default>
+			</Literal>
+			<Literal>
+				<ID>LookupBy</ID>
+				<Default>LookupBy</Default>
+			</Literal>
+		</Declarations>
+
+		<Code Language="csharp"><![CDATA[
+using FantasyHOF.Application.Queries.$Entity$Queries;
+using FantasyHOF.Domain.Types;
+using MediatR;
+
+namespace FantasyHOF.GraphQL.Types.DataLoaders
+{
+	internal static class $Entity$sBy$LookupBy$sDataLoaderDefinition
+	{
+		[DataLoader]
+		public static async Task<Dictionary<int, $Entity$>> Get$Entity$s$LookupBy$Async(
+			IReadOnlyList<int> ids,
+			IMediator mediator,
+			CancellationToken cancellationToken)
+		{
+			var $CollectionName$s = await mediator.Send(
+				new Get$Entity$s$LookupBy$Query(ids),
+				cancellationToken);
+
+			return $CollectionName$s.ToDictionary($CollectionName$ => $CollectionName$.$LookupBy$Id);
+		}
+	}
+}]]>
+		</Code>
+	</Snippet>
+</CodeSnippet>

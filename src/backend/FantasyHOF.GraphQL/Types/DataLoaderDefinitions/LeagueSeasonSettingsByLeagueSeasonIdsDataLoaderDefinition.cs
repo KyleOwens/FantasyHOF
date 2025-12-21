@@ -22,7 +22,7 @@ namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
                 new GetLeagueSeasonSettingsByLeagueSeasonIdsQuery(leagueSeasonIds),
                 cancellationToken);
 
-            return settings.ToDictionary(settings => settings.Id);
+            return settings.ToDictionary(settings => settings.LeagueSeasonId);
         }
     }
 }

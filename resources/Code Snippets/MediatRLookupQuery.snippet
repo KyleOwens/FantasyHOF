@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0"
+             xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<Header>
+		<Title>MediatR lookup by entity query</Title>
+		<Shortcut>lquery</Shortcut>
+		<Description>Snippet to create a MediatR query that looks up an entity by another entity's Id</Description>
+		<Author>Kyle</Author>
+	</Header>
+
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>Entity</ID>
+				<Default>Entity</Default>
+			</Literal>
+			<Literal>
+				<ID>LookupEntity</ID>
+				<Default>LookupEntity</Default>
+			</Literal>
+			<Literal>
+				<ID>Item</ID>
+				<Default>item</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="csharp"><![CDATA[
+using FantasyHOF.Domain.Types;
+using FantasyHOF.EntityFramework;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace FantasyHOF.Application.Queries.$Entity$Queries
+{
+    public sealed record Get$Entity$sBy$LookupEntity$IdsQuery(IEnumerable<int> $LookupEntity$Ids) : IRequest<IEnumerable<$Entity$>>;
+
+    public sealed class Get$Entity$sBy$LookupEntity$IdsQueryHandler : IRequestHandler<Get$Entity$sBy$LookupEntity$IdsQuery, IEnumerable<$Entity$>>
+    {
+        private readonly FantasyHOFDBContext _context;
+
+        public Get$Entity$sBy$LookupEntity$IdsQueryHandler(FantasyHOFDBContext context) => _context = context;
+
+        public async Task<IEnumerable<$Entity$>> Handle(Get$Entity$sBy$LookupEntity$IdsQuery request, CancellationToken cancellationToken)
+        {
+            return _context.$Entity$s
+                .Where($Item$ => request.$LookupEntity$Ids.Contains($Item$.$LookupEntity$Id));
+        }
+    }
+}
+]]>
+		</Code>
+	</Snippet>
+</CodeSnippet>

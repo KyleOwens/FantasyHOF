@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0"
+             xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<Header>
+		<Title>Mediatr Collection Query</Title>
+		<Shortcut>cquery</Shortcut>
+		<Description>Creates a mediatr query request for returning a collection</Description>
+		<Author>Kyle</Author>
+	</Header>
+	<Snippet>
+		<Declarations>
+			<Literal>
+				<ID>Entity</ID>
+				<Default>Entity</Default>
+			</Literal>
+			<Literal>
+				<ID>ItemName</ID>
+				<Default>item</Default>
+			</Literal>
+		</Declarations>
+		<Code Language="csharp"><![CDATA[
+using FantasyHOF.Domain.Types;
+using FantasyHOF.EntityFramework;
+using MediatR;
+
+namespace FantasyHOF.Application.Queries.$Entity$Queries
+{
+	public sealed record Get$Entity$sByIdsQuery(IEnumerable<int> $Entity$Ids) 
+		: IRequest<IEnumerable<$Entity$>>
+	{
+		public sealed class Get$Entity$sByIdsQueryHandler(FantasyHOFDBContext context)
+						: IRequestHandler<Get$Entity$sByIdsQuery, IEnumerable<$Entity$>>
+		{
+			private readonly FantasyHOFDBContext _context = context;
+
+			public async Task<IEnumerable<$Entity$>> Handle(
+				Get$Entity$sByIdsQuery request, 
+				CancellationToken cancellationToken)
+			{
+				return _context.$Entity$s
+					.Where($ItemName$ => request.$Entity$Ids.Contains($ItemName$.Id));
+			}
+		}
+	}
+}]]>
+		</Code>
+	</Snippet>
+</CodeSnippet>
