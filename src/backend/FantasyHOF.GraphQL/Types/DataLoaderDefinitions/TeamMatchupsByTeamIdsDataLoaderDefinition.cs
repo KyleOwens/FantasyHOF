@@ -8,7 +8,7 @@ namespace FantasyHOF.GraphQL.Types.DataLoaders
     internal class TeamMatchupsByTeamIdsDataLoaderDefinition
     {
         [DataLoader]
-        public static async Task<Dictionary<int, List<TeamMatchup>>> TeamMatchupsAsync(
+        public static async Task<Dictionary<int, List<TeamMatchup>>> TeamMatchupsByTeamIdsAsync(
             IReadOnlyList<int> ids,
             IMediator mediator,
             CancellationToken cancellationToken)

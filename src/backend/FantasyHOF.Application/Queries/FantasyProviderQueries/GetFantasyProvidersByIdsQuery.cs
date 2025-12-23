@@ -2,6 +2,7 @@
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.FantasyProviderQueries
 {
@@ -17,8 +18,9 @@ namespace FantasyHOF.Application.Queries.FantasyProviderQueries
 				GetFantasyProvidersByIdsQuery request,
 				CancellationToken cancellationToken)
 			{
-				return _context.FantasyProviders
-					.Where(provider => request.FantasyProviderIds.Contains(provider.Id));
+				return await _context.FantasyProviders
+					.Where(provider => request.FantasyProviderIds.Contains(provider.Id))
+					.ToListAsync();
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,9 @@ namespace FantasyHOF.Application.Queries.Leagues
             
             public async Task<IEnumerable<League>> Handle(GetLeaguesByIdsQuery request, CancellationToken cancellationToken)
             {
-                return _context.Leagues
-                    .Where(league => request.LeagueIds.Contains(league.Id));
+                return await _context.Leagues
+                    .Where(league => request.LeagueIds.Contains(league.Id))
+                    .ToListAsync();
             }
         }
     }

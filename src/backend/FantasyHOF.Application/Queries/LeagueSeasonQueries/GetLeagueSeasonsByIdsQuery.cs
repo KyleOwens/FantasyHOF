@@ -1,6 +1,7 @@
 ﻿using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,8 +22,9 @@ namespace FantasyHOF.Application.Queries.LeagueSeasons
                 GetLeagueSeasonsByIdsQuery request, 
                 CancellationToken cancellationToken)
             {
-                return _context.LeagueSeasons
-                    .Where(season => request.LeagueSeasonIds.Contains(season.Id));
+                return await _context.LeagueSeasons
+                    .Where(season => request.LeagueSeasonIds.Contains(season.Id))
+                    .ToListAsync();
             }
         }
     }

@@ -1,8 +1,9 @@
 ﻿
-using FantasyHOF.Domain.Types;
 using FantasyHOF.Domain.ComplexIds;
+using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonMemberQueries
 {
@@ -18,9 +19,10 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberQueries
 				GetLeagueSeasonMembersByIdsQuery request,
 				CancellationToken cancellationToken)
 			{
-				return _context.LeagueSeasonMembers
+				return await _context.LeagueSeasonMembers
 					.Where(seasonMember => request.LeagueSeasonMemberIds
-						.Any(id => id.LeagueSeasonId == seasonMember.LeagueSeasonId && id.MemberId == seasonMember.MemberId));
+						.Any(id => id.LeagueSeasonId == seasonMember.LeagueSeasonId && id.MemberId == seasonMember.MemberId))
+                    .ToListAsync();
 			}
 		}
 	}

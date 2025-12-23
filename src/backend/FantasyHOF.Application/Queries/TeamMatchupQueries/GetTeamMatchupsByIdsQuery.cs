@@ -2,6 +2,7 @@
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.TeamMatchupQueries
 {
@@ -17,8 +18,9 @@ namespace FantasyHOF.Application.Queries.TeamMatchupQueries
 				GetTeamMatchupsByIdsQuery request,
 				CancellationToken cancellationToken)
 			{
-				return _context.TeamMatchups
-					.Where(matchup => request.TeamMatchupIds.Contains(matchup.Id));
+				return await _context.TeamMatchups
+					.Where(matchup => request.TeamMatchupIds.Contains(matchup.Id))
+					.ToListAsync();
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonSettingsQueries
 {
@@ -16,8 +17,9 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonSettingsQueries
                 GetLeagueSeasonSettingsByIdsQuery request,
 				CancellationToken cancellationToken)
 			{
-				return _context.LeagueSeasonSettings
-					.Where(settings => request.LeagueSeasonSettingsIds.Contains(settings.Id));
+				return await _context.LeagueSeasonSettings
+					.Where(settings => request.LeagueSeasonSettingsIds.Contains(settings.Id))
+                    .ToListAsync();
 			}
 		}
 	}

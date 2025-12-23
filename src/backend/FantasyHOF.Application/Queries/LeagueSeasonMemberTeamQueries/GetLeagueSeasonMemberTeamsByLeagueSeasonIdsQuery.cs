@@ -30,6 +30,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
 
             return unfilteredResults
                 .Where(memberTeam => idSet.Contains(new LeagueSeasonMemberId(memberTeam.LeagueSeasonId, memberTeam.MemberId)));
+                
         }
     }
 }

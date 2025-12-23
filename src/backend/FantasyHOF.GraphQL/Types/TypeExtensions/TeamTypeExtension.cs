@@ -21,8 +21,16 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
 		{
 			return await stats.LoadRequiredAsync(team.Id, cancellationToken);
 		}
-		
-		public static async Task<Team?> GetTeamAsync(
+
+		public async Task<IEnumerable<TeamMatchup>> GetMatchups(
+			[Parent] Team team,
+			ITeamMatchupsByTeamIdsDataLoader matchups,
+			CancellationToken cancellationToken)
+		{
+			return await matchups.LoadAsync(team.Id, cancellationToken) ?? [];
+        }
+
+        public static async Task<Team?> GetTeamAsync(
 			int id,
 			IMediator mediator,
 			CancellationToken cancellationToken)

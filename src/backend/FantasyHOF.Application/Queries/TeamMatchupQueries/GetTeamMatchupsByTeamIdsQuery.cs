@@ -16,8 +16,9 @@ namespace FantasyHOF.Application.Queries.TeamMatchupQueries
 
         public async Task<IEnumerable<TeamMatchup>> Handle(GetTeamMatchupsByTeamIdsQuery request, CancellationToken cancellationToken)
         {
-            return _context.TeamMatchups
-                .Where(matchup => request.TeamIds.Contains(matchup.TeamId));
+            return await _context.TeamMatchups
+                .Where(matchup => request.TeamIds.Contains(matchup.TeamId))
+                .ToListAsync();
         }
     }
 }

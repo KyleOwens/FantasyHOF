@@ -16,8 +16,9 @@ namespace FantasyHOF.Application.Queries.TeamSeasonStatsQueries
 
         public async Task<IEnumerable<TeamSeasonStats>> Handle(GetTeamSeasonStatsByTeamIdsQuery request, CancellationToken cancellationToken)
         {
-            return _context.TeamSeasonStats
-                .Where(stats => request.TeamIds.Contains(stats.TeamId));
+            return await _context.TeamSeasonStats
+                .Where(stats => request.TeamIds.Contains(stats.TeamId))
+                .ToListAsync();
         }
     }
 }

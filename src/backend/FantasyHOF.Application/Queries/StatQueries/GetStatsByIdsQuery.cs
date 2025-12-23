@@ -3,6 +3,7 @@ using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.StatQueries
 {
@@ -18,8 +19,9 @@ namespace FantasyHOF.Application.Queries.StatQueries
 				GetStatsByIdsQuery request,
 				CancellationToken cancellationToken)
 			{
-				return _context.Stats
-					.Where(stat => request.StatIds.Contains(stat.Id));
+				return await _context.Stats
+					.Where(stat => request.StatIds.Contains(stat.Id))
+                    .ToListAsync();
 			}
 		}
 	}

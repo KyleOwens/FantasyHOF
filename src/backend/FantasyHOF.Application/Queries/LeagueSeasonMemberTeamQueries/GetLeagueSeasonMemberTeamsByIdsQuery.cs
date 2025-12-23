@@ -3,6 +3,7 @@ using FantasyHOF.Domain.ComplexIds;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
 {
@@ -18,11 +19,12 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
 				GetLeagueSeasonMemberTeamsByIdsQuery request,
 				CancellationToken cancellationToken)
 			{
-				return _context.LeagueSeasonMemberTeams
+				return await _context.LeagueSeasonMemberTeams
 					.Where(memberTeam => request.LeagueSeasonMemberTeamIds
 						.Any(id => id.LeagueSeasonId == memberTeam.LeagueSeasonId &&
 									id.MemberId == memberTeam.MemberId &&
-									id.TeamId == memberTeam.TeamId));
+									id.TeamId == memberTeam.TeamId))
+                    .ToListAsync();
 			}
 		}
 	}
