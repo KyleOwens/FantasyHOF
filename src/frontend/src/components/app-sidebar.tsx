@@ -126,6 +126,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>Records</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarGroups.map((group) => (
