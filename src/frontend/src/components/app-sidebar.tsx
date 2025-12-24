@@ -4,6 +4,7 @@ import {
   Calculator,
   Calendar,
   ChevronRight,
+  ChevronsUpDown,
   GamepadDirectional,
   Home,
   Inbox,
@@ -23,13 +24,24 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarSeparator,
   SidebarTrigger,
   useSidebar,
 } from "./ui/sidebar";
-import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
-import { Collapsible, CollapsibleContent } from "./ui/collapsible";
-import { CollapsibleTrigger } from "@radix-ui/react-collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 const sidebarGroups = [
   {
@@ -74,23 +86,43 @@ const sidebarGroups = [
 ];
 
 export function AppSidebar() {
-  const { toggleSidebar, open } = useSidebar();
-
   return (
-    <Sidebar collapsible="icon" className="sticky">
-      <SidebarHeader className="flex items-end -mx-1.5">
-        <Button
-          onClick={toggleSidebar}
-          variant="ghost"
-          className="flex flex-row items-center"
-        >
-          <ArrowRight
-            className={cn(
-              "h-4 w-4 transition-transform duration-400 text-primary",
-              open && "rotate-180"
-            )}
-          />
-        </Button>
+    <Sidebar className="sticky">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
+                  size="lg"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                >
+                  <Avatar className="w-8 h-8 rounded-lg">
+                    <AvatarImage src="/logo-old.png" />
+                  </Avatar>
+                  <div className="grid flex-1 text-left text-xs leading-tight">
+                    <span className="truncate font-medium">
+                      National Fantasy League
+                    </span>
+                    <span className="truncate text-xs">Football</span>
+                  </div>
+                  <ChevronsUpDown className="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                side="right"
+                align="start"
+                sideOffset={4}
+              >
+                <DropdownMenuLabel>Teams</DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>National Fantasy League</DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
