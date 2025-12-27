@@ -7,18 +7,15 @@ using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
-namespace FantasyHOF.Application.Mutations
+namespace FantasyHOF.Application.Queries.ESPNQueries
 {
-    public sealed record LoadESPNLeagueCommand(ESPNLeagueCredentials Credentials) : IRequest<League>
+    public sealed record GetESPNLeagueQuery(ESPNLeagueCredentials Credentials) : IRequest<League>
     {
         private sealed class ESPNImportContext
         {
@@ -32,23 +29,23 @@ namespace FantasyHOF.Application.Mutations
                 MemberLookup = memberLookup;
             }
         }
-        
-        public sealed class LoadESPNLeagueCommandHandler : IRequestHandler<LoadESPNLeagueCommand, League>
+
+        public sealed class GetESPNLeagueQueryHandler : IRequestHandler<GetESPNLeagueQuery, League>
         {
             private readonly FantasyHOFDBContext _context;
             private readonly IESPNAPIClientBuilder _espnClientBuilder;
             private readonly IESPNLeagueMapper _espnMapper;
 
             private ESPNImportContext _importContext = null!;
-            
-            public LoadESPNLeagueCommandHandler(FantasyHOFDBContext context, IESPNAPIClientBuilder espnClientBuilder, IESPNLeagueMapper espnMapper)
+
+            public GetESPNLeagueQueryHandler(FantasyHOFDBContext context, IESPNAPIClientBuilder espnClientBuilder, IESPNLeagueMapper espnMapper)
             {
                 _context = context;
                 _espnClientBuilder = espnClientBuilder;
                 _espnMapper = espnMapper;
             }
 
-            public async Task<League> Handle(LoadESPNLeagueCommand request, CancellationToken cancellationToken)
+            public async Task<League> Handle(GetESPNLeagueQuery request, CancellationToken cancellationToken)
             {
                 ESPNAPIClient espnClient = _espnClientBuilder.Build(request.Credentials);
 
@@ -57,11 +54,7 @@ namespace FantasyHOF.Application.Mutations
 
                 await PrepareImportContextAsync(memberDetails, matchupDetails, cancellationToken);
 
-                League league = CreateLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
-
-                await SaveNewLeagueData(league, cancellationToken);
-
-                return league; 
+                return CreateLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
             }
 
             private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, CancellationToken cancellationToken)
@@ -193,9 +186,9 @@ namespace FantasyHOF.Application.Mutations
             }
 
             private List<LeagueSeasonMemberTeam> CreateLeagueSeasonMemberTeams(
-                ESPNFantasyMember espnMember, 
-                List<ESPNFantasyTeam> espnTeams, 
-                IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData 
+                ESPNFantasyMember espnMember,
+                List<ESPNFantasyTeam> espnTeams,
+                IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData
             )
             {
                 List<LeagueSeasonMemberTeam> leagueSeasonMemberTeams = [];
@@ -239,19 +232,19 @@ namespace FantasyHOF.Application.Mutations
                     ESPNMatchupTeam? opponentTeam = isPrimaryTeamHomeTeam ? espnMatchup.Away : espnMatchup.Home;
 
                     TeamMatchup matchup = _espnMapper.MapTeamMatchup(
-                        espnTeamMatchup.Week, 
-                        espnMatchup.PlayoffTierType, 
+                        espnTeamMatchup.Week,
+                        espnMatchup.PlayoffTierType,
                         isPrimaryTeamHomeTeam,
                         espnMatchup.Winner,
                         primaryTeam);
 
-                    if (opponentTeam is not null) 
-                    { 
-                        matchup.Opponent = _importContext.TeamLookup[opponentTeam.TeamId]; 
+                    if (opponentTeam is not null)
+                    {
+                        matchup.Opponent = _importContext.TeamLookup[opponentTeam.TeamId];
                     }
 
                     matchup.MatchupRosterSpots = CreateMatchupRosterSpots(primaryTeam.Roster, espnTeamMatchup.Year);
-                    
+
                     teamMatchups.Add(matchup);
                 }
 
@@ -302,8 +295,8 @@ namespace FantasyHOF.Application.Mutations
                 foreach (int statId in espnLeagueAdjustedStats.AppliedStats.Keys)
                 {
                     AccumulatedStat accumulatedStat = _espnMapper.MapAccumulatedStat(
-                        statId, 
-                        espnLeagueAdjustedStats.AppliedStats[statId], 
+                        statId,
+                        espnLeagueAdjustedStats.AppliedStats[statId],
                         espnLeagueAdjustedStats.Stats[statId]);
 
                     accumulatedStats.Add(accumulatedStat);
@@ -311,48 +304,7 @@ namespace FantasyHOF.Application.Mutations
 
                 return accumulatedStats;
             }
-
-            private async Task SaveNewLeagueData(League league, CancellationToken cancellationToken)
-            {
-                await using IDbContextTransaction transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
-                
-                await DeleteLeagueIfExists(league.ProviderLeagueId, cancellationToken);
-
-                _context.Leagues.Add(league);
-                await _context.SaveChangesAsync(cancellationToken);
-
-                await transaction.CommitAsync(cancellationToken);
-            }
-
-            private async Task DeleteLeagueIfExists(string espnLeagueId, CancellationToken cancellationToken)
-            {
-                League? existingLeague = await _context.Leagues
-                    .Include(league => league.Seasons)
-                    .ThenInclude(season => season.Members)
-                    .ThenInclude(member => member.Teams)
-                    .ThenInclude(lsmt => lsmt.Team)
-                    .ThenInclude(team => team.Matchups)
-                    .FirstOrDefaultAsync(league =>
-                        league.FantasyProviderId == FantasyProviderId.ESPN &&
-                        league.ProviderLeagueId == espnLeagueId,
-                        cancellationToken);
-
-                if (existingLeague is null) return;
-
-                IEnumerable<Team> teams = existingLeague.Seasons
-                    .SelectMany(season => season.Members)
-                    .SelectMany(member => member.Teams)
-                    .Select(team => team.Team)
-                    .Distinct();
-
-                IEnumerable<TeamMatchup> matchups = teams
-                    .SelectMany(team => team.Matchups)
-                    .Distinct();
-
-                _context.TeamMatchups.RemoveRange(matchups);
-                _context.Teams.RemoveRange(teams);
-                _context.Leagues.Remove(existingLeague);
-            }
         }
     }
 }
+

@@ -188,12 +188,10 @@ namespace FantasyHOF.ESPN
                 .WithViews(ESPNView.mStatus)
                 .Build();
 
-            PreviousYearsResponse mostRecentPreviousYear = (await SendAPIRequestAsync<List<PreviousYearsResponse>>(previousYearsRequest))
-                .OrderBy(year => year.SeasonId)
-                .Last();
+            IEnumerable<int> previousYears = (await SendAPIRequestAsync<List<PreviousYearsResponse>>(previousYearsRequest))
+                .Select(x => x.SeasonId);
 
-            leagueYears.AddRange(mostRecentPreviousYear.Status.PreviousSeasons);
-            leagueYears.Add(mostRecentPreviousYear.SeasonId);
+            leagueYears.AddRange(previousYears);
 
             return leagueYears;
         }

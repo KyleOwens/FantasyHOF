@@ -5,7 +5,10 @@ using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
 using FantasyHOF.ESPN.Types.Outputs;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
+using FantasyHOF.Infrastructure.Authentication;
+using HotChocolate.Authorization;
 using MediatR;
+using System.Security.Claims;
 
 namespace FantasyHOF.GraphQL.Types.Roots;
 
@@ -14,6 +17,7 @@ public static class Query
 {
     public static async Task<League> GetLeagueAsync(
         [ID(nameof(League))] int id, 
+        ClaimsPrincipal claimsPrincipal,
         ILeaguesByIdsDataLoader leagues, 
         CancellationToken cancellationToken)
     {

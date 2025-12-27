@@ -1,36 +1,33 @@
 using FantasyHOF.Application.Mappers;
+using FantasyHOF.ApplicationExtensions;
 using FantasyHOF.Domain.ComplexIds;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Enums;
+using FantasyHOF.Infrastructure.Authentication;
 using FantasyHOF.Infrastructure.Exceptions;
+using FantasyHOF.ServiceExtensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient();
-builder.Services.AddTransient<IESPNAPIClientBuilder, ESPNAPIClientBuilder>();
-builder.Services.AddSingleton<IESPNLeagueMapper, ESPNLeagueMapper>();
+builder.Services.AddFantasyHOFAuthenticationServices(
+    builder.Configuration["Authentication:Authority"]
+    ?? throw new Exception("Failed to load JWT authority from config"));
 
-builder.Services.AddDbContext<FantasyHOFDBContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-        .UseSnakeCaseNamingConvention();
+builder.Services.AddFantasyHOFDatabaseServices(
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new Exception("Failed to load connection string from config"));
 
-    options.EnableSensitiveDataLogging();
-});
+builder.Services.AddFantasyHOFHttpServices();
+builder.Services.AddFantasyHOFCurrentUserService();
+builder.Services.AddFantasyHOFAPIProviderServices();
+builder.Services.AddFantasyHOFMediatRServices();
 
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssembly(typeof(FantasyHOF.Application.AssemblyMarker).Assembly);
-});
-
-builder.AddGraphQL()
-    .AddFantasyHOFTypes()
-    .AddGlobalObjectIdentification()
-    .AddMutationConventions(applyToAllMutations: true)
-    .AddErrorInterfaceType<ICodedException>();
+builder.AddFantasyHOFGraphQL();
     
 var app = builder.Build();
 
@@ -43,6 +40,9 @@ if (app.Environment.IsDevelopment())
     //context.Database.EnsureDeleted();
     context.Database.Migrate();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGraphQL();
 app.RunWithGraphQLCommands(args);

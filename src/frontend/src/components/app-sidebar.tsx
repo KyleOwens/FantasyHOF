@@ -8,6 +8,7 @@ import {
   GamepadDirectional,
   Home,
   Inbox,
+  Plus,
   Search,
   Settings,
 } from "lucide-react";
@@ -39,6 +40,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarImage } from "./ui/avatar";
@@ -115,9 +117,18 @@ export function AppSidebar() {
                 align="start"
                 sideOffset={4}
               >
-                <DropdownMenuLabel>Teams</DropdownMenuLabel>
+                <DropdownMenuLabel>Leagues</DropdownMenuLabel>
                 <DropdownMenuGroup>
                   <DropdownMenuItem>National Fantasy League</DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem className="flex flex-row items-center gap-2">
+                    <div className="border rounded-sm p-0.5">
+                      <Plus className="size-4 text-primary" />
+                    </div>
+                    {"Add league"}
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -125,7 +136,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="-my-2">
           <SidebarGroupLabel>Records</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
