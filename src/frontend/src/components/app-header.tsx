@@ -45,7 +45,7 @@ export function AppHeader() {
                 Demo
               </NavigationMenuTrigger>
               <NavigationMenuContent>
-                <NavigationMenuLink>
+                <NavigationMenuLink asChild>
                   <Link to={footballDemoRoute.to}>Football</Link>
                 </NavigationMenuLink>
               </NavigationMenuContent>

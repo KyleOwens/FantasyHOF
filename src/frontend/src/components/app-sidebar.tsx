@@ -44,6 +44,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarImage } from "./ui/avatar";
+import { graphql } from "relay-runtime";
 
 const sidebarGroups = [
   {
@@ -86,6 +87,23 @@ const sidebarGroups = [
     ],
   },
 ];
+
+const AppSidebarDemoQuery = graphql`
+  query appSidebarDemoQuery {
+    demoLeagues {
+      id
+      seasons {
+        settings {
+          leagueName
+        }
+      }
+      fantasyProvider {
+        id
+        name
+      }
+    }
+  }
+`;
 
 export function AppSidebar() {
   return (

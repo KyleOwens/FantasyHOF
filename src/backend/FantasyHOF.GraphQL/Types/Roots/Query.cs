@@ -1,5 +1,6 @@
 using FantasyHOF.Application.Mutations;
 using FantasyHOF.Application.Queries;
+using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
@@ -15,8 +16,15 @@ namespace FantasyHOF.GraphQL.Types.Roots;
 [QueryType]
 public static class Query
 {
+    public static async Task<IEnumerable<League>> GetDemoLeaguesAsync(
+        IMediator mediator,
+        CancellationToken cancellationToken)
+    {
+        return await mediator.Send(new GetDemoLeaguesQuery(), cancellationToken);
+    }
+    
     public static async Task<League> GetLeagueAsync(
-        [ID(nameof(League))] int id, 
+        [ID<League>] int id, 
         ClaimsPrincipal claimsPrincipal,
         ILeaguesByIdsDataLoader leagues, 
         CancellationToken cancellationToken)
