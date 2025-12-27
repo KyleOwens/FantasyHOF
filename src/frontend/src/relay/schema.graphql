@@ -1,0 +1,593 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+interface ICodedException {
+  errorCode: AppErrorCode!
+  message: String!
+}
+
+"The node interface is implemented by entities that have a global unique identifier."
+interface Node {
+  id: ID!
+}
+
+type AccumulatedStat implements Node {
+  id: ID!
+  matchupRosterSpotId: ID!
+  statId: ID!
+  statValue: Decimal!
+  pointsScored: Decimal!
+  stat: Stat! @cost(weight: "10")
+}
+
+type AddDemoESPNLeaguePayload {
+  league: League
+  errors: [AddDemoESPNLeagueError!]
+}
+
+type AddESPNLeagueToUserPayload {
+  league: League
+  errors: [AddESPNLeagueToUserError!]
+}
+
+type ESPNAuthenticationError implements ICodedException {
+  message: String!
+  errorCode: AppErrorCode!
+}
+
+type ESPNHttpError implements ICodedException {
+  message: String!
+  errorCode: AppErrorCode!
+}
+
+type ESPNInvalidYearError implements ICodedException {
+  message: String!
+  errorCode: AppErrorCode!
+}
+
+type ESPNLeagueInvalidError implements ICodedException {
+  message: String!
+  errorCode: AppErrorCode!
+}
+
+type ESPNNoActiveYearsError implements ICodedException {
+  message: String!
+  errorCode: AppErrorCode!
+}
+
+type FantasyMember implements Node {
+  id: ID!
+  fantasyProviderId: ID!
+  providerMemberId: String!
+  displayName: String!
+  firstName: String!
+  lastName: String!
+  fantasyProvider: FantasyProvider! @cost(weight: "10")
+}
+
+type FantasyProvider implements Node {
+  id: ID!
+  name: String!
+  value: FantasyProviderId!
+}
+
+type League implements Node {
+  id: ID!
+  userId: UUID
+  fantasyProviderId: ID!
+  providerLeagueId: String!
+  sportId: SportId!
+  seasons: [LeagueSeason!]! @cost(weight: "10")
+  fantasyProvider: FantasyProvider! @cost(weight: "10")
+}
+
+type LeagueSeason implements Node {
+  id: ID!
+  leagueId: ID!
+  year: Int!
+  settings: LeagueSeasonSettings! @cost(weight: "10")
+  members: [LeagueSeasonMember!]! @cost(weight: "10")
+}
+
+type LeagueSeasonMember implements Node {
+  leagueSeasonId: ID!
+  memberId: ID!
+  isLeagueCreator: Boolean!
+  isLeagueManager: Boolean!
+  member: FantasyMember! @cost(weight: "10")
+  teams: [LeagueSeasonMemberTeam!]! @cost(weight: "10")
+  id: ID!
+}
+
+type LeagueSeasonMemberId {
+  leagueSeasonId: Int!
+  memberId: Int!
+}
+
+type LeagueSeasonMemberTeam implements Node {
+  memberId: ID!
+  leagueSeasonId: ID!
+  teamId: ID!
+  team: Team! @cost(weight: "10")
+  id: ID!
+}
+
+type LeagueSeasonMemberTeamId {
+  leagueSeasonId: Int!
+  memberId: Int!
+  teamId: Int!
+}
+
+type LeagueSeasonScheduleSettings implements Node {
+  id: ID!
+  leagueSeasonId: ID!
+  matchupCount: Int!
+  matchupLength: Int!
+  playoffMatchupLength: Int!
+  playoffTeamCount: Int!
+  variablePlayoffMatchupLength: Boolean!
+}
+
+type LeagueSeasonScoringItem implements Node {
+  id: ID!
+  leagueSeasonId: ID!
+  statId: ID!
+  points: Decimal!
+  stat: Stat! @cost(weight: "10")
+}
+
+type LeagueSeasonScoringSettings implements Node {
+  id: ID!
+  leagueSeasonId: ID!
+  homeTeamBonusPoints: Int!
+  matchupTieRule: String!
+  matchupTieRuleBy: Int!
+  playerRankType: String!
+  playoffHomeTeamBonusPoints: Int!
+  playoffMatchupTieRule: String!
+  playoffMatchupTieRuleBy: Int!
+  scoringType: String!
+  scoringItems: [LeagueSeasonScoringItem!]! @cost(weight: "10")
+}
+
+type LeagueSeasonSettings implements Node {
+  id: ID!
+  leagueSeasonId: ID!
+  leagueName: String!
+  scheduleSettings: LeagueSeasonScheduleSettings! @cost(weight: "10")
+  scoringSettings: LeagueSeasonScoringSettings! @cost(weight: "10")
+}
+
+type MatchupOutcome implements Node {
+  id: ID!
+  name: String!
+  value: MatchupOutcomeId!
+}
+
+type MatchupRosterSpot implements Node {
+  id: ID!
+  matchupId: ID!
+  playerId: ID!
+  positionId: ID!
+  pointsScored: Decimal!
+  player: Player! @cost(weight: "10")
+  position: Position! @cost(weight: "10")
+  accumulatedStats: [AccumulatedStat!]! @cost(weight: "10")
+}
+
+type MatchupType implements Node {
+  id: ID!
+  name: String!
+  value: MatchupTypeId!
+}
+
+type Mutation {
+  addESPNLeagueToUser(input: AddESPNLeagueToUserInput!): AddESPNLeagueToUserPayload! @authorize @cost(weight: "10")
+  addDemoESPNLeague(input: AddDemoESPNLeagueInput!): AddDemoESPNLeaguePayload! @authorize(roles: [ "admin" ]) @cost(weight: "10")
+}
+
+type Player implements Node {
+  id: ID!
+  providerId: ID!
+  providerPlayerId: Int!
+  firstName: String!
+  lastName: String!
+  fullName: String!
+  provider: FantasyProvider! @cost(weight: "10")
+}
+
+type Position implements Node {
+  id: ID!
+  name: String!
+  value: PositionId!
+}
+
+type Query {
+  "Fetches an object given its ID."
+  node("ID of the object." id: ID!): Node @cost(weight: "10")
+  "Lookup nodes by a list of IDs."
+  nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
+  league(id: ID!): League! @cost(weight: "10")
+}
+
+type Stat implements Node {
+  id: ID!
+  name: String!
+  value: StatId!
+}
+
+type Team implements Node {
+  id: ID!
+  providerTeamId: Int!
+  abbreviation: String!
+  logoURL: String
+  name: String!
+  seasonStats: TeamSeasonStats! @cost(weight: "10")
+  matchups: [TeamMatchup!]! @cost(weight: "10")
+}
+
+type TeamMatchup implements Node {
+  id: ID!
+  teamId: ID!
+  opponentTeamId: ID
+  week: Int!
+  score: Decimal!
+  matchupOutcomeId: ID!
+  matchupTypeId: ID!
+  opponent: Team @cost(weight: "10")
+  matchupOutcome: MatchupOutcome! @cost(weight: "10")
+  matchupType: MatchupType! @cost(weight: "10")
+  matchupRosterSpots: [MatchupRosterSpot!]! @cost(weight: "10")
+}
+
+type TeamSeasonStats implements Node {
+  id: ID!
+  teamId: ID!
+  wins: Int!
+  losses: Int!
+  ties: Int!
+  winPercentage: Decimal!
+  pointsAgainst: Decimal!
+  pointsFor: Decimal!
+}
+
+union AddDemoESPNLeagueError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError
+
+union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError
+
+input AddDemoESPNLeagueInput {
+  leagueId: String!
+  swid: String!
+  espnS2Id: String!
+}
+
+input AddESPNLeagueToUserInput {
+  leagueId: String!
+  swid: String!
+  espnS2Id: String!
+}
+
+enum AppErrorCode {
+  ESPN_AUTHENTICATION_FAILED
+  ESPN_INVALID_YEAR
+  ESPN_LEAGUE_INVALID
+  ESPN_NO_ACTIVE_YEARS
+  ESPN_GENERAL_HTTP_ERROR
+}
+
+"Defines when a policy shall be executed."
+enum ApplyPolicy {
+  "Before the resolver was executed."
+  BEFORE_RESOLVER
+  "After the resolver was executed."
+  AFTER_RESOLVER
+  "The policy is applied in the validation step before the execution."
+  VALIDATION
+}
+
+enum FantasyProviderId {
+  ESPN
+}
+
+enum MatchupOutcomeId {
+  WIN
+  LOSS
+  TIE
+  UNDECIDED
+  UNKNOWN
+}
+
+enum MatchupTypeId {
+  REGULAR_SEASON
+  LOSERS_BRACKET
+  WINNERS_CONSOLATION
+  WINNERS_BRACKET
+  UNKNOWN
+}
+
+enum PositionId {
+  QB
+  TQB
+  RB
+  RBWR
+  WR
+  WRTE
+  TE
+  OP
+  DT
+  DE
+  LB
+  DL
+  CB
+  S
+  DB
+  DP
+  DST
+  K
+  P
+  HC
+  BE
+  IR
+  RBWRTE
+  ER
+  ROOKIE
+  UNKNOWN
+}
+
+enum SportId {
+  FOOTBALL
+}
+
+enum StatId {
+  ATTEMPTED_PASSES
+  COMPLETED_PASSES
+  INCOMPLETE_PASSES
+  PASSING_YARDS
+  PASSING_TOUCHDOWNS
+  PASSING_YARDS_PER5
+  PASSING_YARDS_PER10
+  PASSING_YARDS_PER20
+  PASSING_YARDS_PER25
+  PASSING_YARDS_PER50
+  PASSING_YARDS_PER100
+  PASS_COMPLETIONS_PER5
+  PASS_COMPLETIONS_PER10
+  PASS_INCOMPLETIONS_PER5
+  PASS_INCOMPLETIONS_PER10
+  PASSING_TD40_PLUS_BONUS
+  PASSING_TD50_PLUS_BONUS
+  PASSING300_TO399_YARD_GAME
+  PASSING400_PLUS_YARD_GAME
+  PASSING_TWO_POINT_CONVERSION
+  INTERCEPTIONS_THROWN
+  COMPLETION_PERCENTAGE
+  PASSING_YARDS_PER_GAME
+  RUSHING_ATTEMPTS
+  RUSHING_YARDS
+  RUSHING_TOUCHDOWNS
+  RUSHING_TWO_POINT_CONVERSION
+  RUSHING_YARDS_PER5
+  RUSHING_YARDS_PER10
+  RUSHING_YARDS_PER20
+  RUSHING_YARDS_PER25
+  RUSHING_YARDS_PER50
+  RUSHING_YARDS_PER100
+  RUSHING_ATTEMPTS_PER5
+  RUSHING_ATTEMPTS_PER10
+  RUSHING_TD40_PLUS_BONUS
+  RUSHING_TD50_PLUS_BONUS
+  RUSHING100_TO199_YARD_GAME
+  RUSHING200_PLUS_YARD_GAME
+  RUSHING_YARDS_PER_ATTEMPT
+  RUSHING_YARDS_PER_GAME
+  RECEPTIONS
+  RECEIVING_YARDS
+  RECEIVING_TOUCHDOWNS
+  RECEIVING_TWO_POINT_CONVERSION
+  RECEIVING_TD40_PLUS_BONUS
+  RECEIVING_TD50_PLUS_BONUS
+  RECEIVING_YARDS_PER5
+  RECEIVING_YARDS_PER10
+  RECEIVING_YARDS_PER20
+  RECEIVING_YARDS_PER25
+  RECEIVING_YARDS_PER50
+  RECEIVING_YARDS_PER100
+  EACH_RECEPTION
+  RECEPTIONS_PER5
+  RECEPTIONS_PER10
+  RECEIVING100_TO199_YARD_GAME
+  RECEIVING200_PLUS_YARD_GAME
+  RECEIVING_TARGETS
+  RECEIVING_YARDS_AFTER_CATCH
+  RECEIVING_YARDS_PER_CATCH
+  RECEIVING_YARDS_PER_GAME
+  TOTAL_TWO_POINT_CONVERSIONS
+  FUMBLE_RECOVERED_FOR_TD
+  SACKED
+  PASSING_FUMBLES
+  RUSHING_FUMBLES
+  RECEIVING_FUMBLES
+  TOTAL_FUMBLES
+  PASSING_FUMBLES_LOST
+  RUSHING_FUMBLES_LOST
+  RECEIVING_FUMBLES_LOST
+  TOTAL_FUMBLES_LOST
+  TOTAL_TURNOVERS
+  FIELD_GOAL_MADE50_PLUS
+  FIELD_GOAL_ATTEMPTED50_PLUS
+  FIELD_GOAL_MISSED50_PLUS
+  FIELD_GOAL_MADE40_TO49
+  FIELD_GOAL_ATTEMPTED40_TO49
+  FIELD_GOAL_MISSED40_TO49
+  FIELD_GOAL_MADE0_TO39
+  FIELD_GOAL_ATTEMPTED0_TO39
+  FIELD_GOAL_MISSED0_TO39
+  TOTAL_FIELD_GOALS_MADE
+  TOTAL_FIELD_GOALS_ATTEMPTED
+  TOTAL_FIELD_GOALS_MISSED
+  PAT_MADE
+  PAT_ATTEMPTED
+  PAT_MISSED
+  POINTS_ALLOWED0
+  POINTS_ALLOWED1_TO6
+  POINTS_ALLOWED7_TO13
+  POINTS_ALLOWED14_TO17
+  BLOCKED_KICK_RETURN_TD
+  FUMBLE_OR_INT_RETURN_TD
+  DEFENSE_INTERCEPTION
+  DEFENSE_FUMBLE_RECOVERED
+  BLOCKED_KICK
+  SAFETY
+  SACK
+  HALF_SACK
+  KICKOFF_RETURN_TD
+  PUNT_RETURN_TD
+  INTERCEPTION_RETURN_TD
+  FUMBLE_RETURN_TD
+  TOTAL_RETURN_TD
+  FUMBLE_FORCED
+  ASSISTED_TACKLES
+  SOLO_TACKLES
+  TOTAL_TACKLES
+  EVERY3_TACKLES
+  EVERY5_TACKLES
+  STUFFS
+  PASSES_DEFENDED
+  KICKOFF_RETURN_YARDS
+  PUNT_RETURN_YARDS
+  KICKOFF_RETURN_YARDS_PER10
+  KICKOFF_RETURN_YARDS_PER25
+  PUNT_RETURN_YARDS_PER10
+  PUNT_RETURN_YARDS_PER25
+  POINTS_ALLOWED
+  POINTS_ALLOWED18_TO21
+  POINTS_ALLOWED22_TO27
+  POINTS_ALLOWED28_TO34
+  POINTS_ALLOWED35_TO45
+  POINTS_ALLOWED46_PLUS
+  POINTS_ALLOWED_PER_GAME
+  YARDS_ALLOWED
+  YARDS_ALLOWED_LESS_THAN100
+  YARDS_ALLOWED100_TO199
+  YARDS_ALLOWED200_TO299
+  YARDS_ALLOWED300_TO349
+  YARDS_ALLOWED350_TO399
+  YARDS_ALLOWED400_TO449
+  YARDS_ALLOWED450_TO499
+  YARDS_ALLOWED500_TO549
+  YARDS_ALLOWED550_PLUS
+  YARDS_ALLOWED_PER_GAME
+  PUNTS
+  PUNT_YARDS
+  PUNTS_INSIDE10
+  PUNTS_INSIDE20
+  BLOCKED_PUNTS
+  PUNTS_RETURNED
+  PUNTING_RETURN_YARDS
+  TOUCHBACKS
+  FAIR_CATCHES
+  PUNT_AVERAGE
+  PUNT_AVERAGE44_PLUS
+  PUNT_AVERAGE42_TO43_9
+  PUNT_AVERAGE40_TO41_9
+  PUNT_AVERAGE38_TO39_9
+  PUNT_AVERAGE36_TO37_9
+  PUNT_AVERAGE34_TO35_9
+  PUNT_AVERAGE33_9_OR_LESS
+  TEAM_WIN
+  TEAM_LOSS
+  TEAM_TIE
+  POINTS_SCORED
+  POINTS_PER_GAME
+  MARGIN_OF_VICTORY
+  WIN_MARGIN25_PLUS
+  WIN_MARGIN20_TO24
+  WIN_MARGIN15_TO19
+  WIN_MARGIN10_TO14
+  WIN_MARGIN5_TO9
+  WIN_MARGIN1_TO4
+  LOSS_MARGIN1_TO4
+  LOSS_MARGIN5_TO9
+  LOSS_MARGIN10_TO14
+  LOSS_MARGIN15_TO19
+  LOSS_MARGIN20_TO24
+  LOSS_MARGIN25_PLUS
+  MARGIN_OF_VICTORY_PER_GAME
+  WINNING_PERCENTAGE
+  PASSING_TD0_TO9_BONUS
+  PASSING_TD10_TO19_BONUS
+  PASSING_TD20_TO29_BONUS
+  PASSING_TD30_TO39_BONUS
+  RUSHING_TD0_TO9_BONUS
+  RUSHING_TD10_TO19_BONUS
+  RUSHING_TD20_TO29_BONUS
+  RUSHING_TD30_TO39_BONUS
+  RECEIVING_TD0_TO9_BONUS
+  RECEIVING_TD10_TO19_BONUS
+  RECEIVING_TD20_TO29_BONUS
+  RECEIVING_TD30_TO39_BONUS
+  DST_POINTS_ALLOWED
+  DST_POINTS_ALLOWED0
+  DST_POINTS_ALLOWED1_TO6
+  DST_POINTS_ALLOWED7_TO13
+  DST_POINTS_ALLOWED14_TO17
+  DST_POINTS_ALLOWED18_TO21
+  DST_POINTS_ALLOWED22_TO27
+  DST_POINTS_ALLOWED28_TO34
+  DST_POINTS_ALLOWED35_TO45
+  DST_POINTS_ALLOWED46_PLUS
+  DST_POINTS_ALLOWED_PER_GAME
+  FIELD_GOAL_MADE50_TO59
+  FIELD_GOAL_ATTEMPTED50_TO59
+  FIELD_GOAL_MISSED50_TO59
+  FIELD_GOAL_MADE60_PLUS
+  FIELD_GOAL_ATTEMPTED60_PLUS
+  FIELD_GOAL_MISSED60_PLUS
+  OFFENSIVE_TWO_POINT_RETURN
+  DEFENSIVE_TWO_POINT_RETURN
+  TWO_POINT_RETURN
+  OFFENSIVE_ONE_POINT_SAFETY
+  DEFENSIVE_ONE_POINT_SAFETY
+  ONE_POINT_SAFETY
+  GAMES_PLAYED
+  PASSING_FIRST_DOWN
+  RUSHING_FIRST_DOWN
+  RECEIVING_FIRST_DOWN
+  FIELD_GOAL_MADE_YARDS
+  FIELD_GOAL_MISSED_YARDS
+  FIELD_GOAL_ATTEMPT_YARDS
+  FIELD_GOAL_MADE_YARDS_PER5
+  FIELD_GOAL_MADE_YARDS_PER10
+  FIELD_GOAL_MADE_YARDS_PER20
+  FIELD_GOAL_MADE_YARDS_PER25
+  FIELD_GOAL_MADE_YARDS_PER50
+  FIELD_GOAL_MADE_YARDS_PER100
+  FIELD_GOAL_MISSED_YARDS_PER5
+  FIELD_GOAL_MISSED_YARDS_PER10
+  FIELD_GOAL_MISSED_YARDS_PER20
+  FIELD_GOAL_MISSED_YARDS_PER25
+  FIELD_GOAL_MISSED_YARDS_PER50
+  FIELD_GOAL_MISSED_YARDS_PER100
+  FIELD_GOAL_ATTEMPT_YARDS_PER5
+  FIELD_GOAL_ATTEMPT_YARDS_PER10
+  FIELD_GOAL_ATTEMPT_YARDS_PER20
+  FIELD_GOAL_ATTEMPT_YARDS_PER25
+  FIELD_GOAL_ATTEMPT_YARDS_PER50
+  FIELD_GOAL_ATTEMPT_YARDS_PER100
+}
+
+"The authorize directive."
+directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the authorize directive shall be applied.By default the authorize directives are applied during the validation phase." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on OBJECT | FIELD_DEFINITION
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
+
+"The `Decimal` scalar type represents a decimal floating-point number."
+scalar Decimal
+
+scalar UUID @specifiedBy(url: "https:\/\/tools.ietf.org\/html\/rfc4122")
