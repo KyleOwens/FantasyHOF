@@ -1,4 +1,4 @@
-import { ChevronsUpDown, Plus } from "lucide-react";
+import { BadgeCheck, Check, ChevronsUpDown, Plus } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -6,12 +6,57 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
+import { graphql } from "relay-runtime";
+import { useLazyLoadQuery } from "react-relay";
+import { leagueNavigationQuery as LeagueNavigationQueryType } from "@/__generated__/leagueNavigationQuery.graphql";
+import { Link, useMatchRoute, useParams } from "@tanstack/react-router";
+import { Button } from "../ui/button";
+
+export const leagueNavigationQuery = graphql`
+  query leagueNavigationQuery {
+    demoLeagues {
+      id
+      fantasyProvider {
+        id
+        logoURL
+      }
+      seasons {
+        id
+        settings {
+          id
+          leagueName
+        }
+      }
+      sport {
+        id
+        name
+      }
+    }
+  }
+`;
 
 export function LeagueNavigation() {
+  const selectedLeagueId = useParams({ strict: false }).leagueId;
+  const matchRoute = useMatchRoute();
+  const data = useLazyLoadQuery<LeagueNavigationQueryType>(
+    leagueNavigationQuery,
+    {}
+  );
+
+  const isDemo = !!matchRoute({ to: "/demo", fuzzy: true });
+
+  const selectedLeague = selectedLeagueId
+    ? data.demoLeagues.find((x) => x.id === selectedLeagueId)
+    : data.demoLeagues.at(-1);
+  const mostRecentSeason = selectedLeague?.seasons.at(-1);
+  const leagueName = mostRecentSeason?.settings.leagueName;
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -22,30 +67,52 @@ export function LeagueNavigation() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="w-8 h-8 rounded-lg">
-                <AvatarImage src="/logo-old.png" />
+                <AvatarImage src={selectedLeague?.fantasyProvider.logoURL} />
               </Avatar>
               <div className="grid flex-1 text-left text-xs leading-tight">
-                <span className="truncate font-medium">
-                  National Fantasy League
+                <span className="truncate font-medium">{leagueName}</span>
+                <span className="truncate text-muted-foreground">
+                  {selectedLeague?.sport.name}
                 </span>
-                <span className="truncate text-xs">Football</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className=" min-w-56 rounded-lg"
             side="right"
             align="start"
             sideOffset={4}
           >
             <DropdownMenuLabel>Leagues</DropdownMenuLabel>
             <DropdownMenuGroup>
-              <DropdownMenuItem>National Fantasy League</DropdownMenuItem>
+              {data.demoLeagues.map((league) => (
+                <DropdownMenuItem key={league.id} asChild>
+                  <Link to="/demo/$leagueId" params={{ leagueId: league.id }}>
+                    <div className="border rounded-sm p-0.5">
+                      <img
+                        src={league.fantasyProvider.logoURL}
+                        className="size-4"
+                      />
+                    </div>
+                    <div className="grid flex-1">
+                      <span className="text-sm">
+                        {league.seasons.at(-1)?.settings.leagueName}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {league.sport.name}
+                      </span>
+                    </div>
+                    <BadgeCheck
+                      className={`size-4 ml-auto text-primary ${league.id === selectedLeagueId ? "opacity-100" : "opacity-0"}`}
+                    />
+                  </Link>
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="flex flex-row items-center gap-2">
+              <DropdownMenuItem disabled={isDemo}>
                 <div className="border rounded-sm p-0.5">
                   <Plus className="size-4 text-primary" />
                 </div>

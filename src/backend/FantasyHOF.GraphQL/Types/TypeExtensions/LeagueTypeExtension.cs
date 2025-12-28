@@ -27,12 +27,20 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
             return await leagueSeasons.LoadAsync(league.Id, cancellationToken) ?? [];
         }
 
-        public async Task<FantasyProvider> GetFantasyProvider(
+        public async Task<FantasyProvider> GetFantasyProviderAsync(
             [Parent] League league,
             IFantasyProvidersByIdsDataLoader providers,
             CancellationToken cancellationToken)
         {
             return await providers.LoadRequiredAsync(league.FantasyProviderId, cancellationToken);
+        }
+
+        public async Task<Sport> GetSportAsync(
+            [Parent] League league,
+            ISportsByIdsDataLoader sports,
+            CancellationToken cancellationToken)
+        {
+            return await sports.LoadRequiredAsync(league.SportId, cancellationToken);
         }
 
         public static async Task<League?> GetLeagueAsync(

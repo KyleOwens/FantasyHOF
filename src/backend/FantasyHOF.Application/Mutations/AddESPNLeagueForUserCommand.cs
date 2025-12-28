@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.Application.Queries.ESPNQueries;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN.Types.Inputs;

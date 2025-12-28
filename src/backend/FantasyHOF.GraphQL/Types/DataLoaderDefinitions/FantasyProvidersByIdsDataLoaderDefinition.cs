@@ -1,5 +1,6 @@
 ﻿
 using FantasyHOF.Application.Queries.FantasyProviderQueries;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using MediatR;
 

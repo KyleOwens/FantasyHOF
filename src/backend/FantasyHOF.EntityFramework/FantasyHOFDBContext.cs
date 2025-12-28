@@ -27,6 +27,7 @@ namespace FantasyHOF.EntityFramework
         public DbSet<MatchupOutcome> MatchupOutcomes => Set<MatchupOutcome>();
         public DbSet<MatchupType> MatchupTypes => Set<MatchupType>();
         public DbSet<User> Users => Set<User>();
+        public DbSet<Sport> Sports => Set<Sport>();
 
         public FantasyHOFDBContext(DbContextOptions<FantasyHOFDBContext> options) : base(options)
         {

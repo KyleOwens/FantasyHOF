@@ -1,4 +1,6 @@
-﻿namespace FantasyHOF.Domain.Types
+﻿using FantasyHOF.Domain.Enums;
+
+namespace FantasyHOF.Domain.Types
 {
     public class Player
     {

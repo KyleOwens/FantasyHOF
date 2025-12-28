@@ -70,6 +70,7 @@ type FantasyMember implements Node {
 type FantasyProvider implements Node {
   id: ID!
   name: String!
+  logoURL: String!
   value: FantasyProviderId!
 }
 
@@ -81,6 +82,7 @@ type League implements Node {
   sportId: SportId!
   seasons: [LeagueSeason!]! @cost(weight: "10")
   fantasyProvider: FantasyProvider! @cost(weight: "10")
+  sport: Sport! @cost(weight: "10")
 }
 
 type LeagueSeason implements Node {
@@ -211,6 +213,12 @@ type Query {
   nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
   demoLeagues: [League!]! @cost(weight: "10")
   league(id: ID!): League! @cost(weight: "10")
+}
+
+type Sport implements Node {
+  id: ID!
+  name: String!
+  value: SportId!
 }
 
 type Stat implements Node {

@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Domain.Enums;
+using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -16,9 +17,20 @@ namespace FantasyHOF.EntityFramework.Configurations
         {
             builder.HasKey(x => x.Id);
 
-            builder.SeedFromEnum<FantasyProviderId, FantasyProvider>(id => new FantasyProvider(id, id.ToString()));
+            builder.SeedFromEnum<FantasyProviderId, FantasyProvider>(id => new FantasyProvider(id, id.ToString(), GetProviderLogoURL(id)));
 
             builder.Property(x => x.Name).HasMaxLength(256);
+        }
+
+        public string GetProviderLogoURL(FantasyProviderId providerId)
+        {
+            switch(providerId)
+            {
+                case FantasyProviderId.ESPN:
+                    return "/espn-logo.png";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(providerId), providerId, null);
+            }
         }
     }
 }

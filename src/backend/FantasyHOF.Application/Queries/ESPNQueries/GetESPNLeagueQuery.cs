@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.Application.Mappers;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;

@@ -11,7 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoLayoutRouteImport } from './routes/demo/_layout'
-import { Route as DemoLayoutFootballRouteImport } from './routes/demo/_layout/football'
+import { Route as DemoLayoutIndexRouteImport } from './routes/demo/_layout/index'
+import { Route as DemoLayoutLeagueIdRouteImport } from './routes/demo/_layout/$leagueId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,34 +24,46 @@ const DemoLayoutRoute = DemoLayoutRouteImport.update({
   path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoLayoutFootballRoute = DemoLayoutFootballRouteImport.update({
-  id: '/football',
-  path: '/football',
+const DemoLayoutIndexRoute = DemoLayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DemoLayoutRoute,
+} as any)
+const DemoLayoutLeagueIdRoute = DemoLayoutLeagueIdRouteImport.update({
+  id: '/$leagueId',
+  path: '/$leagueId',
   getParentRoute: () => DemoLayoutRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo': typeof DemoLayoutRouteWithChildren
-  '/demo/football': typeof DemoLayoutFootballRoute
+  '/demo/$leagueId': typeof DemoLayoutLeagueIdRoute
+  '/demo/': typeof DemoLayoutIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/demo': typeof DemoLayoutRouteWithChildren
-  '/demo/football': typeof DemoLayoutFootballRoute
+  '/demo/$leagueId': typeof DemoLayoutLeagueIdRoute
+  '/demo': typeof DemoLayoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/demo/_layout': typeof DemoLayoutRouteWithChildren
-  '/demo/_layout/football': typeof DemoLayoutFootballRoute
+  '/demo/_layout/$leagueId': typeof DemoLayoutLeagueIdRoute
+  '/demo/_layout/': typeof DemoLayoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo' | '/demo/football'
+  fullPaths: '/' | '/demo' | '/demo/$leagueId' | '/demo/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo' | '/demo/football'
-  id: '__root__' | '/' | '/demo/_layout' | '/demo/_layout/football'
+  to: '/' | '/demo/$leagueId' | '/demo'
+  id:
+    | '__root__'
+    | '/'
+    | '/demo/_layout'
+    | '/demo/_layout/$leagueId'
+    | '/demo/_layout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -74,22 +87,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/_layout/football': {
-      id: '/demo/_layout/football'
-      path: '/football'
-      fullPath: '/demo/football'
-      preLoaderRoute: typeof DemoLayoutFootballRouteImport
+    '/demo/_layout/': {
+      id: '/demo/_layout/'
+      path: '/'
+      fullPath: '/demo/'
+      preLoaderRoute: typeof DemoLayoutIndexRouteImport
+      parentRoute: typeof DemoLayoutRoute
+    }
+    '/demo/_layout/$leagueId': {
+      id: '/demo/_layout/$leagueId'
+      path: '/$leagueId'
+      fullPath: '/demo/$leagueId'
+      preLoaderRoute: typeof DemoLayoutLeagueIdRouteImport
       parentRoute: typeof DemoLayoutRoute
     }
   }
 }
 
 interface DemoLayoutRouteChildren {
-  DemoLayoutFootballRoute: typeof DemoLayoutFootballRoute
+  DemoLayoutLeagueIdRoute: typeof DemoLayoutLeagueIdRoute
+  DemoLayoutIndexRoute: typeof DemoLayoutIndexRoute
 }
 
 const DemoLayoutRouteChildren: DemoLayoutRouteChildren = {
-  DemoLayoutFootballRoute: DemoLayoutFootballRoute,
+  DemoLayoutLeagueIdRoute: DemoLayoutLeagueIdRoute,
+  DemoLayoutIndexRoute: DemoLayoutIndexRoute,
 }
 
 const DemoLayoutRouteWithChildren = DemoLayoutRoute._addFileChildren(

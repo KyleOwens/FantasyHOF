@@ -1,15 +1,7 @@
-﻿namespace FantasyHOF.Domain.Types
-{
-    public enum FantasyProviderId
-    {
-        ESPN = 1,
-    }
+﻿using FantasyHOF.Domain.Enums;
 
-    public enum SportId
-    {
-        Football = 1
-    }
-    
+namespace FantasyHOF.Domain.Types
+{
     public class League
     {
         public int Id { get; private set; }
@@ -21,5 +13,6 @@
 
         public List<LeagueSeason> Seasons { get; set; } = new();
         public FantasyProvider FantasyProvider { get; private set; } = null!;
+        public Sport Sport { get; private set; } = null!;
     }
 }

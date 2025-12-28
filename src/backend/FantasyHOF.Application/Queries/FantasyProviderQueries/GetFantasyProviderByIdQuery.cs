@@ -1,4 +1,5 @@
 ﻿
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using MediatR;
 
