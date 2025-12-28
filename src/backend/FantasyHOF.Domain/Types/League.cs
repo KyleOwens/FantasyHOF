@@ -11,8 +11,21 @@ namespace FantasyHOF.Domain.Types
         public required string ProviderLeagueId { get; init; }
         public required SportId SportId { get; init; }
 
-        public List<LeagueSeason> Seasons { get; set; } = new();
+        public string CurrentLeagueName { get; private set; } = null!;
+        public int CurrentLeagueYear { get; private set; }
+
+        public List<LeagueSeason> Seasons { get; set; } = [];
         public FantasyProvider FantasyProvider { get; private set; } = null!;
         public Sport Sport { get; private set; } = null!;
+
+        public void AddSeason(LeagueSeason season)
+        {
+            Seasons.Add(season);
+
+            if (season.Year <= CurrentLeagueYear) return;
+
+            CurrentLeagueName = season.Settings.LeagueName;
+            CurrentLeagueYear = season.Year;
+        }
     }
 }

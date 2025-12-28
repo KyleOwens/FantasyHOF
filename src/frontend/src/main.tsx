@@ -28,6 +28,6 @@ if (!rootElement.innerHTML) {
       <StrictMode>
         <RouterProvider router={router} />
       </StrictMode>
-    </RelayEnvironmentProvider>
+    </RelayEnvironmentProvider>,
   );
 }

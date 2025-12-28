@@ -15,7 +15,17 @@ namespace FantasyHOF.Domain.Types
         public required string? LogoURL { get; init; }
         public required string Name { get; init; }
 
-        public TeamSeasonStats SeasonStats { get; set; } = null!;
-        public List<TeamMatchup> Matchups { get; set; } = null!;
+        public TeamSeasonStats SeasonStats { get; private set; } = null!;
+        public List<TeamMatchup> Matchups { get; private set; } = null!;
+
+        public void SetSeasonStats(TeamSeasonStats seasonStats)
+        {
+            SeasonStats = seasonStats;
+        }
+
+        public void SetMatchups(List<TeamMatchup> matchups)
+        {
+            Matchups = matchups;
+        }
     }
 }

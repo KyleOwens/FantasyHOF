@@ -80,6 +80,8 @@ type League implements Node {
   fantasyProviderId: ID!
   providerLeagueId: String!
   sportId: SportId!
+  currentLeagueName: String!
+  currentLeagueYear: Int!
   seasons: [LeagueSeason!]! @cost(weight: "10")
   fantasyProvider: FantasyProvider! @cost(weight: "10")
   sport: Sport! @cost(weight: "10")

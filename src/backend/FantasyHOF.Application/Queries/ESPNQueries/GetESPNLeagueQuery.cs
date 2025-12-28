@@ -93,7 +93,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                     IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData = espnWeeklyData
                         .Where(espnWeek => espnWeek.Year == espnSeason.Year);
 
-                    league.Seasons.Add(CreateLeagueSeason(espnSeason, espnSeasonMatchupData));
+                    league.AddSeason(CreateLeagueSeason(espnSeason, espnSeasonMatchupData));
                 }
 
                 return league;
@@ -103,8 +103,8 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
             {
                 LeagueSeason season = _espnMapper.MapLeagueSeason(espnSeason);
 
-                season.Settings = CreateLeagueSeasonSettings(espnSeason.LeagueSettings);
-                season.Members = CreateLeagueSeasonMembers(espnSeason.Members, espnSeason.Teams, espnSeasonMatchupData);
+                season.SetSettings(CreateLeagueSeasonSettings(espnSeason.LeagueSettings));
+                season.SetMembers(CreateLeagueSeasonMembers(espnSeason.Members, espnSeason.Teams, espnSeasonMatchupData));
 
                 return season;
             }
@@ -113,8 +113,8 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
             {
                 LeagueSeasonSettings settings = _espnMapper.MapLeagueSeasonSettings(espnSettings);
 
-                settings.ScheduleSettings = _espnMapper.MapLeagueSeasonScheduleSettings(espnSettings.ScheduleSettings);
-                settings.ScoringSettings = CreateLeagueSeasonScoringSettings(espnSettings.ScoringSettings);
+                settings.SetScheduleSettings(_espnMapper.MapLeagueSeasonScheduleSettings(espnSettings.ScheduleSettings));
+                settings.SetScoringSettings(CreateLeagueSeasonScoringSettings(espnSettings.ScoringSettings));  
 
                 return settings;
             }
@@ -123,7 +123,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
             {
                 LeagueSeasonScoringSettings scoringSettings = _espnMapper.MapLeagueSeasonScoringSettings(espnScoringSettings);
 
-                scoringSettings.ScoringItems = CreateScoringItems(espnScoringSettings.ScoringItems);
+                scoringSettings.SetScoringItems(CreateScoringItems(espnScoringSettings.ScoringItems));
 
                 return scoringSettings;
             }
@@ -155,8 +155,8 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 {
                     LeagueSeasonMember leagueSeasonMember = _espnMapper.MapLeagueSeasonMember(espnMember);
 
-                    leagueSeasonMember.Member = GetOrCreateFantasyMember(espnMember);
-                    leagueSeasonMember.Teams = CreateLeagueSeasonMemberTeams(espnMember, espnTeams, espnSeasonMatchupData);
+                    leagueSeasonMember.SetMember(GetOrCreateFantasyMember(espnMember));
+                    leagueSeasonMember.SetTeams(CreateLeagueSeasonMemberTeams(espnMember, espnTeams, espnSeasonMatchupData));
 
                     leagueSeasonMembers.Add(leagueSeasonMember);
                 }
@@ -168,7 +168,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
             {
                 Team team = _espnMapper.MapTeam(espnTeam);
 
-                team.SeasonStats = _espnMapper.MapTeamSeasonStats(espnTeam.Record.Overall);
+                team.SetSeasonStats(_espnMapper.MapTeamSeasonStats(espnTeam.Record.Overall));
 
                 return team;
             }
@@ -211,8 +211,8 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                                     espnMatchup.Away?.TeamId == espnTeam.Id).ToList()
                         });
 
-                    leagueSeasonMemberTeam.Team = _importContext.TeamLookup[espnTeam.Id];
-                    leagueSeasonMemberTeam.Team.Matchups = CreateTeamMatchups(espnTeam.Id, espnTeamMatchups);
+                    leagueSeasonMemberTeam.SetTeam(_importContext.TeamLookup[espnTeam.Id]);
+                    leagueSeasonMemberTeam.Team.SetMatchups(CreateTeamMatchups(espnTeam.Id, espnTeamMatchups));
 
                     leagueSeasonMemberTeams.Add(leagueSeasonMemberTeam);
                 }
@@ -241,10 +241,10 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                     if (opponentTeam is not null)
                     {
-                        matchup.Opponent = _importContext.TeamLookup[opponentTeam.TeamId];
+                        matchup.SetOpponent(_importContext.TeamLookup[opponentTeam.TeamId]);
                     }
 
-                    matchup.MatchupRosterSpots = CreateMatchupRosterSpots(primaryTeam.Roster, espnTeamMatchup.Year);
+                    matchup.SetMatchupRosterSpots(CreateMatchupRosterSpots(primaryTeam.Roster, espnTeamMatchup.Year));
 
                     teamMatchups.Add(matchup);
                 }
@@ -262,8 +262,8 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 {
                     MatchupRosterSpot rosterSpot = _espnMapper.MapMatchupRosterSpot(espnRosterSpot, year);
 
-                    rosterSpot.Player = GetOrCreatePlayer(espnRosterSpot.PlayerPoolEntry.Player);
-                    rosterSpot.AccumulatedStats = CreateAccumulatedStats(espnRosterSpot.PlayerPoolEntry.Player);
+                    rosterSpot.SetPlayer(GetOrCreatePlayer(espnRosterSpot.PlayerPoolEntry.Player));
+                    rosterSpot.SetAccumulatedStats(CreateAccumulatedStats(espnRosterSpot.PlayerPoolEntry.Player));
 
                     matchupRosterSpots.Add(rosterSpot);
                 }

@@ -16,8 +16,23 @@ namespace FantasyHOF.Domain.Types
         public required PositionId PositionId { get; set; }
         public required decimal PointsScored { get; set; }
 
-        public Player Player { get; set; } = null!;
-        public Position Position { get; set; } = null!;
-        public List<AccumulatedStat> AccumulatedStats { get; set; } = null!;
+        public Player Player { get; private set; } = null!;
+        public Position Position { get; private set; } = null!;
+        public List<AccumulatedStat> AccumulatedStats { get; private set; } = null!;
+
+        public void SetPlayer(Player player)
+        {
+            Player = player;
+        }
+
+        public void SetPosition(Position position)
+        {
+            Position = position;
+        }
+        
+        public void SetAccumulatedStats(List<AccumulatedStat> accumulatedStats)
+        {
+            AccumulatedStats = accumulatedStats;
+        }
     }
 }

@@ -15,9 +15,19 @@ namespace FantasyHOF.Domain.Types
         public required bool IsLeagueCreator { get; init; }
         public required bool IsLeagueManager { get; init; }
 
-        public FantasyMember Member { get; set; } = null!;
-        public List<LeagueSeasonMemberTeam> Teams { get; set; } = null!;
+        public FantasyMember Member { get; private set; } = null!;
+        public List<LeagueSeasonMemberTeam> Teams { get; private set; } = null!;
 
         public LeagueSeasonMemberId Id => new(LeagueSeasonId, MemberId);
+
+        public void SetMember(FantasyMember member)
+        {
+            Member = member;
+        }
+
+        public void SetTeams(List<LeagueSeasonMemberTeam> teams)
+        {
+            Teams = teams;
+        }
     }
 }

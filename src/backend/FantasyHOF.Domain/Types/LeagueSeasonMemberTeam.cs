@@ -13,8 +13,13 @@ namespace FantasyHOF.Domain.Types
         public int LeagueSeasonId { get; private set; }
         public int TeamId { get; private set; }
 
-        public Team Team { get; set; } = null!;
+        public Team Team { get; private set; } = null!;
 
         public LeagueSeasonMemberTeamId Id => new(LeagueSeasonId, MemberId, TeamId);
+
+        public void SetTeam(Team team)
+        {
+            Team = team;
+        }
     }
 }

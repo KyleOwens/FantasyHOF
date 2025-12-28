@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
-import { graphql } from "relay-runtime";
+import { graphql } from "react-relay";
 import { useLazyLoadQuery } from "react-relay";
 import { leagueNavigationQuery as LeagueNavigationQueryType } from "@/__generated__/leagueNavigationQuery.graphql";
 import { Link, useMatchRoute, useParams } from "@tanstack/react-router";
@@ -22,16 +22,10 @@ export const leagueNavigationQuery = graphql`
   query leagueNavigationQuery {
     demoLeagues {
       id
+      currentLeagueName
       fantasyProvider {
         id
         logoURL
-      }
-      seasons {
-        id
-        settings {
-          id
-          leagueName
-        }
       }
       sport {
         id
@@ -46,7 +40,7 @@ export function LeagueNavigation() {
   const matchRoute = useMatchRoute();
   const data = useLazyLoadQuery<LeagueNavigationQueryType>(
     leagueNavigationQuery,
-    {}
+    {},
   );
 
   const isDemo = !!matchRoute({ to: "/demo", fuzzy: true });

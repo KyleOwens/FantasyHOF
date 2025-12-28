@@ -17,7 +17,7 @@ export const Route = createFileRoute("/demo/_layout/")({
     const data = await fetchQuery<LayoutDemoLeaguesQueryType>(
       RelayEnvironment,
       demoLeaguesQuery,
-      {}
+      {},
     ).toPromise();
 
     const firstLeagueId = data?.demoLeagues?.[0]?.id;

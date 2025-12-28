@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<48105433f9ad49e5f64411b40b563963>>
+ * @generated SignedSource<<43d633cba06c432376e3f27320ff6a1e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,18 +12,12 @@ import { ConcreteRequest } from 'relay-runtime';
 export type leagueNavigationQuery$variables = Record<PropertyKey, never>;
 export type leagueNavigationQuery$data = {
   readonly demoLeagues: ReadonlyArray<{
+    readonly currentLeagueName: string;
     readonly fantasyProvider: {
       readonly id: string;
       readonly logoURL: string;
     };
     readonly id: string;
-    readonly seasons: ReadonlyArray<{
-      readonly id: string;
-      readonly settings: {
-        readonly id: string;
-        readonly leagueName: string;
-      };
-    }>;
     readonly sport: {
       readonly id: string;
       readonly name: string;
@@ -56,6 +50,13 @@ v1 = [
       {
         "alias": null,
         "args": null,
+        "kind": "ScalarField",
+        "name": "currentLeagueName",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
         "concreteType": "FantasyProvider",
         "kind": "LinkedField",
         "name": "fantasyProvider",
@@ -67,37 +68,6 @@ v1 = [
             "args": null,
             "kind": "ScalarField",
             "name": "logoURL",
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "LeagueSeason",
-        "kind": "LinkedField",
-        "name": "seasons",
-        "plural": true,
-        "selections": [
-          (v0/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "LeagueSeasonSettings",
-            "kind": "LinkedField",
-            "name": "settings",
-            "plural": false,
-            "selections": [
-              (v0/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "leagueName",
-                "storageKey": null
-              }
-            ],
             "storageKey": null
           }
         ],
@@ -144,16 +114,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "9ad67577f06307d8aec382ecd883d943",
+    "cacheID": "76325dc011c0f5b3d443bb32dd0d1ba4",
     "id": null,
     "metadata": {},
     "name": "leagueNavigationQuery",
     "operationKind": "query",
-    "text": "query leagueNavigationQuery {\n  demoLeagues {\n    id\n    fantasyProvider {\n      id\n      logoURL\n    }\n    seasons {\n      id\n      settings {\n        id\n        leagueName\n      }\n    }\n    sport {\n      id\n      name\n    }\n  }\n}\n"
+    "text": "query leagueNavigationQuery {\n  demoLeagues {\n    id\n    currentLeagueName\n    fantasyProvider {\n      id\n      logoURL\n    }\n    sport {\n      id\n      name\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a8e070263d1dc86468b0f2a38a45c4e3";
+(node as any).hash = "5d28277b31327ba7a543554b6714d89d";
 
 export default node;

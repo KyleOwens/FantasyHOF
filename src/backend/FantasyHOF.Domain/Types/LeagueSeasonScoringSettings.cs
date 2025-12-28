@@ -14,6 +14,11 @@
         public required int PlayoffMatchupTieRuleBy { get; set; }
         public required string ScoringType { get; set; }
 
-        public List<LeagueSeasonScoringItem> ScoringItems { get; set; } = null!;
+        public List<LeagueSeasonScoringItem> ScoringItems { get; private set; } = null!;
+
+        public void SetScoringItems(List<LeagueSeasonScoringItem> scoringItems)
+        {
+            ScoringItems = scoringItems;
+        }
     }
 }
