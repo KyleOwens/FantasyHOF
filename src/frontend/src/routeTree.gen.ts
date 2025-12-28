@@ -10,53 +10,52 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DemoIndexRouteImport } from './routes/demo/index'
-import { Route as DemoFootballRouteImport } from './routes/demo/football'
+import { Route as DemoLayoutRouteImport } from './routes/demo/_layout'
+import { Route as DemoLayoutFootballRouteImport } from './routes/demo/_layout/football'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoIndexRoute = DemoIndexRouteImport.update({
-  id: '/demo/',
-  path: '/demo/',
+const DemoLayoutRoute = DemoLayoutRouteImport.update({
+  id: '/demo/_layout',
+  path: '/demo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoFootballRoute = DemoFootballRouteImport.update({
-  id: '/demo/football',
-  path: '/demo/football',
-  getParentRoute: () => rootRouteImport,
+const DemoLayoutFootballRoute = DemoLayoutFootballRouteImport.update({
+  id: '/football',
+  path: '/football',
+  getParentRoute: () => DemoLayoutRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/demo/football': typeof DemoFootballRoute
-  '/demo': typeof DemoIndexRoute
+  '/demo': typeof DemoLayoutRouteWithChildren
+  '/demo/football': typeof DemoLayoutFootballRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/demo/football': typeof DemoFootballRoute
-  '/demo': typeof DemoIndexRoute
+  '/demo': typeof DemoLayoutRouteWithChildren
+  '/demo/football': typeof DemoLayoutFootballRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/demo/football': typeof DemoFootballRoute
-  '/demo/': typeof DemoIndexRoute
+  '/demo/_layout': typeof DemoLayoutRouteWithChildren
+  '/demo/_layout/football': typeof DemoLayoutFootballRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/football' | '/demo'
+  fullPaths: '/' | '/demo' | '/demo/football'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/football' | '/demo'
-  id: '__root__' | '/' | '/demo/football' | '/demo/'
+  to: '/' | '/demo' | '/demo/football'
+  id: '__root__' | '/' | '/demo/_layout' | '/demo/_layout/football'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DemoFootballRoute: typeof DemoFootballRoute
-  DemoIndexRoute: typeof DemoIndexRoute
+  DemoLayoutRoute: typeof DemoLayoutRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -68,27 +67,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/': {
-      id: '/demo/'
+    '/demo/_layout': {
+      id: '/demo/_layout'
       path: '/demo'
       fullPath: '/demo'
-      preLoaderRoute: typeof DemoIndexRouteImport
+      preLoaderRoute: typeof DemoLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/football': {
-      id: '/demo/football'
-      path: '/demo/football'
+    '/demo/_layout/football': {
+      id: '/demo/_layout/football'
+      path: '/football'
       fullPath: '/demo/football'
-      preLoaderRoute: typeof DemoFootballRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof DemoLayoutFootballRouteImport
+      parentRoute: typeof DemoLayoutRoute
     }
   }
 }
 
+interface DemoLayoutRouteChildren {
+  DemoLayoutFootballRoute: typeof DemoLayoutFootballRoute
+}
+
+const DemoLayoutRouteChildren: DemoLayoutRouteChildren = {
+  DemoLayoutFootballRoute: DemoLayoutFootballRoute,
+}
+
+const DemoLayoutRouteWithChildren = DemoLayoutRoute._addFileChildren(
+  DemoLayoutRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DemoFootballRoute: DemoFootballRoute,
-  DemoIndexRoute: DemoIndexRoute,
+  DemoLayoutRoute: DemoLayoutRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

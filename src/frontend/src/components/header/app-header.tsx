@@ -15,7 +15,7 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { Button } from "../ui/button.tsx";
-import { Route as footballDemoRoute } from "../../routes/demo/football.tsx";
+import { Route as footballDemoRoute } from "../../routes/demo/_layout/football.tsx";
 import { title } from "node:process";
 import { HeaderNavigation } from "./header-navigation.tsx";
 import { HeaderProfile } from "./header-profile.tsx";

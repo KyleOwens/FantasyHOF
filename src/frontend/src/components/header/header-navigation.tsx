@@ -6,7 +6,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "../ui/navigation-menu";
-import { Route as footballDemoRoute } from "../../routes/demo/football.tsx";
+import { Route as footballDemoRoute } from "../../routes/demo/_layout/football.tsx";
 import { Route as indexRoute } from "../../routes/index.tsx";
 import { Link } from "@tanstack/react-router";
 
