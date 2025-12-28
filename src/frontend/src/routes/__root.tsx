@@ -1,8 +1,8 @@
 import { createRootRoute, Outlet, useMatchRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { ClerkProvider } from "@clerk/clerk-react";
-import { AppSidebar } from "@/components/app-sidebar";
-import { AppHeader } from "@/components/app-header";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { AppHeader } from "@/components/header/app-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { RelayAuthProvider } from "@/relay/RelayAuthProvider";
 import { Route as demoRoute } from "./demo/index";
