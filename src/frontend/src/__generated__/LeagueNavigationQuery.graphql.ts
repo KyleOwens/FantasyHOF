@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<43d633cba06c432376e3f27320ff6a1e>>
+ * @generated SignedSource<<687dc34a3da8f7eb8a4aaac112febb9d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,8 +9,8 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from 'relay-runtime';
-export type leagueNavigationQuery$variables = Record<PropertyKey, never>;
-export type leagueNavigationQuery$data = {
+export type LeagueNavigationQuery$variables = Record<PropertyKey, never>;
+export type LeagueNavigationQuery$data = {
   readonly demoLeagues: ReadonlyArray<{
     readonly currentLeagueName: string;
     readonly fantasyProvider: {
@@ -24,9 +24,9 @@ export type leagueNavigationQuery$data = {
     };
   }>;
 };
-export type leagueNavigationQuery = {
-  response: leagueNavigationQuery$data;
-  variables: leagueNavigationQuery$variables;
+export type LeagueNavigationQuery = {
+  response: LeagueNavigationQuery$data;
+  variables: LeagueNavigationQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -101,7 +101,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "leagueNavigationQuery",
+    "name": "LeagueNavigationQuery",
     "selections": (v1/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -110,20 +110,20 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "leagueNavigationQuery",
+    "name": "LeagueNavigationQuery",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "76325dc011c0f5b3d443bb32dd0d1ba4",
+    "cacheID": "292b1a4d521071d5bb6e4ae0f2f73480",
     "id": null,
     "metadata": {},
-    "name": "leagueNavigationQuery",
+    "name": "LeagueNavigationQuery",
     "operationKind": "query",
-    "text": "query leagueNavigationQuery {\n  demoLeagues {\n    id\n    currentLeagueName\n    fantasyProvider {\n      id\n      logoURL\n    }\n    sport {\n      id\n      name\n    }\n  }\n}\n"
+    "text": "query LeagueNavigationQuery {\n  demoLeagues {\n    id\n    currentLeagueName\n    fantasyProvider {\n      id\n      logoURL\n    }\n    sport {\n      id\n      name\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5d28277b31327ba7a543554b6714d89d";
+(node as any).hash = "63a74ca7b8155aaa8ef3b2f43d8224bf";
 
 export default node;
