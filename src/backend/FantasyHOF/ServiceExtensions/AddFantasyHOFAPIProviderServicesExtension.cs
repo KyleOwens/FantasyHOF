@@ -9,7 +9,9 @@ namespace FantasyHOF.ServiceExtensions
         {
             services.AddTransient<IESPNAPIClientBuilder, ESPNAPIClientBuilder>();
             services.AddSingleton<IESPNLeagueMapper, ESPNLeagueMapper>();
-            
+
+            services.AddSingleton<IRecordCalculator, RecordCalculator>();
+
             return services;
         }
     }

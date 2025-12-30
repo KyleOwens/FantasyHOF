@@ -1,5 +1,5 @@
-import { HeaderNavigation } from "./header-navigation.tsx";
-import { HeaderProfile } from "./header-profile.tsx";
+import { HeaderNavigation } from "./HeaderNavigation.tsx";
+import { HeaderProfile } from "./HeaderProfile.tsx";
 
 export function AppHeader() {
   return (

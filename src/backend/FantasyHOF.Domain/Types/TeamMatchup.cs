@@ -13,14 +13,14 @@ namespace FantasyHOF.Domain.Types
         public required MatchupOutcomeId MatchupOutcomeId { get; init; }
         public required MatchupTypeId MatchupTypeId { get; init; }
 
-        public Team? Opponent { get; private set; } = null!;
+        public TeamMatchup? OpponentMatchup { get; private set; } = null!;
         public MatchupOutcome MatchupOutcome { get; private set; } = null!;
         public MatchupType MatchupType { get; private set; } = null!;
         public List<MatchupRosterSpot> MatchupRosterSpots { get; private set; } = null!;
 
-        public void SetOpponent(Team opponent)
+        public void SetOpponentMatchup(TeamMatchup opponentMatchup)
         {
-            Opponent = opponent;
+            OpponentMatchup = opponentMatchup;
         }
 
         public void SetMatchupOutcome(MatchupOutcome matchupOutcome)

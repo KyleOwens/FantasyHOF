@@ -1,3 +1,4 @@
+import { LeagueDashboard } from "@/components/league-dashboard/LeagueDashboard";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/demo/_layout/$leagueId")({
@@ -5,5 +6,5 @@ export const Route = createFileRoute("/demo/_layout/$leagueId")({
 });
 
 function RouteComponent() {
-  return <div>Hello "/demo/_layout/$leagueId"!</div>;
+  return <LeagueDashboard />;
 }

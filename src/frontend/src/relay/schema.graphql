@@ -87,6 +87,13 @@ type League implements Node {
   sport: Sport! @cost(weight: "10")
 }
 
+type LeagueRecordSummary {
+  id: Int!
+  leagueId: Int!
+  mostPointsLeagueHistory: LeagueValueRecord!
+  mostAveragePointsPerWeekLeagueHistory: LeagueValueRecord!
+}
+
 type LeagueSeason implements Node {
   id: ID!
   leagueId: ID!
@@ -164,6 +171,15 @@ type LeagueSeasonSettings implements Node {
   scoringSettings: LeagueSeasonScoringSettings! @cost(weight: "10")
 }
 
+type LeagueValueRecord {
+  value: Decimal!
+  id: Int!
+  leagueId: Int!
+  memberId: Int!
+  recordType: RecordType!
+  member: FantasyMember!
+}
+
 type MatchupOutcome implements Node {
   id: ID!
   name: String!
@@ -215,6 +231,7 @@ type Query {
   nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
   demoLeagues: [League!]! @cost(weight: "10")
   league(id: ID!): League! @cost(weight: "10")
+  leagueRecords(leagueId: ID!): LeagueRecordSummary! @cost(weight: "10")
 }
 
 type Sport implements Node {
@@ -345,6 +362,13 @@ enum PositionId {
   ER
   ROOKIE
   UNKNOWN
+}
+
+enum RecordType {
+  LEAGUE_VALUE
+  SEASONAL_VALUE
+  WEEKLY_VALUE
+  PLAYER_VALUE
 }
 
 enum SportId {

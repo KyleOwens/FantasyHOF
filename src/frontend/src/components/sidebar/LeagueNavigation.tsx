@@ -1,4 +1,4 @@
-import { BadgeCheck, Check, ChevronsUpDown, Plus } from "lucide-react";
+import { BadgeCheck, ChevronsUpDown, Plus } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import {
   DropdownMenu,
@@ -6,20 +6,17 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 import { graphql } from "react-relay";
 import { useLazyLoadQuery } from "react-relay";
-import { leagueNavigationQuery as LeagueNavigationQueryType } from "@/__generated__/leagueNavigationQuery.graphql";
+import { LeagueNavigationQuery } from "@/__generated__/LeagueNavigationQuery.graphql";
 import { Link, useMatchRoute, useParams } from "@tanstack/react-router";
-import { Button } from "../ui/button";
 
 export const leagueNavigationQuery = graphql`
-  query leagueNavigationQuery {
+  query LeagueNavigationQuery {
     demoLeagues {
       id
       currentLeagueName
@@ -38,18 +35,16 @@ export const leagueNavigationQuery = graphql`
 export function LeagueNavigation() {
   const selectedLeagueId = useParams({ strict: false }).leagueId;
   const matchRoute = useMatchRoute();
-  const data = useLazyLoadQuery<LeagueNavigationQueryType>(
+  const leagues = useLazyLoadQuery<LeagueNavigationQuery>(
     leagueNavigationQuery,
     {},
-  );
+  ).demoLeagues;
 
   const isDemo = !!matchRoute({ to: "/demo", fuzzy: true });
 
   const selectedLeague = selectedLeagueId
-    ? data.demoLeagues.find((x) => x.id === selectedLeagueId)
-    : data.demoLeagues.at(-1);
-  const mostRecentSeason = selectedLeague?.seasons.at(-1);
-  const leagueName = mostRecentSeason?.settings.leagueName;
+    ? leagues.find((x) => x.id === selectedLeagueId)
+    : leagues.at(-1);
 
   return (
     <SidebarMenu>
@@ -64,7 +59,9 @@ export function LeagueNavigation() {
                 <AvatarImage src={selectedLeague?.fantasyProvider.logoURL} />
               </Avatar>
               <div className="grid flex-1 text-left text-xs leading-tight">
-                <span className="truncate font-medium">{leagueName}</span>
+                <span className="truncate font-medium">
+                  {selectedLeague?.currentLeagueName}
+                </span>
                 <span className="truncate text-muted-foreground">
                   {selectedLeague?.sport.name}
                 </span>
@@ -80,7 +77,7 @@ export function LeagueNavigation() {
           >
             <DropdownMenuLabel>Leagues</DropdownMenuLabel>
             <DropdownMenuGroup>
-              {data.demoLeagues.map((league) => (
+              {leagues.map((league) => (
                 <DropdownMenuItem key={league.id} asChild>
                   <Link to="/demo/$leagueId" params={{ leagueId: league.id }}>
                     <div className="border rounded-sm p-0.5">
@@ -91,7 +88,7 @@ export function LeagueNavigation() {
                     </div>
                     <div className="grid flex-1">
                       <span className="text-sm">
-                        {league.seasons.at(-1)?.settings.leagueName}
+                        {league.currentLeagueName}
                       </span>
                       <span className="text-xs text-muted-foreground">
                         {league.sport.name}

@@ -1,6 +1,7 @@
 using FantasyHOF.Application.Mutations;
 using FantasyHOF.Application.Queries;
 using FantasyHOF.Application.Queries.LeagueQueries;
+using FantasyHOF.Application.Queries.TestQueries;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
@@ -30,5 +31,14 @@ public static class Query
         CancellationToken cancellationToken)
     {
         return await leagues.LoadRequiredAsync(id, cancellationToken);
+    }
+
+    // TEST
+    public static async Task<LeagueRecordSummary> GetLeagueRecordsAsync(
+        [ID<League>] int leagueId,
+        IMediator mediator,
+        CancellationToken cancellationToken)
+    {
+        return await mediator.Send(new GetLeagueRecordsQuery(leagueId), cancellationToken);
     }
 }
