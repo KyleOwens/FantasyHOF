@@ -2,6 +2,7 @@
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
         {
             public async Task<IEnumerable<League>> Handle(GetDemoLeaguesQuery request, CancellationToken cancellationToken)
             {
-                return database.Leagues.Where(league => league.UserId == appConfig.Value.AdminUserId);
+                return database.Leagues
+                    .AsNoTracking()
+                    .Where(league => league.UserId == appConfig.Value.AdminUserId);
             }
         }
     }

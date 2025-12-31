@@ -17,6 +17,7 @@ namespace FantasyHOF.Application.Queries.AccumulatedStatQueries
         public async Task<IEnumerable<AccumulatedStat>> Handle(GetAccumulatedStatsByMatchupRosterSpotIdsQuery request, CancellationToken cancellationToken)
         {
             return await _context.AccumulatedStats
+                .AsNoTracking()
                 .Where(item => request.MatchupRosterSpotIds.Contains(item.MatchupRosterSpotId))
                 .ToListAsync();
         }

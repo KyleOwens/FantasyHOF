@@ -19,6 +19,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonScoringSettingsQueries
 				CancellationToken cancellationToken)
 			{
 				return await _context.LeagueSeasonScoringSettings
+					.AsNoTracking()
 					.Where(settings => request.LeagueSeasonScoringSettingsIds.Contains(settings.Id))
                     .ToListAsync();
 			}

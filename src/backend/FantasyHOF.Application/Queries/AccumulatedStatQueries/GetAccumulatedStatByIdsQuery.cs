@@ -19,6 +19,7 @@ namespace FantasyHOF.Application.Queries.AccumulatedStatQueries
 				CancellationToken cancellationToken)
 			{
 				return await _context.AccumulatedStats
+					.AsNoTracking()
 					.Where(stat => request.AccumulatedStatIds.Contains(stat.Id))
 					.ToListAsync();
 			}

@@ -19,6 +19,7 @@ namespace FantasyHOF.Application.Queries.TeamMatchupQueries
 				CancellationToken cancellationToken)
 			{
 				return await _context.TeamMatchups
+					.AsNoTracking()
 					.Where(matchup => request.TeamMatchupIds.Contains(matchup.Id))
 					.ToListAsync();
 			}

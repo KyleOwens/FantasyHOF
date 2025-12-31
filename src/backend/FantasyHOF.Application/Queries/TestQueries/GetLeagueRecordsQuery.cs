@@ -18,6 +18,7 @@ namespace FantasyHOF.Application.Queries.TestQueries
             public async Task<LeagueRecordSummary> Handle(GetLeagueRecordsQuery request, CancellationToken cancellationToken)
             {
                 League league = await database.Leagues
+                    .AsNoTracking()
                     .Include(x => x.Seasons)
                         .ThenInclude(x => x.Members)
                             .ThenInclude(x => x.Member)
@@ -40,6 +41,7 @@ namespace FantasyHOF.Application.Queries.TestQueries
                             .ThenInclude(m => m.Teams)
                                 .ThenInclude(t => t.Team)
                                     .ThenInclude(t => t.SeasonStats)
+                    .AsSplitQuery()
                     .SingleAsync(x => x.Id == request.LeagueId, cancellationToken);
 
                 return recordCalculator.CalculateLeagueRecords(league);

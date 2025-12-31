@@ -20,6 +20,7 @@ namespace FantasyHOF.Application.Queries.MatchupTypeQueries
 				CancellationToken cancellationToken)
 			{
 				return await _context.MatchupTypes
+					.AsNoTracking()
 					.Where(type => request.MatchupTypeIds.Contains(type.Id))
                     .ToListAsync();
 			}

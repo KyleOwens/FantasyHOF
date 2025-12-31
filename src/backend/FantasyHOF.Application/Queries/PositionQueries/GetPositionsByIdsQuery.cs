@@ -20,6 +20,7 @@ namespace FantasyHOF.Application.Queries.PositionQueries
 				CancellationToken cancellationToken)
 			{
 				return await _context.Positions
+					.AsNoTracking()
 					.Where(position => request.PositionIds.Contains(position.Id))
                     .ToListAsync();
 			}

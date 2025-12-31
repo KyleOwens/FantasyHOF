@@ -20,6 +20,7 @@ namespace FantasyHOF.Application.Queries.FantasyProviderQueries
 				CancellationToken cancellationToken)
 			{
 				return await _context.FantasyProviders
+					.AsNoTracking()
 					.Where(provider => request.FantasyProviderIds.Contains(provider.Id))
 					.ToListAsync();
 			}

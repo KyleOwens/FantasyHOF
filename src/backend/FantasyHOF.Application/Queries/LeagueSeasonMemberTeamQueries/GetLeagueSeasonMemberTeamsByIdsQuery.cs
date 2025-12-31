@@ -20,6 +20,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
 				CancellationToken cancellationToken)
 			{
 				return await _context.LeagueSeasonMemberTeams
+					.AsNoTracking()
 					.Where(memberTeam => request.LeagueSeasonMemberTeamIds
 						.Any(id => id.LeagueSeasonId == memberTeam.LeagueSeasonId &&
 									id.MemberId == memberTeam.MemberId &&

@@ -17,6 +17,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberQueries
         public async Task<IEnumerable<LeagueSeasonMember>> Handle(GetLeagueSeasonMembersByLeagueSeasonIdsQuery request, CancellationToken cancellationToken)
         {
             return await _context.LeagueSeasonMembers
+                .AsNoTracking()
                 .Where(seasonMember => request.LeagueSeasonIds.Contains(seasonMember.LeagueSeasonId))
                 .ToListAsync();
         }

@@ -24,6 +24,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
             IEnumerable<int> memberIds = searchIds.Select(x => x.MemberId).Distinct();
 
             List<LeagueSeasonMemberTeam> unfilteredResults = await _context.LeagueSeasonMemberTeams
+                .AsNoTracking()
                 .Where(memberTeam => seasonIds.Contains(memberTeam.LeagueSeasonId)
                           && memberIds.Contains(memberTeam.MemberId))
                 .ToListAsync();

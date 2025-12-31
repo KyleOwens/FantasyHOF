@@ -19,6 +19,7 @@ namespace FantasyHOF.Application.Queries.MatchupRosterSpotQueries
 				CancellationToken cancellationToken)
 			{
 				return await _context.MatchupRosterSpots
+					.AsNoTracking()
 					.Where(rosterSpot => request.MatchupRosterSpotIds.Contains(rosterSpot.Id))
                     .ToListAsync();
 			}

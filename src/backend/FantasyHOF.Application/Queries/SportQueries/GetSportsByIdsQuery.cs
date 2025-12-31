@@ -3,6 +3,7 @@ using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.SportQueries
 {
@@ -19,6 +20,7 @@ namespace FantasyHOF.Application.Queries.SportQueries
 				CancellationToken cancellationToken)
 			{
 				return _context.Sports
+					.AsNoTracking()
 					.Where(sport => request.SportIds.Contains(sport.Id));
 			}
 		}
