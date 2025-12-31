@@ -11,19 +11,8 @@ namespace FantasyHOF.ApplicationExtensions
                 .AddFantasyHOFTypes()
                 .AddGlobalObjectIdentification()
                 .AddMutationConventions(applyToAllMutations: true)
-                .AddErrorInterfaceType<ICodedException>()
-                .AddInstrumentation();
-
-            builder.Services
-                .AddOpenTelemetry()
-                .WithTracing(b =>
-                {
-                    b.AddAspNetCoreInstrumentation()
-                     .AddHotChocolateInstrumentation()
-                     .AddConsoleExporter();
-                });
-
-
+                .AddErrorInterfaceType<ICodedException>();
+                
             return builder;
         }
     }
