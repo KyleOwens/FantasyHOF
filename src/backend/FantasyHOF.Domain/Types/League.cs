@@ -5,7 +5,7 @@ namespace FantasyHOF.Domain.Types
     public class League
     {
         public int Id { get; private set; }
-        public Guid? UserId { get; private set; }
+        public Guid UserId { get; private set; }
 
         public required FantasyProviderId FantasyProviderId { get; init; }
         public required string ProviderLeagueId { get; init; }

@@ -1,6 +1,8 @@
-﻿using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Application.Configuration;
+using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,11 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
 {
     public sealed record GetDemoLeaguesQuery() : IRequest<IEnumerable<League>>
     {
-        public sealed class GetDemoLeaguesQueryHandler(FantasyHOFDBContext database) : IRequestHandler<GetDemoLeaguesQuery, IEnumerable<League>>
+        public sealed class GetDemoLeaguesQueryHandler(FantasyHOFDBContext database, IOptions<AppConfig> appConfig) : IRequestHandler<GetDemoLeaguesQuery, IEnumerable<League>>
         {
             public async Task<IEnumerable<League>> Handle(GetDemoLeaguesQuery request, CancellationToken cancellationToken)
             {
-                return database.Leagues.Where(league => league.UserId == null);
+                return database.Leagues.Where(league => league.UserId == appConfig.Value.AdminUserId);
             }
         }
     }

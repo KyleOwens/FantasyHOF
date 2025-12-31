@@ -17,32 +17,14 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
 		[ID<Team>]
 		public int TeamId([Parent] TeamMatchup teamMatchup) => teamMatchup.TeamId;
 
-		[ID<Team>]
-		public int? OpponentTeamId([Parent] TeamMatchup teamMatchup) => teamMatchup.OpponentTeamId;
+        [ID<MatchupTeamDetails>]
+        public int? OwnerMatchupDetailsId([Parent] TeamMatchup teamMatchup) => teamMatchup.OwnerMatchupDetailsId;
 
-		[ID<MatchupOutcome>]
-		public int MatchupOutcomeId([Parent] TeamMatchup teamMatchup) => (int)teamMatchup.MatchupOutcomeId;
+        [ID<MatchupTeamDetails>]
+		public int? OpponentMatchupDetailsId([Parent] TeamMatchup teamMatchup) => teamMatchup.OpponentMatchupDetailsId;
 
 		[ID<MatchupType>]
 		public int MatchupTypeId([Parent] TeamMatchup teamMatchup) => (int)teamMatchup.MatchupTypeId;
-
-		public async Task<Team?> GetOpponentAsync(
-			[Parent] TeamMatchup teamMatchup,
-			ITeamssByIdsDataLoader teams,
-			CancellationToken cancellationToken)
-		{
-            if (teamMatchup.OpponentTeamId is null) return null;
-
-            return await teams.LoadAsync(teamMatchup.OpponentTeamId.Value);
-		}
-
-		public async Task<MatchupOutcome> GetMatchupOutcomeAsync(
-			[Parent] TeamMatchup teamMatchup,
-			IMatchupOutcomesByIdsDataLoader outcomes,
-			CancellationToken cancellationToken)
-		{
-			return await outcomes.LoadRequiredAsync(teamMatchup.MatchupOutcomeId, cancellationToken);
-		}
 
 		public async Task<MatchupType> GetMatchupTypeAsync(
 			[Parent] TeamMatchup teamMatchup,
@@ -52,13 +34,23 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
 			return await types.LoadRequiredAsync(teamMatchup.MatchupTypeId, cancellationToken);
 		}
 
-		public async Task<IEnumerable<MatchupRosterSpot>> MatchupRosterSpots(
-			[Parent] TeamMatchup teamMatchup,
-			IMatchupRosterSpotsByTeamMatchupIdsDataLoader rosterSpots,
+		public async Task<MatchupTeamDetails> GetOwnerMatchupDetailsAsync(
+			[Parent] TeamMatchup matchup,
+			IMatchupTeamDetailsByIdsDataLoader teamDetails,
 			CancellationToken cancellationToken)
 		{
-			return await rosterSpots.LoadAsync(teamMatchup.Id, cancellationToken) ?? [];
+			return await teamDetails.LoadRequiredAsync(matchup.OwnerMatchupDetailsId, cancellationToken);
 		}
+
+        public async Task<MatchupTeamDetails?> GetOpponentMatchupDetailsAsync(
+            [Parent] TeamMatchup matchup,
+            IMatchupTeamDetailsByIdsDataLoader teamDetails,
+            CancellationToken cancellationToken)
+        {
+			if (matchup.OpponentMatchupDetailsId is null) return null;
+			
+			return await teamDetails.LoadRequiredAsync(matchup.OpponentMatchupDetailsId.Value, cancellationToken);
+        }
 
         public static async Task<TeamMatchup?> GetTeamMatchupAsync(
 			int id,

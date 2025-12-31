@@ -31,7 +31,15 @@ namespace FantasyHOF.Application.Mutations
 
                 user.AddLeague(newLeague);
 
-                await database.SaveChangesAsync(cancellationToken);
+                try
+                {
+                    await database.SaveChangesAsync(cancellationToken);
+                }
+                catch(Exception e)
+                {
+                    throw new Exception(e.InnerException?.Message);
+                }
+                
 
                 return newLeague;
             }

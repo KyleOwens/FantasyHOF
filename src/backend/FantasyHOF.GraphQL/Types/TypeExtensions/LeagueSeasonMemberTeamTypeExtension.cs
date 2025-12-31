@@ -30,7 +30,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
 
         public async Task<Team> GetTeam(
             [Parent] LeagueSeasonMemberTeam memberTeam,
-            ITeamssByIdsDataLoader teams,
+            ITeamsByIdsDataLoader teams,
             CancellationToken cancellationToken)
         {
             return await teams.LoadRequiredAsync(memberTeam.TeamId, cancellationToken);

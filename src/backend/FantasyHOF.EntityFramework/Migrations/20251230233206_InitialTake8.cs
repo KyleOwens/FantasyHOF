@@ -6,22 +6,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class NullableUser : Migration
+    public partial class InitialTake8 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterColumn<Guid>(
-                name: "user_id",
-                table: "leagues",
-                type: "uuid",
-                nullable: true,
-                oldClrType: typeof(Guid),
-                oldType: "uuid");
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<Guid>(
                 name: "user_id",
@@ -32,6 +20,18 @@ namespace FantasyHOF.EntityFramework.Migrations
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
                 oldNullable: true);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterColumn<Guid>(
+                name: "user_id",
+                table: "leagues",
+                type: "uuid",
+                nullable: true,
+                oldClrType: typeof(Guid),
+                oldType: "uuid");
         }
     }
 }

@@ -38,27 +38,5 @@ namespace FantasyHOF.GraphQL.Types.Roots
                         espnS2Id)), 
                 cancellationToken);
         }
-
-        [Error(typeof(ESPNAuthenticationException))]
-        [Error(typeof(ESPNHttpException))]
-        [Error(typeof(ESPNLeagueInvalidException))]
-        [Error(typeof(ESPNNoActiveYearsException))]
-        [Error(typeof(ESPNInvalidYearException))]
-        [Authorize(Roles = [Roles.Admin])]
-        public static async Task<League> AddDemoESPNLeague(
-            string leagueId,
-            string swid,
-            string espnS2Id,
-            IMediator mediator,
-            CancellationToken cancellationToken)
-        {
-            return await mediator.Send(
-                new AddDemoESPNLeagueCommand(
-                    new ESPNLeagueCredentials(
-                        leagueId,
-                        swid,
-                        espnS2Id)),
-                cancellationToken);
-        }
     }
 }

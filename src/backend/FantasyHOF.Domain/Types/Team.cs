@@ -8,15 +8,22 @@ namespace FantasyHOF.Domain.Types
 {
     public class Team
     {
-        public int Id { get; init; }
+        public int Id { get; private set; }
+        public int LeagueSeasonId { get; private set; }
 
         public required int ProviderTeamId { get; init; }
         public required string Abbreviation { get; init; }
         public required string? LogoURL { get; init; }
         public required string Name { get; init; }
 
+        public LeagueSeason Season { get; private set; } = null!;
         public TeamSeasonStats SeasonStats { get; private set; } = null!;
         public List<TeamMatchup> Matchups { get; private set; } = null!;
+
+        public void SetLeagueSeason(LeagueSeason season)
+        {
+            Season = season;
+        }
 
         public void SetSeasonStats(TeamSeasonStats seasonStats)
         {

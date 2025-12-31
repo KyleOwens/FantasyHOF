@@ -18,89 +18,65 @@ namespace FantasyHOF.Application.Mappers
 
     public class RecordCalculator() : IRecordCalculator
     {
+        private interface IHasMember { FantasyMember Member { get; } }
+        
+        private record AggregatedMemberLeagueStats(
+            FantasyMember Member,
+            decimal TotalPointsFor,
+            decimal TotalPointsForAverage,
+            decimal TotalPointsAgainst) : IHasMember
+        {
+
+        }
+
         public LeagueRecordSummary CalculateLeagueRecords(League league)
         {
-            var groupedMembers = league.Seasons
-                .SelectMany(season => season.Members)
-                .GroupBy(seasonMember => seasonMember.Member.Id);
-
-            var aggregatedSeasonStats = AggregateLeagueRecordStats(league);
+            IEnumerable<AggregatedMemberLeagueStats> aggregatedMemberLeagueStats = AggregateMemberLeagueStats(league);
 
             return new LeagueRecordSummary
             {
-                MostPointsLeagueHistory = CalculateMostPointsLeagueHistory(groupedMembers),
-                MostAveragePointsPerWeekLeagueHistory = CalcualteMostAveragePointsPerWeekLeagueHistory(groupedMembers)
+                MostPointsLeagueHistory = ExtractLeagueRecord(
+                    aggregatedMemberLeagueStats.OrderByDescending(x => x.TotalPointsFor).First(), 
+                    stats => stats.TotalPointsFor),
+
+                MostAveragePointsPerWeekLeagueHistory = ExtractLeagueRecord(
+                    aggregatedMemberLeagueStats.OrderByDescending(x => x.TotalPointsForAverage).First(),
+                    stats => stats.TotalPointsForAverage)
             };
         }
 
-        private object AggregateLeagueRecordStats(League league)
+        private IEnumerable<AggregatedMemberLeagueStats> AggregateMemberLeagueStats(League league)
         {
-            var groupedMembers = league.Seasons
+            return league.Seasons
                 .SelectMany(season => season.Members)
                 .GroupBy(seasonMember => seasonMember.Member.Id)
                 .Select(group =>
-                 {
+                {
                      IEnumerable<TeamMatchup> allMatchups = group
                          .SelectMany(member => member.Teams)
                          .SelectMany(memberTeam => memberTeam.Team.Matchups);
-                         
 
-                     decimal totalPointsFor = allMatchups.Sum(matchup => matchup.Score);
-                     decimal totalPointsAgainst = allMatchups.Sum(matchup => matchup.Opponent.Matchups.Single(x => x.Week == )
-
+                     decimal totalPointsFor = allMatchups.Sum(matchup => matchup.OwnerMatchupDetails.Score);
+                     decimal totalPointsAgainst = allMatchups.Sum(matchup => matchup.OpponentMatchupDetails?.Score ?? 0);
 
                      decimal totalWeeks = group
                          .SelectMany(member => member.Teams)
                          .Select(memberTeam => memberTeam.Team.Matchups)
                          .Sum(x => x.Count);
 
-                     return new
-                     {
+                     return new AggregatedMemberLeagueStats(
                          group.First().Member,
-                         TotalPointsFor = totalPointsFor,
-                         AveragePointsFor = totalPointsFor / totalWeeks
-                     };
-                 })
-                .OrderByDescending(x => x.TotalPoints)
-                .First();
+                         totalPointsFor,
+                         totalPointsFor/totalWeeks,
+                         totalPointsAgainst);
+                });
         }
 
-        private LeagueValueRecord CalculateMostPointsLeagueHistory(Leag)
+        private LeagueValueRecord ExtractLeagueRecord<T>(
+            T source,
+            Func<T, decimal> valueSelector) where T : IHasMember
         {
-            
-
-            var record = groupedMembers
-                
-
-            return new LeagueValueRecord(record.Member, record.TotalPoints);
-        }
-
-        private LeagueValueRecord CalcualteMostAveragePointsPerWeekLeagueHistory(
-            IEnumerable<IGrouping<int, LeagueSeasonMember>> groupedMembers)
-        {
-            var record = groupedMembers
-                .Select(group =>
-                {
-                    decimal totalPoints = group
-                        .SelectMany(member => member.Teams)
-                        .SelectMany(memberTeam => memberTeam.Team.Matchups)
-                        .Sum(matchup => matchup.Score);
-
-                    decimal totalWeeks = group
-                        .SelectMany(member => member.Teams)
-                        .Select(memberTeam => memberTeam.Team.Matchups)
-                        .Sum(x => x.Count);
-
-                    return new
-                    {
-                        group.First().Member,
-                        AverageWeeklyScore = totalPoints / totalWeeks
-                    };
-                })
-                .OrderByDescending(x => x.AverageWeeklyScore)
-                .First();
-
-            return new LeagueValueRecord(record.Member, record.AverageWeeklyScore);
+            return new LeagueValueRecord(source.Member, valueSelector(source));
         }
     }
 }

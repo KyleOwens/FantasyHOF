@@ -22,11 +22,6 @@ type AccumulatedStat implements Node {
   stat: Stat! @cost(weight: "10")
 }
 
-type AddDemoESPNLeaguePayload {
-  league: League
-  errors: [AddDemoESPNLeagueError!]
-}
-
 type AddESPNLeagueToUserPayload {
   league: League
   errors: [AddESPNLeagueToUserError!]
@@ -76,7 +71,7 @@ type FantasyProvider implements Node {
 
 type League implements Node {
   id: ID!
-  userId: UUID
+  userId: UUID!
   fantasyProviderId: ID!
   providerLeagueId: String!
   sportId: SportId!
@@ -188,13 +183,23 @@ type MatchupOutcome implements Node {
 
 type MatchupRosterSpot implements Node {
   id: ID!
-  matchupId: ID!
+  matchupTeamDetailsId: ID!
   playerId: ID!
   positionId: ID!
   pointsScored: Decimal!
   player: Player! @cost(weight: "10")
   position: Position! @cost(weight: "10")
   accumulatedStats: [AccumulatedStat!]! @cost(weight: "10")
+}
+
+type MatchupTeamDetails implements Node {
+  id: ID!
+  teamId: ID!
+  score: Decimal!
+  matchupOutcomeId: ID!
+  team: Team! @cost(weight: "10")
+  outcome: MatchupOutcome! @cost(weight: "10")
+  matchupRosterSpots: [MatchupRosterSpot!]! @cost(weight: "10")
 }
 
 type MatchupType implements Node {
@@ -205,7 +210,6 @@ type MatchupType implements Node {
 
 type Mutation {
   addESPNLeagueToUser(input: AddESPNLeagueToUserInput!): AddESPNLeagueToUserPayload! @authorize @cost(weight: "10")
-  addDemoESPNLeague(input: AddDemoESPNLeagueInput!): AddDemoESPNLeaguePayload! @authorize(roles: [ "admin" ]) @cost(weight: "10")
 }
 
 type Player implements Node {
@@ -248,10 +252,12 @@ type Stat implements Node {
 
 type Team implements Node {
   id: ID!
+  leagueSeasonId: Int!
   providerTeamId: Int!
   abbreviation: String!
   logoURL: String
   name: String!
+  season: LeagueSeason!
   seasonStats: TeamSeasonStats! @cost(weight: "10")
   matchups: [TeamMatchup!]! @cost(weight: "10")
 }
@@ -259,15 +265,14 @@ type Team implements Node {
 type TeamMatchup implements Node {
   id: ID!
   teamId: ID!
-  opponentTeamId: ID
+  ownerMatchupDetailsId: ID
+  opponentMatchupDetailsId: ID
   week: Int!
-  score: Decimal!
-  matchupOutcomeId: ID!
   matchupTypeId: ID!
-  opponent: Team @cost(weight: "10")
-  matchupOutcome: MatchupOutcome! @cost(weight: "10")
   matchupType: MatchupType! @cost(weight: "10")
-  matchupRosterSpots: [MatchupRosterSpot!]! @cost(weight: "10")
+  ownerMatchupDetails: MatchupTeamDetails! @cost(weight: "10")
+  opponentMatchupDetails: MatchupTeamDetails @cost(weight: "10")
+  scoreMargin: Decimal!
 }
 
 type TeamSeasonStats implements Node {
@@ -281,15 +286,7 @@ type TeamSeasonStats implements Node {
   pointsFor: Decimal!
 }
 
-union AddDemoESPNLeagueError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError
-
 union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError
-
-input AddDemoESPNLeagueInput {
-  leagueId: String!
-  swid: String!
-  espnS2Id: String!
-}
 
 input AddESPNLeagueToUserInput {
   leagueId: String!

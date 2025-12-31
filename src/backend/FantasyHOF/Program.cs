@@ -26,7 +26,7 @@ builder.Services.AddFantasyHOFDatabaseServices(
 
 builder.Services.AddFantasyHOFHttpServices();
 builder.Services.AddFantasyHOFCurrentUserService();
-builder.Services.AddFantasyHOFAPIProviderServices();
+builder.Services.AddFantasyHOFApplicationServices(builder.Configuration.GetSection("Authentication"));
 builder.Services.AddFantasyHOFMediatRServices();
 
 builder.AddFantasyHOFGraphQL();

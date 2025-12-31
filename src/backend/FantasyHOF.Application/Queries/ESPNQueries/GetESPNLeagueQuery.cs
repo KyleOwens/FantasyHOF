@@ -22,7 +22,8 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
         {
             public Dictionary<int, Player> PlayerLookup { get; }
             public Dictionary<string, FantasyMember> MemberLookup { get; }
-            public Dictionary<int, Team> TeamLookup { get; set; } = [];
+            public Dictionary<int, Team> TeamLookup { get; private set; } = [];
+            public Dictionary<(int, int), MatchupTeamDetails> MatchupDetailsLookup { get; private set; } = [];
 
             public ESPNImportContext(Dictionary<string, FantasyMember> memberLookup, Dictionary<int, Player> playerLookup)
             {
@@ -55,7 +56,9 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 await PrepareImportContextAsync(memberDetails, matchupDetails, cancellationToken);
 
-                return CreateLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
+                League league = CreateLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
+
+                return league;
             }
 
             private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, CancellationToken cancellationToken)
@@ -104,7 +107,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 LeagueSeason season = _espnMapper.MapLeagueSeason(espnSeason);
 
                 season.SetSettings(CreateLeagueSeasonSettings(espnSeason.LeagueSettings));
-                season.SetMembers(CreateLeagueSeasonMembers(espnSeason.Members, espnSeason.Teams, espnSeasonMatchupData));
+                season.SetMembers(CreateLeagueSeasonMembers(season, espnSeason.Members, espnSeason.Teams, espnSeasonMatchupData));
 
                 return season;
             }
@@ -140,16 +143,12 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 return scoringItems;
             }
 
-            private List<LeagueSeasonMember> CreateLeagueSeasonMembers(List<ESPNFantasyMember> espnMembers, List<ESPNFantasyTeam> espnTeams, IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData)
+            private List<LeagueSeasonMember> CreateLeagueSeasonMembers(LeagueSeason season, List<ESPNFantasyMember> espnMembers, List<ESPNFantasyTeam> espnTeams, IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData)
             {
                 List<LeagueSeasonMember> leagueSeasonMembers = [];
 
-                _importContext.TeamLookup.Clear();
-
-                foreach (ESPNFantasyTeam espnTeam in espnTeams)
-                {
-                    _importContext.TeamLookup.TryAdd(espnTeam.Id, CreateTeam(espnTeam));
-                }
+                PopulateTeamLookup(season, espnTeams);
+                PopulateMatchupDetailsLookup(espnSeasonMatchupData);
 
                 foreach (ESPNFantasyMember espnMember in espnMembers)
                 {
@@ -164,13 +163,54 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 return leagueSeasonMembers;
             }
 
-            private Team CreateTeam(ESPNFantasyTeam espnTeam)
+            private void PopulateTeamLookup(LeagueSeason season, List<ESPNFantasyTeam> espnTeams)
+            {
+                _importContext.TeamLookup.Clear();
+                foreach (ESPNFantasyTeam espnTeam in espnTeams)
+                {
+                    _importContext.TeamLookup.TryAdd(espnTeam.Id, CreateTeam(season, espnTeam));
+                }
+            }
+
+            private Team CreateTeam(LeagueSeason season, ESPNFantasyTeam espnTeam)
             {
                 Team team = _espnMapper.MapTeam(espnTeam);
 
+                team.SetLeagueSeason(season);
                 team.SetSeasonStats(_espnMapper.MapTeamSeasonStats(espnTeam.Record.Overall));
 
                 return team;
+            }
+
+            private void PopulateMatchupDetailsLookup(IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData)
+            {
+                _importContext.MatchupDetailsLookup.Clear();
+
+                foreach (ESPNWeeklyLeagueData espnWeek in espnSeasonMatchupData)
+                {
+                    foreach (ESPNMatchup espnMatchup in espnWeek.Matchups)
+                    {
+                        if (espnMatchup.Home is not null)
+                        {
+                            MatchupTeamDetails matchupTeamDetails = _espnMapper.MapMatchupTeamDetails(
+                                espnMatchup.Home,
+                                espnMatchup.Winner,
+                                true);
+
+                            _importContext.MatchupDetailsLookup[(espnWeek.Week, espnMatchup.Home.TeamId)] = matchupTeamDetails;
+                        }
+
+                        if (espnMatchup.Away is not null)
+                        {
+                            MatchupTeamDetails matchupTeamDetails = _espnMapper.MapMatchupTeamDetails(
+                                espnMatchup.Away,
+                                espnMatchup.Winner,
+                                false);
+
+                            _importContext.MatchupDetailsLookup[(espnWeek.Week, espnMatchup.Away.TeamId)] = matchupTeamDetails;
+                        }
+                    }
+                }
             }
 
             private FantasyMember GetOrCreateFantasyMember(ESPNFantasyMember espnMember)
@@ -232,19 +272,17 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                     ESPNMatchupTeam primaryTeam = isPrimaryTeamHomeTeam ? espnMatchup.Home! : espnMatchup.Away!;
                     ESPNMatchupTeam? opponentTeam = isPrimaryTeamHomeTeam ? espnMatchup.Away : espnMatchup.Home;
 
-                    TeamMatchup matchup = _espnMapper.MapTeamMatchup(
-                        espnTeamMatchup.Week,
-                        espnMatchup.PlayoffTierType,
-                        isPrimaryTeamHomeTeam,
-                        espnMatchup.Winner,
-                        primaryTeam);
+                    TeamMatchup matchup = _espnMapper.MapTeamMatchup(espnTeamMatchup.Week, espnMatchup.PlayoffTierType);
+                    MatchupTeamDetails ownerDetails = _importContext.MatchupDetailsLookup[(espnTeamMatchup.Week, primaryTeam.TeamId)];
+
+                    ownerDetails.SetMatchupRosterSpots(CreateMatchupRosterSpots(primaryTeam.Roster, espnTeamMatchup.Year));
+                    ownerDetails.SetTeam(_importContext.TeamLookup[primaryTeam.TeamId]);
+                    matchup.SetOwnerMathcupDetails(ownerDetails);
 
                     if (opponentTeam is not null)
                     {
-                        matchup.SetOpponent(_importContext.TeamLookup[opponentTeam.TeamId]);
+                        matchup.SetOpponentMathcupDetails(_importContext.MatchupDetailsLookup[(espnTeamMatchup.Week, opponentTeam.TeamId)]);
                     }
-
-                    matchup.SetMatchupRosterSpots(CreateMatchupRosterSpots(primaryTeam.Roster, espnTeamMatchup.Year));
 
                     teamMatchups.Add(matchup);
                 }

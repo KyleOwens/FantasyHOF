@@ -10,7 +10,7 @@ namespace FantasyHOF.Domain.Types
     public class MatchupRosterSpot
     {
         public int Id { get; private set; }
-        public int MatchupId { get; private set; }
+        public int MatchupTeamDetailsId { get; private set; }
         public int PlayerId { get; private set; }
 
         public required PositionId PositionId { get; set; }

@@ -18,6 +18,11 @@ namespace FantasyHOF.EntityFramework.Configurations
             builder.Property(x => x.Abbreviation).HasMaxLength(10);
             builder.Property(x => x.Name).HasMaxLength(200);
 
+            builder.HasOne(x => x.Season)
+                .WithMany()
+                .HasForeignKey(x => x.LeagueSeasonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(x => x.SeasonStats)
                 .WithOne()
                 .HasForeignKey<TeamSeasonStats>(x => x.TeamId)

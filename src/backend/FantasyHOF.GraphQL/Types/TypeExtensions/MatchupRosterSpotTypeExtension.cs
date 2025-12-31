@@ -14,8 +14,8 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
 	[ExtendObjectType<MatchupRosterSpot>]
 	internal class MatchupRosterSpotTypeExtension
 	{
-		[ID<TeamMatchup>]
-		public int MatchupId([Parent] MatchupRosterSpot rosterSpot) => rosterSpot.MatchupId;
+		[ID<MatchupTeamDetails>]
+		public int MatchupTeamDetailsId([Parent] MatchupRosterSpot rosterSpot) => rosterSpot.MatchupTeamDetailsId;
 
 		[ID<Player>]
 		public int PlayerId([Parent] MatchupRosterSpot rosterSpot) => rosterSpot.PlayerId;

@@ -19,7 +19,8 @@ namespace FantasyHOF.EntityFramework.Migrations
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false),
-                    name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    logo_url = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,6 +61,18 @@ namespace FantasyHOF.EntityFramework.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_positions", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "sports",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false),
+                    name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_sports", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -155,7 +168,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     team_id = table.Column<int>(type: "integer", nullable: false),
-                    opponent_team_id = table.Column<int>(type: "integer", nullable: true),
+                    opponent_matchup_id = table.Column<int>(type: "integer", nullable: true),
                     week = table.Column<int>(type: "integer", nullable: false),
                     score = table.Column<decimal>(type: "numeric", nullable: false),
                     matchup_outcome_id = table.Column<int>(type: "integer", nullable: false),
@@ -177,11 +190,11 @@ namespace FantasyHOF.EntityFramework.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "fk_team_matchups_teams_opponent_team_id",
-                        column: x => x.opponent_team_id,
-                        principalTable: "teams",
+                        name: "fk_team_matchups_team_matchups_opponent_matchup_id",
+                        column: x => x.opponent_matchup_id,
+                        principalTable: "team_matchups",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "fk_team_matchups_teams_team_id",
                         column: x => x.team_id,
@@ -221,10 +234,12 @@ namespace FantasyHOF.EntityFramework.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: true),
                     fantasy_provider_id = table.Column<int>(type: "integer", nullable: false),
                     provider_league_id = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    sport_id = table.Column<int>(type: "integer", nullable: false)
+                    sport_id = table.Column<int>(type: "integer", nullable: false),
+                    current_league_name = table.Column<string>(type: "text", nullable: false),
+                    current_league_year = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -236,9 +251,50 @@ namespace FantasyHOF.EntityFramework.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "fk_leagues_sports_sport_id",
+                        column: x => x.sport_id,
+                        principalTable: "sports",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "fk_leagues_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "record",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    league_id = table.Column<int>(type: "integer", nullable: false),
+                    member_id = table.Column<int>(type: "integer", nullable: false),
+                    record_type = table.Column<int>(type: "integer", nullable: false),
+                    league_value_record_value = table.Column<decimal>(type: "numeric", nullable: true),
+                    player_id = table.Column<int>(type: "integer", nullable: true),
+                    value = table.Column<decimal>(type: "numeric", nullable: true),
+                    seasonal_value_record_value = table.Column<decimal>(type: "numeric", nullable: true),
+                    year = table.Column<int>(type: "integer", nullable: true),
+                    weekly_value_record_value = table.Column<decimal>(type: "numeric", nullable: true),
+                    weekly_value_record_year = table.Column<int>(type: "integer", nullable: true),
+                    week = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_record", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_record_fantasy_members_member_id",
+                        column: x => x.member_id,
+                        principalTable: "fantasy_members",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_record_players_player_id",
+                        column: x => x.player_id,
+                        principalTable: "players",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -477,8 +533,8 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             migrationBuilder.InsertData(
                 table: "fantasy_providers",
-                columns: new[] { "id", "name" },
-                values: new object[] { 1, "ESPN" });
+                columns: new[] { "id", "logo_url", "name" },
+                values: new object[] { 1, "/espn-logo.png", "ESPN" });
 
             migrationBuilder.InsertData(
                 table: "matchup_outcomes",
@@ -536,6 +592,11 @@ namespace FantasyHOF.EntityFramework.Migrations
                     { 25, "Rookie" },
                     { 999, "Unknown" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "sports",
+                columns: new[] { "id", "name" },
+                values: new object[] { 1, "Football" });
 
             migrationBuilder.InsertData(
                 table: "stats",
@@ -843,6 +904,11 @@ namespace FantasyHOF.EntityFramework.Migrations
                 column: "fantasy_provider_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_leagues_sport_id",
+                table: "leagues",
+                column: "sport_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_leagues_user_id",
                 table: "leagues",
                 column: "user_id");
@@ -868,6 +934,16 @@ namespace FantasyHOF.EntityFramework.Migrations
                 columns: new[] { "provider_id", "provider_player_id" });
 
             migrationBuilder.CreateIndex(
+                name: "ix_record_member_id",
+                table: "record",
+                column: "member_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_record_player_id",
+                table: "record",
+                column: "player_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_team_matchups_matchup_outcome_id",
                 table: "team_matchups",
                 column: "matchup_outcome_id");
@@ -878,9 +954,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                 column: "matchup_type_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_team_matchups_opponent_team_id",
+                name: "ix_team_matchups_opponent_matchup_id",
                 table: "team_matchups",
-                column: "opponent_team_id");
+                column: "opponent_matchup_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_team_matchups_team_id",
@@ -914,6 +991,9 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             migrationBuilder.DropTable(
                 name: "league_season_scoring_items");
+
+            migrationBuilder.DropTable(
+                name: "record");
 
             migrationBuilder.DropTable(
                 name: "team_season_stats");
@@ -962,6 +1042,9 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             migrationBuilder.DropTable(
                 name: "fantasy_providers");
+
+            migrationBuilder.DropTable(
+                name: "sports");
 
             migrationBuilder.DropTable(
                 name: "users");
