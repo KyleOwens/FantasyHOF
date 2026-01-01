@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    [Migration("20251230225410_InitialTake5")]
-    partial class InitialTake5
+    [Migration("20251231163643_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,7 +172,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("sport_id");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
@@ -535,11 +535,18 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("score");
 
+                    b.Property<int>("TeamId")
+                        .HasColumnType("integer")
+                        .HasColumnName("team_id");
+
                     b.HasKey("Id")
                         .HasName("pk_matchup_team_details");
 
                     b.HasIndex("MatchupOutcomeId")
                         .HasDatabaseName("ix_matchup_team_details_matchup_outcome_id");
+
+                    b.HasIndex("TeamId")
+                        .HasDatabaseName("ix_matchup_team_details_team_id");
 
                     b.ToTable("matchup_team_details", (string)null);
                 });
@@ -2066,6 +2073,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("provider_team_id");
 
+                    b.Property<int>("SeasonRank")
+                        .HasColumnType("integer")
+                        .HasColumnName("season_rank");
+
                     b.HasKey("Id")
                         .HasName("pk_teams");
 
@@ -2328,6 +2339,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .WithMany("Leagues")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_leagues_users_user_id");
 
                     b.Navigation("FantasyProvider");
@@ -2471,7 +2483,16 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_matchup_team_details_matchup_outcomes_matchup_outcome_id");
 
+                    b.HasOne("FantasyHOF.Domain.Types.Team", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_matchup_team_details_teams_team_id");
+
                     b.Navigation("Outcome");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("FantasyHOF.Domain.Types.Player", b =>

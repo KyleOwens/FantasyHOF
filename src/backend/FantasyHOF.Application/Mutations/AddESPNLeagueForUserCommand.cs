@@ -37,6 +37,13 @@ namespace FantasyHOF.Application.Mutations
                 }
                 catch(Exception e)
                 {
+                    var problemMatchups = newLeague.Seasons
+                        .SelectMany(s => s.Members)
+                        .SelectMany(m => m.Teams)
+                        .SelectMany(t => t.Team.Matchups)
+                        .Where(m => m.OpponentMatchupDetails != null && m.OpponentMatchupDetails.Team == null)
+                        .ToList();
+
                     throw new Exception(e.InnerException?.Message);
                 }
                 

@@ -281,7 +281,17 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                     if (opponentTeam is not null)
                     {
-                        matchup.SetOpponentMathcupDetails(_importContext.MatchupDetailsLookup[(espnTeamMatchup.Week, opponentTeam.TeamId)]);
+                        var opponentDetails =
+                            _importContext.MatchupDetailsLookup[(espnTeamMatchup.Week, opponentTeam.TeamId)];
+
+                        opponentDetails.SetTeam(_importContext.TeamLookup[opponentTeam.TeamId]);
+
+                        // If you want opponent roster/stats too:
+                        opponentDetails.SetMatchupRosterSpots(
+                            CreateMatchupRosterSpots(opponentTeam.Roster, espnTeamMatchup.Year)
+                        );
+
+                        matchup.SetOpponentMathcupDetails(opponentDetails);
                     }
 
                     teamMatchups.Add(matchup);

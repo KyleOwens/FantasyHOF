@@ -2070,6 +2070,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("provider_team_id");
 
+                    b.Property<int>("SeasonRank")
+                        .HasColumnType("integer")
+                        .HasColumnName("season_rank");
+
                     b.HasKey("Id")
                         .HasName("pk_teams");
 

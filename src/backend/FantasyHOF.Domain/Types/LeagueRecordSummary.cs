@@ -15,39 +15,39 @@ namespace FantasyHOF.Domain.Types
         // Good League
         public required LeagueValueRecord MostPointsLeagueHistory { get; init; }
         public required LeagueValueRecord MostAveragePointsPerWeekLeagueHistory { get; init; }
-        //public required LeagueValueRecord LeastPointsAllowedLeagueHistory { get; init; }
-        //public required LeagueValueRecord LeastAveragePointsAllowedPerWeekLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostWinsLeagueHistory { get; init; }
-        //public required LeagueValueRecord LeastLossesLeagueHistory { get; init; }
-        //public required LeagueValueRecord HighestWinPercentageLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostTopWeeklyScoresLeagueHistory { get; init; }
-        //public required LeagueValueRecord HighestPercentageTopWeeklyScoresLeagueHisotry { get; init; }
-        //public required LeagueValueRecord MostBlowoutWinsLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostNarrowWinsLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostChampionshipsLeagueHistory { get; init; }
-        //public required LeagueValueRecord HighestChampionshipPercentageLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostSeasonsWinningRecordLeagueHistory { get; init; }
-        //public required LeagueValueRecord HighestWinningRecordPercentageLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostOutstandingPerformancesLeagueHistory { get; init; }
+        public required LeagueValueRecord LeastPointsAllowedLeagueHistory { get; init; }
+        public required LeagueValueRecord LeastAveragePointsAllowedPerWeekLeagueHistory { get; init; }
+        public required LeagueValueRecord MostWinsLeagueHistory { get; init; }
+        public required LeagueValueRecord LeastLossesLeagueHistory { get; init; }
+        public required LeagueValueRecord HighestWinPercentageLeagueHistory { get; init; }
+        public required LeagueValueRecord MostTopWeeklyScoresLeagueHistory { get; init; }
+        public required LeagueValueRecord HighestPercentageTopWeeklyScoresLeagueHisotry { get; init; }
+        public required LeagueValueRecord MostBlowoutWinsLeagueHistory { get; init; }
+        public required LeagueValueRecord MostNarrowWinsLeagueHistory { get; init; }
+        public required LeagueValueRecord MostChampionshipsLeagueHistory { get; init; }
+        public required LeagueValueRecord HighestChampionshipPercentageLeagueHistory { get; init; }
+        public required LeagueValueRecord MostSeasonsWinningRecordLeagueHistory { get; init; }
+        public required LeagueValueRecord HighestWinningRecordPercentageLeagueHistory { get; init; }
+        public required LeagueValueRecord MostOutstandingPerformancesLeagueHistory { get; init; }
 
 
         //// Bad League
-        //public required LeagueValueRecord LeastPointsLeagueHistory { get; init; }
-        //public required LeagueValueRecord LeastAveragePointsPerWeekLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostPointsAllowedLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostAveragePointsAllowedPerWeekLeagueHistory { get; init; }
-        //public required LeagueValueRecord LeastWinsLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostLossesLeagueHistory { get; init; }
-        //public required LeagueValueRecord LowestWinPercentageLeagueHistory { get; init; }
-        //public required LeagueValueRecord LeastTopWeeklyScoresLeagueHistory { get; init; }
-        //public required LeagueValueRecord LowestPercentageTopWeeklyScoresLeagueHisotry { get; init; }
-        //public required LeagueValueRecord LeastBlowWinsLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostNarrowLossesLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostLastPlacesLeagueHistory { get; init; }
-        //public required LeagueValueRecord HighestLastPlacePercentageLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostSeasonsLosingRecordLeagueHistory { get; init; }
-        //public required LeagueValueRecord HighestLosingRecordPercentageLeagueHistory { get; init; }
-        //public required LeagueValueRecord MostPoorPerformancesLeagueHistory { get; init; }
+        public required LeagueValueRecord LeastPointsLeagueHistory { get; init; }
+        public required LeagueValueRecord LeastAveragePointsPerWeekLeagueHistory { get; init; }
+        public required LeagueValueRecord MostPointsAllowedLeagueHistory { get; init; }
+        public required LeagueValueRecord MostAveragePointsAllowedPerWeekLeagueHistory { get; init; }
+        public required LeagueValueRecord LeastWinsLeagueHistory { get; init; }
+        public required LeagueValueRecord MostLossesLeagueHistory { get; init; }
+        public required LeagueValueRecord LowestWinPercentageLeagueHistory { get; init; }
+        public required LeagueValueRecord MostLowestWeeklyScoresLeagueHistory { get; init; }
+        public required LeagueValueRecord HighestPercentageLowestWeeklyScoresLeagueHisotry { get; init; }
+        public required LeagueValueRecord MostBlowoutLossesLeagueHistory { get; init; }
+        public required LeagueValueRecord MostNarrowLossesLeagueHistory { get; init; }
+        public required LeagueValueRecord MostLastPlacesLeagueHistory { get; init; }
+        public required LeagueValueRecord HighestLastPlacePercentageLeagueHistory { get; init; }
+        public required LeagueValueRecord MostSeasonsLosingRecordLeagueHistory { get; init; }
+        public required LeagueValueRecord HighestLosingRecordPercentageLeagueHistory { get; init; }
+        public required LeagueValueRecord MostPoorPerformancesLeagueHistory { get; init; }
 
         //// Good Seasonal
         //public required SeasonalValueRecord MostPointsSingleSeason { get; init; }

@@ -127,6 +127,7 @@ namespace FantasyHOF.Application.Mappers
             return new Team()
             {
                 ProviderTeamId = espnTeam.Id,
+                SeasonRank = espnTeam.RankCalculatedFinal,
                 Abbreviation = espnTeam.Abbrev,
                 LogoURL = espnTeam.Logo,
                 Name = espnTeam.Name,

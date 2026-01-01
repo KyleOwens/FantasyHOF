@@ -87,6 +87,36 @@ type LeagueRecordSummary {
   leagueId: Int!
   mostPointsLeagueHistory: LeagueValueRecord!
   mostAveragePointsPerWeekLeagueHistory: LeagueValueRecord!
+  leastPointsAllowedLeagueHistory: LeagueValueRecord!
+  leastAveragePointsAllowedPerWeekLeagueHistory: LeagueValueRecord!
+  mostWinsLeagueHistory: LeagueValueRecord!
+  leastLossesLeagueHistory: LeagueValueRecord!
+  highestWinPercentageLeagueHistory: LeagueValueRecord!
+  mostTopWeeklyScoresLeagueHistory: LeagueValueRecord!
+  highestPercentageTopWeeklyScoresLeagueHisotry: LeagueValueRecord!
+  mostBlowoutWinsLeagueHistory: LeagueValueRecord!
+  mostNarrowWinsLeagueHistory: LeagueValueRecord!
+  mostChampionshipsLeagueHistory: LeagueValueRecord!
+  highestChampionshipPercentageLeagueHistory: LeagueValueRecord!
+  mostSeasonsWinningRecordLeagueHistory: LeagueValueRecord!
+  highestWinningRecordPercentageLeagueHistory: LeagueValueRecord!
+  mostOutstandingPerformancesLeagueHistory: LeagueValueRecord!
+  leastPointsLeagueHistory: LeagueValueRecord!
+  leastAveragePointsPerWeekLeagueHistory: LeagueValueRecord!
+  mostPointsAllowedLeagueHistory: LeagueValueRecord!
+  mostAveragePointsAllowedPerWeekLeagueHistory: LeagueValueRecord!
+  leastWinsLeagueHistory: LeagueValueRecord!
+  mostLossesLeagueHistory: LeagueValueRecord!
+  lowestWinPercentageLeagueHistory: LeagueValueRecord!
+  mostLowestWeeklyScoresLeagueHistory: LeagueValueRecord!
+  highestPercentageLowestWeeklyScoresLeagueHisotry: LeagueValueRecord!
+  mostBlowoutLossesLeagueHistory: LeagueValueRecord!
+  mostNarrowLossesLeagueHistory: LeagueValueRecord!
+  mostLastPlacesLeagueHistory: LeagueValueRecord!
+  highestLastPlacePercentageLeagueHistory: LeagueValueRecord!
+  mostSeasonsLosingRecordLeagueHistory: LeagueValueRecord!
+  highestLosingRecordPercentageLeagueHistory: LeagueValueRecord!
+  mostPoorPerformancesLeagueHistory: LeagueValueRecord!
 }
 
 type LeagueSeason implements Node {
@@ -254,6 +284,7 @@ type Team implements Node {
   id: ID!
   leagueSeasonId: Int!
   providerTeamId: Int!
+  seasonRank: Int!
   abbreviation: String!
   logoURL: String
   name: String!

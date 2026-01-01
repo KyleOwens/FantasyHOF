@@ -12,6 +12,7 @@ namespace FantasyHOF.Domain.Types
         public int LeagueSeasonId { get; private set; }
 
         public required int ProviderTeamId { get; init; }
+        public required int SeasonRank { get; init; }
         public required string Abbreviation { get; init; }
         public required string? LogoURL { get; init; }
         public required string Name { get; init; }
