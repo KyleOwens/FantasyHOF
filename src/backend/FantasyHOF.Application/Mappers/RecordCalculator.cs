@@ -4,6 +4,7 @@ using FantasyHOF.Domain.Types;
 using FantasyHOF.Domain.Types.Records;
 using FantasyHOF.EntityFramework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace FantasyHOF.Application.Mappers
 {
     public interface IRecordCalculator
     {
-        public LeagueRecordSummary CalculateLeagueRecords(League league);
+        public LeagueRecordSummary? CalculateLeagueRecords(League league);
     }
 
     public class RecordCalculator() : IRecordCalculator
@@ -23,110 +24,54 @@ namespace FantasyHOF.Application.Mappers
         private const int OutstandingPerformanceThreshold = 200;
         private const int PoorPerformanceThreshold = 100;
 
-        public LeagueRecordSummary CalculateLeagueRecords(League league)
+        public LeagueRecordSummary? CalculateLeagueRecords(League league)
         {
             IEnumerable<AggregatedMemberLeagueStats> aggregatedMemberLeagueStats = AggregateMemberLeagueStats(league);
 
-            return new LeagueRecordSummary
+            if (aggregatedMemberLeagueStats.Count() == 0) return null;
+
+            var summary = CreateInitialLeagueRecordSummary(aggregatedMemberLeagueStats);
+
+            foreach (var stat in aggregatedMemberLeagueStats.Skip(1))
             {
-                // Good league
-                MostPointsLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PointsFor),
+                // Good (max)
+                UpdateMax(summary.MostPointsLeagueHistory, stat, s => s.MatchupStats.PointsFor);
+                UpdateMax(summary.MostAveragePointsPerWeekLeagueHistory, stat, s => s.MatchupStats.PointsForAverage);
+                UpdateMin(summary.LeastPointsAllowedLeagueHistory, stat, s => s.MatchupStats.PointsAgainst);
+                UpdateMin(summary.LeastAveragePointsAllowedPerWeekLeagueHistory, stat, s => s.MatchupStats.PointsAgainstAverage);
+                UpdateMax(summary.MostWinsLeagueHistory, stat, s => s.MatchupStats.Wins);
+                UpdateMin(summary.LeastLossesLeagueHistory, stat, s => s.MatchupStats.Losses);
+                UpdateMax(summary.HighestWinPercentageLeagueHistory, stat, s => s.MatchupStats.WinPercentage);
+                UpdateMax(summary.MostTopWeeklyScoresLeagueHistory, stat, s => s.MatchupStats.TopWeeks);
+                UpdateMax(summary.HighestPercentageTopWeeklyScoresLeagueHisotry, stat, s => s.MatchupStats.TopWeekPercentage);
+                UpdateMax(summary.MostBlowoutWinsLeagueHistory, stat, s => s.MatchupStats.BlowoutWins);
+                UpdateMax(summary.MostNarrowWinsLeagueHistory, stat, s => s.MatchupStats.NarrowWins);
+                UpdateMax(summary.MostChampionshipsLeagueHistory, stat, s => s.RecordStats.Championships);
+                UpdateMax(summary.HighestChampionshipPercentageLeagueHistory, stat, s => s.RecordStats.ChampionshipPercentage);
+                UpdateMax(summary.MostSeasonsWinningRecordLeagueHistory, stat, s => s.RecordStats.WinningSeasons);
+                UpdateMax(summary.HighestWinningRecordPercentageLeagueHistory, stat, s => s.RecordStats.WinningSeasonPercentage);
+                UpdateMax(summary.MostOutstandingPerformancesLeagueHistory, stat, s => s.MatchupStats.OutstandingPerformances);
 
-                MostAveragePointsPerWeekLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PointsForAverage),
+                // Bad (max of bad, min of good)
+                UpdateMin(summary.LeastPointsLeagueHistory, stat, s => s.MatchupStats.PointsFor);
+                UpdateMin(summary.LeastAveragePointsPerWeekLeagueHistory, stat, s => s.MatchupStats.PointsForAverage);
+                UpdateMax(summary.MostPointsAllowedLeagueHistory, stat, s => s.MatchupStats.PointsAgainst);
+                UpdateMax(summary.MostAveragePointsAllowedPerWeekLeagueHistory, stat, s => s.MatchupStats.PointsAgainstAverage);
+                UpdateMin(summary.LeastWinsLeagueHistory, stat, s => s.MatchupStats.Wins);
+                UpdateMax(summary.MostLossesLeagueHistory, stat, s => s.MatchupStats.Losses);
+                UpdateMin(summary.LowestWinPercentageLeagueHistory, stat, s => s.MatchupStats.WinPercentage);
+                UpdateMax(summary.MostLowestWeeklyScoresLeagueHistory, stat, s => s.MatchupStats.LowestWeeks);
+                UpdateMax(summary.HighestPercentageLowestWeeklyScoresLeagueHisotry, stat, s => s.MatchupStats.LowestWeekPercentage);
+                UpdateMax(summary.MostBlowoutLossesLeagueHistory, stat, s => s.MatchupStats.BlowoutLosses);
+                UpdateMax(summary.MostNarrowLossesLeagueHistory, stat, s => s.MatchupStats.NarrowLosses);
+                UpdateMax(summary.MostLastPlacesLeagueHistory, stat, s => s.RecordStats.LastPlaces);
+                UpdateMax(summary.HighestLastPlacePercentageLeagueHistory, stat, s => s.RecordStats.LastPlacePercentage);
+                UpdateMax(summary.MostSeasonsLosingRecordLeagueHistory, stat, s => s.RecordStats.LosingSeasons);
+                UpdateMax(summary.HighestLosingRecordPercentageLeagueHistory, stat, s => s.RecordStats.LosingSeasonPercentage);
+                UpdateMax(summary.MostPoorPerformancesLeagueHistory, stat, s => s.MatchupStats.PoorPerformances);
+            }
 
-                LeastPointsAllowedLeagueHistory = ExtractMinLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PointsAgainst),
-
-                LeastAveragePointsAllowedPerWeekLeagueHistory = ExtractMinLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PointsAgainstAverage),
-
-                MostWinsLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.Wins),
-
-                LeastLossesLeagueHistory = ExtractMinLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.Losses),
-
-                HighestWinPercentageLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.WinPercentage),
-
-                MostTopWeeklyScoresLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.TopWeeks),
-
-                HighestPercentageTopWeeklyScoresLeagueHisotry = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.TopWeekPercentage),
-
-                MostBlowoutWinsLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.BlowoutWins),
-
-                MostNarrowWinsLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.NarrowWins),
-
-                MostChampionshipsLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.RecordStats.Championships),
-
-                HighestChampionshipPercentageLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.RecordStats.ChampionshipPercentage),
-
-                MostSeasonsWinningRecordLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.RecordStats.WinningSeasons),
-
-                HighestWinningRecordPercentageLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.RecordStats.WinningSeasonPercentage),
-
-                MostOutstandingPerformancesLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.OutstandingPerformances),
-
-                // Bad league
-                LeastPointsLeagueHistory = ExtractMinLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PointsFor),
-
-                LeastAveragePointsPerWeekLeagueHistory = ExtractMinLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PointsForAverage),
-
-                MostPointsAllowedLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PointsAgainst),
-
-                MostAveragePointsAllowedPerWeekLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PointsAgainstAverage),
-
-                LeastWinsLeagueHistory = ExtractMinLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.Wins),
-
-                MostLossesLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.Losses),
-
-                LowestWinPercentageLeagueHistory = ExtractMinLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.WinPercentage),
-
-                MostLowestWeeklyScoresLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.LowestWeeks),
-
-                HighestPercentageLowestWeeklyScoresLeagueHisotry = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.LowestWeekPercentage),
-
-                MostBlowoutLossesLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.BlowoutLosses),
-
-                MostNarrowLossesLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.NarrowLosses),
-
-                MostLastPlacesLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.RecordStats.LastPlaces),
-
-                HighestLastPlacePercentageLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.RecordStats.LastPlacePercentage),
-
-                MostSeasonsLosingRecordLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.RecordStats.LosingSeasons),
-
-                HighestLosingRecordPercentageLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.RecordStats.LosingSeasonPercentage),
-
-                MostPoorPerformancesLeagueHistory = ExtractMaxLeagueRecord(
-                    aggregatedMemberLeagueStats, x => x.MatchupStats.PoorPerformances)
-            };
+            return summary;
         }
 
         private IEnumerable<AggregatedMemberLeagueStats> AggregateMemberLeagueStats(League league)
@@ -272,20 +217,77 @@ namespace FantasyHOF.Application.Mappers
             return context.MinScoreByWeekLookup.TryGetValue(key, out var min) && matchup.OwnerMatchupDetails.Score == min;
         }
 
-        private LeagueValueRecord ExtractMaxLeagueRecord(
-            IEnumerable<AggregatedMemberLeagueStats> aggregatedLeagueMemberStats,
-            Func<AggregatedMemberLeagueStats, decimal> valueSelector)
+
+        private LeagueRecordSummary CreateInitialLeagueRecordSummary(IEnumerable<AggregatedMemberLeagueStats> aggregatedStats)
         {
-            AggregatedMemberLeagueStats stats = aggregatedLeagueMemberStats.OrderByDescending(valueSelector).First();
-            return new LeagueValueRecord(stats.Member, valueSelector(stats));
+            var first = aggregatedStats.First();
+
+            // Initialize summary with first member
+            return new LeagueRecordSummary
+            {
+                // Good
+                MostPointsLeagueHistory = ToRecord(first, s => s.MatchupStats.PointsFor),
+                MostAveragePointsPerWeekLeagueHistory = ToRecord(first, s => s.MatchupStats.PointsForAverage),
+                LeastPointsAllowedLeagueHistory = ToRecord(first, s => s.MatchupStats.PointsAgainst),
+                LeastAveragePointsAllowedPerWeekLeagueHistory = ToRecord(first, s => s.MatchupStats.PointsAgainstAverage),
+                MostWinsLeagueHistory = ToRecord(first, s => s.MatchupStats.Wins),
+                LeastLossesLeagueHistory = ToRecord(first, s => s.MatchupStats.Losses),
+                HighestWinPercentageLeagueHistory = ToRecord(first, s => s.MatchupStats.WinPercentage),
+                MostTopWeeklyScoresLeagueHistory = ToRecord(first, s => s.MatchupStats.TopWeeks),
+                HighestPercentageTopWeeklyScoresLeagueHisotry = ToRecord(first, s => s.MatchupStats.TopWeekPercentage),
+                MostBlowoutWinsLeagueHistory = ToRecord(first, s => s.MatchupStats.BlowoutWins),
+                MostNarrowWinsLeagueHistory = ToRecord(first, s => s.MatchupStats.NarrowWins),
+                MostChampionshipsLeagueHistory = ToRecord(first, s => s.RecordStats.Championships),
+                HighestChampionshipPercentageLeagueHistory = ToRecord(first, s => s.RecordStats.ChampionshipPercentage),
+                MostSeasonsWinningRecordLeagueHistory = ToRecord(first, s => s.RecordStats.WinningSeasons),
+                HighestWinningRecordPercentageLeagueHistory = ToRecord(first, s => s.RecordStats.WinningSeasonPercentage),
+                MostOutstandingPerformancesLeagueHistory = ToRecord(first, s => s.MatchupStats.OutstandingPerformances),
+
+                // Bad
+                LeastPointsLeagueHistory = ToRecord(first, s => s.MatchupStats.PointsFor),
+                LeastAveragePointsPerWeekLeagueHistory = ToRecord(first, s => s.MatchupStats.PointsForAverage),
+                MostPointsAllowedLeagueHistory = ToRecord(first, s => s.MatchupStats.PointsAgainst),
+                MostAveragePointsAllowedPerWeekLeagueHistory = ToRecord(first, s => s.MatchupStats.PointsAgainstAverage),
+                LeastWinsLeagueHistory = ToRecord(first, s => s.MatchupStats.Wins),
+                MostLossesLeagueHistory = ToRecord(first, s => s.MatchupStats.Losses),
+                LowestWinPercentageLeagueHistory = ToRecord(first, s => s.MatchupStats.WinPercentage),
+                MostLowestWeeklyScoresLeagueHistory = ToRecord(first, s => s.MatchupStats.LowestWeeks),
+                HighestPercentageLowestWeeklyScoresLeagueHisotry = ToRecord(first, s => s.MatchupStats.LowestWeekPercentage),
+                MostBlowoutLossesLeagueHistory = ToRecord(first, s => s.MatchupStats.BlowoutLosses),
+                MostNarrowLossesLeagueHistory = ToRecord(first, s => s.MatchupStats.NarrowLosses),
+                MostLastPlacesLeagueHistory = ToRecord(first, s => s.RecordStats.LastPlaces),
+                HighestLastPlacePercentageLeagueHistory = ToRecord(first, s => s.RecordStats.LastPlacePercentage),
+                MostSeasonsLosingRecordLeagueHistory = ToRecord(first, s => s.RecordStats.LosingSeasons),
+                HighestLosingRecordPercentageLeagueHistory = ToRecord(first, s => s.RecordStats.LosingSeasonPercentage),
+                MostPoorPerformancesLeagueHistory = ToRecord(first, s => s.MatchupStats.PoorPerformances)
+            };
         }
 
-        private LeagueValueRecord ExtractMinLeagueRecord(
-            IEnumerable<AggregatedMemberLeagueStats> aggregatedLeagueMemberStats,
-            Func<AggregatedMemberLeagueStats, decimal> valueSelector)
+        private LeagueValueRecord ToRecord(AggregatedMemberLeagueStats stat, Func<AggregatedMemberLeagueStats, decimal> selector)
+            => new(stat.Member, selector(stat));
+
+        private void UpdateMax(
+            LeagueValueRecord current,
+            AggregatedMemberLeagueStats candidate,
+            Func<AggregatedMemberLeagueStats, decimal> selector)
         {
-            AggregatedMemberLeagueStats stats = aggregatedLeagueMemberStats.OrderBy(valueSelector).First();
-            return new LeagueValueRecord(stats.Member, valueSelector(stats));
+            var candidateValue = selector(candidate);
+            if (candidateValue > current.Value)
+            {
+                current.UpdateRecord(candidate.Member, candidateValue);
+            }
+        }
+
+        private void UpdateMin(
+            LeagueValueRecord current,
+            AggregatedMemberLeagueStats candidate,
+            Func<AggregatedMemberLeagueStats, decimal> selector)
+        {
+            var candidateValue = selector(candidate);
+            if (candidateValue < current.Value)
+            {
+                current.UpdateRecord(candidate.Member, candidateValue);
+            }
         }
 
         private sealed class LeagueAggregationContext
