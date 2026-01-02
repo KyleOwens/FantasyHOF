@@ -9,6 +9,7 @@ namespace FantasyHOF.Domain.Types
         public int OwnerMatchupDetailsId { get; private set; }
         public int? OpponentMatchupDetailsId { get; private set; }
 
+        public required int Year { get; init; }
         public required int Week { get; init; }
         public required MatchupTypeId MatchupTypeId { get; init; }
 

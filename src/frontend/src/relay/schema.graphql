@@ -265,7 +265,7 @@ type Query {
   nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
   demoLeagues: [League!]! @cost(weight: "10")
   league(id: ID!): League! @cost(weight: "10")
-  leagueRecords(leagueId: ID!): LeagueRecordSummary! @cost(weight: "10")
+  leagueRecords(leagueId: ID!): LeagueRecordSummary @cost(weight: "10")
 }
 
 type Sport implements Node {
@@ -298,6 +298,7 @@ type TeamMatchup implements Node {
   teamId: ID!
   ownerMatchupDetailsId: ID
   opponentMatchupDetailsId: ID
+  year: Int!
   week: Int!
   matchupTypeId: ID!
   matchupType: MatchupType! @cost(weight: "10")

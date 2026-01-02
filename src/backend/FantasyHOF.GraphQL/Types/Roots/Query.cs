@@ -34,7 +34,7 @@ public static class Query
     }
 
     // TEST
-    public static async Task<LeagueRecordSummary> GetLeagueRecordsAsync(
+    public static async Task<LeagueRecordSummary?> GetLeagueRecordsAsync(
         [ID<League>] int leagueId,
         IMediator mediator,
         CancellationToken cancellationToken)

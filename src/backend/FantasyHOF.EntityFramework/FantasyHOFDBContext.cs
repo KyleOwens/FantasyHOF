@@ -29,6 +29,7 @@ namespace FantasyHOF.EntityFramework
         public DbSet<User> Users => Set<User>();
         public DbSet<Sport> Sports => Set<Sport>();
         public DbSet<MatchupTeamDetails> MatchupTeamDetails => Set<MatchupTeamDetails>();
+        public DbSet<LeagueMemberAggregateStats> LeagueMemberAggregateStats => Set<LeagueMemberAggregateStats>();
 
         public FantasyHOFDBContext(DbContextOptions<FantasyHOFDBContext> options) : base(options)
         {

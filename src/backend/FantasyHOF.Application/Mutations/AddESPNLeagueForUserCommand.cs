@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Application.Queries.ESPNQueries;
+﻿using FantasyHOF.Application.Mappers;
+using FantasyHOF.Application.Queries.ESPNQueries;
 using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
@@ -16,7 +17,7 @@ namespace FantasyHOF.Application.Mutations
 {
     public sealed record AddESPNLeagueForUserCommand(ESPNLeagueCredentials LeagueCredentials) : IRequest<League>
     {
-        public sealed class AddESPNLeagueForUserCommandHandler(ICurrentUserService currentUser, IMediator mediator, FantasyHOFDBContext database) : IRequestHandler<AddESPNLeagueForUserCommand, League>
+        public sealed class AddESPNLeagueForUserCommandHandler(ICurrentUserService currentUser, IMediator mediator, FantasyHOFDBContext database, IStatAggregator statAggregator) : IRequestHandler<AddESPNLeagueForUserCommand, League>
         {
             public async Task<League> Handle(AddESPNLeagueForUserCommand request, CancellationToken cancellationToken)
             {
@@ -28,25 +29,12 @@ namespace FantasyHOF.Application.Mutations
                 user.RemoveLeagueIfExists(FantasyProviderId.ESPN, request.LeagueCredentials.LeagueId);
 
                 League newLeague = await mediator.Send(new GetESPNLeagueQuery(request.LeagueCredentials), cancellationToken);
-
                 user.AddLeague(newLeague);
+                await database.SaveChangesAsync(cancellationToken);
 
-                try
-                {
-                    await database.SaveChangesAsync(cancellationToken);
-                }
-                catch(Exception e)
-                {
-                    var problemMatchups = newLeague.Seasons
-                        .SelectMany(s => s.Members)
-                        .SelectMany(m => m.Teams)
-                        .SelectMany(t => t.Team.Matchups)
-                        .Where(m => m.OpponentMatchupDetails != null && m.OpponentMatchupDetails.Team == null)
-                        .ToList();
+                database.LeagueMemberAggregateStats.AddRange(statAggregator.AggregateMemberStats(newLeague));
 
-                    throw new Exception(e.InnerException?.Message);
-                }
-                
+                await database.SaveChangesAsync(cancellationToken);
 
                 return newLeague;
             }

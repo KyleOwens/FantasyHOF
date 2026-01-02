@@ -272,7 +272,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                     ESPNMatchupTeam primaryTeam = isPrimaryTeamHomeTeam ? espnMatchup.Home! : espnMatchup.Away!;
                     ESPNMatchupTeam? opponentTeam = isPrimaryTeamHomeTeam ? espnMatchup.Away : espnMatchup.Home;
 
-                    TeamMatchup matchup = _espnMapper.MapTeamMatchup(espnTeamMatchup.Week, espnMatchup.PlayoffTierType);
+                    TeamMatchup matchup = _espnMapper.MapTeamMatchup(espnTeamMatchup.Year, espnTeamMatchup.Week, espnMatchup.PlayoffTierType);
                     MatchupTeamDetails ownerDetails = _importContext.MatchupDetailsLookup[(espnTeamMatchup.Week, primaryTeam.TeamId)];
 
                     ownerDetails.SetMatchupRosterSpots(CreateMatchupRosterSpots(primaryTeam.Roster, espnTeamMatchup.Year));

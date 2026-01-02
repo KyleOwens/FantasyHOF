@@ -24,7 +24,7 @@ namespace FantasyHOF.Application.Mappers
         LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam();
         Team MapTeam(ESPNFantasyTeam espnTeam);
         TeamSeasonStats MapTeamSeasonStats(ESPNRecordDetails espnTeamStats);
-        TeamMatchup MapTeamMatchup(int week, string espnMatchupType);
+        TeamMatchup MapTeamMatchup(int year, int week, string espnMatchupType);
         MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot, int year);
         Player MapPlayer(ESPNPlayer espnPlayer);
         AccumulatedStat MapAccumulatedStat(int statId, decimal statValue, decimal statScore);
@@ -148,6 +148,7 @@ namespace FantasyHOF.Application.Mappers
         }
 
         public TeamMatchup MapTeamMatchup(
+            int year,
             int week, 
             string espnMatchupType)
         {
@@ -162,6 +163,7 @@ namespace FantasyHOF.Application.Mappers
 
             return new TeamMatchup()
             {
+                Year = year,
                 Week = week,
                 MatchupTypeId = matchupType,
             };

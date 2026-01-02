@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    [Migration("20251231163643_Initial")]
-    partial class Initial
+    [Migration("20260102202716_AdditionalTeamData")]
+    partial class AdditionalTeamData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,6 +189,109 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasDatabaseName("ix_leagues_user_id");
 
                     b.ToTable("leagues", (string)null);
+                });
+
+            modelBuilder.Entity("FantasyHOF.Domain.Types.LeagueMemberAggregateStats", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BlowoutLosses")
+                        .HasColumnType("integer")
+                        .HasColumnName("blowout_losses");
+
+                    b.Property<int>("BlowoutWins")
+                        .HasColumnType("integer")
+                        .HasColumnName("blowout_wins");
+
+                    b.Property<int>("Championships")
+                        .HasColumnType("integer")
+                        .HasColumnName("championships");
+
+                    b.Property<int>("LastPlaces")
+                        .HasColumnType("integer")
+                        .HasColumnName("last_places");
+
+                    b.Property<int>("LeagueId")
+                        .HasColumnType("integer")
+                        .HasColumnName("league_id");
+
+                    b.Property<int>("LosingSeasons")
+                        .HasColumnType("integer")
+                        .HasColumnName("losing_seasons");
+
+                    b.Property<int>("LowestWeeks")
+                        .HasColumnType("integer")
+                        .HasColumnName("lowest_weeks");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("integer")
+                        .HasColumnName("member_id");
+
+                    b.Property<int>("NarrowLosses")
+                        .HasColumnType("integer")
+                        .HasColumnName("narrow_losses");
+
+                    b.Property<int>("NarrowWins")
+                        .HasColumnType("integer")
+                        .HasColumnName("narrow_wins");
+
+                    b.Property<int>("OutstandingPerformances")
+                        .HasColumnType("integer")
+                        .HasColumnName("outstanding_performances");
+
+                    b.Property<int>("PoorPerformances")
+                        .HasColumnType("integer")
+                        .HasColumnName("poor_performances");
+
+                    b.Property<int>("TopWeeks")
+                        .HasColumnType("integer")
+                        .HasColumnName("top_weeks");
+
+                    b.Property<int>("TotalLosses")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_losses");
+
+                    b.Property<int>("TotalMatchups")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_matchups");
+
+                    b.Property<decimal>("TotalPointsAgainst")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("total_points_against");
+
+                    b.Property<decimal>("TotalPointsFor")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("total_points_for");
+
+                    b.Property<int>("TotalSeasons")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_seasons");
+
+                    b.Property<int>("TotalWins")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_wins");
+
+                    b.Property<int>("WinningSeasons")
+                        .HasColumnType("integer")
+                        .HasColumnName("winning_seasons");
+
+                    b.HasKey("Id")
+                        .HasName("pk_league_member_aggregate_stats");
+
+                    b.HasIndex("MemberId")
+                        .HasDatabaseName("ix_league_member_aggregate_stats_member_id");
+
+                    b.HasIndex("LeagueId", "MemberId")
+                        .HasDatabaseName("ix_league_member_aggregate_stats_league_id_member_id");
+
+                    b.ToTable("league_member_aggregate_stats", (string)null);
                 });
 
             modelBuilder.Entity("FantasyHOF.Domain.Types.LeagueSeason", b =>
@@ -2115,6 +2218,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("week");
 
+                    b.Property<int>("Year")
+                        .HasColumnType("integer")
+                        .HasColumnName("year");
+
                     b.HasKey("Id")
                         .HasName("pk_team_matchups");
 
@@ -2345,6 +2452,27 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Navigation("FantasyProvider");
 
                     b.Navigation("Sport");
+                });
+
+            modelBuilder.Entity("FantasyHOF.Domain.Types.LeagueMemberAggregateStats", b =>
+                {
+                    b.HasOne("FantasyHOF.Domain.Types.League", "League")
+                        .WithMany()
+                        .HasForeignKey("LeagueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_league_member_aggregate_stats_leagues_league_id");
+
+                    b.HasOne("FantasyHOF.Domain.Types.FantasyMember", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_league_member_aggregate_stats_fantasy_members_member_id");
+
+                    b.Navigation("League");
+
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("FantasyHOF.Domain.Types.LeagueSeason", b =>
