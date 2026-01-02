@@ -31,7 +31,7 @@ namespace FantasyHOF.Application.Mappers
 
             return league.Seasons
                 .SelectMany(season => season.Members)
-                .GroupBy(seasonMember => seasonMember.Member.Id)
+                .GroupBy(seasonMember => seasonMember.Member.ProviderMemberId)
                 .Select(group =>
                 {
                     IEnumerable<LeagueSeasonMemberTeam> memberTeams = group
