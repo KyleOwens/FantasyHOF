@@ -20,11 +20,5 @@ namespace FantasyHOF.Domain.Types.Records
 
             SetMember(member);
         }
-
-        public void UpdateRecord(FantasyMember member, decimal value)
-        {
-            Value = value;
-            SetMember(member);
-        }
     }
 }

@@ -217,50 +217,6 @@ namespace FantasyHOF.EntityFramework.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "league_member_aggregate_stats",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    league_id = table.Column<int>(type: "integer", nullable: false),
-                    member_id = table.Column<int>(type: "integer", nullable: false),
-                    total_seasons = table.Column<int>(type: "integer", nullable: false),
-                    championships = table.Column<int>(type: "integer", nullable: false),
-                    last_places = table.Column<int>(type: "integer", nullable: false),
-                    winning_seasons = table.Column<int>(type: "integer", nullable: false),
-                    losing_seasons = table.Column<int>(type: "integer", nullable: false),
-                    total_matchups = table.Column<int>(type: "integer", nullable: false),
-                    total_points_for = table.Column<decimal>(type: "numeric(12,2)", precision: 12, scale: 2, nullable: false),
-                    total_points_against = table.Column<decimal>(type: "numeric(12,2)", precision: 12, scale: 2, nullable: false),
-                    total_wins = table.Column<int>(type: "integer", nullable: false),
-                    total_losses = table.Column<int>(type: "integer", nullable: false),
-                    top_weeks = table.Column<int>(type: "integer", nullable: false),
-                    lowest_weeks = table.Column<int>(type: "integer", nullable: false),
-                    blowout_wins = table.Column<int>(type: "integer", nullable: false),
-                    blowout_losses = table.Column<int>(type: "integer", nullable: false),
-                    narrow_wins = table.Column<int>(type: "integer", nullable: false),
-                    narrow_losses = table.Column<int>(type: "integer", nullable: false),
-                    outstanding_performances = table.Column<int>(type: "integer", nullable: false),
-                    poor_performances = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_league_member_aggregate_stats", x => x.id);
-                    table.ForeignKey(
-                        name: "fk_league_member_aggregate_stats_fantasy_members_member_id",
-                        column: x => x.member_id,
-                        principalTable: "fantasy_members",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_league_member_aggregate_stats_leagues_league_id",
-                        column: x => x.league_id,
-                        principalTable: "leagues",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "league_seasons",
                 columns: table => new
                 {
@@ -549,6 +505,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     team_id = table.Column<int>(type: "integer", nullable: false),
                     owner_matchup_details_id = table.Column<int>(type: "integer", nullable: false),
                     opponent_matchup_details_id = table.Column<int>(type: "integer", nullable: true),
+                    year = table.Column<int>(type: "integer", nullable: false),
                     week = table.Column<int>(type: "integer", nullable: false),
                     matchup_type_id = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -935,16 +892,6 @@ namespace FantasyHOF.EntityFramework.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_league_member_aggregate_stats_league_id_member_id",
-                table: "league_member_aggregate_stats",
-                columns: new[] { "league_id", "member_id" });
-
-            migrationBuilder.CreateIndex(
-                name: "ix_league_member_aggregate_stats_member_id",
-                table: "league_member_aggregate_stats",
-                column: "member_id");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_league_season_member_teams_league_season_id_member_id",
                 table: "league_season_member_teams",
                 columns: new[] { "league_season_id", "member_id" });
@@ -1084,9 +1031,6 @@ namespace FantasyHOF.EntityFramework.Migrations
         {
             migrationBuilder.DropTable(
                 name: "accumulated_stats");
-
-            migrationBuilder.DropTable(
-                name: "league_member_aggregate_stats");
 
             migrationBuilder.DropTable(
                 name: "league_season_member_teams");

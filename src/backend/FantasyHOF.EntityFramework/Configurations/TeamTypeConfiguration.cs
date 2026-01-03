@@ -29,7 +29,7 @@ namespace FantasyHOF.EntityFramework.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(x => x.Matchups)
-                .WithOne()
+                .WithOne(x => x.Team)
                 .HasForeignKey(x => x.TeamId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

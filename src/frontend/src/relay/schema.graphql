@@ -117,6 +117,34 @@ type LeagueRecordSummary {
   mostSeasonsLosingRecordLeagueHistory: LeagueValueRecord!
   highestLosingRecordPercentageLeagueHistory: LeagueValueRecord!
   mostPoorPerformancesLeagueHistory: LeagueValueRecord!
+  mostPointsSingleSeason: SeasonalValueRecord!
+  mostPointsPerWeekSingleSeason: SeasonalValueRecord!
+  leastPointsAllowedSingleSeason: SeasonalValueRecord!
+  leastPointsAllowedPerWeekSingleSeason: SeasonalValueRecord!
+  mostWinsSingleSeason: SeasonalValueRecord!
+  mostHighestScoringWeeksSingleSeason: SeasonalValueRecord!
+  mostBlowoutWinsSingleSeason: SeasonalValueRecord!
+  mostNarrowWinsSingleSeason: SeasonalValueRecord!
+  mostOutstandingPerformancesSingleSeason: SeasonalValueRecord!
+  leastPointsSingleSeason: SeasonalValueRecord!
+  leastPointsPerWeekSingleSeason: SeasonalValueRecord!
+  mostPointsAllowedSingleSeason: SeasonalValueRecord!
+  mostPointsAllowedPerWeekSingleSeason: SeasonalValueRecord!
+  mostLossesSingleSeason: SeasonalValueRecord!
+  mostLowestScoringWeeksSingleSeason: SeasonalValueRecord!
+  mostBlowoutLossesSingleSeason: SeasonalValueRecord!
+  mostNarrowLossesSingleSeason: SeasonalValueRecord!
+  mostPoorPerformancesSingleSeason: SeasonalValueRecord!
+  mostPointsSingleWeek: WeeklyValueRecord!
+  mostPointsSinglePlayoffWeek: WeeklyValueRecord!
+  largestMarginOfVictorySingleWeek: WeeklyValueRecord!
+  largestMarginOfVictorySinglePlayoffWeek: WeeklyValueRecord!
+  lowestScoringWinSingleWeek: WeeklyValueRecord!
+  leastPointsSingleWeek: WeeklyValueRecord!
+  leastPointsSinglePlayoffWeek: WeeklyValueRecord!
+  lowestMarginOfVictorySingleWeek: WeeklyValueRecord!
+  lowestMarginOfVictorySinglePlayoffWeek: WeeklyValueRecord!
+  highestScoringLossSingleWeek: WeeklyValueRecord!
 }
 
 type LeagueSeason implements Node {
@@ -143,9 +171,10 @@ type LeagueSeasonMemberId {
 }
 
 type LeagueSeasonMemberTeam implements Node {
-  memberId: ID!
   leagueSeasonId: ID!
+  memberId: ID!
   teamId: ID!
+  owner: LeagueSeasonMember!
   team: Team! @cost(weight: "10")
   id: ID!
 }
@@ -268,6 +297,16 @@ type Query {
   leagueRecords(leagueId: ID!): LeagueRecordSummary @cost(weight: "10")
 }
 
+type SeasonalValueRecord {
+  value: Decimal!
+  year: Int!
+  id: Int!
+  leagueId: Int!
+  memberId: Int!
+  recordType: RecordType!
+  member: FantasyMember!
+}
+
 type Sport implements Node {
   id: ID!
   name: String!
@@ -289,6 +328,7 @@ type Team implements Node {
   logoURL: String
   name: String!
   season: LeagueSeason!
+  memberTeams: [LeagueSeasonMemberTeam!]!
   seasonStats: TeamSeasonStats! @cost(weight: "10")
   matchups: [TeamMatchup!]! @cost(weight: "10")
 }
@@ -301,6 +341,7 @@ type TeamMatchup implements Node {
   year: Int!
   week: Int!
   matchupTypeId: ID!
+  team: Team!
   matchupType: MatchupType! @cost(weight: "10")
   ownerMatchupDetails: MatchupTeamDetails! @cost(weight: "10")
   opponentMatchupDetails: MatchupTeamDetails @cost(weight: "10")
@@ -316,6 +357,17 @@ type TeamSeasonStats implements Node {
   winPercentage: Decimal!
   pointsAgainst: Decimal!
   pointsFor: Decimal!
+}
+
+type WeeklyValueRecord {
+  value: Decimal!
+  year: Int!
+  week: Int!
+  id: Int!
+  leagueId: Int!
+  memberId: Int!
+  recordType: RecordType!
+  member: FantasyMember!
 }
 
 union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError

@@ -31,7 +31,7 @@ namespace FantasyHOF.Application.Mutations
                 League newLeague = await mediator.Send(new GetESPNLeagueQuery(request.LeagueCredentials), cancellationToken);
                 user.AddLeague(newLeague);
 
-                database.LeagueMemberAggregateStats.AddRange(statAggregator.AggregateMemberStats(newLeague));
+                //database.LeagueMemberAggregateStats.AddRange(statAggregator.AggregateMemberStats(newLeague));
 
                 await database.SaveChangesAsync(cancellationToken);
 

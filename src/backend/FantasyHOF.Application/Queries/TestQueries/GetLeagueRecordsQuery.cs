@@ -1,5 +1,8 @@
 ﻿using FantasyHOF.Application.Mappers;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Types.Records;
+using FantasyHOF.Domain.Types.Views;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,13 +20,24 @@ namespace FantasyHOF.Application.Queries.TestQueries
         {
             public async Task<LeagueRecordSummary?> Handle(GetLeagueRecordsQuery request, CancellationToken cancellationToken)
             {
-                List<LeagueMemberAggregateStats> aggregateStats = await database.LeagueMemberAggregateStats
-                    .AsNoTracking()
-                    .Include(x => x.Member)
+                List<LeagueMemberAggregatedStats> allTimeStatsByMember = await database.LeagueMemberAggregatedStats
                     .Where(x => x.LeagueId == request.LeagueId)
+                    .Include(x => x.Member)
                     .ToListAsync();
 
-                return LeagueRecordSummary.FromAggregateStats(aggregateStats);
+                List<LeagueSeasonMemberAggregatedStats> statsByMemberAndSeason = await database.LeagueSeasonMemberAggregatedStats
+                    .Where(x => x.LeagueId == request.LeagueId)
+                    .Include(x => x.Member)
+                    .ToListAsync();
+
+                List<WeeklyAggregationData> weeklyAggregationData = await database.WeeklyAggregationData
+                    .Where(x => x.LeagueId == request.LeagueId)
+                    .Include(x => x.Member)
+                    .ToListAsync();
+
+                if (allTimeStatsByMember.Count == 0) return null;
+
+                return LeagueRecordSummary.FromAggregateLeagueStats(allTimeStatsByMember, statsByMemberAndSeason, weeklyAggregationData);
             }
         }
     }

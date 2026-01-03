@@ -13,6 +13,7 @@ namespace FantasyHOF.Domain.Types
         public required int Week { get; init; }
         public required MatchupTypeId MatchupTypeId { get; init; }
 
+        public Team Team { get; private set; } = null!;
         public MatchupType MatchupType { get; private set; } = null!;
         public MatchupTeamDetails OwnerMatchupDetails { get; private set; } = null!;
         public MatchupTeamDetails? OpponentMatchupDetails { get; private set; } = null!;

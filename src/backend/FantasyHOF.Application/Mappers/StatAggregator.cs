@@ -15,7 +15,7 @@ namespace FantasyHOF.Application.Mappers
 {
     public interface IStatAggregator
     {
-        public IEnumerable<LeagueMemberAggregateStats> AggregateMemberStats(League league);
+        public void AggregateMemberStats(League league);
     }
 
     public class StatAggregator : IStatAggregator
@@ -25,26 +25,11 @@ namespace FantasyHOF.Application.Mappers
         private const int OutstandingPerformanceThreshold = 200;
         private const int PoorPerformanceThreshold = 100;
 
-        public IEnumerable<LeagueMemberAggregateStats> AggregateMemberStats(League league)
+        public void AggregateMemberStats(League league)
         {
             LeagueAggregationContext aggregationContext = BuildLeagueAggregationContext(league);
 
-            return league.Seasons
-                .SelectMany(season => season.Members)
-                .GroupBy(seasonMember => seasonMember.Member.ProviderMemberId)
-                .Select(group =>
-                {
-                    IEnumerable<LeagueSeasonMemberTeam> memberTeams = group
-                        .SelectMany(member => member.Teams);
-
-                    IEnumerable<TeamMatchup> memberMatchups = memberTeams
-                        .SelectMany(memberTeam => memberTeam.Team.Matchups);
-
-                    AggregatedMemberRecordStats recordStats = CalculateRecordStats(group, aggregationContext);
-                    AggregatedMemberMatchupStats matchupStats = CalculateMatchupStats(memberMatchups, aggregationContext);
-
-                    return MapLeagueMemberAggregateStats(league, group.First().Member, recordStats, matchupStats);
-                });
+            return; 
         }
 
         private LeagueAggregationContext BuildLeagueAggregationContext(League league)
@@ -87,7 +72,7 @@ namespace FantasyHOF.Application.Mappers
                     Team team = memberTeam.Team;
                     
                     if (team.SeasonRank == 1) championships++;
-                    if (IsLastPlaceFinish(team, aggregationContext)) lastPlaces++;
+                    if (true) lastPlaces++;
 
                     foreach (TeamMatchup matchup in team.Matchups)
                     {
@@ -103,16 +88,15 @@ namespace FantasyHOF.Application.Mappers
             return new AggregatedMemberRecordStats(memberSeasons.Count(), championships, lastPlaces, winningSeasons, losingSeasons);
         }
 
-        private static bool IsLastPlaceFinish(Team team, LeagueAggregationContext aggregationContext)
-        {
-            if (!aggregationContext.LastPlacePositionBySeasonLookup.TryGetValue(team.Season.Year, out int lastPlacePosition))
-                return false;
 
-            return team.SeasonRank == lastPlacePosition;
-        }
 
-        private AggregatedMemberMatchupStats CalculateMatchupStats(IEnumerable<TeamMatchup> memberMatchups, LeagueAggregationContext aggregationContext)
+        private void CalculateSeasonMemberMatchupStats(LeagueSeason season, LeagueSeasonMember seasonMember, LeagueAggregationContext aggregationContext)
         {
+            IEnumerable<TeamMatchup> seasonMemberMatchups = seasonMember.Teams
+                .SelectMany(seasonMember => seasonMember.Team.Matchups);
+
+            int year = seasonMemberMatchups.FirstOrDefault()?.Year ?? 0;
+            int seasonRank = seasonMember.Teams.Max(seasonMemberTeam => seasonMemberTeam.Team.SeasonRank);
             decimal pointsFor = 0;
             decimal pointsAgainst = 0;
             int wins = 0;
@@ -126,7 +110,13 @@ namespace FantasyHOF.Application.Mappers
             int outstandingPerformances = 0;
             int poorPerformances = 0;
 
-            foreach (TeamMatchup matchup in memberMatchups)
+            int mostPointsSingleWeek = 0;
+            int mostPointsSinglePlayoffWeek = 0;
+            int largestMarginOfVictory = 0;
+
+            
+
+            foreach (TeamMatchup matchup in seasonMemberMatchups)
             {
                 decimal score = matchup.OwnerMatchupDetails.Score;
                 decimal margin = matchup.ScoreMargin;
@@ -147,8 +137,7 @@ namespace FantasyHOF.Application.Mappers
                 if (score < PoorPerformanceThreshold) poorPerformances++;
             }
 
-            return new AggregatedMemberMatchupStats(memberMatchups.Count(), pointsFor, pointsAgainst, wins, losses, topWeeks, lowestWeeks, 
-                blowoutWins, blowoutLosses, narrowWins, narrowLosses, outstandingPerformances, poorPerformances);
+            return;
         }
 
         private static bool IsTopWeek(TeamMatchup matchup, LeagueAggregationContext context)
@@ -163,34 +152,42 @@ namespace FantasyHOF.Application.Mappers
             return context.MinScoreByWeekLookup.TryGetValue(key, out var min) && matchup.OwnerMatchupDetails.Score == min;
         }
 
-        private LeagueMemberAggregateStats MapLeagueMemberAggregateStats(League league, FantasyMember member, AggregatedMemberRecordStats recordStats, AggregatedMemberMatchupStats matchupStats)
+        private static bool IsLastPlaceFinish(int year, int seasonRank, LeagueAggregationContext aggregationContext)
         {
-            return new LeagueMemberAggregateStats
-            {
-                League = league,
-                Member = member,
+            if (!aggregationContext.LastPlacePositionBySeasonLookup.TryGetValue(year, out int lastPlacePosition))
+                return false;
 
-                TotalSeasons = recordStats.TotalSeasons,
-                Championships = recordStats.Championships,
-                LastPlaces = recordStats.LastPlaces,
-                WinningSeasons = recordStats.WinningSeasons,
-                LosingSeasons = recordStats.LosingSeasons,
-
-                TotalMatchups = matchupStats.MatchupCount,
-                TotalPointsFor = matchupStats.PointsFor,
-                TotalPointsAgainst = matchupStats.PointsAgainst,
-                TotalWins = matchupStats.Wins,
-                TotalLosses = matchupStats.Losses,
-                TopWeeks = matchupStats.TopWeeks,
-                LowestWeeks = matchupStats.LowestWeeks,
-                BlowoutWins = matchupStats.BlowoutWins,
-                BlowoutLosses = matchupStats.BlowoutLosses,
-                NarrowWins = matchupStats.NarrowWins,
-                NarrowLosses = matchupStats.NarrowLosses,
-                OutstandingPerformances = matchupStats.OutstandingPerformances,
-                PoorPerformances = matchupStats.PoorPerformances,
-            };
+            return seasonRank == lastPlacePosition;
         }
+
+        //private LeagueSeasonMemberAggregateStats MapLeagueMemberAggregateStats(League league, FantasyMember member, AggregatedMemberRecordStats recordStats, AggregatedMemberMatchupStats matchupStats)
+        //{
+        //    return new LeagueSeasonMemberAggregateStats
+        //    {
+        //        League = league,
+        //        Member = member,
+
+        //        TotalSeasons = recordStats.TotalSeasons,
+        //        Championships = recordStats.Championships,
+        //        LastPlaces = recordStats.LastPlaces,
+        //        WinningSeasons = recordStats.WinningSeasons,
+        //        LosingSeasons = recordStats.LosingSeasons,
+
+        //        MatchupCount = matchupStats.MatchupCount,
+        //        PointsFor = matchupStats.PointsFor,
+        //        PointsAgainst = matchupStats.PointsAgainst,
+        //        Wins = matchupStats.Wins,
+        //        Losses = matchupStats.Losses,
+        //        TopWeeks = matchupStats.TopWeeks,
+        //        LowestWeeks = matchupStats.LowestWeeks,
+        //        BlowoutWins = matchupStats.BlowoutWins,
+        //        BlowoutLosses = matchupStats.BlowoutLosses,
+        //        NarrowWins = matchupStats.NarrowWins,
+        //        NarrowLosses = matchupStats.NarrowLosses,
+        //        OutstandingPerformances = matchupStats.OutstandingPerformances,
+        //        PoorPerformances = matchupStats.PoorPerformances,
+        //    };
+        //}
 
         private sealed class LeagueAggregationContext
         {
@@ -206,7 +203,8 @@ namespace FantasyHOF.Application.Mappers
             int WinningSeasons,
             int LosingSeasons);
 
-        private sealed record AggregatedMemberMatchupStats(
+        private sealed record AggregatedSeasonMemberMatchupStats(
+            int Year,
             int MatchupCount,
             decimal PointsFor,
             decimal PointsAgainst,

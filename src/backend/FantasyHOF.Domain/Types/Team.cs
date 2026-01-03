@@ -18,6 +18,7 @@ namespace FantasyHOF.Domain.Types
         public required string Name { get; init; }
 
         public LeagueSeason Season { get; private set; } = null!;
+        public List<LeagueSeasonMemberTeam> MemberTeams { get; private set; } = null!;
         public TeamSeasonStats SeasonStats { get; private set; } = null!;
         public List<TeamMatchup> Matchups { get; private set; } = null!;
 

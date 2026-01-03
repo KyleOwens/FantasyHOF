@@ -18,7 +18,7 @@ namespace FantasyHOF.EntityFramework.Configurations
             builder.Ignore(x => x.Id);
 
             builder.HasOne(x => x.Team)
-                .WithMany()
+                .WithMany(x => x.MemberTeams)
                 .HasForeignKey(x => x.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
         }

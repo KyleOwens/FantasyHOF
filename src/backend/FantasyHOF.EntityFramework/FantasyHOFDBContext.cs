@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Types.Views;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -29,7 +30,9 @@ namespace FantasyHOF.EntityFramework
         public DbSet<User> Users => Set<User>();
         public DbSet<Sport> Sports => Set<Sport>();
         public DbSet<MatchupTeamDetails> MatchupTeamDetails => Set<MatchupTeamDetails>();
-        public DbSet<LeagueMemberAggregateStats> LeagueMemberAggregateStats => Set<LeagueMemberAggregateStats>();
+        public DbSet<LeagueMemberAggregatedStats> LeagueMemberAggregatedStats => Set<LeagueMemberAggregatedStats>();
+        public DbSet<LeagueSeasonMemberAggregatedStats> LeagueSeasonMemberAggregatedStats => Set<LeagueSeasonMemberAggregatedStats>();
+        public DbSet<WeeklyAggregationData> WeeklyAggregationData => Set<WeeklyAggregationData>();
 
         public FantasyHOFDBContext(DbContextOptions<FantasyHOFDBContext> options) : base(options)
         {
