@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.Application.Mappers;
+using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.Domain.Types.Records;
@@ -35,9 +36,15 @@ namespace FantasyHOF.Application.Queries.TestQueries
                     .Include(x => x.Member)
                     .ToListAsync();
 
+                List<PlayerAggregationData> playerAggregationData = await database.PlayerAggregationData
+                    .Where(x => x.LeagueId == request.LeagueId)
+                    .Include(x => x.Member)
+                    .Include(x => x.Player)
+                    .ToListAsync();
+
                 if (allTimeStatsByMember.Count == 0) return null;
 
-                return LeagueRecordSummary.FromAggregateLeagueStats(allTimeStatsByMember, statsByMemberAndSeason, weeklyAggregationData);
+                return LeagueRecordSummary.FromAggregateLeagueStats(allTimeStatsByMember, statsByMemberAndSeason, weeklyAggregationData, playerAggregationData);
             }
         }
     }

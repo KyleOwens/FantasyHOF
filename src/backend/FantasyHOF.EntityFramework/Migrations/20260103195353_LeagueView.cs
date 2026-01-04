@@ -53,12 +53,101 @@ namespace FantasyHOF.EntityFramework.Migrations
                         season_reference.league_id
                     ,   season_reference.member_id
             ");
+
+            migrationBuilder.Sql(@"
+                CREATE OR REPLACE VIEW vw_league_season_member_aggregated_stats AS
+                WITH weekly_matchup_score_extremes AS (
+                    SELECT
+                            league_id   AS league_id
+                        ,   year        AS year
+                        ,   week        AS week
+                        ,   MAX(score)  AS max_score
+                        ,   MIN(score)  AS min_score
+                    FROM vw_weekly_aggregation_data
+                    GROUP BY
+                            league_id
+                        ,   year
+                        ,   week
+                )
+                SELECT
+                        weekly_data.member_id                                                                                   AS member_id
+                    ,   weekly_data.league_id                                                                                   AS league_id
+                    ,   weekly_data.year                                                                                        AS year
+                    ,   MIN(teams.season_rank)                                                                                  AS season_rank -- If a member has multiple teams, then select the best rank
+                    ,   COUNT(*)                                                                                                AS total_matchups
+                    ,   SUM(weekly_data.score)                                                                                  AS points_for
+                    ,   SUM(weekly_data.opponent_score)                                                                         AS points_against
+                    ,   SUM(CASE WHEN weekly_data.matchup_outcome_id = 0 THEN 1 ELSE 0 END)                                     AS wins
+                    ,   SUM(CASE WHEN weekly_data.matchup_outcome_id = 1 THEN 1 ELSE 0 END)                                     AS losses
+                    ,   SUM(CASE WHEN weekly_data.score = extremes.max_score THEN 1 ELSE 0 END)                                 AS top_weeks
+                    ,   SUM(CASE WHEN weekly_data.score = extremes.min_score THEN 1 ELSE 0 END)                                 AS bottom_weeks
+                    ,   SUM(CASE WHEN weekly_data.score_margin > 50 THEN 1 ELSE 0 END)                                          AS blowout_wins
+                    ,   SUM(CASE WHEN weekly_data.score_margin < -50 THEN 1 ELSE 0 END)                                         AS blowout_losses
+                    ,   SUM(CASE WHEN weekly_data.score_margin <= 3 AND weekly_data.matchup_outcome_id = 0 THEN 1 ELSE 0 END)   AS narrow_wins
+                    ,   SUM(CASE WHEN weekly_data.score_margin >= -3 AND weekly_data.matchup_outcome_id = 1 THEN 1 ELSE 0 END)  AS narrow_losses
+                    ,   SUM(CASE WHEN weekly_data.score > 200 THEN 1 ELSE 0 END)                                                AS outstanding_performances
+                    ,   SUM(CASE WHEN weekly_data.score < 100 THEN 1 ELSE 0 END)                                                AS poor_performances
+                FROM vw_weekly_aggregation_data weekly_data
+
+                INNER JOIN teams ON teams.id = weekly_data.team_id
+                INNER JOIN weekly_matchup_score_extremes extremes
+                    ON  extremes.league_id = weekly_data.league_id
+                    AND extremes.year = weekly_data.year
+                    AND extremes.week = weekly_data.week
+
+                GROUP BY
+                        weekly_data.league_id
+                    ,   weekly_data.year
+                    ,   weekly_data.member_id
+            ");
+
+            migrationBuilder.Sql(@"
+                CREATE OR REPLACE VIEW vw_weekly_aggregation_data AS
+                SELECT
+                        member_teams.member_id                                                      AS member_id
+                    ,   matchups.team_id                                                            AS team_id
+                    ,   seasons.league_id                                                           AS league_id
+                    ,   seasons.year                                                                AS year
+                    ,   matchups.week                                                               AS week
+                    ,   matchups.matchup_type_id                                                    AS matchup_type_id
+                    ,   matchup_owner_details.score                                                 AS score
+                    ,   COALESCE(matchup_opponent_details.score,0)                                  AS opponent_score
+                    ,   matchup_owner_details.score - COALESCE(matchup_opponent_details.score, 0)   AS score_margin
+                    ,   matchup_owner_details.matchup_outcome_id                                    AS matchup_outcome_id
+                FROM team_matchups matchups
+
+                INNER JOIN matchup_team_details matchup_owner_details       ON matchup_owner_details.id = matchups.owner_matchup_details_id
+                LEFT  JOIN matchup_team_details matchup_opponent_details    ON matchup_opponent_details.id = matchups.opponent_matchup_details_id
+                INNER JOIN league_season_member_teams member_teams          ON member_teams.team_id = matchups.team_id
+                INNER JOIN league_seasons seasons                           ON seasons.id = member_teams.league_season_id
+            ");
+
+            migrationBuilder.Sql(@"
+                CREATE OR REPLACE VIEW vw_player_aggregation_stats AS
+                SELECT
+                        seasons.league_id
+                    ,   member_teams.member_id
+                    ,   seasons.year
+                    ,   owner_matchups.week
+                    ,   roster_spots.points_scored
+                    ,   roster_spots.player_id
+                    ,   roster_spots.position_id
+                FROM matchup_roster_spots roster_spots
+
+                INNER JOIN matchup_team_details owner_matchup_details ON owner_matchup_details.id = roster_spots.matchup_team_details_id
+                INNER JOIN team_matchups owner_matchups ON owner_matchups.team_id = owner_matchup_details.team_id
+                INNER JOIN league_season_member_teams member_teams ON member_teams.team_id = owner_matchup_details.team_id
+                INNER JOIN league_seasons seasons ON seasons.id = member_teams.league_season_id
+            ");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"DROP VIEW IF EXISTS vw_league_member_aggregated_stats");
+            migrationBuilder.Sql(@"DROP VIEW IF EXISTS vw_league_season_member_aggregated_stats");
+            migrationBuilder.Sql(@"DROP VIEW IF EXISTS vw_weekly_aggregation_data");
+            migrationBuilder.Sql(@"DROP VIEW IF EXISTS vw_player_aggregation_stats");
         }
     }
 }

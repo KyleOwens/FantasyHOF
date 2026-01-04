@@ -145,6 +145,10 @@ type LeagueRecordSummary {
   lowestMarginOfVictorySingleWeek: WeeklyValueRecord!
   lowestMarginOfVictorySinglePlayoffWeek: WeeklyValueRecord!
   highestScoringLossSingleWeek: WeeklyValueRecord!
+  mostPointsScoredSinglePlayer: PlayerValueRecord!
+  mostPointsScoredSingleNonQBPlayer: PlayerValueRecord!
+  leastPointsScoredSinglePlayer: PlayerValueRecord!
+  leastPointsScoredSingleNonDefensePlayer: PlayerValueRecord!
 }
 
 type LeagueSeason implements Node {
@@ -227,10 +231,6 @@ type LeagueSeasonSettings implements Node {
 
 type LeagueValueRecord {
   value: Decimal!
-  id: Int!
-  leagueId: Int!
-  memberId: Int!
-  recordType: RecordType!
   member: FantasyMember!
 }
 
@@ -281,6 +281,14 @@ type Player implements Node {
   provider: FantasyProvider! @cost(weight: "10")
 }
 
+type PlayerValueRecord {
+  value: Decimal!
+  player: Player!
+  week: Int!
+  year: Int!
+  member: FantasyMember!
+}
+
 type Position implements Node {
   id: ID!
   name: String!
@@ -300,10 +308,6 @@ type Query {
 type SeasonalValueRecord {
   value: Decimal!
   year: Int!
-  id: Int!
-  leagueId: Int!
-  memberId: Int!
-  recordType: RecordType!
   member: FantasyMember!
 }
 
@@ -361,12 +365,8 @@ type TeamSeasonStats implements Node {
 
 type WeeklyValueRecord {
   value: Decimal!
-  year: Int!
   week: Int!
-  id: Int!
-  leagueId: Int!
-  memberId: Int!
-  recordType: RecordType!
+  year: Int!
   member: FantasyMember!
 }
 
@@ -443,13 +443,6 @@ enum PositionId {
   ER
   ROOKIE
   UNKNOWN
-}
-
-enum RecordType {
-  LEAGUE_VALUE
-  SEASONAL_VALUE
-  WEEKLY_VALUE
-  PLAYER_VALUE
 }
 
 enum SportId {

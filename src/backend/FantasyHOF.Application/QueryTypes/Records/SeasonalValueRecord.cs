@@ -11,15 +11,11 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public decimal Value { get; init; }
 
-        protected SeasonalValueRecord() { }
-
         public SeasonalValueRecord(FantasyMember member, int year, decimal value)
+            : base(member, year)
         {
-            RecordType = RecordType.SeasonalValue;
             Year = year;
             Value = value;
-
-            SetMember(member);
         }
     }
 }

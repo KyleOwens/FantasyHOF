@@ -17,7 +17,7 @@ namespace FantasyHOF.Application.Mutations
 {
     public sealed record AddESPNLeagueForUserCommand(ESPNLeagueCredentials LeagueCredentials) : IRequest<League>
     {
-        public sealed class AddESPNLeagueForUserCommandHandler(ICurrentUserService currentUser, IMediator mediator, FantasyHOFDBContext database, IStatAggregator statAggregator) : IRequestHandler<AddESPNLeagueForUserCommand, League>
+        public sealed class AddESPNLeagueForUserCommandHandler(ICurrentUserService currentUser, IMediator mediator, FantasyHOFDBContext database) : IRequestHandler<AddESPNLeagueForUserCommand, League>
         {
             public async Task<League> Handle(AddESPNLeagueForUserCommand request, CancellationToken cancellationToken)
             {
@@ -30,8 +30,6 @@ namespace FantasyHOF.Application.Mutations
 
                 League newLeague = await mediator.Send(new GetESPNLeagueQuery(request.LeagueCredentials), cancellationToken);
                 user.AddLeague(newLeague);
-
-                //database.LeagueMemberAggregateStats.AddRange(statAggregator.AggregateMemberStats(newLeague));
 
                 await database.SaveChangesAsync(cancellationToken);
 

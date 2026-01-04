@@ -10,15 +10,10 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public decimal Value { get; init; }
 
-        protected WeeklyValueRecord() { }
-
         public WeeklyValueRecord(FantasyMember member, int year, int week, decimal value)
+            : base(member, year, week)
         {
-            Year = year;
-            Week = week;
             Value = value;
-
-            SetMember(member);
         }
     }
 }

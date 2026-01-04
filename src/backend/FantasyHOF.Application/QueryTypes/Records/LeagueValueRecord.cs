@@ -11,14 +11,10 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public decimal Value { get; private set; }
 
-        protected LeagueValueRecord() { }
-
         public LeagueValueRecord(FantasyMember member, decimal value)
+            : base(member)
         {
-            RecordType = RecordType.LeagueValue;
             Value = value;
-
-            SetMember(member);
         }
     }
 }

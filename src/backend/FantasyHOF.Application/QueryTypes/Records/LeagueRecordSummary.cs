@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Enums;
+﻿using FantasyHOF.Domain.Entities.Views;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types.Records;
 using FantasyHOF.Domain.Types.Views;
 using System;
@@ -87,10 +88,19 @@ namespace FantasyHOF.Domain.Types
         public required WeeklyValueRecord LowestMarginOfVictorySinglePlayoffWeek { get; init; } = null!;
         public required WeeklyValueRecord HighestScoringLossSingleWeek { get; init; } = null!;
 
+        // Good Player
+        public required PlayerValueRecord MostPointsScoredSinglePlayer { get; init; } = null!;
+        public required PlayerValueRecord MostPointsScoredSingleNonQBPlayer { get; init; } = null!;
+
+        // Bad Player
+        public required PlayerValueRecord LeastPointsScoredSinglePlayer { get; init; } = null!;
+        public required PlayerValueRecord LeastPointsScoredSingleNonDefensePlayer { get; init; } = null!;
+
         public static LeagueRecordSummary? FromAggregateLeagueStats(
             IReadOnlyList<LeagueMemberAggregatedStats> allTimeStatsByMember,
             IReadOnlyList<LeagueSeasonMemberAggregatedStats> statsByMemberAndSeason,
-            IReadOnlyList<WeeklyAggregationData> weeklyAggregationData)
+            IReadOnlyList<WeeklyAggregationData> weeklyAggregationData,
+            IReadOnlyList<PlayerAggregationData> playerAggregationData)
         {
             IReadOnlyList<WeeklyAggregationData> weeklyPlayoffAggregationData = weeklyAggregationData
                 .Where(x => x.MatchupTypeId != MatchupTypeId.RegularSeason && x.MatchupTypeId != MatchupTypeId.Unknown)
@@ -169,6 +179,14 @@ namespace FantasyHOF.Domain.Types
                 LowestMarginOfVictorySingleWeek = ToMinWeeklyRecord(weeklyAggregationData.Where(x => x.MatchupOutcomeId == MatchupOutcomeId.Win).ToList(), x => x.ScoreMargin),
                 LowestMarginOfVictorySinglePlayoffWeek = ToMinWeeklyRecord(weeklyPlayoffAggregationData.Where(x => x.MatchupOutcomeId == MatchupOutcomeId.Win).ToList(), x => x.ScoreMargin),
                 HighestScoringLossSingleWeek = ToMaxWeeklyRecord(weeklyAggregationData.Where(x => x.MatchupOutcomeId == MatchupOutcomeId.Loss).ToList(), x => x.Score),
+
+                // Good Player
+                MostPointsScoredSinglePlayer = ToMaxPlayerRecord(playerAggregationData, x => x.PointsScored),
+                MostPointsScoredSingleNonQBPlayer = ToMaxPlayerRecord(playerAggregationData.Where(x => !new []{ PositionId.QB, PositionId.Unknown }.Contains(x.PositionId)).ToList(), x => x.PointsScored),
+
+                // Bad Player
+                LeastPointsScoredSinglePlayer = ToMinPlayerRecord(playerAggregationData, x => x.PointsScored),
+                LeastPointsScoredSingleNonDefensePlayer = ToMinPlayerRecord(playerAggregationData.Where(x => !new[] { PositionId.DST, PositionId.Unknown }.Contains(x.PositionId)).ToList(), x => x.PointsScored),
             };
         }
 
@@ -220,46 +238,20 @@ namespace FantasyHOF.Domain.Types
             return new WeeklyValueRecord(stat.Member, stat.Year, stat.Week, valueSelector(stat));
         }
 
-        //private static LeagueRecordSummary FromSingleMemberAggregateStats(LeagueSeasonMemberAggregateStats aggregateStats)
-        //{
-        //    return new()
-        //    {
-        //        // Good League
-        //        MostPointsLeagueHistory = new(aggregateStats.Member, aggregateStats.PointsFor),
-        //        MostAveragePointsPerWeekLeagueHistory = new(aggregateStats.Member, aggregateStats.PointsForAverage),
-        //        LeastPointsAllowedLeagueHistory = new(aggregateStats.Member, aggregateStats.PointsAgainst),
-        //        LeastAveragePointsAllowedPerWeekLeagueHistory = new(aggregateStats.Member, aggregateStats.PointsAgainstAverage),
-        //        MostWinsLeagueHistory = new(aggregateStats.Member, aggregateStats.Wins),
-        //        LeastLossesLeagueHistory = new(aggregateStats.Member, aggregateStats.Losses),
-        //        HighestWinPercentageLeagueHistory = new(aggregateStats.Member, aggregateStats.WinPercentage),
-        //        MostTopWeeklyScoresLeagueHistory = new(aggregateStats.Member, aggregateStats.TopWeeks),
-        //        HighestPercentageTopWeeklyScoresLeagueHisotry = new(aggregateStats.Member, aggregateStats.TopWeekPercentage),
-        //        MostBlowoutWinsLeagueHistory = new(aggregateStats.Member, aggregateStats.BlowoutWins),
-        //        MostNarrowWinsLeagueHistory = new(aggregateStats.Member, aggregateStats.NarrowWins),
-        //        MostChampionshipsLeagueHistory = new(aggregateStats.Member, aggregateStats.Championships),
-        //        HighestChampionshipPercentageLeagueHistory = new(aggregateStats.Member, aggregateStats.ChampionshipPercentage),
-        //        MostSeasonsWinningRecordLeagueHistory = new(aggregateStats.Member, aggregateStats.WinningSeasons),
-        //        HighestWinningRecordPercentageLeagueHistory = new(aggregateStats.Member, aggregateStats.WinningSeasonPercentage),
-        //        MostOutstandingPerformancesLeagueHistory = new(aggregateStats.Member, aggregateStats.OutstandingPerformances),
+        private static PlayerValueRecord ToMaxPlayerRecord(
+            IReadOnlyList<PlayerAggregationData> weeklyAggregationData,
+            Func<PlayerAggregationData, decimal> valueSelector)
+        {
+            PlayerAggregationData stat = weeklyAggregationData.MaxBy(stat => valueSelector(stat))!;
+            return new PlayerValueRecord(stat.Member, stat.Player, stat.Year, stat.Week, valueSelector(stat));
+        }
 
-        //        // Bad League
-        //        LeastPointsLeagueHistory = new(aggregateStats.Member, aggregateStats.PointsFor),
-        //        LeastAveragePointsPerWeekLeagueHistory = new(aggregateStats.Member, aggregateStats.PointsForAverage),
-        //        MostPointsAllowedLeagueHistory = new(aggregateStats.Member, aggregateStats.PointsAgainst),
-        //        MostAveragePointsAllowedPerWeekLeagueHistory = new(aggregateStats.Member, aggregateStats.PointsAgainstAverage),
-        //        LeastWinsLeagueHistory = new(aggregateStats.Member, aggregateStats.Wins),
-        //        MostLossesLeagueHistory = new(aggregateStats.Member, aggregateStats.Losses),
-        //        LowestWinPercentageLeagueHistory = new(aggregateStats.Member, aggregateStats.WinPercentage),
-        //        MostLowestWeeklyScoresLeagueHistory = new(aggregateStats.Member, aggregateStats.LowestWeeks),
-        //        HighestPercentageLowestWeeklyScoresLeagueHisotry = new(aggregateStats.Member, aggregateStats.LowestWeekPercentage),
-        //        MostBlowoutLossesLeagueHistory = new(aggregateStats.Member, aggregateStats.BlowoutLosses),
-        //        MostNarrowLossesLeagueHistory = new(aggregateStats.Member, aggregateStats.NarrowLosses),
-        //        MostLastPlacesLeagueHistory = new(aggregateStats.Member, aggregateStats.LastPlaces),
-        //        HighestLastPlacePercentageLeagueHistory = new(aggregateStats.Member, aggregateStats.LastPlacePercentage),
-        //        MostSeasonsLosingRecordLeagueHistory = new(aggregateStats.Member, aggregateStats.LosingSeasons),
-        //        HighestLosingRecordPercentageLeagueHistory = new(aggregateStats.Member, aggregateStats.LosingSeasonPercentage),
-        //        MostPoorPerformancesLeagueHistory = new(aggregateStats.Member, aggregateStats.PoorPerformances)
-        //    };
-        //}
+        private static PlayerValueRecord ToMinPlayerRecord(
+            IReadOnlyList<PlayerAggregationData> weeklyAggregationData,
+            Func<PlayerAggregationData, decimal> valueSelector)
+        {
+            PlayerAggregationData stat = weeklyAggregationData.MinBy(stat => valueSelector(stat))!;
+            return new PlayerValueRecord(stat.Member, stat.Player, stat.Year, stat.Week, valueSelector(stat));
+        }
     }
 }
