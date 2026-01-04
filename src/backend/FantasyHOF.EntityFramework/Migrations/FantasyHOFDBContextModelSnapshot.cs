@@ -22,6 +22,47 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("FantasyHOF.Domain.Entities.Views.PlayerAggregationData", b =>
+                {
+                    b.Property<int>("LeagueId")
+                        .HasColumnType("integer")
+                        .HasColumnName("league_id");
+
+                    b.Property<int>("MemberId")
+                        .HasColumnType("integer")
+                        .HasColumnName("member_id");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("integer")
+                        .HasColumnName("player_id");
+
+                    b.Property<decimal>("PointsScored")
+                        .HasColumnType("numeric")
+                        .HasColumnName("points_scored");
+
+                    b.Property<int>("PositionId")
+                        .HasColumnType("integer")
+                        .HasColumnName("position_id");
+
+                    b.Property<int>("Week")
+                        .HasColumnType("integer")
+                        .HasColumnName("week");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer")
+                        .HasColumnName("year");
+
+                    b.HasIndex("MemberId")
+                        .HasDatabaseName("ix_player_aggregation_data_member_id");
+
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("ix_player_aggregation_data_player_id");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("vw_player_aggregation_data", (string)null);
+                });
+
             modelBuilder.Entity("FantasyHOF.Domain.Types.AccumulatedStat", b =>
                 {
                     b.Property<int>("Id")
@@ -2385,6 +2426,27 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.ToTable((string)null);
 
                     b.ToView("vw_weekly_aggregation_data", (string)null);
+                });
+
+            modelBuilder.Entity("FantasyHOF.Domain.Entities.Views.PlayerAggregationData", b =>
+                {
+                    b.HasOne("FantasyHOF.Domain.Types.FantasyMember", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_player_aggregation_data_fantasy_members_member_id");
+
+                    b.HasOne("FantasyHOF.Domain.Types.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_player_aggregation_data_players_player_id");
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("FantasyHOF.Domain.Types.AccumulatedStat", b =>

@@ -181,12 +181,12 @@ namespace FantasyHOF.Domain.Types
                 HighestScoringLossSingleWeek = ToMaxWeeklyRecord(weeklyAggregationData.Where(x => x.MatchupOutcomeId == MatchupOutcomeId.Loss).ToList(), x => x.Score),
 
                 // Good Player
-                MostPointsScoredSinglePlayer = ToMaxPlayerRecord(playerAggregationData, x => x.PointsScored),
-                MostPointsScoredSingleNonQBPlayer = ToMaxPlayerRecord(playerAggregationData.Where(x => !new []{ PositionId.QB, PositionId.Unknown }.Contains(x.PositionId)).ToList(), x => x.PointsScored),
+                MostPointsScoredSinglePlayer = ToMaxPlayerRecord(playerAggregationData.Where(x => x.PositionId != PositionId.BE).ToList(), x => x.PointsScored),
+                MostPointsScoredSingleNonQBPlayer = ToMaxPlayerRecord(playerAggregationData.Where(x => !new []{ PositionId.QB, PositionId.BE, PositionId.Unknown }.Contains(x.PositionId)).ToList(), x => x.PointsScored),
 
                 // Bad Player
-                LeastPointsScoredSinglePlayer = ToMinPlayerRecord(playerAggregationData, x => x.PointsScored),
-                LeastPointsScoredSingleNonDefensePlayer = ToMinPlayerRecord(playerAggregationData.Where(x => !new[] { PositionId.DST, PositionId.Unknown }.Contains(x.PositionId)).ToList(), x => x.PointsScored),
+                LeastPointsScoredSinglePlayer = ToMinPlayerRecord(playerAggregationData.Where(x => x.PositionId != PositionId.BE).ToList(), x => x.PointsScored),
+                LeastPointsScoredSingleNonDefensePlayer = ToMinPlayerRecord(playerAggregationData.Where(x => !new[] { PositionId.DST, PositionId.BE, PositionId.Unknown }.Contains(x.PositionId)).ToList(), x => x.PointsScored),
             };
         }
 
