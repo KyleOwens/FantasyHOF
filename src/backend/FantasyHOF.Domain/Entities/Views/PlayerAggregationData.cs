@@ -20,5 +20,24 @@ namespace FantasyHOF.Domain.Entities.Views
 
         public FantasyMember Member { get; private set; } = null!;
         public Player Player { get; private set; } = null!;
+
+        public bool IsNotQBOrBench()
+        {
+            IEnumerable<PositionId> qbOrBench = [PositionId.BE, PositionId.QB, PositionId.Unknown];
+
+            return !qbOrBench.Contains(PositionId);
+        }
+
+        public bool IsNotDSTOrBench()
+        {
+            IEnumerable<PositionId> dstOrBench = [PositionId.BE, PositionId.DST, PositionId.Unknown];
+
+            return !dstOrBench.Contains(PositionId);
+        }
+
+        public bool IsBench()
+        {
+            return PositionId == PositionId.BE;
+        }
     }
 }

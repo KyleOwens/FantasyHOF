@@ -9,7 +9,7 @@ function DemoLayout() {
   return (
     <>
       <AppSidebar />
-      <div className="p-8">
+      <div className="p-8 w-full">
         <Outlet />
       </div>
     </>

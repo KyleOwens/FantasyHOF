@@ -12,9 +12,6 @@ namespace FantasyHOF.Domain.Types
 {
     public class LeagueRecordSummary
     {
-        public int Id { get; private set; }
-        public int LeagueId { get; private set; }
-
         // Good League
         public required LeagueValueRecord MostPointsLeagueHistory { get; init; } = null!;
         public required LeagueValueRecord MostAveragePointsPerWeekLeagueHistory { get; init; } = null!;
@@ -106,6 +103,7 @@ namespace FantasyHOF.Domain.Types
                 .Where(x => x.MatchupTypeId != MatchupTypeId.RegularSeason && x.MatchupTypeId != MatchupTypeId.Unknown)
                 .ToList();
             
+            // This could be made much more efficient by iterating over each list just one time. For now, leave for simplicity
             return new()
             {
                 // Good League
@@ -181,12 +179,12 @@ namespace FantasyHOF.Domain.Types
                 HighestScoringLossSingleWeek = ToMaxWeeklyRecord(weeklyAggregationData.Where(x => x.MatchupOutcomeId == MatchupOutcomeId.Loss).ToList(), x => x.Score),
 
                 // Good Player
-                MostPointsScoredSinglePlayer = ToMaxPlayerRecord(playerAggregationData.Where(x => x.PositionId != PositionId.BE).ToList(), x => x.PointsScored),
-                MostPointsScoredSingleNonQBPlayer = ToMaxPlayerRecord(playerAggregationData.Where(x => !new []{ PositionId.QB, PositionId.BE, PositionId.Unknown }.Contains(x.PositionId)).ToList(), x => x.PointsScored),
+                MostPointsScoredSinglePlayer = ToMaxPlayerRecord(playerAggregationData.Where(x => !x.IsBench()).ToList(), x => x.PointsScored),
+                MostPointsScoredSingleNonQBPlayer = ToMaxPlayerRecord(playerAggregationData.Where(x => x.IsNotQBOrBench()).ToList(), x => x.PointsScored),
 
                 // Bad Player
-                LeastPointsScoredSinglePlayer = ToMinPlayerRecord(playerAggregationData.Where(x => x.PositionId != PositionId.BE).ToList(), x => x.PointsScored),
-                LeastPointsScoredSingleNonDefensePlayer = ToMinPlayerRecord(playerAggregationData.Where(x => !new[] { PositionId.DST, PositionId.BE, PositionId.Unknown }.Contains(x.PositionId)).ToList(), x => x.PointsScored),
+                LeastPointsScoredSinglePlayer = ToMinPlayerRecord(playerAggregationData.Where(x => !x.IsBench()).ToList(), x => x.PointsScored),
+                LeastPointsScoredSingleNonDefensePlayer = ToMinPlayerRecord(playerAggregationData.Where(x => x.IsNotDSTOrBench()).ToList(), x => x.PointsScored),
             };
         }
 

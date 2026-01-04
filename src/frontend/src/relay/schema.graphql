@@ -80,11 +80,10 @@ type League implements Node {
   seasons: [LeagueSeason!]! @cost(weight: "10")
   fantasyProvider: FantasyProvider! @cost(weight: "10")
   sport: Sport! @cost(weight: "10")
+  recordSummary: LeagueRecordSummary @cost(weight: "10")
 }
 
 type LeagueRecordSummary {
-  id: Int!
-  leagueId: Int!
   mostPointsLeagueHistory: LeagueValueRecord!
   mostAveragePointsPerWeekLeagueHistory: LeagueValueRecord!
   leastPointsAllowedLeagueHistory: LeagueValueRecord!

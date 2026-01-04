@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Application.Queries.LeagueQueries;
+using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using FantasyHOF.GraphQL.Types.DataLoaders;
@@ -41,6 +42,14 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
             CancellationToken cancellationToken)
         {
             return await sports.LoadRequiredAsync(league.SportId, cancellationToken);
+        }
+
+        public async Task<LeagueRecordSummary?> GetRecordSummaryAsync(
+            [Parent] League league,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            return await mediator.Send(new GetLeagueRecordSummaryQuery(league.Id));
         }
 
         public static async Task<League?> GetLeagueAsync(
