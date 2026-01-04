@@ -18,5 +18,7 @@ namespace FantasyHOF.Domain.Types
         public required string LastName { get; set; }
 
         public FantasyProvider FantasyProvider { get; private set; } = null!;
+
+        public string FullName => FirstName + " " + LastName;
     }
 }

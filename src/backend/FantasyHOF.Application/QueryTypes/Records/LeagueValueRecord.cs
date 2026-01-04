@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Enums;
+﻿using FantasyHOF.Application.Enums;
+using FantasyHOF.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public decimal Value { get; private set; }
 
-        public LeagueValueRecord(FantasyMember member, decimal value)
-            : base(member)
+        public LeagueValueRecord(FantasyMember member, RecordType type, decimal value)
+            : base(member, type)
         {
             Value = value;
         }

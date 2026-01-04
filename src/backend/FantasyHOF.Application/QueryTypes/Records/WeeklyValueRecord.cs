@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FantasyHOF.Application.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,8 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public decimal Value { get; init; }
 
-        public WeeklyValueRecord(FantasyMember member, int year, int week, decimal value)
-            : base(member, year, week)
+        public WeeklyValueRecord(FantasyMember member, RecordType type, int year, int week, decimal value)
+            : base(member, type, year, week)
         {
             Value = value;
         }

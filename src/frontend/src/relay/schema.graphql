@@ -60,6 +60,7 @@ type FantasyMember implements Node {
   firstName: String!
   lastName: String!
   fantasyProvider: FantasyProvider! @cost(weight: "10")
+  fullName: String!
 }
 
 type FantasyProvider implements Node {
@@ -84,70 +85,10 @@ type League implements Node {
 }
 
 type LeagueRecordSummary {
-  mostPointsLeagueHistory: LeagueValueRecord!
-  mostAveragePointsPerWeekLeagueHistory: LeagueValueRecord!
-  leastPointsAllowedLeagueHistory: LeagueValueRecord!
-  leastAveragePointsAllowedPerWeekLeagueHistory: LeagueValueRecord!
-  mostWinsLeagueHistory: LeagueValueRecord!
-  leastLossesLeagueHistory: LeagueValueRecord!
-  highestWinPercentageLeagueHistory: LeagueValueRecord!
-  mostTopWeeklyScoresLeagueHistory: LeagueValueRecord!
-  highestPercentageTopWeeklyScoresLeagueHisotry: LeagueValueRecord!
-  mostBlowoutWinsLeagueHistory: LeagueValueRecord!
-  mostNarrowWinsLeagueHistory: LeagueValueRecord!
-  mostChampionshipsLeagueHistory: LeagueValueRecord!
-  highestChampionshipPercentageLeagueHistory: LeagueValueRecord!
-  mostSeasonsWinningRecordLeagueHistory: LeagueValueRecord!
-  highestWinningRecordPercentageLeagueHistory: LeagueValueRecord!
-  mostOutstandingPerformancesLeagueHistory: LeagueValueRecord!
-  leastPointsLeagueHistory: LeagueValueRecord!
-  leastAveragePointsPerWeekLeagueHistory: LeagueValueRecord!
-  mostPointsAllowedLeagueHistory: LeagueValueRecord!
-  mostAveragePointsAllowedPerWeekLeagueHistory: LeagueValueRecord!
-  leastWinsLeagueHistory: LeagueValueRecord!
-  mostLossesLeagueHistory: LeagueValueRecord!
-  lowestWinPercentageLeagueHistory: LeagueValueRecord!
-  mostLowestWeeklyScoresLeagueHistory: LeagueValueRecord!
-  highestPercentageLowestWeeklyScoresLeagueHisotry: LeagueValueRecord!
-  mostBlowoutLossesLeagueHistory: LeagueValueRecord!
-  mostNarrowLossesLeagueHistory: LeagueValueRecord!
-  mostLastPlacesLeagueHistory: LeagueValueRecord!
-  highestLastPlacePercentageLeagueHistory: LeagueValueRecord!
-  mostSeasonsLosingRecordLeagueHistory: LeagueValueRecord!
-  highestLosingRecordPercentageLeagueHistory: LeagueValueRecord!
-  mostPoorPerformancesLeagueHistory: LeagueValueRecord!
-  mostPointsSingleSeason: SeasonalValueRecord!
-  mostPointsPerWeekSingleSeason: SeasonalValueRecord!
-  leastPointsAllowedSingleSeason: SeasonalValueRecord!
-  leastPointsAllowedPerWeekSingleSeason: SeasonalValueRecord!
-  mostWinsSingleSeason: SeasonalValueRecord!
-  mostHighestScoringWeeksSingleSeason: SeasonalValueRecord!
-  mostBlowoutWinsSingleSeason: SeasonalValueRecord!
-  mostNarrowWinsSingleSeason: SeasonalValueRecord!
-  mostOutstandingPerformancesSingleSeason: SeasonalValueRecord!
-  leastPointsSingleSeason: SeasonalValueRecord!
-  leastPointsPerWeekSingleSeason: SeasonalValueRecord!
-  mostPointsAllowedSingleSeason: SeasonalValueRecord!
-  mostPointsAllowedPerWeekSingleSeason: SeasonalValueRecord!
-  mostLossesSingleSeason: SeasonalValueRecord!
-  mostLowestScoringWeeksSingleSeason: SeasonalValueRecord!
-  mostBlowoutLossesSingleSeason: SeasonalValueRecord!
-  mostNarrowLossesSingleSeason: SeasonalValueRecord!
-  mostPoorPerformancesSingleSeason: SeasonalValueRecord!
-  mostPointsSingleWeek: WeeklyValueRecord!
-  mostPointsSinglePlayoffWeek: WeeklyValueRecord!
-  largestMarginOfVictorySingleWeek: WeeklyValueRecord!
-  largestMarginOfVictorySinglePlayoffWeek: WeeklyValueRecord!
-  lowestScoringWinSingleWeek: WeeklyValueRecord!
-  leastPointsSingleWeek: WeeklyValueRecord!
-  leastPointsSinglePlayoffWeek: WeeklyValueRecord!
-  lowestMarginOfVictorySingleWeek: WeeklyValueRecord!
-  lowestMarginOfVictorySinglePlayoffWeek: WeeklyValueRecord!
-  highestScoringLossSingleWeek: WeeklyValueRecord!
-  mostPointsScoredSinglePlayer: PlayerValueRecord!
-  mostPointsScoredSingleNonQBPlayer: PlayerValueRecord!
-  leastPointsScoredSinglePlayer: PlayerValueRecord!
-  leastPointsScoredSingleNonDefensePlayer: PlayerValueRecord!
+  leagueRecords: [LeagueValueRecord!]!
+  seasonalRecords: [SeasonalValueRecord!]!
+  weeklyRecords: [WeeklyValueRecord!]!
+  playerRecords: [PlayerValueRecord!]!
 }
 
 type LeagueSeason implements Node {
@@ -230,7 +171,12 @@ type LeagueSeasonSettings implements Node {
 
 type LeagueValueRecord {
   value: Decimal!
+  type: RecordType!
   member: FantasyMember!
+  displayName: String!
+  iconURI: String!
+  category: RecordCategory!
+  sentiment: RecordSentiment!
 }
 
 type MatchupOutcome implements Node {
@@ -285,7 +231,12 @@ type PlayerValueRecord {
   player: Player!
   week: Int!
   year: Int!
+  type: RecordType!
   member: FantasyMember!
+  displayName: String!
+  iconURI: String!
+  category: RecordCategory!
+  sentiment: RecordSentiment!
 }
 
 type Position implements Node {
@@ -307,7 +258,12 @@ type Query {
 type SeasonalValueRecord {
   value: Decimal!
   year: Int!
+  type: RecordType!
   member: FantasyMember!
+  displayName: String!
+  iconURI: String!
+  category: RecordCategory!
+  sentiment: RecordSentiment!
 }
 
 type Sport implements Node {
@@ -366,7 +322,12 @@ type WeeklyValueRecord {
   value: Decimal!
   week: Int!
   year: Int!
+  type: RecordType!
   member: FantasyMember!
+  displayName: String!
+  iconURI: String!
+  category: RecordCategory!
+  sentiment: RecordSentiment!
 }
 
 union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError
@@ -442,6 +403,85 @@ enum PositionId {
   ER
   ROOKIE
   UNKNOWN
+}
+
+enum RecordCategory {
+  LEAGUE
+  SEASON
+  WEEK
+  PLAYER
+}
+
+enum RecordSentiment {
+  FAME
+  SHAME
+}
+
+enum RecordType {
+  MOST_CHAMPIONSHIPS_LEAGUE_HISTORY
+  HIGHEST_CHAMPIONSHIP_PERCENTAGE_LEAGUE_HISTORY
+  MOST_WINS_LEAGUE_HISTORY
+  HIGHEST_WIN_PERCENTAGE_LEAGUE_HISTORY
+  MOST_SEASONS_WINNING_RECORD_LEAGUE_HISTORY
+  HIGHEST_WINNING_RECORD_PERCENTAGE_LEAGUE_HISTORY
+  MOST_POINTS_LEAGUE_HISTORY
+  MOST_AVERAGE_POINTS_PER_WEEK_LEAGUE_HISTORY
+  MOST_OUTSTANDING_PERFORMANCES_LEAGUE_HISTORY
+  MOST_BLOWOUT_WINS_LEAGUE_HISTORY
+  MOST_NARROW_WINS_LEAGUE_HISTORY
+  MOST_TOP_WEEKLY_SCORES_LEAGUE_HISTORY
+  HIGHEST_PERCENTAGE_TOP_WEEKLY_SCORES_LEAGUE_HISTORY
+  LEAST_LOSSES_LEAGUE_HISTORY
+  LEAST_POINTS_ALLOWED_LEAGUE_HISTORY
+  LEAST_AVERAGE_POINTS_ALLOWED_PER_WEEK_LEAGUE_HISTORY
+  MOST_LAST_PLACES_LEAGUE_HISTORY
+  HIGHEST_LAST_PLACE_PERCENTAGE_LEAGUE_HISTORY
+  MOST_LOSSES_LEAGUE_HISTORY
+  LOWEST_WIN_PERCENTAGE_LEAGUE_HISTORY
+  MOST_SEASONS_LOSING_RECORD_LEAGUE_HISTORY
+  HIGHEST_LOSING_RECORD_PERCENTAGE_LEAGUE_HISTORY
+  MOST_POINTS_ALLOWED_LEAGUE_HISTORY
+  MOST_AVERAGE_POINTS_ALLOWED_PER_WEEK_LEAGUE_HISTORY
+  MOST_POOR_PERFORMANCES_LEAGUE_HISTORY
+  MOST_BLOWOUT_LOSSES_LEAGUE_HISTORY
+  MOST_NARROW_LOSSES_LEAGUE_HISTORY
+  MOST_LOWEST_WEEKLY_SCORES_LEAGUE_HISTORY
+  HIGHEST_PERCENTAGE_LOWEST_WEEKLY_SCORES_LEAGUE_HISTORY
+  LEAST_WINS_LEAGUE_HISTORY
+  LEAST_POINTS_LEAGUE_HISTORY
+  LEAST_AVERAGE_POINTS_PER_WEEK_LEAGUE_HISTORY
+  MOST_POINTS_SINGLE_SEASON
+  MOST_POINTS_PER_WEEK_SINGLE_SEASON
+  LEAST_POINTS_ALLOWED_SINGLE_SEASON
+  LEAST_POINTS_ALLOWED_PER_WEEK_SINGLE_SEASON
+  MOST_WINS_SINGLE_SEASON
+  MOST_OUTSTANDING_PERFORMANCES_SINGLE_SEASON
+  MOST_BLOWOUT_WINS_SINGLE_SEASON
+  MOST_NARROW_WINS_SINGLE_SEASON
+  MOST_HIGHEST_SCORING_WEEKS_SINGLE_SEASON
+  LEAST_POINTS_SINGLE_SEASON
+  LEAST_POINTS_PER_WEEK_SINGLE_SEASON
+  MOST_POINTS_ALLOWED_SINGLE_SEASON
+  MOST_POINTS_ALLOWED_PER_WEEK_SINGLE_SEASON
+  MOST_LOSSES_SINGLE_SEASON
+  MOST_POOR_PERFORMANCES_SINGLE_SEASON
+  MOST_BLOWOUT_LOSSES_SINGLE_SEASON
+  MOST_NARROW_LOSSES_SINGLE_SEASON
+  MOST_LOWEST_SCORING_WEEKS_SINGLE_SEASON
+  MOST_POINTS_SINGLE_WEEK
+  MOST_POINTS_SINGLE_PLAYOFF_WEEK
+  LARGEST_MARGIN_OF_VICTORY_SINGLE_WEEK
+  LARGEST_MARGIN_OF_VICTORY_SINGLE_PLAYOFF_WEEK
+  LOWEST_SCORING_WIN_SINGLE_WEEK
+  LEAST_POINTS_SINGLE_WEEK
+  LEAST_POINTS_SINGLE_PLAYOFF_WEEK
+  LOWEST_MARGIN_OF_VICTORY_SINGLE_WEEK
+  LOWEST_MARGIN_OF_VICTORY_SINGLE_PLAYOFF_WEEK
+  HIGHEST_SCORING_LOSS_SINGLE_WEEK
+  MOST_POINTS_SCORED_SINGLE_PLAYER
+  MOST_POINTS_SCORED_SINGLE_NON_QB_PLAYER
+  LEAST_POINTS_SCORED_SINGLE_PLAYER
+  LEAST_POINTS_SCORED_SINGLE_NON_DEFENSE_PLAYER
 }
 
 enum SportId {

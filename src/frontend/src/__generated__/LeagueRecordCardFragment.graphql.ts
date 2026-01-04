@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<92d607a254ce24fbedda0bf9a7465e1e>>
+ * @generated SignedSource<<ae6e3952c29236e2bb355416dd9cfdd3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,8 @@
 import { ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type LeagueRecordCardFragment$data = {
+  readonly displayName: string;
+  readonly iconURI: string;
   readonly member: {
     readonly firstName: string;
     readonly id: string;
@@ -35,6 +37,20 @@ const node: ReaderFragment = {
       "args": null,
       "kind": "ScalarField",
       "name": "value",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "displayName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "iconURI",
       "storageKey": null
     },
     {
@@ -74,6 +90,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "0485738b305868a4da4e7a019d177bfe";
+(node as any).hash = "5c4bd4cc4719a731c6d5f5a748cc8dcb";
 
 export default node;

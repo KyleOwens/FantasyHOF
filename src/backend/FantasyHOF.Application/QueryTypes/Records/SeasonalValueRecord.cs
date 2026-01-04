@@ -1,9 +1,10 @@
-﻿using System;
+﻿using FantasyHOF.Application.Enums;
+using FantasyHOF.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FantasyHOF.Domain.Enums;
 
 namespace FantasyHOF.Domain.Types.Records
 {
@@ -11,8 +12,8 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public decimal Value { get; init; }
 
-        public SeasonalValueRecord(FantasyMember member, int year, decimal value)
-            : base(member, year)
+        public SeasonalValueRecord(FantasyMember member, RecordType type, int year, decimal value)
+            : base(member, type, year)
         {
             Year = year;
             Value = value;

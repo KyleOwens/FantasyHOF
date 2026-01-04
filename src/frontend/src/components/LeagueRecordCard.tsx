@@ -1,5 +1,5 @@
 import { graphql } from "relay-runtime";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -13,13 +13,14 @@ import { useFragment } from "react-relay";
 
 type Props = {
   recordKey: LeagueRecordCardFragment$key;
-  title: string;
   isPercentage?: boolean;
 };
 
 const LeagueRecordCardFragment = graphql`
   fragment LeagueRecordCardFragment on LeagueValueRecord {
     value
+    displayName
+    iconURI
     member {
       id
       firstName
@@ -28,7 +29,7 @@ const LeagueRecordCardFragment = graphql`
   }
 `;
 
-export function LeagueRecordCard({ recordKey, title, isPercentage }: Props) {
+export function LeagueRecordCard({ recordKey, isPercentage }: Props) {
   const record = useFragment(LeagueRecordCardFragment, recordKey);
 
   const roundedValue = parseFloat(record.value.toFixed(2));
@@ -41,13 +42,13 @@ export function LeagueRecordCard({ recordKey, title, isPercentage }: Props) {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Avatar className="size-20">
-            <AvatarImage
-              src="/record-icons/MostPointsLeague.png"
-              alt="Most points"
-            />
+            <AvatarImage src={record.iconURI} alt={record.displayName} />
+            <AvatarFallback>
+              <AvatarImage src="MostPointsLeague.png" />
+            </AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle>{title}</CardTitle>
+            <CardTitle>{record.displayName}</CardTitle>
             <CardDescription>League history</CardDescription>
           </div>
         </div>
