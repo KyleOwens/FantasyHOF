@@ -1,16 +1,7 @@
 import { LeagueDashboardQuery } from "@/__generated__/LeagueDashboardQuery.graphql";
 import { useParams } from "@tanstack/react-router";
 import { graphql, useLazyLoadQuery } from "react-relay";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "../ui/item";
-import { Button } from "../ui/button";
-import { LeagueRecordCard } from "../LeagueRecordCard";
+import { RecordSection } from "./RecordSection";
 
 const dashboardQuery = graphql`
   query LeagueDashboardQuery($leagueId: ID!) {
@@ -18,27 +9,22 @@ const dashboardQuery = graphql`
       currentLeagueName
       recordSummary {
         leagueRecords {
-          ...LeagueRecordCardFragment
+          ...RecordSectionFragment
         }
         seasonalRecords {
-          value
-          year
-          member {
-            fullName
-          }
+          ...RecordSectionFragment
         }
         weeklyRecords {
-          value
-          year
-          week
-          member {
-            fullName
-          }
+          ...RecordSectionFragment
+        }
+        playerRecords {
+          ...RecordSectionFragment
         }
         playerRecords {
           value
           year
           week
+          sentiment
           member {
             fullName
           }
@@ -49,7 +35,7 @@ const dashboardQuery = graphql`
 `;
 
 export function LeagueDashboard() {
-  const leagueId = useParams({ from: "/demo/_layout/$leagueId" }).leagueId;
+  const leagueId = useParams({ from: "/demo/$leagueId" }).leagueId;
   const league = useLazyLoadQuery<LeagueDashboardQuery>(dashboardQuery, {
     leagueId: leagueId,
   }).league;
@@ -59,14 +45,24 @@ export function LeagueDashboard() {
   return (
     <div>
       <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-      <p className="text-muted-foreground">{league.currentLeagueName}</p>
+      <span className="text-muted-foreground">{league.currentLeagueName}</span>
       <div className="mt-6 w-full">
-        <h3 className="text-xl font-medium">League records</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-8 py-4 w-full">
-          {league.recordSummary.leagueRecords.map((leagueRecord) => (
-            <LeagueRecordCard recordKey={leagueRecord} />
-          ))}
-        </div>
+        <RecordSection
+          title={"League records"}
+          recordKey={league.recordSummary.leagueRecords}
+        />
+        <RecordSection
+          title={"Seasonal records"}
+          recordKey={league.recordSummary.seasonalRecords}
+        />
+        <RecordSection
+          title={"Weekly records"}
+          recordKey={league.recordSummary.weeklyRecords}
+        />
+        <RecordSection
+          title={"Player records"}
+          recordKey={league.recordSummary.playerRecords}
+        />
       </div>
     </div>
   );

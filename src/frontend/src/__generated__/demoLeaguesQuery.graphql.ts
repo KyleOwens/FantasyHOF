@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8fe4167e96e8b646d1a751bf00c44780>>
+ * @generated SignedSource<<a2915388a21686eee38cb4196da6bbf3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,15 +9,15 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from 'relay-runtime';
-export type LayoutDemoLeaguesQuery$variables = Record<PropertyKey, never>;
-export type LayoutDemoLeaguesQuery$data = {
+export type demoLeaguesQuery$variables = Record<PropertyKey, never>;
+export type demoLeaguesQuery$data = {
   readonly demoLeagues: ReadonlyArray<{
     readonly id: string;
   }>;
 };
-export type LayoutDemoLeaguesQuery = {
-  response: LayoutDemoLeaguesQuery$data;
-  variables: LayoutDemoLeaguesQuery$variables;
+export type demoLeaguesQuery = {
+  response: demoLeaguesQuery$data;
+  variables: demoLeaguesQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -46,7 +46,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "LayoutDemoLeaguesQuery",
+    "name": "demoLeaguesQuery",
     "selections": (v0/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -55,20 +55,20 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "LayoutDemoLeaguesQuery",
+    "name": "demoLeaguesQuery",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "649d8c28690150526e1bd37b6a334d85",
+    "cacheID": "24990146d7633607d9727f8766fb1267",
     "id": null,
     "metadata": {},
-    "name": "LayoutDemoLeaguesQuery",
+    "name": "demoLeaguesQuery",
     "operationKind": "query",
-    "text": "query LayoutDemoLeaguesQuery {\n  demoLeagues {\n    id\n  }\n}\n"
+    "text": "query demoLeaguesQuery {\n  demoLeagues {\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "9d28901132c805d30f087755f543276e";
+(node as any).hash = "b124852ae113c1bf9437f770eaf5c959";
 
 export default node;

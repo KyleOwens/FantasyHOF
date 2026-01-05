@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Types.Records
 {
-    public abstract class LeagueRecord : Record
+    public class LeagueRecord : Record
     {
-        public LeagueRecord(FantasyMember member, RecordType type) 
-            : base(member, type) { }
+        public LeagueRecord(FantasyMember member, RecordType type, decimal value) 
+            : base(member, type, value) { }
     }
 }

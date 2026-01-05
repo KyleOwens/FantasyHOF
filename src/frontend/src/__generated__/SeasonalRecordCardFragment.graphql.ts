@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f595842a37723b1a5035e780820b69f7>>
+ * @generated SignedSource<<4984cc1ce0df5774904b4b34d10ec52c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,29 +10,37 @@
 
 import { ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type LeagueRecordCardFragment$data = {
+export type SeasonalRecordCardFragment$data = {
   readonly member: {
     readonly fullName: string;
     readonly id: string;
   };
+  readonly year: number;
   readonly " $fragmentSpreads": FragmentRefs<"RecordCardFragment">;
-  readonly " $fragmentType": "LeagueRecordCardFragment";
+  readonly " $fragmentType": "SeasonalRecordCardFragment";
 };
-export type LeagueRecordCardFragment$key = {
-  readonly " $data"?: LeagueRecordCardFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"LeagueRecordCardFragment">;
+export type SeasonalRecordCardFragment$key = {
+  readonly " $data"?: SeasonalRecordCardFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"SeasonalRecordCardFragment">;
 };
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "LeagueRecordCardFragment",
+  "name": "SeasonalRecordCardFragment",
   "selections": [
     {
       "args": null,
       "kind": "FragmentSpread",
       "name": "RecordCardFragment"
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "year",
+      "storageKey": null
     },
     {
       "alias": null,
@@ -60,10 +68,10 @@ const node: ReaderFragment = {
       "storageKey": null
     }
   ],
-  "type": "LeagueRecord",
+  "type": "SeasonalRecord",
   "abstractKey": null
 };
 
-(node as any).hash = "3cf3fc777aaf1359bdbf90a54c08a69d";
+(node as any).hash = "41fa73ed2549c918ffb9e37565edcb1a";
 
 export default node;

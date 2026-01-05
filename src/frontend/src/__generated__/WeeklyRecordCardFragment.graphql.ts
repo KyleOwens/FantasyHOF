@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f595842a37723b1a5035e780820b69f7>>
+ * @generated SignedSource<<2e8bb8875e0accfc61cd1391f25e389b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,29 +10,40 @@
 
 import { ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type LeagueRecordCardFragment$data = {
+export type WeeklyRecordCardFragment$data = {
   readonly member: {
     readonly fullName: string;
     readonly id: string;
   };
+  readonly week: number;
+  readonly year: number;
   readonly " $fragmentSpreads": FragmentRefs<"RecordCardFragment">;
-  readonly " $fragmentType": "LeagueRecordCardFragment";
+  readonly " $fragmentType": "WeeklyRecordCardFragment";
 };
-export type LeagueRecordCardFragment$key = {
-  readonly " $data"?: LeagueRecordCardFragment$data;
-  readonly " $fragmentSpreads": FragmentRefs<"LeagueRecordCardFragment">;
+export type WeeklyRecordCardFragment$key = {
+  readonly " $data"?: WeeklyRecordCardFragment$data;
+  readonly " $fragmentSpreads": FragmentRefs<"WeeklyRecordCardFragment">;
 };
 
 const node: ReaderFragment = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "LeagueRecordCardFragment",
+  "name": "WeeklyRecordCardFragment",
   "selections": [
     {
+      "alias": null,
       "args": null,
-      "kind": "FragmentSpread",
-      "name": "RecordCardFragment"
+      "kind": "ScalarField",
+      "name": "year",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "week",
+      "storageKey": null
     },
     {
       "alias": null,
@@ -58,12 +69,17 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "RecordCardFragment"
     }
   ],
-  "type": "LeagueRecord",
+  "type": "WeeklyRecord",
   "abstractKey": null
 };
 
-(node as any).hash = "3cf3fc777aaf1359bdbf90a54c08a69d";
+(node as any).hash = "e9e2219653e767240b8cd45d467f202b";
 
 export default node;

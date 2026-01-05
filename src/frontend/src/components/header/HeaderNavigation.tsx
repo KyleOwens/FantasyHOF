@@ -7,7 +7,7 @@ import {
   NavigationMenuTrigger,
 } from "../ui/navigation-menu";
 import { Route as indexRoute } from "../../routes/index.tsx";
-import { Route as demoRoute } from "../../routes/demo/_layout.tsx";
+import { Route as demoRoute } from "../../routes/demo/route.tsx";
 import { Link } from "@tanstack/react-router";
 
 const navData = [

@@ -13,6 +13,18 @@ interface Node {
   id: ID!
 }
 
+interface Record {
+  type: RecordType!
+  member: FantasyMember!
+  value: Decimal!
+  displayName: String!
+  iconURI: String!
+  metric: String!
+  category: RecordCategory!
+  sentiment: RecordSentiment!
+  isPercentage: Boolean!
+}
+
 type AccumulatedStat implements Node {
   id: ID!
   matchupRosterSpotId: ID!
@@ -84,11 +96,23 @@ type League implements Node {
   recordSummary: LeagueRecordSummary @cost(weight: "10")
 }
 
+type LeagueRecord implements Record {
+  type: RecordType!
+  member: FantasyMember!
+  value: Decimal!
+  displayName: String!
+  iconURI: String!
+  metric: String!
+  category: RecordCategory!
+  sentiment: RecordSentiment!
+  isPercentage: Boolean!
+}
+
 type LeagueRecordSummary {
-  leagueRecords: [LeagueValueRecord!]!
-  seasonalRecords: [SeasonalValueRecord!]!
-  weeklyRecords: [WeeklyValueRecord!]!
-  playerRecords: [PlayerValueRecord!]!
+  leagueRecords: [LeagueRecord!]!
+  seasonalRecords: [SeasonalRecord!]!
+  weeklyRecords: [WeeklyRecord!]!
+  playerRecords: [PlayerRecord!]!
 }
 
 type LeagueSeason implements Node {
@@ -169,16 +193,6 @@ type LeagueSeasonSettings implements Node {
   scoringSettings: LeagueSeasonScoringSettings! @cost(weight: "10")
 }
 
-type LeagueValueRecord {
-  value: Decimal!
-  type: RecordType!
-  member: FantasyMember!
-  displayName: String!
-  iconURI: String!
-  category: RecordCategory!
-  sentiment: RecordSentiment!
-}
-
 type MatchupOutcome implements Node {
   id: ID!
   name: String!
@@ -226,17 +240,19 @@ type Player implements Node {
   provider: FantasyProvider! @cost(weight: "10")
 }
 
-type PlayerValueRecord {
-  value: Decimal!
+type PlayerRecord implements Record {
   player: Player!
   week: Int!
   year: Int!
   type: RecordType!
   member: FantasyMember!
+  value: Decimal!
   displayName: String!
   iconURI: String!
+  metric: String!
   category: RecordCategory!
   sentiment: RecordSentiment!
+  isPercentage: Boolean!
 }
 
 type Position implements Node {
@@ -255,15 +271,17 @@ type Query {
   leagueRecords(leagueId: ID!): LeagueRecordSummary @cost(weight: "10")
 }
 
-type SeasonalValueRecord {
-  value: Decimal!
+type SeasonalRecord implements Record {
   year: Int!
   type: RecordType!
   member: FantasyMember!
+  value: Decimal!
   displayName: String!
   iconURI: String!
+  metric: String!
   category: RecordCategory!
   sentiment: RecordSentiment!
+  isPercentage: Boolean!
 }
 
 type Sport implements Node {
@@ -318,16 +336,18 @@ type TeamSeasonStats implements Node {
   pointsFor: Decimal!
 }
 
-type WeeklyValueRecord {
-  value: Decimal!
+type WeeklyRecord implements Record {
   week: Int!
   year: Int!
   type: RecordType!
   member: FantasyMember!
+  value: Decimal!
   displayName: String!
   iconURI: String!
+  metric: String!
   category: RecordCategory!
   sentiment: RecordSentiment!
+  isPercentage: Boolean!
 }
 
 union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError

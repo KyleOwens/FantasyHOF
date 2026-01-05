@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Types.Records
 {
-    public abstract class SeasonalRecord : LeagueRecord
+    public class SeasonalRecord : LeagueRecord
     {
         public int Year { get; init; }
 
-        public SeasonalRecord(FantasyMember member, RecordType type, int year)
-            : base(member, type) 
+        public SeasonalRecord(FantasyMember member, RecordType type, int year, decimal value)
+            : base(member, type, value) 
         {
             Year = year;        
         }

@@ -4,7 +4,7 @@ import { RecordNavigation } from "./RecordNavigation";
 
 export function AppSidebar() {
   return (
-    <Sidebar className="sticky">
+    <Sidebar className="sticky top-16">
       <SidebarHeader>
         <LeagueNavigation />
       </SidebarHeader>

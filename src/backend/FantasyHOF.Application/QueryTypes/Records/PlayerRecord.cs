@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Types.Records
 {
-    public abstract class PlayerRecord : WeeklyRecord
+    public class PlayerRecord : WeeklyRecord
     {
         public Player Player { get; private set; } = null!;
 
-        public PlayerRecord(FantasyMember member, RecordType type, Player player, int year, int week)
-            : base(member, type, year, week)
+        public PlayerRecord(FantasyMember member, RecordType type, Player player, int year, int week, decimal value)
+            : base(member, type, year, week, value)
         {
             Player = player;
         }

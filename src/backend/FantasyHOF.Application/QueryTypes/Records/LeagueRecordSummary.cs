@@ -14,16 +14,16 @@ namespace FantasyHOF.Domain.Types
 {
     public class LeagueRecordSummary
     {
-        public IReadOnlyList<LeagueValueRecord> LeagueRecords { get; }
-        public IReadOnlyList<SeasonalValueRecord> SeasonalRecords { get; }
-        public IReadOnlyList<WeeklyValueRecord> WeeklyRecords { get; }
-        public IReadOnlyList<PlayerValueRecord> PlayerRecords { get; }
+        public IReadOnlyList<LeagueRecord> LeagueRecords { get; }
+        public IReadOnlyList<SeasonalRecord> SeasonalRecords { get; }
+        public IReadOnlyList<WeeklyRecord> WeeklyRecords { get; }
+        public IReadOnlyList<PlayerRecord> PlayerRecords { get; }
 
         public LeagueRecordSummary(
-            List<LeagueValueRecord> leagueRecords,
-            List<SeasonalValueRecord> seasonalRecords,
-            List<WeeklyValueRecord> weeklyRecords,
-            List<PlayerValueRecord> playerRecords)
+            List<LeagueRecord> leagueRecords,
+            List<SeasonalRecord> seasonalRecords,
+            List<WeeklyRecord> weeklyRecords,
+            List<PlayerRecord> playerRecords)
         {
             LeagueRecords = leagueRecords;
             SeasonalRecords = seasonalRecords;
@@ -42,7 +42,7 @@ namespace FantasyHOF.Domain.Types
                 .ToList();
 
             // This could be made much more efficient by iterating over each list just one time. For now, leave for simplicity
-            List<LeagueValueRecord> leagueRecords =
+            List<LeagueRecord> leagueRecords =
             [
                 ToLeagueRecord(RecordType.MostChampionshipsLeagueHistory, allTimeStatsByMember, x => x.Championships),
                 ToLeagueRecord(RecordType.HighestChampionshipPercentageLeagueHistory, allTimeStatsByMember, x => x.ChampionshipPercentage),
@@ -59,7 +59,7 @@ namespace FantasyHOF.Domain.Types
                 ToLeagueRecord(RecordType.HighestPercentageTopWeeklyScoresLeagueHistory, allTimeStatsByMember, x => x.TopWeekPercentage),
                 ToLeagueRecord(RecordType.LeastLossesLeagueHistory, allTimeStatsByMember, x => x.Losses, true),
                 ToLeagueRecord(RecordType.LeastPointsAllowedLeagueHistory, allTimeStatsByMember, x => x.PointsAgainst, true),
-                ToLeagueRecord(RecordType.LeastPointsAllowedPerWeekSingleSeason, allTimeStatsByMember, x => x.PointsAgainstAverage, true),
+                ToLeagueRecord(RecordType.LeastAveragePointsAllowedPerWeekLeagueHistory, allTimeStatsByMember, x => x.PointsAgainstAverage, true),
 
                 ToLeagueRecord(RecordType.MostLastPlacesLeagueHistory, allTimeStatsByMember, x => x.LastPlaces),
                 ToLeagueRecord(RecordType.HighestLastPlacePercentageLeagueHistory, allTimeStatsByMember, x => x.LastPlacePercentage),
@@ -79,7 +79,7 @@ namespace FantasyHOF.Domain.Types
                 ToLeagueRecord(RecordType.LeastAveragePointsPerWeekLeagueHistory, allTimeStatsByMember, x => x.PointsForAverage, true),
             ];
 
-            List<SeasonalValueRecord> seasonRecords =
+            List<SeasonalRecord> seasonRecords =
             [
                 ToSeasonalRecord(RecordType.MostPointsSingleSeason, statsByMemberAndSeason, x => x.PointsFor),
                 ToSeasonalRecord(RecordType.MostPointsPerWeekSingleSeason, statsByMemberAndSeason, x => x.PointsForAverage),
@@ -102,7 +102,7 @@ namespace FantasyHOF.Domain.Types
                 ToSeasonalRecord(RecordType.MostLowestScoringWeeksSingleSeason, statsByMemberAndSeason, x => x.BottomWeeks),
             ];
 
-            List<WeeklyValueRecord> weeklyRecords =
+            List<WeeklyRecord> weeklyRecords =
             [
                 ToWeeklyRecord(RecordType.MostPointsSingleWeek, weeklyAggregationData, x => x.Score),
                 ToWeeklyRecord(RecordType.MostPointsSinglePlayoffWeek, weeklyPlayoffAggregationData, x => x.Score),
@@ -117,19 +117,19 @@ namespace FantasyHOF.Domain.Types
                 ToWeeklyRecord(RecordType.HighestScoringLossSingleWeek, weeklyAggregationData.Where(x => x.MatchupOutcomeId == MatchupOutcomeId.Loss), x => x.Score),
             ];
 
-            List<PlayerValueRecord> playerRecords =
+            List<PlayerRecord> playerRecords =
             [
                 ToPlayerRecord(RecordType.MostPointsScoredSinglePlayer, playerAggregationData.Where(x => !x.IsBench()), x => x.PointsScored),
                 ToPlayerRecord(RecordType.MostPointsScoredSingleNonQBPlayer, playerAggregationData.Where(x => x.IsNotQBOrBench()), x => x.PointsScored),
 
-                ToPlayerRecord(RecordType.LeastPointsScoredSinglePlayer, playerAggregationData.Where(x => !x.IsBench()), x => x.PointsScored),
-                ToPlayerRecord(RecordType.LeastPointsScoredSingleNonDefensePlayer, playerAggregationData.Where(x => x.IsNotQBOrBench()), x => x.PointsScored),
+                ToPlayerRecord(RecordType.LeastPointsScoredSinglePlayer, playerAggregationData.Where(x => !x.IsBench()), x => x.PointsScored, true),
+                ToPlayerRecord(RecordType.LeastPointsScoredSingleNonDefensePlayer, playerAggregationData.Where(x => x.IsNotDSTOrBench()), x => x.PointsScored, true),
             ];
 
             return new LeagueRecordSummary(leagueRecords, seasonRecords, weeklyRecords, playerRecords);
         }
 
-        private static LeagueValueRecord ToLeagueRecord(
+        private static LeagueRecord ToLeagueRecord(
             RecordType type,
             IEnumerable<LeagueMemberAggregatedStats> allTimeStats,
             Func<LeagueMemberAggregatedStats, decimal> valueSelector,
@@ -139,14 +139,14 @@ namespace FantasyHOF.Domain.Types
                 allTimeStats.MinBy(valueSelector)! : 
                 allTimeStats.MaxBy(valueSelector)!;
             
-            return new LeagueValueRecord(
+            return new LeagueRecord(
                 stat.Member, 
                 type, 
                 valueSelector(stat)
             );
         }
 
-        private static SeasonalValueRecord ToSeasonalRecord(
+        private static SeasonalRecord ToSeasonalRecord(
             RecordType type,
             IEnumerable<LeagueSeasonMemberAggregatedStats> statsByMemberAndSeason,
             Func<LeagueSeasonMemberAggregatedStats, decimal> valueSelector,
@@ -156,7 +156,7 @@ namespace FantasyHOF.Domain.Types
                 statsByMemberAndSeason.MinBy(valueSelector)! : 
                 statsByMemberAndSeason.MaxBy(valueSelector)!;
 
-            return new SeasonalValueRecord(
+            return new SeasonalRecord(
                 stat.Member, 
                 type,
                 stat.Year, 
@@ -164,7 +164,7 @@ namespace FantasyHOF.Domain.Types
             );
         }
 
-        private static WeeklyValueRecord ToWeeklyRecord(
+        private static WeeklyRecord ToWeeklyRecord(
             RecordType type,
             IEnumerable<WeeklyAggregationData> weeklyAggregationData,
             Func<WeeklyAggregationData, decimal> valueSelector,
@@ -174,7 +174,7 @@ namespace FantasyHOF.Domain.Types
                 weeklyAggregationData.MinBy(valueSelector)! :
                 weeklyAggregationData.MaxBy(valueSelector)!;
             
-            return new WeeklyValueRecord(
+            return new WeeklyRecord(
                 stat.Member, 
                 type,
                 stat.Year, 
@@ -183,7 +183,7 @@ namespace FantasyHOF.Domain.Types
             );
         }
 
-        private static PlayerValueRecord ToPlayerRecord(
+        private static PlayerRecord ToPlayerRecord(
             RecordType type,
             IEnumerable<PlayerAggregationData> playerAggregationData,
             Func<PlayerAggregationData, decimal> valueSelector,
@@ -193,7 +193,7 @@ namespace FantasyHOF.Domain.Types
                 playerAggregationData.MinBy(valueSelector)! :
                 playerAggregationData.MaxBy(valueSelector)!;
 
-            return new PlayerValueRecord(
+            return new PlayerRecord(
                 stat.Member,
                 type,
                 stat.Player, 
