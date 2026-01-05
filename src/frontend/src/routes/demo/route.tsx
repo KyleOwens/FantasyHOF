@@ -9,7 +9,7 @@ function DemoLayout() {
   return (
     <>
       <AppSidebar />
-      <div className="p-8 flex flex-1 items-center">
+      <div className="p-8 flex flex-1">
         <Outlet />
       </div>
     </>

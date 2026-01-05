@@ -9,7 +9,7 @@ export const Route = createFileRoute("/demo/$leagueId")({
 
 function RouteComponent() {
   return (
-    <Suspense fallback={<Spinner className="mx-auto size-20 text-primary" />}>
+    <Suspense fallback={<Spinner className="m-auto size-20 text-primary" />}>
       <LeagueDashboard />
     </Suspense>
   );
