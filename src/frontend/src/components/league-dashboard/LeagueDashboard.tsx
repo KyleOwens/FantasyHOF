@@ -8,6 +8,7 @@ import { RecordSection } from "./RecordSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const dashboardQuery = graphql`
   query LeagueDashboardQuery($leagueId: ID!) {
@@ -88,34 +89,46 @@ export function LeagueDashboard() {
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
-          <TabsContent value={LEAGUE_TAB_NAME}>
-            <RecordSection
-              recordKey={league.recordSummary.leagueRecords}
-              sentiment={sentiment}
-              title="League"
-            />
-          </TabsContent>
-          <TabsContent value={SEASONAL_TAB_NAME}>
-            <RecordSection
-              title={"Seasonal records"}
-              recordKey={league.recordSummary.seasonalRecords}
-              sentiment={sentiment}
-            />
-          </TabsContent>
-          <TabsContent value={WEEKLY_TAB_NAME}>
-            <RecordSection
-              title={"Weekly records"}
-              recordKey={league.recordSummary.weeklyRecords}
-              sentiment={sentiment}
-            />
-          </TabsContent>
-          <TabsContent value={PLAYER_TAB_NAME}>
-            <RecordSection
-              title={"Player records"}
-              recordKey={league.recordSummary.playerRecords}
-              sentiment={sentiment}
-            />
-          </TabsContent>
+          <div
+            className={cn(
+              "*:data-[state=inactive]:hidden",
+              "*:data-[state=active]:animate-in",
+              "*:data-[state=active]:fade-in-0",
+              "*:slide-in-from-bottom-2",
+              "*:data-[state=active]:duration-300",
+            )}
+          >
+            <TabsContent value={LEAGUE_TAB_NAME} forceMount>
+              <RecordSection
+                recordKey={league.recordSummary.leagueRecords}
+                sentiment={sentiment}
+                title="League"
+              />
+            </TabsContent>
+            <TabsContent value={SEASONAL_TAB_NAME} forceMount>
+              <RecordSection
+                title={"Seasonal records"}
+                recordKey={league.recordSummary.seasonalRecords}
+                sentiment={sentiment}
+              />
+            </TabsContent>
+            <TabsContent value={WEEKLY_TAB_NAME} forceMount>
+              <RecordSection
+                title={"Weekly records"}
+                recordKey={league.recordSummary.weeklyRecords}
+                sentiment={sentiment}
+              />
+            </TabsContent>
+            <TabsContent value={PLAYER_TAB_NAME} forceMount>
+              <div>
+                <RecordSection
+                  title={"Player records"}
+                  recordKey={league.recordSummary.playerRecords}
+                  sentiment={sentiment}
+                />
+              </div>
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
       {/* <RecordSection

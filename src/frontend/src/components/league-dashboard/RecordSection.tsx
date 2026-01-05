@@ -56,7 +56,10 @@ export function RecordSection({ recordKey, title, sentiment }: Props) {
   };
 
   return (
-    <section className="mt-4">
+    <section
+      key={sentiment}
+      className="mt-4 animate-in fade-in-0 slide-in-from-bottom-3 duration-300"
+    >
       <h3 className="text-xl font-medium mb-3">{title}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-8 w-full">
         {recordsToDisplay.map((record, index) => renderRecord(record, index))}
