@@ -12,7 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DemoRouteRouteImport } from './routes/demo/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
-import { Route as DemoLeagueIdRouteImport } from './routes/demo/$leagueId'
+import { Route as DemoLeagueIdIndexRouteImport } from './routes/demo/$leagueId/index'
+import { Route as DemoLeagueIdDashboardRouteImport } from './routes/demo/$leagueId/dashboard'
 
 const DemoRouteRoute = DemoRouteRouteImport.update({
   id: '/demo',
@@ -29,36 +30,55 @@ const DemoIndexRoute = DemoIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DemoRouteRoute,
 } as any)
-const DemoLeagueIdRoute = DemoLeagueIdRouteImport.update({
-  id: '/$leagueId',
-  path: '/$leagueId',
+const DemoLeagueIdIndexRoute = DemoLeagueIdIndexRouteImport.update({
+  id: '/$leagueId/',
+  path: '/$leagueId/',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+const DemoLeagueIdDashboardRoute = DemoLeagueIdDashboardRouteImport.update({
+  id: '/$leagueId/dashboard',
+  path: '/$leagueId/dashboard',
   getParentRoute: () => DemoRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
-  '/demo/$leagueId': typeof DemoLeagueIdRoute
   '/demo/': typeof DemoIndexRoute
+  '/demo/$leagueId/dashboard': typeof DemoLeagueIdDashboardRoute
+  '/demo/$leagueId': typeof DemoLeagueIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/demo/$leagueId': typeof DemoLeagueIdRoute
   '/demo': typeof DemoIndexRoute
+  '/demo/$leagueId/dashboard': typeof DemoLeagueIdDashboardRoute
+  '/demo/$leagueId': typeof DemoLeagueIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/demo': typeof DemoRouteRouteWithChildren
-  '/demo/$leagueId': typeof DemoLeagueIdRoute
   '/demo/': typeof DemoIndexRoute
+  '/demo/$leagueId/dashboard': typeof DemoLeagueIdDashboardRoute
+  '/demo/$leagueId/': typeof DemoLeagueIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo' | '/demo/$leagueId' | '/demo/'
+  fullPaths:
+    | '/'
+    | '/demo'
+    | '/demo/'
+    | '/demo/$leagueId/dashboard'
+    | '/demo/$leagueId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/$leagueId' | '/demo'
-  id: '__root__' | '/' | '/demo' | '/demo/$leagueId' | '/demo/'
+  to: '/' | '/demo' | '/demo/$leagueId/dashboard' | '/demo/$leagueId'
+  id:
+    | '__root__'
+    | '/'
+    | '/demo'
+    | '/demo/'
+    | '/demo/$leagueId/dashboard'
+    | '/demo/$leagueId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -89,24 +109,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoIndexRouteImport
       parentRoute: typeof DemoRouteRoute
     }
-    '/demo/$leagueId': {
-      id: '/demo/$leagueId'
+    '/demo/$leagueId/': {
+      id: '/demo/$leagueId/'
       path: '/$leagueId'
       fullPath: '/demo/$leagueId'
-      preLoaderRoute: typeof DemoLeagueIdRouteImport
+      preLoaderRoute: typeof DemoLeagueIdIndexRouteImport
+      parentRoute: typeof DemoRouteRoute
+    }
+    '/demo/$leagueId/dashboard': {
+      id: '/demo/$leagueId/dashboard'
+      path: '/$leagueId/dashboard'
+      fullPath: '/demo/$leagueId/dashboard'
+      preLoaderRoute: typeof DemoLeagueIdDashboardRouteImport
       parentRoute: typeof DemoRouteRoute
     }
   }
 }
 
 interface DemoRouteRouteChildren {
-  DemoLeagueIdRoute: typeof DemoLeagueIdRoute
   DemoIndexRoute: typeof DemoIndexRoute
+  DemoLeagueIdDashboardRoute: typeof DemoLeagueIdDashboardRoute
+  DemoLeagueIdIndexRoute: typeof DemoLeagueIdIndexRoute
 }
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
-  DemoLeagueIdRoute: DemoLeagueIdRoute,
   DemoIndexRoute: DemoIndexRoute,
+  DemoLeagueIdDashboardRoute: DemoLeagueIdDashboardRoute,
+  DemoLeagueIdIndexRoute: DemoLeagueIdIndexRoute,
 }
 
 const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(

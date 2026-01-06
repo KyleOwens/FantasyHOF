@@ -2,7 +2,7 @@ import { demoLeaguesQuery as LayoutDemoLeaguesQueryType } from "@/__generated__/
 import { RelayEnvironment } from "@/relay/RelayEnvironment";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { fetchQuery, graphql } from "relay-runtime";
-import { Route as demoLeagueIdRoute } from "./$leagueId.tsx";
+import { Route as demoDashboardRoute } from "@/routes/demo/$leagueId/dashboard";
 
 const demoLeaguesQuery = graphql`
   query demoLeaguesQuery {
@@ -24,9 +24,8 @@ export const Route = createFileRoute("/demo/")({
 
     if (firstLeagueId) {
       throw redirect({
-        to: demoLeagueIdRoute.to,
+        to: demoDashboardRoute.to,
         params: { leagueId: firstLeagueId },
-        search: { recordCategory: "LEAGUE", recordSentiment: "FAME" },
       });
     }
 

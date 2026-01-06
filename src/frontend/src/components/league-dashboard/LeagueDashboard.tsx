@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { cn } from "@/lib/utils";
 import { RecordCategory, RecordSentiment } from "@/types/enums";
+import { Route as demoDashboardRoute } from "@/routes/demo/$leagueId/dashboard";
 
 type Props = {
   queryRef: PreloadedQuery<LeagueDashboardQuery>;
@@ -33,16 +34,11 @@ export const leagueDashboardQuery = graphql`
   }
 `;
 
-const LEAGUE_TAB_NAME = "LEAGUE";
-const SEASONAL_TAB_NAME = "SEASONAL";
-const WEEKLY_TAB_NAME = "WEEKLY";
-const PLAYER_TAB_NAME = "PLAYER";
-
 export function LeagueDashboard({ queryRef }: Props) {
   const { recordCategory, recordSentiment } = useSearch({
-    from: "/demo/$leagueId",
+    from: demoDashboardRoute.fullPath,
   });
-  const navigate = useNavigate({ from: "/demo/$leagueId" });
+  const navigate = useNavigate({ from: demoDashboardRoute.fullPath });
 
   const league = usePreloadedQuery(leagueDashboardQuery, queryRef).league;
 
@@ -72,10 +68,10 @@ export function LeagueDashboard({ queryRef }: Props) {
         <Tabs value={recordCategory} onValueChange={onCategoryChange}>
           <div className="flex items-center space-x-8">
             <TabsList className="*:data-[state=active]:shadow-none bg-slate-200 ">
-              <TabsTrigger value={LEAGUE_TAB_NAME}>League</TabsTrigger>
-              <TabsTrigger value={SEASONAL_TAB_NAME}>Seasonal</TabsTrigger>
-              <TabsTrigger value={WEEKLY_TAB_NAME}>Weekly</TabsTrigger>
-              <TabsTrigger value={PLAYER_TAB_NAME}>Player</TabsTrigger>
+              <TabsTrigger value={RecordCategory.LEAGUE}>League</TabsTrigger>
+              <TabsTrigger value={RecordCategory.SEASON}>Seasonal</TabsTrigger>
+              <TabsTrigger value={RecordCategory.WEEK}>Weekly</TabsTrigger>
+              <TabsTrigger value={RecordCategory.PLAYER}>Player</TabsTrigger>
             </TabsList>
             <ToggleGroup
               type="single"
@@ -106,28 +102,28 @@ export function LeagueDashboard({ queryRef }: Props) {
               "*:data-[state=active]:duration-300",
             )}
           >
-            <TabsContent value={LEAGUE_TAB_NAME} forceMount>
+            <TabsContent value={RecordCategory.LEAGUE} forceMount>
               <RecordSection
                 recordKey={league.recordSummary.leagueRecords}
                 sentiment={recordSentiment}
                 title="League"
               />
             </TabsContent>
-            <TabsContent value={SEASONAL_TAB_NAME} forceMount>
+            <TabsContent value={RecordCategory.SEASON} forceMount>
               <RecordSection
                 title={"Seasonal records"}
                 recordKey={league.recordSummary.seasonalRecords}
                 sentiment={recordSentiment}
               />
             </TabsContent>
-            <TabsContent value={WEEKLY_TAB_NAME} forceMount>
+            <TabsContent value={RecordCategory.WEEK} forceMount>
               <RecordSection
                 title={"Weekly records"}
                 recordKey={league.recordSummary.weeklyRecords}
                 sentiment={recordSentiment}
               />
             </TabsContent>
-            <TabsContent value={PLAYER_TAB_NAME} forceMount>
+            <TabsContent value={RecordCategory.PLAYER} forceMount>
               <div>
                 <RecordSection
                   title={"Player records"}

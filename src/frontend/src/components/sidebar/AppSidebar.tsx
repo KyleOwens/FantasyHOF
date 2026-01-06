@@ -20,7 +20,7 @@ export function AppSidebar({ queryRef }: Props) {
   const data = usePreloadedQuery(appSidebarQuery, queryRef);
 
   return (
-    <Sidebar className="sticky top-[66px] h-[calc(100vh-66px)] w-72">
+    <Sidebar className="sticky top-[66px] h-[calc(100vh-66px)] w-80">
       <SidebarHeader>
         <LeagueNavigation demoLeaguesKey={data} />
       </SidebarHeader>

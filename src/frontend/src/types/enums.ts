@@ -1,2 +1,11 @@
-export type RecordCategory = "LEAGUE" | "SEASON" | "WEEK" | "PLAYER";
-export type RecordSentiment = "FAME" | "SHAME";
+export enum RecordCategory {
+  LEAGUE = "LEAGUE",
+  SEASON = "SEASON",
+  WEEK = "WEEK",
+  PLAYER = "PLAYER",
+}
+
+export enum RecordSentiment {
+  FAME = "FAME",
+  SHAME = "SHAME",
+}

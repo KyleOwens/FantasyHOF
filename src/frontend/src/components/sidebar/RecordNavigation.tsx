@@ -1,20 +1,4 @@
-import {
-  BellElectric,
-  Calculator,
-  Calendar,
-  CalendarClock,
-  CalendarDays,
-  ChevronRight,
-  GamepadDirectional,
-  GitCompare,
-  History,
-  LayoutDashboard,
-  Scale,
-  Trophy,
-  User,
-  Users,
-  X,
-} from "lucide-react";
+import { BellElectric, LayoutDashboard, Scale, Users } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -22,22 +6,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "../ui/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
-import { Link, useParams } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
 import { useFragment } from "react-relay";
 import {
   RecordNavigationFragment$key,
   RecordNavigationFragment$data,
 } from "@/__generated__/RecordNavigationFragment.graphql";
+import { Route as demoDashboardRoute } from "@/routes/demo/$leagueId/dashboard";
+import { SidebarRecordCategory } from "./RecordCategoryCollapsible";
 
 type Props = {
   recordMetadataKey: RecordNavigationFragment$key;
@@ -53,11 +31,11 @@ const recordNavigationFragment = graphql`
   }
 `;
 
-type SidebarRecordMetadata =
+export type SidebarRecordMetadata =
   RecordNavigationFragment$data["recordMetadata"][number];
 
 export function RecordNavigation({ recordMetadataKey }: Props) {
-  const leagueId = useParams({ strict: false }).leagueId ?? "";
+  const leagueId = demoDashboardRoute.useParams().leagueId;
   const recordMetadata = useFragment(
     recordNavigationFragment,
     recordMetadataKey,
@@ -82,12 +60,9 @@ export function RecordNavigation({ recordMetadataKey }: Props) {
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <Link
-                  to="/demo/$leagueId"
-                  search={(prev) => ({
-                    recordCategory: prev.recordCategory ?? "LEAGUE",
-                    recordSentiment: prev.recordSentiment ?? "FAME",
-                  })}
+                  to={demoDashboardRoute.to}
                   params={{ leagueId }}
+                  search={(prev) => prev}
                 >
                   <LayoutDashboard />
                   <span>Dashboard</span>
@@ -144,94 +119,4 @@ export function RecordNavigation({ recordMetadataKey }: Props) {
       </SidebarGroup>
     </>
   );
-}
-
-type SidebarRecordCategoryProps = {
-  categoryDisplayName: string;
-  records: SidebarRecordMetadata[];
-};
-function SidebarRecordCategory({
-  categoryDisplayName,
-  records,
-}: SidebarRecordCategoryProps) {
-  return (
-    <Collapsible
-      className="group/collapsible"
-      asChild
-      key={categoryDisplayName}
-    >
-      <SidebarMenuItem>
-        <CollapsibleTrigger asChild>
-          <SidebarMenuButton tooltip={categoryDisplayName}>
-            <RecordSectionIcon categoryDisplayName={categoryDisplayName} />
-            <span>{categoryDisplayName}</span>
-            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-          </SidebarMenuButton>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <SidebarRecordList records={records} />
-        </CollapsibleContent>
-      </SidebarMenuItem>
-    </Collapsible>
-  );
-}
-
-function RecordSectionIcon({
-  categoryDisplayName,
-}: {
-  categoryDisplayName: string;
-}) {
-  switch (categoryDisplayName) {
-    case "League":
-      return <History />;
-    case "Season":
-      return <CalendarClock />;
-    case "Week":
-      return <CalendarDays />;
-    case "Player":
-      return <User />;
-    default:
-      return <X />;
-  }
-}
-
-function SidebarRecordList({ records }: { records: SidebarRecordMetadata[] }) {
-  return (
-    <SidebarMenuSub>
-      <div className="px-1 py-1 text-sm text-muted-foreground">🏆 Fame</div>
-      {records
-        .filter((x) => x.sentiment === "FAME")
-        .map((x) => (
-          <SidebarMenuSubItem>
-            <SidebarMenuSubButton asChild>
-              <Link to={"/demo/$leagueId"}>
-                {formatRecordNameForSidebar(x.displayName)}
-              </Link>
-            </SidebarMenuSubButton>
-          </SidebarMenuSubItem>
-        ))}
-      <div className="px-1 pt-4 text-sm text-muted-foreground">💩 Shame</div>
-      {records
-        .filter((x) => x.sentiment === "SHAME")
-        .map((x) => (
-          <SidebarMenuSubItem>
-            <SidebarMenuSubButton asChild>
-              <Link to={"/demo/$leagueId"}>
-                {formatRecordNameForSidebar(x.displayName)}
-              </Link>
-            </SidebarMenuSubButton>
-          </SidebarMenuSubItem>
-        ))}
-    </SidebarMenuSub>
-  );
-}
-
-function formatRecordNameForSidebar(recordName: string) {
-  let formattedName = recordName;
-
-  formattedName = formattedName.replace("percentage", "%");
-  formattedName = formattedName.substring(formattedName.indexOf(" ") + 1);
-  formattedName =
-    formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
-  return formattedName;
 }

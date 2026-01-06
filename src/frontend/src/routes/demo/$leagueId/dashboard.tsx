@@ -1,31 +1,34 @@
 import { LeagueDashboardQuery } from "@/__generated__/LeagueDashboardQuery.graphql";
 import {
-  leagueDashboardQuery,
   LeagueDashboard,
+  leagueDashboardQuery,
 } from "@/components/league-dashboard/LeagueDashboard";
 import { Spinner } from "@/components/ui/spinner";
 import { preloadQuery } from "@/relay/helpers";
 import { RecordCategory, RecordSentiment } from "@/types/enums";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
+import { fallback, zodValidator } from "@tanstack/zod-adapter";
 
-export type DashboardSearch = {
-  recordCategory: RecordCategory;
-  recordSentiment: RecordSentiment;
-};
+const dashboardSearchSchema = z.object({
+  recordCategory: fallback(
+    z.nativeEnum(RecordCategory),
+    RecordCategory.LEAGUE,
+  ).default(RecordCategory.LEAGUE),
+  recordSentiment: fallback(
+    z.nativeEnum(RecordSentiment),
+    RecordSentiment.FAME,
+  ).default(RecordSentiment.FAME),
+});
 
-export const Route = createFileRoute("/demo/$leagueId")({
+export const Route = createFileRoute("/demo/$leagueId/dashboard")({
   component: RouteComponent,
   loader: ({ params }) => {
     return preloadQuery<LeagueDashboardQuery>(leagueDashboardQuery, {
       leagueId: params.leagueId,
     });
   },
-  validateSearch: (search: Record<string, unknown>): DashboardSearch => {
-    return {
-      recordCategory: (search.recordCategory as RecordCategory) || "LEAGUE",
-      recordSentiment: (search.recordSentiment as RecordSentiment) || "FAME",
-    };
-  },
+  validateSearch: zodValidator(dashboardSearchSchema),
   onLeave: ({ loaderData }) => {
     loaderData?.dispose();
   },
