@@ -154,8 +154,6 @@ function SidebarRecordCategory({
   categoryDisplayName,
   records,
 }: SidebarRecordCategoryProps) {
-  const groupIcon = getRecordSectionIcon(categoryDisplayName);
-
   return (
     <Collapsible
       className="group/collapsible"
@@ -165,7 +163,7 @@ function SidebarRecordCategory({
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
           <SidebarMenuButton tooltip={categoryDisplayName}>
-            {groupIcon}
+            <RecordSectionIcon categoryDisplayName={categoryDisplayName} />
             <span>{categoryDisplayName}</span>
             <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
@@ -178,7 +176,11 @@ function SidebarRecordCategory({
   );
 }
 
-function getRecordSectionIcon(categoryDisplayName: string) {
+function RecordSectionIcon({
+  categoryDisplayName,
+}: {
+  categoryDisplayName: string;
+}) {
   switch (categoryDisplayName) {
     case "League":
       return <History />;
