@@ -1,6 +1,7 @@
 ﻿using FantasyHOF.Domain.Types.Records;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -81,7 +82,7 @@ namespace FantasyHOF.Application.Enums
         [RecordMetadata("Most points allowed", "points", RecordCategory.League, RecordSentiment.Shame, "/record-icons/MostPointsAllowed.webp")]
         MostPointsAllowedLeagueHistory,
 
-        [RecordMetadata("Most average points allowed per week", "points", RecordCategory.League, RecordSentiment.Shame, "/record-icons/MostPointsAllowedPerWeek.webp")]
+        [RecordMetadata("Most points allowed per week", "points", RecordCategory.League, RecordSentiment.Shame, "/record-icons/MostPointsAllowedPerWeek.webp")]
         MostAveragePointsAllowedPerWeekLeagueHistory,
 
         [RecordMetadata("Most poor performances", "snoozers", RecordCategory.League, RecordSentiment.Shame, "/record-icons/MostPoor.webp")]
@@ -213,9 +214,13 @@ namespace FantasyHOF.Application.Enums
 
     public enum RecordCategory
     {
+        [Display(Name = "League")]
         League,
+        [Display(Name = "Season")]
         Season,
+        [Display(Name = "Week")]
         Week,
+        [Display(Name = "Player")]
         Player
     }
 

@@ -10,13 +10,16 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
-import { graphql } from "react-relay";
-import { useLazyLoadQuery } from "react-relay";
-import { LeagueNavigationQuery } from "@/__generated__/LeagueNavigationQuery.graphql";
+import { graphql, useFragment } from "react-relay";
 import { Link, useMatchRoute, useParams } from "@tanstack/react-router";
+import { LeagueNavigationFragment$key } from "@/__generated__/LeagueNavigationFragment.graphql";
 
-export const leagueNavigationQuery = graphql`
-  query LeagueNavigationQuery {
+type Props = {
+  demoLeaguesKey: LeagueNavigationFragment$key;
+};
+
+const leagueNavigationFragment = graphql`
+  fragment LeagueNavigationFragment on Query {
     demoLeagues {
       id
       currentLeagueName
@@ -32,12 +35,12 @@ export const leagueNavigationQuery = graphql`
   }
 `;
 
-export function LeagueNavigation() {
+export function LeagueNavigation({ demoLeaguesKey }: Props) {
   const selectedLeagueId = useParams({ strict: false }).leagueId;
   const matchRoute = useMatchRoute();
-  const leagues = useLazyLoadQuery<LeagueNavigationQuery>(
-    leagueNavigationQuery,
-    {},
+  const leagues = useFragment(
+    leagueNavigationFragment,
+    demoLeaguesKey,
   ).demoLeagues;
 
   const isDemo = !!matchRoute({ to: "/demo", fuzzy: true });

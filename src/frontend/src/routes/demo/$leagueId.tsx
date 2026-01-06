@@ -1,13 +1,12 @@
 import { LeagueDashboardQuery } from "@/__generated__/LeagueDashboardQuery.graphql";
 import {
-  dashboardQuery,
+  leagueDashboardQuery,
   LeagueDashboard,
 } from "@/components/league-dashboard/LeagueDashboard";
 import { Spinner } from "@/components/ui/spinner";
 import { preloadQuery } from "@/relay/helpers";
 import { RecordCategory, RecordSentiment } from "@/types/enums";
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
-import { Suspense } from "react";
+import { createFileRoute } from "@tanstack/react-router";
 
 export type DashboardSearch = {
   recordCategory: RecordCategory;
@@ -17,11 +16,9 @@ export type DashboardSearch = {
 export const Route = createFileRoute("/demo/$leagueId")({
   component: RouteComponent,
   loader: ({ params }) => {
-    const queryRef = preloadQuery<LeagueDashboardQuery>(dashboardQuery, {
+    return preloadQuery<LeagueDashboardQuery>(leagueDashboardQuery, {
       leagueId: params.leagueId,
     });
-
-    return { queryRef };
   },
   validateSearch: (search: Record<string, unknown>): DashboardSearch => {
     return {
@@ -30,13 +27,13 @@ export const Route = createFileRoute("/demo/$leagueId")({
     };
   },
   onLeave: ({ loaderData }) => {
-    loaderData?.queryRef.dispose();
+    loaderData?.dispose();
   },
   pendingComponent: () => <Spinner className="m-auto size-20 text-primary" />,
 });
 
 function RouteComponent() {
-  const { queryRef } = Route.useLoaderData();
+  const queryRef = Route.useLoaderData();
 
   return <LeagueDashboard queryRef={queryRef} />;
 }

@@ -1,15 +1,9 @@
 import { LeagueDashboardQuery } from "@/__generated__/LeagueDashboardQuery.graphql";
-import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
-import {
-  graphql,
-  PreloadedQuery,
-  useLazyLoadQuery,
-  usePreloadedQuery,
-} from "react-relay";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import { graphql, PreloadedQuery, usePreloadedQuery } from "react-relay";
 import { RecordSection } from "./RecordSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
-import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { RecordCategory, RecordSentiment } from "@/types/enums";
 
@@ -17,7 +11,7 @@ type Props = {
   queryRef: PreloadedQuery<LeagueDashboardQuery>;
 };
 
-export const dashboardQuery = graphql`
+export const leagueDashboardQuery = graphql`
   query LeagueDashboardQuery($leagueId: ID!) {
     league(id: $leagueId) {
       currentLeagueName
@@ -50,7 +44,7 @@ export function LeagueDashboard({ queryRef }: Props) {
   });
   const navigate = useNavigate({ from: "/demo/$leagueId" });
 
-  const league = usePreloadedQuery(dashboardQuery, queryRef).league;
+  const league = usePreloadedQuery(leagueDashboardQuery, queryRef).league;
 
   if (!league.recordSummary) return;
 

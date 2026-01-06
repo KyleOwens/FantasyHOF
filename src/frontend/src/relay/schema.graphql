@@ -268,7 +268,18 @@ type Query {
   nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
   demoLeagues: [League!]! @cost(weight: "10")
   league(id: ID!): League! @cost(weight: "10")
-  leagueRecords(leagueId: ID!): LeagueRecordSummary @cost(weight: "10")
+  recordMetadata: [RecordMetadata!]! @cost(weight: "10")
+}
+
+type RecordMetadata {
+  type: RecordType!
+  displayName: String!
+  iconURI: String!
+  metric: String!
+  category: RecordCategory!
+  categoryDisplayName: String!
+  sentiment: RecordSentiment!
+  isPercentage: Boolean!
 }
 
 type SeasonalRecord implements Record {

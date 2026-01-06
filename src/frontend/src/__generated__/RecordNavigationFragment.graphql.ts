@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7f355d9c967054e15d4a73e160472c0f>>
+ * @generated SignedSource<<c3a27305e0085c6df7f8b33ca523f574>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,11 +9,13 @@
 // @ts-nocheck
 
 import { ReaderFragment } from 'relay-runtime';
+export type RecordSentiment = "FAME" | "SHAME" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type RecordNavigationFragment$data = {
   readonly recordMetadata: ReadonlyArray<{
     readonly categoryDisplayName: string;
     readonly displayName: string;
+    readonly sentiment: RecordSentiment;
   }>;
   readonly " $fragmentType": "RecordNavigationFragment";
 };
@@ -49,6 +51,13 @@ const node: ReaderFragment = {
           "kind": "ScalarField",
           "name": "categoryDisplayName",
           "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "sentiment",
+          "storageKey": null
         }
       ],
       "storageKey": null
@@ -58,6 +67,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "f8d06d521694db41baf48934e61671df";
+(node as any).hash = "477f321b7ec7a7ffe40f3a73828eae01";
 
 export default node;

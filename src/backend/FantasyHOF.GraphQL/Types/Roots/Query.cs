@@ -1,7 +1,9 @@
+using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Mutations;
 using FantasyHOF.Application.Queries;
 using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Application.Queries.TestQueries;
+using FantasyHOF.Application.QueryTypes.Records;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
@@ -33,12 +35,10 @@ public static class Query
         return await leagues.LoadRequiredAsync(id, cancellationToken);
     }
 
-    // TEST
-    public static async Task<LeagueRecordSummary?> GetLeagueRecordsAsync(
-        [ID<League>] int leagueId,
-        IMediator mediator,
-        CancellationToken cancellationToken)
+    public static async Task<IEnumerable<RecordMetadata>> GetRecordMetadataAsync()
     {
-        return await mediator.Send(new GetLeagueRecordsQuery(leagueId), cancellationToken);
+        return Enum.GetValues(typeof(RecordType))
+                    .Cast<RecordType>()
+                    .Select(type => new RecordMetadata(type));
     }
 }
