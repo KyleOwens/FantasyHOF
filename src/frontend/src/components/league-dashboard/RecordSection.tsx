@@ -5,7 +5,7 @@ import { LeagueRecordCard } from "./LeagueRecordCard";
 import { SeasonalRecordCard } from "./SeasonalRecordCard";
 import { WeeklyRecordCard } from "./WeeklyRecordCard";
 import { PlayerRecordCard } from "./PlayerRecordCard";
-import { RecordSentiment } from "@/__generated__/LeagueDashboardQuery.graphql";
+import { RecordSentiment } from "@/types/enums";
 
 type Props = {
   recordKey: RecordSectionFragment$key;

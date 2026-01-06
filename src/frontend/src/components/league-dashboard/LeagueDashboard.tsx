@@ -1,14 +1,12 @@
-import {
-  LeagueDashboardQuery,
-  RecordSentiment,
-} from "@/__generated__/LeagueDashboardQuery.graphql";
-import { useParams } from "@tanstack/react-router";
+import { LeagueDashboardQuery } from "@/__generated__/LeagueDashboardQuery.graphql";
+import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { graphql, useLazyLoadQuery } from "react-relay";
 import { RecordSection } from "./RecordSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { RecordCategory, RecordSentiment } from "@/types/enums";
 
 const dashboardQuery = graphql`
   query LeagueDashboardQuery($leagueId: ID!) {
@@ -27,33 +25,43 @@ const dashboardQuery = graphql`
         playerRecords {
           ...RecordSectionFragment
         }
-        playerRecords {
-          value
-          year
-          week
-          sentiment
-          member {
-            fullName
-          }
-        }
       }
     }
   }
 `;
 
-const LEAGUE_TAB_NAME = "League";
-const SEASONAL_TAB_NAME = "Seasonal";
-const WEEKLY_TAB_NAME = "Weekly";
-const PLAYER_TAB_NAME = "Player";
+const LEAGUE_TAB_NAME = "LEAGUE";
+const SEASONAL_TAB_NAME = "SEASONAL";
+const WEEKLY_TAB_NAME = "WEEKLY";
+const PLAYER_TAB_NAME = "PLAYER";
 
 export function LeagueDashboard() {
-  const [sentiment, setSentiment] = useState<RecordSentiment>("FAME");
+  const { recordCategory, recordSentiment } = useSearch({
+    from: "/demo/$leagueId",
+  });
   const leagueId = useParams({ from: "/demo/$leagueId" }).leagueId;
+  const navigate = useNavigate({ from: "/demo/$leagueId" });
+
   const league = useLazyLoadQuery<LeagueDashboardQuery>(dashboardQuery, {
     leagueId: leagueId,
   }).league;
 
   if (!league.recordSummary) return;
+
+  const onCategoryChange = (value: string) => {
+    navigate({
+      search: (prev) => ({ ...prev, recordCategory: value as RecordCategory }),
+    });
+  };
+
+  const onSentimentChange = (value: string) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        recordSentiment: value as RecordSentiment,
+      }),
+    });
+  };
 
   return (
     <div>
@@ -61,7 +69,7 @@ export function LeagueDashboard() {
       <span className="text-muted-foreground">{league.currentLeagueName}</span>
 
       <div className="flex flex-col space-y-2 mt-6">
-        <Tabs defaultValue={LEAGUE_TAB_NAME}>
+        <Tabs value={recordCategory} onValueChange={onCategoryChange}>
           <div className="flex items-center space-x-8">
             <TabsList className="*:data-[state=active]:shadow-none bg-slate-200 ">
               <TabsTrigger value={LEAGUE_TAB_NAME}>League</TabsTrigger>
@@ -72,8 +80,8 @@ export function LeagueDashboard() {
             <ToggleGroup
               type="single"
               className="bg-slate-200"
-              value={sentiment}
-              onValueChange={(value) => setSentiment(value as RecordSentiment)}
+              value={recordSentiment}
+              onValueChange={onSentimentChange}
             >
               <ToggleGroupItem
                 className="data-[state=on]:bg-emerald-400 data-[state=on]:text-slate-50 hover:bg-emerald-400  hover:text-slate-50 transition-all"
@@ -101,7 +109,7 @@ export function LeagueDashboard() {
             <TabsContent value={LEAGUE_TAB_NAME} forceMount>
               <RecordSection
                 recordKey={league.recordSummary.leagueRecords}
-                sentiment={sentiment}
+                sentiment={recordSentiment}
                 title="League"
               />
             </TabsContent>
@@ -109,14 +117,14 @@ export function LeagueDashboard() {
               <RecordSection
                 title={"Seasonal records"}
                 recordKey={league.recordSummary.seasonalRecords}
-                sentiment={sentiment}
+                sentiment={recordSentiment}
               />
             </TabsContent>
             <TabsContent value={WEEKLY_TAB_NAME} forceMount>
               <RecordSection
                 title={"Weekly records"}
                 recordKey={league.recordSummary.weeklyRecords}
-                sentiment={sentiment}
+                sentiment={recordSentiment}
               />
             </TabsContent>
             <TabsContent value={PLAYER_TAB_NAME} forceMount>
@@ -124,7 +132,7 @@ export function LeagueDashboard() {
                 <RecordSection
                   title={"Player records"}
                   recordKey={league.recordSummary.playerRecords}
-                  sentiment={sentiment}
+                  sentiment={recordSentiment}
                 />
               </div>
             </TabsContent>
