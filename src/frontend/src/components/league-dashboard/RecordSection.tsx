@@ -35,10 +35,15 @@ const RecordSectionFragment = graphql`
 export function RecordSection({ recordKey, title, sentiment }: Props) {
   const records = useFragment(RecordSectionFragment, recordKey);
 
-  const fameRecords = records.filter((r) => r.sentiment === "FAME");
-  const shameRecords = records.filter((r) => r.sentiment === "SHAME");
+  const fameRecords = records.filter(
+    (r) => r.sentiment === RecordSentiment.FAME,
+  );
+  const shameRecords = records.filter(
+    (r) => r.sentiment === RecordSentiment.SHAME,
+  );
 
-  const recordsToDisplay = sentiment === "FAME" ? fameRecords : shameRecords;
+  const recordsToDisplay =
+    sentiment === RecordSentiment.FAME ? fameRecords : shameRecords;
 
   const renderRecord = (record: (typeof records)[number], index: number) => {
     switch (record.__typename) {

@@ -81,13 +81,13 @@ export function LeagueDashboard({ queryRef }: Props) {
             >
               <ToggleGroupItem
                 className="data-[state=on]:bg-emerald-400 data-[state=on]:text-slate-50 hover:bg-emerald-400  hover:text-slate-50 transition-all"
-                value="FAME"
+                value={RecordSentiment.FAME}
               >
                 Fame
               </ToggleGroupItem>
               <ToggleGroupItem
                 className="data-[state=on]:bg-rose-400 data-[state=on]:text-slate-50 hover:bg-rose-400 hover:text-slate-50 transition-all"
-                value="SHAME"
+                value={RecordSentiment.SHAME}
               >
                 Shame
               </ToggleGroupItem>
