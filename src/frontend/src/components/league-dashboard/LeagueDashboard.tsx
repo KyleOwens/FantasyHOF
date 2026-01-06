@@ -1,6 +1,11 @@
 import { LeagueDashboardQuery } from "@/__generated__/LeagueDashboardQuery.graphql";
 import { useNavigate, useParams, useSearch } from "@tanstack/react-router";
-import { graphql, useLazyLoadQuery } from "react-relay";
+import {
+  graphql,
+  PreloadedQuery,
+  useLazyLoadQuery,
+  usePreloadedQuery,
+} from "react-relay";
 import { RecordSection } from "./RecordSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
@@ -8,7 +13,11 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { RecordCategory, RecordSentiment } from "@/types/enums";
 
-const dashboardQuery = graphql`
+type Props = {
+  queryRef: PreloadedQuery<LeagueDashboardQuery>;
+};
+
+export const dashboardQuery = graphql`
   query LeagueDashboardQuery($leagueId: ID!) {
     league(id: $leagueId) {
       currentLeagueName
@@ -35,16 +44,13 @@ const SEASONAL_TAB_NAME = "SEASONAL";
 const WEEKLY_TAB_NAME = "WEEKLY";
 const PLAYER_TAB_NAME = "PLAYER";
 
-export function LeagueDashboard() {
+export function LeagueDashboard({ queryRef }: Props) {
   const { recordCategory, recordSentiment } = useSearch({
     from: "/demo/$leagueId",
   });
-  const leagueId = useParams({ from: "/demo/$leagueId" }).leagueId;
   const navigate = useNavigate({ from: "/demo/$leagueId" });
 
-  const league = useLazyLoadQuery<LeagueDashboardQuery>(dashboardQuery, {
-    leagueId: leagueId,
-  }).league;
+  const league = usePreloadedQuery(dashboardQuery, queryRef).league;
 
   if (!league.recordSummary) return;
 
@@ -139,22 +145,6 @@ export function LeagueDashboard() {
           </div>
         </Tabs>
       </div>
-      {/* <RecordSection
-          title={"League records"}
-          recordKey={league.recordSummary.leagueRecords}
-        />
-        <RecordSection
-          title={"Seasonal records"}
-          recordKey={league.recordSummary.seasonalRecords}
-        />
-        <RecordSection
-          title={"Weekly records"}
-          recordKey={league.recordSummary.weeklyRecords}
-        />
-        <RecordSection
-          title={"Player records"}
-          recordKey={league.recordSummary.playerRecords}
-        /> */}
     </div>
   );
 }

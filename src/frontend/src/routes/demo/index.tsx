@@ -26,6 +26,7 @@ export const Route = createFileRoute("/demo/")({
       throw redirect({
         to: demoLeagueIdRoute.to,
         params: { leagueId: firstLeagueId },
+        search: { recordCategory: "LEAGUE", recordSentiment: "FAME" },
       });
     }
 

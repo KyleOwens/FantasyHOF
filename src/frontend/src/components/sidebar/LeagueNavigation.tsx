@@ -79,7 +79,11 @@ export function LeagueNavigation() {
             <DropdownMenuGroup>
               {leagues.map((league) => (
                 <DropdownMenuItem key={league.id} asChild>
-                  <Link to="/demo/$leagueId" params={{ leagueId: league.id }}>
+                  <Link
+                    to="."
+                    search={(prev) => ({ ...prev })}
+                    params={{ leagueId: league.id }}
+                  >
                     <div className="border rounded-sm p-0.5">
                       <img
                         src={league.fantasyProvider.logoURL}
