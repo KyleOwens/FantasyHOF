@@ -1,4 +1,6 @@
-﻿using FantasyHOF.Application.Queries.LeagueQueries;
+﻿using FantasyHOF.Application.Enums;
+using FantasyHOF.Application.Queries.LeagueQueries;
+using FantasyHOF.Application.QueryTypes.Records;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
@@ -49,7 +51,16 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
             IMediator mediator,
             CancellationToken cancellationToken)
         {
-            return await mediator.Send(new GetLeagueRecordSummaryQuery(league.Id));
+            return await mediator.Send(new GetLeagueRecordSummaryQuery(league.Id), cancellationToken);
+        }
+
+        public async Task<IEnumerable<RecordDetails>> GetRecordDetailsAsync(
+            [Parent] League league,
+            RecordType recordType,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            return await mediator.Send(new GetLeagueSingleRecordDetailsQuery(league.Id, recordType));
         }
 
         public static async Task<League?> GetLeagueAsync(

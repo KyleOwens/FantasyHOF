@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 import { RecordCardFragment$key } from "@/__generated__/RecordCardFragment.graphql";
 import { useFragment } from "react-relay";
+import { Link } from "@tanstack/react-router";
+import { Route as dashboardRoute } from "@/routes/demo/$leagueId/dashboard";
 
 type Props = {
   recordKey: RecordCardFragment$key;
@@ -18,6 +20,7 @@ const RecordCardFragment = graphql`
     metric
     isPercentage
     value
+    type
   }
 `;
 
@@ -44,8 +47,14 @@ export function RecordCard({ recordKey, titleDescription, footerText }: Props) {
             <CardDescription>{titleDescription}</CardDescription>
           </div>
         </div>
-        <Button variant={"link"} className="font-bold">
-          See more
+        <Button variant={"link"} className="font-bold" asChild>
+          <Link
+            from={dashboardRoute.fullPath}
+            to="/demo/$leagueId/$recordTypeId"
+            params={{ recordTypeId: record.type }}
+          >
+            See more
+          </Link>
         </Button>
       </div>
       <CardContent className="px-2 space-y-4 -mt-4">

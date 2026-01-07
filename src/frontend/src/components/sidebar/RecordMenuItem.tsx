@@ -10,7 +10,7 @@ export function RecordMenuItem({ recordMetadata }: Props) {
   return (
     <SidebarMenuSubItem>
       <SidebarMenuSubButton asChild>
-        <Link to={"/demo/$leagueId"} className="text-xs">
+        <Link to={"."} className="text-xs">
           {formatRecordNameForSidebar(recordMetadata.displayName)}
         </Link>
       </SidebarMenuSubButton>

@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
-import { Link } from "@tanstack/react-router";
+import { Link, useParams } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
 import { useFragment } from "react-relay";
 import {
@@ -35,7 +35,8 @@ export type SidebarRecordMetadata =
   RecordNavigationFragment$data["recordMetadata"][number];
 
 export function RecordNavigation({ recordMetadataKey }: Props) {
-  const leagueId = demoDashboardRoute.useParams().leagueId;
+  const leagueId = useParams({ strict: false }).leagueId ?? "";
+
   const recordMetadata = useFragment(
     recordNavigationFragment,
     recordMetadataKey,

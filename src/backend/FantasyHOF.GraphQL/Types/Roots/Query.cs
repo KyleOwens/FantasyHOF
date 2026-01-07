@@ -2,7 +2,6 @@ using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Mutations;
 using FantasyHOF.Application.Queries;
 using FantasyHOF.Application.Queries.LeagueQueries;
-using FantasyHOF.Application.Queries.TestQueries;
 using FantasyHOF.Application.QueryTypes.Records;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.ESPN;

@@ -94,6 +94,7 @@ type League implements Node {
   fantasyProvider: FantasyProvider! @cost(weight: "10")
   sport: Sport! @cost(weight: "10")
   recordSummary: LeagueRecordSummary @cost(weight: "10")
+  recordDetails(recordType: RecordType!): [RecordDetails!]! @cost(weight: "10")
 }
 
 type LeagueRecord implements Record {
@@ -269,6 +270,12 @@ type Query {
   demoLeagues: [League!]! @cost(weight: "10")
   league(id: ID!): League! @cost(weight: "10")
   recordMetadata: [RecordMetadata!]! @cost(weight: "10")
+}
+
+type RecordDetails {
+  rank: Int!
+  value: Decimal!
+  member: FantasyMember!
 }
 
 type RecordMetadata {
