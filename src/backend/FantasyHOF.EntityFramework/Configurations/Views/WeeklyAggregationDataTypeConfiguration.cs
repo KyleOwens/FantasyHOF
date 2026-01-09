@@ -15,9 +15,9 @@ namespace FantasyHOF.EntityFramework.Configurations.Views
         {
             builder.HasNoKey().ToView("vw_weekly_aggregation_data");
 
-            builder.HasOne(x => x.Member)
+            builder.HasOne(x => x.MemberDetails)
                 .WithMany()
-                .HasForeignKey(x => x.MemberId);
+                .HasForeignKey(x => new { x.LeagueId, x.MemberId });
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Entities.Views;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.Domain.Types.Views;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace FantasyHOF.EntityFramework
         public DbSet<LeagueSeasonMemberAggregatedStats> LeagueSeasonMemberAggregatedStats => Set<LeagueSeasonMemberAggregatedStats>();
         public DbSet<WeeklyAggregationData> WeeklyAggregationData => Set<WeeklyAggregationData>();
         public DbSet<PlayerAggregationData> PlayerAggregationData => Set<PlayerAggregationData>();
+        public DbSet<LeagueMember> LeagueMembers => Set<LeagueMember>();
 
         public FantasyHOFDBContext(DbContextOptions<FantasyHOFDBContext> options) : base(options)
         {

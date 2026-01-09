@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FantasyHOF.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,11 +15,16 @@ namespace FantasyHOF.Domain.Types.Views
         public int TotalMatchups { get; private set; }
         public int SeasonRank { get; private set; }
         public decimal PointsFor { get; private set; }
+        public decimal PointsForAverage { get; private set; }
         public decimal PointsAgainst { get; private set; }
+        public decimal PointsAgainstAverage { get; private set; }
         public int Wins { get; private set; }
         public int Losses { get; private set; }
+        public decimal WinPercentage { get; private set; }
         public int TopWeeks { get; private set; }
+        public decimal TopWeekPercentage{ get; private set; }
         public int BottomWeeks { get; private set; }
+        public decimal BottomWeekPercentage { get; private set; }
         public int BlowoutWins { get; private set; }
         public int BlowoutLosses { get; private set; }
         public int NarrowWins { get; private set; }
@@ -26,12 +32,6 @@ namespace FantasyHOF.Domain.Types.Views
         public int OutstandingPerformances { get; private set; }
         public int PoorPerformances { get; private set; }
 
-        public decimal PointsForAverage => TotalMatchups > 0 ? PointsFor / TotalMatchups : 0;
-        public decimal PointsAgainstAverage => TotalMatchups > 0 ? PointsAgainst / TotalMatchups : 0;
-        public decimal WinPercentage => TotalMatchups > 0 ? (decimal)Wins / TotalMatchups : 0;
-        public decimal TopWeekPercentage => TotalMatchups > 0 ? (decimal)TopWeeks / TotalMatchups : 0;
-        public decimal BottomWeekPercentage => TotalMatchups > 0 ? (decimal)BottomWeeks / TotalMatchups : 0;
-
-        public FantasyMember Member { get; private set; } = null!;
+        public LeagueMember MemberDetails { get; private set; } = null!;
     }
 }

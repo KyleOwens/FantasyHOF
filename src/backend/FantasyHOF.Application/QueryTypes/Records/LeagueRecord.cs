@@ -9,7 +9,7 @@ namespace FantasyHOF.Domain.Types.Records
 {
     public class LeagueRecord : Record
     {
-        public LeagueRecord(FantasyMember member, RecordType type, decimal value) 
+        public LeagueRecord(FantasyMember member, RecordTypeId type, decimal value) 
             : base(member, type, value) { }
     }
 }

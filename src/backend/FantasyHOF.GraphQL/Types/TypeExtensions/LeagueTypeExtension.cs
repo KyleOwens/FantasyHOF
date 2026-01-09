@@ -56,7 +56,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
 
         public async Task<IEnumerable<RecordDetails>> GetRecordDetailsAsync(
             [Parent] League league,
-            RecordType recordType,
+            RecordTypeId recordType,
             IMediator mediator,
             CancellationToken cancellationToken)
         {

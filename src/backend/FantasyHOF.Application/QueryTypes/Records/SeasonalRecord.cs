@@ -11,7 +11,7 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public int Year { get; init; }
 
-        public SeasonalRecord(FantasyMember member, RecordType type, int year, decimal value)
+        public SeasonalRecord(FantasyMember member, RecordTypeId type, int year, decimal value)
             : base(member, type, value) 
         {
             Year = year;        

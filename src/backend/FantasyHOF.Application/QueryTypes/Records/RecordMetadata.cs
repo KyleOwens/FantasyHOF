@@ -10,19 +10,19 @@ namespace FantasyHOF.Application.QueryTypes.Records
 {
     public class RecordMetadata
     {
-        public RecordMetadata(RecordType type)
+        public RecordMetadata(RecordTypeId type)
         {
             Type = type;
         }
 
-        public RecordType Type { get; private set; }
+        public RecordTypeId Type { get; private set; }
 
         public string DisplayName => Type.GetMetadata().DisplayName;
-        public string IconURI => Type.GetMetadata().IconURI;
-        public string Metric => Type.GetMetadata().Metric;
-        public RecordCategory Category => Type.GetMetadata().Category;
-        public string CategoryDisplayName => Type.GetMetadata().Category.GetDisplayName();
+        public RecordCategoryId Category => Type.GetMetadata().Category;
         public RecordSentiment Sentiment => Type.GetMetadata().Sentiment;
-        public bool IsPercentage => Type.GetMetadata().IsPercentage;
+        public RecordMetricId Metric => Type.GetMetadata().Metric;
+        public RecordMetricType MetricType => Type.GetMetadata().MetricType;
+        public string IconURI => Type.GetMetadata().IconURI;
+        public SortDirection SortDirection => Type.GetMetadata().SortDirection;
     }
 }

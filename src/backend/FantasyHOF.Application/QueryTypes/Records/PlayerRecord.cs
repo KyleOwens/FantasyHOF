@@ -11,7 +11,7 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public Player Player { get; private set; } = null!;
 
-        public PlayerRecord(FantasyMember member, RecordType type, Player player, int year, int week, decimal value)
+        public PlayerRecord(FantasyMember member, RecordTypeId type, Player player, int year, int week, decimal value)
             : base(member, type, year, week, value)
         {
             Player = player;

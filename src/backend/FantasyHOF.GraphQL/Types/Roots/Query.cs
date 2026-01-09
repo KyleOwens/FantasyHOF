@@ -36,8 +36,8 @@ public static class Query
 
     public static async Task<IEnumerable<RecordMetadata>> GetRecordMetadataAsync()
     {
-        return Enum.GetValues(typeof(RecordType))
-                    .Cast<RecordType>()
+        return Enum.GetValues(typeof(RecordTypeId))
+                    .Cast<RecordTypeId>()
                     .Select(type => new RecordMetadata(type));
     }
 }

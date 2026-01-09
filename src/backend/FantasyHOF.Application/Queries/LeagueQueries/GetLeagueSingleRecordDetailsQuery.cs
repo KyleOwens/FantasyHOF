@@ -1,80 +1,122 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.QueryTypes.Records;
+using FantasyHOF.Application.Registries;
+using FantasyHOF.Domain.Entities.Views;
+using FantasyHOF.Domain.Types;
 using FantasyHOF.Domain.Types.Views;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
-    public sealed record GetLeagueSingleRecordDetailsQuery(int LeagueId, RecordType RecordType) : IRequest<List<RecordDetails>>
+    public sealed record GetLeagueSingleRecordDetailsQuery(int LeagueId, RecordTypeId RecordType) : IRequest<List<RecordDetails>>
     {
         public sealed class GetLeagueSingleRecordDetailsQueryHandler(FantasyHOFDBContext database) : IRequestHandler<GetLeagueSingleRecordDetailsQuery, List<RecordDetails>>
         {
             public Task<List<RecordDetails>> Handle(GetLeagueSingleRecordDetailsQuery request, CancellationToken cancellationToken)
-            {
-                RecordCategory recordCategory = request.RecordType.GetMetadata().Category;
+            {                
+                RecordCategoryId recordCategory = request.RecordType.GetMetadata().Category;
 
                 switch (recordCategory)
                 {
-                    case RecordCategory.League:
+                    case RecordCategoryId.League:
                         return LoadLeagueRecordDetail(request.LeagueId, request.RecordType);
+                    case RecordCategoryId.Season:
+                        return LoadSeasonalRecordDetails(request.LeagueId, request.RecordType);
+                    case RecordCategoryId.Week:
+                        return LoadWeeklyRecordDetails(request.LeagueId, request.RecordType);
+                    case RecordCategoryId.Player:
+                        return LoadPlayerRecordDetails(request.LeagueId, request.RecordType);
                     default:
                         return Task.FromResult<List<RecordDetails>>([]);
                 }
             }
 
-            private async Task<List<RecordDetails>> LoadLeagueRecordDetail(int leagueId, RecordType recordType)
+            private async Task<List<RecordDetails>> LoadLeagueRecordDetail(int leagueId, RecordTypeId recordType)
             {
-                RecordQuerySpecification<LeagueMemberAggregatedStats> querySpec = LeagueRecordSpecs.Specs[recordType];
+                RecordMetricProjector<LeagueMemberAggregatedStats> projector = new(recordType);
                 
                 IQueryable<LeagueMemberAggregatedStats> baseQuery = database.LeagueMemberAggregatedStats
                     .Where(stats => stats.LeagueId == leagueId)
-                    .Include(x => x.Member);
+                    .Include(x => x.MemberDetails)
+                        .ThenInclude(x => x.Member);
 
-                List<LeagueMemberAggregatedStats> materializedStats = await SortQuery(baseQuery, querySpec)
-                    .ToListAsync();
+                List<LeagueMemberAggregatedStats> materializedStats = await MaterializeFilteredAndSortedStats(
+                    baseQuery,
+                    projector);
 
                 return materializedStats
-                    .Select((stat, i) => new RecordDetails
-                    {
-                        Member = stat.Member,
-                        Value = querySpec.MetricSelector.Compile()(stat),
-                        Rank = i + 1
-                    })
+                    .Select((stat, i) => new LeagueRecordDetails(i, projector.GetMetric(stat), stat.MemberDetails))
+                    .Cast<RecordDetails>()
                     .ToList();
             }
 
-            private IQueryable<TEntity> SortQuery<TEntity>(IQueryable<TEntity> baseQuery, RecordQuerySpecification<TEntity> querySpec)
+            private async Task<List<RecordDetails>> LoadSeasonalRecordDetails(int LeagueId, RecordTypeId recordType)
             {
-                return querySpec.Descending ?
-                    baseQuery.OrderByDescending(querySpec.MetricSelector) :
-                    baseQuery.OrderBy(querySpec.MetricSelector);
+                RecordMetricProjector<LeagueSeasonMemberAggregatedStats> projector = new(recordType);
+
+                IQueryable<LeagueSeasonMemberAggregatedStats> baseQuery = database.LeagueSeasonMemberAggregatedStats
+                    .Where(stats => stats.LeagueId == LeagueId)
+                    .Include(x => x.MemberDetails)
+                        .ThenInclude(x => x.Member);
+
+                List<LeagueSeasonMemberAggregatedStats> materializedStats = await MaterializeFilteredAndSortedStats(
+                    baseQuery,
+                    projector);
+
+                return materializedStats
+                    .Select((stat, i) => new SeasonalRecordDetails(stat.Year, i, projector.GetMetric(stat), stat.MemberDetails))
+                    .Cast<RecordDetails>()
+                    .ToList();
+            }
+
+            private async Task<List<RecordDetails>> LoadWeeklyRecordDetails(int LeagueId, RecordTypeId recordType)
+            {
+                RecordMetricProjector<WeeklyAggregationData> projector = new(recordType);
+
+                IQueryable<WeeklyAggregationData> baseQuery = database.WeeklyAggregationData
+                    .Where(stats => stats.LeagueId == LeagueId)
+                    .Include(x => x.MemberDetails)
+                        .ThenInclude(x => x.Member);
+
+                List<WeeklyAggregationData> materializedStats = await MaterializeFilteredAndSortedStats(
+                    baseQuery,
+                    projector);
+
+                return materializedStats
+                    .Select((stat, i) => new WeeklyRecordDetails(stat.Year, stat.Week, i, projector.GetMetric(stat), stat.MemberDetails))
+                    .Cast<RecordDetails>()
+                    .ToList();
+            }
+
+            private async Task<List<RecordDetails>> LoadPlayerRecordDetails(int LeagueId, RecordTypeId recordType)
+            {
+                RecordMetricProjector<PlayerAggregationData> projector = new(recordType);
+
+                IQueryable<PlayerAggregationData> baseQuery = database.PlayerAggregationData
+                    .Where(stats => stats.LeagueId == LeagueId)
+                    .Include(x => x.MemberDetails)
+                        .ThenInclude(x => x.Member)
+                    .Include(x => x.Player);
+
+                List<PlayerAggregationData> materializedStats = await MaterializeFilteredAndSortedStats(
+                    baseQuery,
+                    projector);
+
+                return materializedStats
+                    .Select((stat, i) => new PlayerRecordDetails(stat.Year, stat.Week, i, stat.Player, projector.GetMetric(stat), stat.MemberDetails))
+                    .Cast<RecordDetails>()
+                    .ToList();
+            }
+
+            private async Task<List<TEntity>> MaterializeFilteredAndSortedStats<TEntity>(IQueryable<TEntity> baseQuery, RecordMetricProjector<TEntity> projector)
+            {
+                IQueryable<TEntity> filteredQuery = projector.ApplyFilter(baseQuery);
+                IQueryable<TEntity> filteredAndSortedQuery = projector.ApplySort(filteredQuery);
+
+                return await filteredAndSortedQuery.Take(10).ToListAsync();
             }
         }
-    }
-
-    public sealed record RecordQuerySpecification<TEntity>(
-        Expression<Func<TEntity, decimal>> MetricSelector,
-        bool Descending
-    );
-
-    public static class LeagueRecordSpecs
-    {
-        public static readonly IReadOnlyDictionary<RecordType, RecordQuerySpecification<LeagueMemberAggregatedStats>> Specs =
-            new Dictionary<RecordType, RecordQuerySpecification<LeagueMemberAggregatedStats>>
-            {
-                [RecordType.MostPointsLeagueHistory] =
-                    new(r => r.PointsFor, Descending: true),
-
-                [RecordType.LeastPointsAllowedLeagueHistory] =
-                    new(r => r.PointsAgainst, Descending: false),
-            };
-    }
+    }    
 }

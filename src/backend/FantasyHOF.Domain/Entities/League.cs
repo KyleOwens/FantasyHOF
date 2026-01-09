@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Enums;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
 
 namespace FantasyHOF.Domain.Types
 {
@@ -15,8 +16,10 @@ namespace FantasyHOF.Domain.Types
         public int CurrentLeagueYear { get; private set; }
 
         public List<LeagueSeason> Seasons { get; set; } = [];
+        public List<LeagueMember> Members { get; private set; } = [];
         public FantasyProvider FantasyProvider { get; private set; } = null!;
         public Sport Sport { get; private set; } = null!;
+        
 
         public void AddSeason(LeagueSeason season)
         {
@@ -26,6 +29,13 @@ namespace FantasyHOF.Domain.Types
 
             CurrentLeagueName = season.Settings.LeagueName;
             CurrentLeagueYear = season.Year;
+        }
+
+        public void SetLeagueMembers(LeagueMember member)
+        {
+            if (Members.Any(x => x.MemberId == member.MemberId)) return;
+            
+            Members.Add(member);
         }
     }
 }

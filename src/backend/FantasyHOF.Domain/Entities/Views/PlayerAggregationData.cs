@@ -3,6 +3,7 @@ using FantasyHOF.Domain.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,26 +19,7 @@ namespace FantasyHOF.Domain.Entities.Views
         public int PlayerId { get; private set; }
         public PositionId PositionId { get; private set; }
 
-        public FantasyMember Member { get; private set; } = null!;
+        public LeagueMember MemberDetails { get; private set; } = null!;
         public Player Player { get; private set; } = null!;
-
-        public bool IsNotQBOrBench()
-        {
-            IEnumerable<PositionId> qbOrBench = [PositionId.BE, PositionId.QB, PositionId.Unknown];
-
-            return !qbOrBench.Contains(PositionId);
-        }
-
-        public bool IsNotDSTOrBench()
-        {
-            IEnumerable<PositionId> dstOrBench = [PositionId.BE, PositionId.DST, PositionId.Unknown];
-
-            return !dstOrBench.Contains(PositionId);
-        }
-
-        public bool IsBench()
-        {
-            return PositionId == PositionId.BE;
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.Application.Mappers;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
@@ -63,14 +64,24 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
             private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, CancellationToken cancellationToken)
             {
-                IEnumerable<string> allEspnMemberIds = espnMemberDetails
+                IEnumerable<ESPNFantasyMember> allEspnMembers = espnMemberDetails
                     .SelectMany(x => x.Members)
-                    .Select(x => x.Id)
-                    .Distinct();
+                    .DistinctBy(x => x.Id);
+                
+                IEnumerable<string> allEspnMemberIds = allEspnMembers
+                    .Select(x => x.Id);
 
                 Dictionary<string, FantasyMember> memberLookup = await _context.FantasyMembers
                     .Where(member => member.FantasyProviderId == FantasyProviderId.ESPN && allEspnMemberIds.Contains(member.ProviderMemberId))
                     .ToDictionaryAsync(member => member.ProviderMemberId, cancellationToken);
+
+                foreach (ESPNFantasyMember espnMember in allEspnMembers)
+                {
+                    if (!memberLookup.ContainsKey(espnMember.Id))
+                    {
+                        memberLookup.Add(espnMember.Id, _espnMapper.MapFantasyMember(espnMember));
+                    }
+                }
 
                 IEnumerable<int> allEspnPlayerIds = espnMatchupDetails
                     .SelectMany(espnWeeklyLeagueData => espnWeeklyLeagueData.Matchups)
@@ -91,6 +102,8 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
             {
                 League league = _espnMapper.MapLeague(espnLeagueId);
 
+                CreateLeagueMembers(league, espnSeasons, espnWeeklyData);
+
                 foreach (ESPNSeasonalLeagueData espnSeason in espnSeasons)
                 {
                     IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData = espnWeeklyData
@@ -100,6 +113,29 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 }
 
                 return league;
+            }
+
+            private List<LeagueMember> CreateLeagueMembers(League league, IEnumerable<ESPNSeasonalLeagueData> espnSeasons, IEnumerable<ESPNWeeklyLeagueData> espnWeeklyData)
+            {
+                List<LeagueMember> leagueMembers = [];
+                
+                foreach (FantasyMember member in _importContext.MemberLookup.Values)
+                {
+                    IEnumerable<ESPNSeasonalLeagueData> memberSeasons = espnSeasons.Where(x => x.Members.Any(x => x.Id == member.ProviderMemberId));
+                    
+                    LeagueMember newLeagueMember = new LeagueMember()
+                    {
+                        Firstyear = memberSeasons.First().Year,
+                        LearYear = memberSeasons.Last().Year,
+                        Tenure = memberSeasons.Count(),
+                        League = league,
+                        Member = member
+                    };
+
+                    league.Members.Add(newLeagueMember);
+                }
+
+                return leagueMembers;
             }
 
             private LeagueSeason CreateLeagueSeason(ESPNSeasonalLeagueData espnSeason, IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData)
@@ -154,7 +190,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 {
                     LeagueSeasonMember leagueSeasonMember = _espnMapper.MapLeagueSeasonMember(espnMember);
 
-                    leagueSeasonMember.SetMember(GetOrCreateFantasyMember(espnMember));
+                    leagueSeasonMember.SetMember(_importContext.MemberLookup[espnMember.Id]);
                     leagueSeasonMember.SetTeams(CreateLeagueSeasonMemberTeams(espnMember, espnTeams, espnSeasonMatchupData));
 
                     leagueSeasonMembers.Add(leagueSeasonMember);

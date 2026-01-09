@@ -23,7 +23,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                 FROM matchup_roster_spots roster_spots
 
                 INNER JOIN matchup_team_details owner_matchup_details ON owner_matchup_details.id = roster_spots.matchup_team_details_id
-                INNER JOIN team_matchups owner_matchups ON owner_matchups.team_id = owner_matchup_details.team_id
+                INNER JOIN team_matchups owner_matchups ON owner_matchups.owner_matchup_details_id = owner_matchup_details.id
                 INNER JOIN league_season_member_teams member_teams ON member_teams.team_id = owner_matchup_details.team_id
                 INNER JOIN league_seasons seasons ON seasons.id = member_teams.league_season_id
             ");
@@ -63,37 +63,46 @@ namespace FantasyHOF.EntityFramework.Migrations
                             league_id
                         ,   year
                         ,   week
-                )
+                ),
+                scalars AS (
                 SELECT
-                        weekly_data.member_id                                                                                   AS member_id
-                    ,   weekly_data.league_id                                                                                   AS league_id
-                    ,   weekly_data.year                                                                                        AS year
-                    ,   MIN(teams.season_rank)                                                                                  AS season_rank -- If a member has multiple teams, then select the best rank
-                    ,   COUNT(*)                                                                                                AS total_matchups
-                    ,   SUM(weekly_data.score)                                                                                  AS points_for
-                    ,   SUM(weekly_data.opponent_score)                                                                         AS points_against
-                    ,   SUM(CASE WHEN weekly_data.matchup_outcome_id = 0 THEN 1 ELSE 0 END)                                     AS wins
-                    ,   SUM(CASE WHEN weekly_data.matchup_outcome_id = 1 THEN 1 ELSE 0 END)                                     AS losses
-                    ,   SUM(CASE WHEN weekly_data.score = extremes.max_score THEN 1 ELSE 0 END)                                 AS top_weeks
-                    ,   SUM(CASE WHEN weekly_data.score = extremes.min_score THEN 1 ELSE 0 END)                                 AS bottom_weeks
-                    ,   SUM(CASE WHEN weekly_data.score_margin > 50 THEN 1 ELSE 0 END)                                          AS blowout_wins
-                    ,   SUM(CASE WHEN weekly_data.score_margin < -50 THEN 1 ELSE 0 END)                                         AS blowout_losses
-                    ,   SUM(CASE WHEN weekly_data.score_margin <= 3 AND weekly_data.matchup_outcome_id = 0 THEN 1 ELSE 0 END)   AS narrow_wins
-                    ,   SUM(CASE WHEN weekly_data.score_margin >= -3 AND weekly_data.matchup_outcome_id = 1 THEN 1 ELSE 0 END)  AS narrow_losses
-                    ,   SUM(CASE WHEN weekly_data.score > 200 THEN 1 ELSE 0 END)                                                AS outstanding_performances
-                    ,   SUM(CASE WHEN weekly_data.score < 100 THEN 1 ELSE 0 END)                                                AS poor_performances
+                        weekly_data.member_id                                                                           AS member_id
+                        ,  weekly_data.league_id                                                                           AS league_id
+                        ,  weekly_data.year                                                                                AS year
+                        ,  MIN(teams.season_rank)                                                                          AS season_rank -- If a member has multiple teams, then select the best rank
+                        ,  COUNT(*)                                                                                        AS total_matchups
+                        ,  SUM(weekly_data.score)                                                                          AS points_for
+                        ,  SUM(weekly_data.opponent_score)                                                                 AS points_against
+                        ,  COUNT(*) FILTER (WHERE weekly_data.matchup_outcome_id = 0)                                      AS wins
+                        ,  COUNT(*) FILTER (WHERE weekly_data.matchup_outcome_id = 1)                                      AS losses
+                        ,  COUNT(*) FILTER (WHERE weekly_data.score = extremes.max_score)                                  AS top_weeks
+                        ,  COUNT(*) FILTER (WHERE weekly_data.score = extremes.min_score)                                  AS bottom_weeks
+                        ,  COUNT(*) FILTER (WHERE weekly_data.score_margin > 50)                                           AS blowout_wins
+                        ,  COUNT(*) FILTER (WHERE weekly_data.score_margin < -50 )                                         AS blowout_losses
+                        ,  COUNT(*) FILTER (WHERE weekly_data.score_margin <= 3 AND weekly_data.matchup_outcome_id = 0)    AS narrow_wins
+                        ,  COUNT(*) FILTER (WHERE weekly_data.score_margin >= -3 AND weekly_data.matchup_outcome_id = 1)   AS narrow_losses
+                        ,  COUNT(*) FILTER (WHERE weekly_data.score > 200)                                                 AS outstanding_performances
+                        ,  COUNT(*) FILTER (WHERE weekly_data.score < 100)                                                 AS poor_performances
                 FROM vw_weekly_aggregation_data weekly_data
 
-                INNER JOIN teams ON teams.id = weekly_data.team_id
-                INNER JOIN weekly_matchup_score_extremes extremes
-                    ON  extremes.league_id = weekly_data.league_id
-                    AND extremes.year = weekly_data.year
-                    AND extremes.week = weekly_data.week
+                            INNER JOIN teams ON teams.id = weekly_data.team_id
+                            INNER JOIN weekly_matchup_score_extremes extremes
+                                    ON extremes.league_id = weekly_data.league_id
+                                AND extremes.year = weekly_data.year
+                                AND extremes.week = weekly_data.week
 
-                GROUP BY
-                        weekly_data.league_id
-                    ,   weekly_data.year
-                    ,   weekly_data.member_id
+                GROUP BY weekly_data.league_id
+                        , weekly_data.year
+                        , weekly_data.member_id
+                )
+                SELECT
+                        *
+                    ,   COALESCE(points_for::decimal/NULLIF(total_matchups, 0), 0)      AS points_for_average
+                    ,   COALESCE(points_against::decimal/NULLIF(total_matchups, 0), 0)  AS points_against_average
+                    ,   COALESCE(wins::decimal/NULLIF(total_matchups, 0), 0)            AS win_percentage
+                    ,   COALESCE(top_weeks/NULLIF(total_matchups, 0) , 0)               AS top_week_percentage
+                    ,   COALESCE(bottom_weeks/NULLIF(total_matchups, 0)  , 0)           AS bottom_week_percentage
+                FROM scalars
             ");
 
             migrationBuilder.Sql(@"
@@ -109,8 +118,9 @@ namespace FantasyHOF.EntityFramework.Migrations
                     INNER JOIN teams                                    ON teams.id = member_teams.team_id
 
                     GROUP BY seasons.league_id, seasons.year
-                )
-                SELECT
+                ),
+                scalars as (
+                   SELECT
                         season_reference.league_id                                                                  AS league_id
                     ,   season_reference.member_id                                                                  AS member_id
                     ,   COUNT(*)                                                                                    AS total_seasons
@@ -125,10 +135,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     ,   SUM(season_reference.blowout_losses)                                                        AS blowout_losses
                     ,   SUM(season_reference.narrow_wins)                                                           AS narrow_wins
                     ,   SUM(season_reference.narrow_losses)                                                         AS narrow_losses
-                    ,   SUM(CASE WHEN season_reference.season_rank = 1 THEN 1 ELSE 0 END)                           AS championships
-                    ,   SUM(CASE WHEN season_reference.season_rank = last_places.last_place_rank THEN 1 ELSE 0 END) AS last_places
-                    ,   SUM(CASE WHEN season_reference.wins > season_reference.losses THEN 1 ELSE 0 END)            AS winning_seasons
-                    ,   SUM(CASE WHEN season_reference.losses > season_reference.wins THEN 1 ELSE 0 END)            AS losing_seasons
+                    ,   COUNT(*) FILTER (WHERE season_reference.season_rank = 1)                                    AS championships
+                    ,   COUNT(*) FILTER (WHERE season_reference.season_rank = last_places.last_place_rank)          AS last_places
+                    ,   COUNT(*) FILTER (WHERE season_reference.wins > season_reference.losses)                     AS winning_seasons
+                    ,   COUNT(*) FILTER (WHERE season_reference.losses > season_reference.wins)                     AS losing_seasons
                     ,   SUM(season_reference.outstanding_performances)                                              AS outstanding_performances
                     ,   SUM(season_reference.poor_performances)                                                     AS poor_performances
                 FROM vw_league_season_member_aggregated_stats season_reference
@@ -138,6 +148,19 @@ namespace FantasyHOF.EntityFramework.Migrations
                 GROUP BY
                         season_reference.league_id
                     ,   season_reference.member_id
+                )
+                SELECT
+                        *
+                    ,   COALESCE(points_for::decimal/NULLIF(total_matchups, 0), 0)      AS points_for_average
+                    ,   COALESCE(points_against::decimal/NULLIF(total_matchups, 0), 0)  AS points_against_average
+                    ,   COALESCE(wins::decimal/NULLIF(total_matchups, 0), 0)            AS win_percentage
+                    ,   COALESCE(top_weeks::decimal/NULLIF(total_matchups, 0), 0)       AS top_week_percentage
+                    ,   COALESCE(bottom_weeks::decimal/NULLIF(bottom_weeks, 0), 0)      AS bottom_week_percentage
+                    ,   COALESCE(championships::decimal/NULLIF(total_seasons, 0), 0)    AS championship_percentage
+                    ,   COALESCE(last_places::decimal/NULLIF(total_seasons, 0), 0)      AS last_place_percentage
+                    ,   COALESCE(winning_seasons::decimal/NULLIF(total_seasons, 0), 0)  AS winning_season_percentage
+                    ,   COALESCE(losing_seasons::decimal/NULLIF(total_seasons, 0), 0)   AS losing_season_percentage
+                FROM scalars
             ");
         }
 

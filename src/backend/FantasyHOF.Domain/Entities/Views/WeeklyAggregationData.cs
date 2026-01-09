@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Enums;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,6 @@ namespace FantasyHOF.Domain.Types.Views
         public decimal ScoreMargin { get; private set; }
         public MatchupOutcomeId MatchupOutcomeId { get; private set; }
 
-        public FantasyMember Member { get; private set; } = null!;
+        public LeagueMember MemberDetails { get; private set; } = null!;
     }
 }

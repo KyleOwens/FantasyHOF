@@ -11,7 +11,7 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public int Week { get; init; }
 
-        public WeeklyRecord(FantasyMember member, RecordType type, int year, int week, decimal value) 
+        public WeeklyRecord(FantasyMember member, RecordTypeId type, int year, int week, decimal value) 
             : base(member, type, year, value)
         {
             Week = week;

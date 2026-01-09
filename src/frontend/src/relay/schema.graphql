@@ -14,15 +14,29 @@ interface Node {
 }
 
 interface Record {
-  type: RecordType!
+  type: RecordTypeId!
   member: FantasyMember!
   value: Decimal!
   displayName: String!
-  iconURI: String!
-  metric: String!
-  category: RecordCategory!
+  category: RecordCategoryId!
   sentiment: RecordSentiment!
-  isPercentage: Boolean!
+  metric: RecordMetricId!
+  metricType: RecordMetricType!
+  iconURI: String!
+  sortDirection: SortDirection!
+}
+
+interface RecordDetails {
+  rank: Int!
+  metric: RecordMetric!
+  memberDetails: LeagueMember!
+  key: String!
+}
+
+interface RecordMetric {
+  value: Decimal!
+  metricId: RecordMetricId!
+  unit: String!
 }
 
 type AccumulatedStat implements Node {
@@ -91,22 +105,41 @@ type League implements Node {
   currentLeagueName: String!
   currentLeagueYear: Int!
   seasons: [LeagueSeason!]! @cost(weight: "10")
+  members: [LeagueMember!]!
   fantasyProvider: FantasyProvider! @cost(weight: "10")
   sport: Sport! @cost(weight: "10")
   recordSummary: LeagueRecordSummary @cost(weight: "10")
-  recordDetails(recordType: RecordType!): [RecordDetails!]! @cost(weight: "10")
+  recordDetails(recordType: RecordTypeId!): [RecordDetails!]! @cost(weight: "10")
+}
+
+type LeagueMember {
+  leagueId: Int!
+  memberId: Int!
+  firstyear: Int!
+  learYear: Int!
+  tenure: Int!
+  league: League!
+  member: FantasyMember!
 }
 
 type LeagueRecord implements Record {
-  type: RecordType!
+  type: RecordTypeId!
   member: FantasyMember!
   value: Decimal!
   displayName: String!
-  iconURI: String!
-  metric: String!
-  category: RecordCategory!
+  category: RecordCategoryId!
   sentiment: RecordSentiment!
-  isPercentage: Boolean!
+  metric: RecordMetricId!
+  metricType: RecordMetricType!
+  iconURI: String!
+  sortDirection: SortDirection!
+}
+
+type LeagueRecordDetails implements RecordDetails {
+  key: String!
+  rank: Int!
+  metric: RecordMetric!
+  memberDetails: LeagueMember!
 }
 
 type LeagueRecordSummary {
@@ -245,15 +278,26 @@ type PlayerRecord implements Record {
   player: Player!
   week: Int!
   year: Int!
-  type: RecordType!
+  type: RecordTypeId!
   member: FantasyMember!
   value: Decimal!
   displayName: String!
-  iconURI: String!
-  metric: String!
-  category: RecordCategory!
+  category: RecordCategoryId!
   sentiment: RecordSentiment!
-  isPercentage: Boolean!
+  metric: RecordMetricId!
+  metricType: RecordMetricType!
+  iconURI: String!
+  sortDirection: SortDirection!
+}
+
+type PlayerRecordDetails implements RecordDetails {
+  year: Int!
+  week: Int!
+  player: Player!
+  key: String!
+  rank: Int!
+  metric: RecordMetric!
+  memberDetails: LeagueMember!
 }
 
 type Position implements Node {
@@ -272,34 +316,55 @@ type Query {
   recordMetadata: [RecordMetadata!]! @cost(weight: "10")
 }
 
-type RecordDetails {
-  rank: Int!
+type RatioRecordMetric implements RecordMetric {
+  numerator: Decimal!
+  numeratorMetricId: RecordMetricId!
+  denominator: Decimal!
+  denominatorMetricId: RecordMetricId!
+  numeratorUnit: String!
+  denominatorUnit: String!
   value: Decimal!
-  member: FantasyMember!
+  metricId: RecordMetricId!
+  unit: String!
 }
 
 type RecordMetadata {
-  type: RecordType!
+  type: RecordTypeId!
   displayName: String!
-  iconURI: String!
-  metric: String!
-  category: RecordCategory!
-  categoryDisplayName: String!
+  category: RecordCategoryId!
   sentiment: RecordSentiment!
-  isPercentage: Boolean!
+  metric: RecordMetricId!
+  metricType: RecordMetricType!
+  iconURI: String!
+  sortDirection: SortDirection!
+}
+
+type ScalarRecordMetric implements RecordMetric {
+  value: Decimal!
+  metricId: RecordMetricId!
+  unit: String!
 }
 
 type SeasonalRecord implements Record {
   year: Int!
-  type: RecordType!
+  type: RecordTypeId!
   member: FantasyMember!
   value: Decimal!
   displayName: String!
-  iconURI: String!
-  metric: String!
-  category: RecordCategory!
+  category: RecordCategoryId!
   sentiment: RecordSentiment!
-  isPercentage: Boolean!
+  metric: RecordMetricId!
+  metricType: RecordMetricType!
+  iconURI: String!
+  sortDirection: SortDirection!
+}
+
+type SeasonalRecordDetails implements RecordDetails {
+  year: Int!
+  key: String!
+  rank: Int!
+  metric: RecordMetric!
+  memberDetails: LeagueMember!
 }
 
 type Sport implements Node {
@@ -357,15 +422,25 @@ type TeamSeasonStats implements Node {
 type WeeklyRecord implements Record {
   week: Int!
   year: Int!
-  type: RecordType!
+  type: RecordTypeId!
   member: FantasyMember!
   value: Decimal!
   displayName: String!
-  iconURI: String!
-  metric: String!
-  category: RecordCategory!
+  category: RecordCategoryId!
   sentiment: RecordSentiment!
-  isPercentage: Boolean!
+  metric: RecordMetricId!
+  metricType: RecordMetricType!
+  iconURI: String!
+  sortDirection: SortDirection!
+}
+
+type WeeklyRecordDetails implements RecordDetails {
+  year: Int!
+  week: Int!
+  key: String!
+  rank: Int!
+  metric: RecordMetric!
+  memberDetails: LeagueMember!
 }
 
 union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError
@@ -443,11 +518,57 @@ enum PositionId {
   UNKNOWN
 }
 
-enum RecordCategory {
+enum RecordCategoryId {
   LEAGUE
   SEASON
   WEEK
   PLAYER
+}
+
+enum RecordMetricId {
+  POINTS_FOR
+  POINTS_FOR_AVERAGE
+  POINTS_AGAINST
+  POINTS_AGAINST_AVERAGE
+  WINS
+  LOSSES
+  WIN_PERCENTAGE
+  TOP_WEEKS
+  TOP_WEEK_PERCENTAGE
+  BOTTOM_WEEKS
+  BOTTOM_WEEK_PERCENTAGE
+  BLOWOUT_WINS
+  BLOWOUT_LOSSES
+  NARROW_WINS
+  NARROW_LOSSES
+  CHAMPIONSHIPS
+  CHAMPIONSHIP_PERCENTAGE
+  LAST_PLACES
+  LAST_PLACE_PERCENTAGE
+  WINNING_SEASONS
+  WINNING_SEASON_PERCENTAGE
+  LOSING_SEASONS
+  LOSING_SEASON_PERCENTAGE
+  OUTSTANDING_PERFORMANCES
+  POOR_PERFORMANCES
+  SCORE
+  PLAYOFF_SCORE
+  WIN_SCORE
+  LOSS_SCORE
+  VICTORY_SCORE_MARGIN
+  PLAYOFF_VICTORY_SCORE_MARGIN
+  WIN_MARGIN
+  LOSS_MARGIN
+  POINTS_SCORED
+  POINTS_SCORED_NON_QB
+  POINTS_SCORED_NON_DST
+  SEASONS
+  WEEKS
+}
+
+enum RecordMetricType {
+  SCALAR
+  RATIO
 }
 
 enum RecordSentiment {
@@ -455,7 +576,7 @@ enum RecordSentiment {
   SHAME
 }
 
-enum RecordType {
+enum RecordTypeId {
   MOST_CHAMPIONSHIPS_LEAGUE_HISTORY
   HIGHEST_CHAMPIONSHIP_PERCENTAGE_LEAGUE_HISTORY
   MOST_WINS_LEAGUE_HISTORY
@@ -520,6 +641,11 @@ enum RecordType {
   MOST_POINTS_SCORED_SINGLE_NON_QB_PLAYER
   LEAST_POINTS_SCORED_SINGLE_PLAYER
   LEAST_POINTS_SCORED_SINGLE_NON_DEFENSE_PLAYER
+}
+
+enum SortDirection {
+  ASCENDING
+  DESCENDING
 }
 
 enum SportId {

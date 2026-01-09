@@ -8,17 +8,18 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Types.Records
 {
-    public abstract class Record(FantasyMember member, RecordType type, decimal value)
+    public abstract class Record(FantasyMember member, RecordTypeId type, decimal value)
     {
-        public RecordType Type { get; private set; } = type;
+        public RecordTypeId Type { get; private set; } = type;
         public FantasyMember Member { get; private set; } = member;
         public decimal Value { get; private set; } = value;
 
         public string DisplayName => Type.GetMetadata().DisplayName;
-        public string IconURI => Type.GetMetadata().IconURI;
-        public string Metric => Type.GetMetadata().Metric;
-        public RecordCategory Category => Type.GetMetadata().Category;
+        public RecordCategoryId Category => Type.GetMetadata().Category;
         public RecordSentiment Sentiment => Type.GetMetadata().Sentiment;
-        public bool IsPercentage => Type.GetMetadata().IsPercentage;
+        public RecordMetricId Metric => Type.GetMetadata().Metric;
+        public RecordMetricType MetricType => Type.GetMetadata().MetricType;
+        public string IconURI => Type.GetMetadata().IconURI;
+        public SortDirection SortDirection => Type.GetMetadata().SortDirection;
     }
 }

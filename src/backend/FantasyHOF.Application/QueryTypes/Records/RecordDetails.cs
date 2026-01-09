@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace FantasyHOF.Application.QueryTypes.Records
 {
-    public class RecordDetails
+    public abstract record RecordDetails(int Rank, RecordMetric Metric, LeagueMember MemberDetails)
     {
-        public required int Rank { get; init; }
-        public required decimal Value { get; init; }
-        public required FantasyMember Member { get; init; }
+        public abstract string Key { get; }
     }
 }
