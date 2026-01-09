@@ -11,39 +11,34 @@ import {
 } from "../ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 import { graphql, useFragment } from "react-relay";
-import { Link, useMatchRoute, useParams } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { LeagueNavigationFragment$key } from "@/__generated__/LeagueNavigationFragment.graphql";
+import { Route as leagueRoute } from "@/routes/$mode/$leagueId/route";
 
 type Props = {
-  demoLeaguesKey: LeagueNavigationFragment$key;
+  leaguesKey: LeagueNavigationFragment$key;
 };
 
 const leagueNavigationFragment = graphql`
-  fragment LeagueNavigationFragment on Query {
-    demoLeagues {
+  fragment LeagueNavigationFragment on League @relay(plural: true) {
+    id
+    currentLeagueName
+    fantasyProvider {
       id
-      currentLeagueName
-      fantasyProvider {
-        id
-        logoURL
-      }
-      sport {
-        id
-        name
-      }
+      logoURL
+    }
+    sport {
+      id
+      name
     }
   }
 `;
 
-export function LeagueNavigation({ demoLeaguesKey }: Props) {
-  const selectedLeagueId = useParams({ strict: false }).leagueId;
-  const matchRoute = useMatchRoute();
-  const leagues = useFragment(
-    leagueNavigationFragment,
-    demoLeaguesKey,
-  ).demoLeagues;
+export function LeagueNavigation({ leaguesKey }: Props) {
+  const { mode, leagueId: selectedLeagueId } = leagueRoute.useParams();
+  const leagues = useFragment(leagueNavigationFragment, leaguesKey);
 
-  const isDemo = !!matchRoute({ to: "/demo", fuzzy: true });
+  const isDemo = mode === "demo";
 
   const selectedLeague = selectedLeagueId
     ? leagues.find((x) => x.id === selectedLeagueId)
@@ -85,7 +80,7 @@ export function LeagueNavigation({ demoLeaguesKey }: Props) {
                   <Link
                     to="."
                     search={(prev) => ({ ...prev })}
-                    params={{ leagueId: league.id }}
+                    params={{ mode: mode, leagueId: league.id }}
                   >
                     <div className="border rounded-sm p-0.5">
                       <img

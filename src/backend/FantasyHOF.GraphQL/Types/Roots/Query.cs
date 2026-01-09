@@ -2,6 +2,7 @@ using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Mutations;
 using FantasyHOF.Application.Queries;
 using FantasyHOF.Application.Queries.LeagueQueries;
+using FantasyHOF.Application.Queries.UserQueries;
 using FantasyHOF.Application.QueryTypes.Records;
 using FantasyHOF.Domain.Types;
 using FantasyHOF.ESPN;
@@ -18,6 +19,13 @@ namespace FantasyHOF.GraphQL.Types.Roots;
 [QueryType]
 public static class Query
 {
+    public static async Task<User> GetMeAsync(
+        IMediator mediator, 
+        CancellationToken cancellation)
+    {
+        return await mediator.Send(new GetAuthenticatedUserQuery());
+    }
+    
     public static async Task<IEnumerable<League>> GetDemoLeaguesAsync(
         IMediator mediator,
         CancellationToken cancellationToken)

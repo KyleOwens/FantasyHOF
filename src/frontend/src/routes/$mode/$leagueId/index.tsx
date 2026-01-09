@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/demo/$leagueId/")({
+export const Route = createFileRoute("/$mode/$leagueId/")({
   beforeLoad: () => {
     throw redirect({
       from: Route.fullPath,

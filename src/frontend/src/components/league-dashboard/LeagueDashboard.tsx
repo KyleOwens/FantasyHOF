@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 import { cn } from "@/lib/utils";
 import { RecordCategory, RecordSentiment } from "@/types/enums";
-import { Route as demoDashboardRoute } from "@/routes/demo/$leagueId/dashboard";
+import { Route as demoDashboardRoute } from "@/routes/$mode/$leagueId/dashboard";
 
 type Props = {
   queryRef: PreloadedQuery<LeagueDashboardQuery>;

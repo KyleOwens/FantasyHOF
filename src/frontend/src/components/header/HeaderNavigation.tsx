@@ -7,6 +7,7 @@ import {
   NavigationMenuTrigger,
 } from "../ui/navigation-menu";
 import { Route as indexRoute } from "../../routes/index.tsx";
+import { Route as modeRoute } from "../../routes/$mode/index";
 import { Link } from "@tanstack/react-router";
 
 const navData = [
@@ -45,7 +46,8 @@ export function HeaderNavigation() {
           <NavigationMenuItem>
             <NavigationMenuLink asChild>
               <Link
-                to="/demo"
+                to={modeRoute.to}
+                params={{ mode: "demo" }}
                 className="font-medium text-muted-foreground px-4 py-2"
               >
                 Demo

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a2915388a21686eee38cb4196da6bbf3>>
+ * @generated SignedSource<<3834caca2621d78bb6943e3c2c145524>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,15 +9,15 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from 'relay-runtime';
-export type demoLeaguesQuery$variables = Record<PropertyKey, never>;
-export type demoLeaguesQuery$data = {
+export type ModeDemoLeaguesQuery$variables = Record<PropertyKey, never>;
+export type ModeDemoLeaguesQuery$data = {
   readonly demoLeagues: ReadonlyArray<{
     readonly id: string;
   }>;
 };
-export type demoLeaguesQuery = {
-  response: demoLeaguesQuery$data;
-  variables: demoLeaguesQuery$variables;
+export type ModeDemoLeaguesQuery = {
+  response: ModeDemoLeaguesQuery$data;
+  variables: ModeDemoLeaguesQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -46,7 +46,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "demoLeaguesQuery",
+    "name": "ModeDemoLeaguesQuery",
     "selections": (v0/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -55,20 +55,20 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "demoLeaguesQuery",
+    "name": "ModeDemoLeaguesQuery",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "24990146d7633607d9727f8766fb1267",
+    "cacheID": "a43d085ea82f2299b1ac2f40e1f01eec",
     "id": null,
     "metadata": {},
-    "name": "demoLeaguesQuery",
+    "name": "ModeDemoLeaguesQuery",
     "operationKind": "query",
-    "text": "query demoLeaguesQuery {\n  demoLeagues {\n    id\n  }\n}\n"
+    "text": "query ModeDemoLeaguesQuery {\n  demoLeagues {\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b124852ae113c1bf9437f770eaf5c959";
+(node as any).hash = "40fe5ddd47154cef17680d8975f93198";
 
 export default node;

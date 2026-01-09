@@ -6,23 +6,45 @@ import { PreloadedQuery, usePreloadedQuery } from "react-relay";
 import { AppSidebarQuery } from "@/__generated__/AppSidebarQuery.graphql";
 
 type Props = {
+  mode: "demo" | "me";
   queryRef: PreloadedQuery<AppSidebarQuery>;
 };
 
-export const appSidebarQuery = graphql`
-  query AppSidebarQuery {
+export const appSidebarMetatdataFragment = graphql`
+  fragment AppSidebarMetadataFragment on Query {
     ...RecordNavigationFragment
+  }
+`;
+
+export const appSidebarDataFragment = graphql`
+  fragment AppSidebarDataFragment on League @relay(plural: true) {
     ...LeagueNavigationFragment
   }
 `;
 
-export function AppSidebar({ queryRef }: Props) {
+export const appSidebarQuery = graphql`
+  query AppSidebarQuery($isDemo: Boolean!) {
+    ...RecordNavigationFragment
+    demoLeagues @include(if: $isDemo) {
+      ...LeagueNavigationFragment
+    }
+    me @skip(if: $isDemo) {
+      leagues {
+        ...LeagueNavigationFragment
+      }
+    }
+  }
+`;
+
+export function AppSidebar({ mode, queryRef }: Props) {
   const data = usePreloadedQuery(appSidebarQuery, queryRef);
+
+  const leagues = mode === "demo" ? data.demoLeagues! : data.me!.leagues!;
 
   return (
     <Sidebar className="sticky top-[66px] h-[calc(100vh-66px)] w-80">
       <SidebarHeader>
-        <LeagueNavigation demoLeaguesKey={data} />
+        <LeagueNavigation leaguesKey={leagues} />
       </SidebarHeader>
       <SidebarContent>
         <RecordNavigation recordMetadataKey={data} />

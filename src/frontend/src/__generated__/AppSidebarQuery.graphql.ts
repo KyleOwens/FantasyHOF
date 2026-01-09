@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8b1064f9f557a1a5c79e227ce410e1f0>>
+ * @generated SignedSource<<8bdb659c38b84f567314bf820da03dbe>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,9 +10,19 @@
 
 import { ConcreteRequest } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type AppSidebarQuery$variables = Record<PropertyKey, never>;
+export type AppSidebarQuery$variables = {
+  isDemo: boolean;
+};
 export type AppSidebarQuery$data = {
-  readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationFragment" | "RecordNavigationFragment">;
+  readonly demoLeagues?: ReadonlyArray<{
+    readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationFragment">;
+  }>;
+  readonly me?: {
+    readonly leagues: ReadonlyArray<{
+      readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationFragment">;
+    }>;
+  };
+  readonly " $fragmentSpreads": FragmentRefs<"RecordNavigationFragment">;
 };
 export type AppSidebarQuery = {
   response: AppSidebarQuery$data;
@@ -20,16 +30,78 @@ export type AppSidebarQuery = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = {
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "isDemo"
+  }
+],
+v1 = [
+  {
+    "args": null,
+    "kind": "FragmentSpread",
+    "name": "LeagueNavigationFragment"
+  }
+],
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-};
+},
+v3 = [
+  (v2/*: any*/),
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "currentLeagueName",
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "FantasyProvider",
+    "kind": "LinkedField",
+    "name": "fantasyProvider",
+    "plural": false,
+    "selections": [
+      (v2/*: any*/),
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "logoURL",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "Sport",
+    "kind": "LinkedField",
+    "name": "sport",
+    "plural": false,
+    "selections": [
+      (v2/*: any*/),
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "name",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
+];
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "AppSidebarQuery",
@@ -40,9 +112,49 @@ return {
         "name": "RecordNavigationFragment"
       },
       {
-        "args": null,
-        "kind": "FragmentSpread",
-        "name": "LeagueNavigationFragment"
+        "condition": "isDemo",
+        "kind": "Condition",
+        "passingValue": true,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "League",
+            "kind": "LinkedField",
+            "name": "demoLeagues",
+            "plural": true,
+            "selections": (v1/*: any*/),
+            "storageKey": null
+          }
+        ]
+      },
+      {
+        "condition": "isDemo",
+        "kind": "Condition",
+        "passingValue": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "User",
+            "kind": "LinkedField",
+            "name": "me",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "League",
+                "kind": "LinkedField",
+                "name": "leagues",
+                "plural": true,
+                "selections": (v1/*: any*/),
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ]
       }
     ],
     "type": "Query",
@@ -50,7 +162,7 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "AppSidebarQuery",
     "selections": [
@@ -87,75 +199,64 @@ return {
         "storageKey": null
       },
       {
-        "alias": null,
-        "args": null,
-        "concreteType": "League",
-        "kind": "LinkedField",
-        "name": "demoLeagues",
-        "plural": true,
+        "condition": "isDemo",
+        "kind": "Condition",
+        "passingValue": true,
         "selections": [
-          (v0/*: any*/),
           {
             "alias": null,
             "args": null,
-            "kind": "ScalarField",
-            "name": "currentLeagueName",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "FantasyProvider",
+            "concreteType": "League",
             "kind": "LinkedField",
-            "name": "fantasyProvider",
+            "name": "demoLeagues",
+            "plural": true,
+            "selections": (v3/*: any*/),
+            "storageKey": null
+          }
+        ]
+      },
+      {
+        "condition": "isDemo",
+        "kind": "Condition",
+        "passingValue": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "User",
+            "kind": "LinkedField",
+            "name": "me",
             "plural": false,
             "selections": [
-              (v0/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "kind": "ScalarField",
-                "name": "logoURL",
+                "concreteType": "League",
+                "kind": "LinkedField",
+                "name": "leagues",
+                "plural": true,
+                "selections": (v3/*: any*/),
                 "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "Sport",
-            "kind": "LinkedField",
-            "name": "sport",
-            "plural": false,
-            "selections": [
-              (v0/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "name",
-                "storageKey": null
-              }
+              },
+              (v2/*: any*/)
             ],
             "storageKey": null
           }
-        ],
-        "storageKey": null
+        ]
       }
     ]
   },
   "params": {
-    "cacheID": "f847107150aac76cc8f8fb35fb438fff",
+    "cacheID": "1ca46a84e8346950447f867c12d00c98",
     "id": null,
     "metadata": {},
     "name": "AppSidebarQuery",
     "operationKind": "query",
-    "text": "query AppSidebarQuery {\n  ...RecordNavigationFragment\n  ...LeagueNavigationFragment\n}\n\nfragment LeagueNavigationFragment on Query {\n  demoLeagues {\n    id\n    currentLeagueName\n    fantasyProvider {\n      id\n      logoURL\n    }\n    sport {\n      id\n      name\n    }\n  }\n}\n\nfragment RecordNavigationFragment on Query {\n  recordMetadata {\n    displayName\n    categoryDisplayName\n    sentiment\n  }\n}\n"
+    "text": "query AppSidebarQuery(\n  $isDemo: Boolean!\n) {\n  ...RecordNavigationFragment\n  demoLeagues @include(if: $isDemo) {\n    ...LeagueNavigationFragment\n    id\n  }\n  me @skip(if: $isDemo) {\n    leagues {\n      ...LeagueNavigationFragment\n      id\n    }\n    id\n  }\n}\n\nfragment LeagueNavigationFragment on League {\n  id\n  currentLeagueName\n  fantasyProvider {\n    id\n    logoURL\n  }\n  sport {\n    id\n    name\n  }\n}\n\nfragment RecordNavigationFragment on Query {\n  recordMetadata {\n    displayName\n    categoryDisplayName\n    sentiment\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "de6229d37e2997a2c65f5177b4208d93";
+(node as any).hash = "316fda5bd15c240e4b17b26facaa7791";
 
 export default node;

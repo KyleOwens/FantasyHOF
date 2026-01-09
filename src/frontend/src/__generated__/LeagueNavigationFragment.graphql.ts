@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4fcf59f1bcfe7fc3c93f070204389fcc>>
+ * @generated SignedSource<<daffc92b93f0eb5a8a74dc87bf6665d2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,25 +10,23 @@
 
 import { ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type LeagueNavigationFragment$data = {
-  readonly demoLeagues: ReadonlyArray<{
-    readonly currentLeagueName: string;
-    readonly fantasyProvider: {
-      readonly id: string;
-      readonly logoURL: string;
-    };
+export type LeagueNavigationFragment$data = ReadonlyArray<{
+  readonly currentLeagueName: string;
+  readonly fantasyProvider: {
     readonly id: string;
-    readonly sport: {
-      readonly id: string;
-      readonly name: string;
-    };
-  }>;
+    readonly logoURL: string;
+  };
+  readonly id: string;
+  readonly sport: {
+    readonly id: string;
+    readonly name: string;
+  };
   readonly " $fragmentType": "LeagueNavigationFragment";
-};
-export type LeagueNavigationFragment$key = {
+}>;
+export type LeagueNavigationFragment$key = ReadonlyArray<{
   readonly " $data"?: LeagueNavigationFragment$data;
   readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationFragment">;
-};
+}>;
 
 const node: ReaderFragment = (function(){
 var v0 = {
@@ -41,72 +39,63 @@ var v0 = {
 return {
   "argumentDefinitions": [],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "plural": true
+  },
   "name": "LeagueNavigationFragment",
   "selections": [
+    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
-      "concreteType": "League",
+      "kind": "ScalarField",
+      "name": "currentLeagueName",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "FantasyProvider",
       "kind": "LinkedField",
-      "name": "demoLeagues",
-      "plural": true,
+      "name": "fantasyProvider",
+      "plural": false,
       "selections": [
         (v0/*: any*/),
         {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "currentLeagueName",
+          "name": "logoURL",
           "storageKey": null
-        },
+        }
+      ],
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Sport",
+      "kind": "LinkedField",
+      "name": "sport",
+      "plural": false,
+      "selections": [
+        (v0/*: any*/),
         {
           "alias": null,
           "args": null,
-          "concreteType": "FantasyProvider",
-          "kind": "LinkedField",
-          "name": "fantasyProvider",
-          "plural": false,
-          "selections": [
-            (v0/*: any*/),
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "logoURL",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "Sport",
-          "kind": "LinkedField",
-          "name": "sport",
-          "plural": false,
-          "selections": [
-            (v0/*: any*/),
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "name",
-              "storageKey": null
-            }
-          ],
+          "kind": "ScalarField",
+          "name": "name",
           "storageKey": null
         }
       ],
       "storageKey": null
     }
   ],
-  "type": "Query",
+  "type": "League",
   "abstractKey": null
 };
 })();
 
-(node as any).hash = "8f019037ad401b807b15389d0623592b";
+(node as any).hash = "e10fb0cc07b7ffe9bfd624c4b0e7ac25";
 
 export default node;

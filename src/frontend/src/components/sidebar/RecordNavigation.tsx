@@ -7,14 +7,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
-import { Link, useParams } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
 import { useFragment } from "react-relay";
 import {
   RecordNavigationFragment$key,
   RecordNavigationFragment$data,
 } from "@/__generated__/RecordNavigationFragment.graphql";
-import { Route as demoDashboardRoute } from "@/routes/demo/$leagueId/dashboard";
+import { Route as dashboardRoute } from "@/routes/$mode/$leagueId/dashboard";
+import { Route as leagueRoute } from "@/routes/$mode/$leagueId/index";
 import { SidebarRecordCategory } from "./RecordCategoryCollapsible";
 
 type Props = {
@@ -35,8 +36,6 @@ export type SidebarRecordMetadata =
   RecordNavigationFragment$data["recordMetadata"][number];
 
 export function RecordNavigation({ recordMetadataKey }: Props) {
-  const leagueId = useParams({ strict: false }).leagueId ?? "";
-
   const recordMetadata = useFragment(
     recordNavigationFragment,
     recordMetadataKey,
@@ -61,8 +60,8 @@ export function RecordNavigation({ recordMetadataKey }: Props) {
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <Link
-                  to={demoDashboardRoute.to}
-                  params={{ leagueId }}
+                  from={leagueRoute.fullPath}
+                  to={dashboardRoute.to}
                   search={(prev) => prev}
                 >
                   <LayoutDashboard />

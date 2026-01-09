@@ -311,6 +311,7 @@ type Query {
   node("ID of the object." id: ID!): Node @cost(weight: "10")
   "Lookup nodes by a list of IDs."
   nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
+  me: User! @cost(weight: "10")
   demoLeagues: [League!]! @cost(weight: "10")
   league(id: ID!): League! @cost(weight: "10")
   recordMetadata: [RecordMetadata!]! @cost(weight: "10")
@@ -418,6 +419,12 @@ type TeamSeasonStats implements Node {
   winPercentage: Decimal!
   pointsAgainst: Decimal!
   pointsFor: Decimal!
+}
+
+type User implements Node {
+  id: ID!
+  clerkId: String!
+  leagues: [League!]!
 }
 
 type WeeklyRecord implements Record {

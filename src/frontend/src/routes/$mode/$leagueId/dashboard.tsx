@@ -21,7 +21,7 @@ const dashboardSearchSchema = z.object({
   ).default(RecordSentiment.FAME),
 });
 
-export const Route = createFileRoute("/demo/$leagueId/dashboard")({
+export const Route = createFileRoute("/$mode/$leagueId/dashboard")({
   component: RouteComponent,
   loader: ({ params }) => {
     return preloadQuery<LeagueDashboardQuery>(leagueDashboardQuery, {
