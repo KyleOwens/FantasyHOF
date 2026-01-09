@@ -19,8 +19,9 @@ namespace FantasyHOF.Application.QueryTypes.Records
 
         public string DisplayName => Type.GetMetadata().DisplayName;
         public RecordCategoryId Category => Type.GetMetadata().Category;
+        public string CategoryDisplayName => Category.GetDisplayName();
         public RecordSentiment Sentiment => Type.GetMetadata().Sentiment;
-        public RecordMetricId Metric => Type.GetMetadata().Metric;
+        public RecordMetricId MetricId => Type.GetMetadata().Metric;
         public RecordMetricType MetricType => Type.GetMetadata().MetricType;
         public string IconURI => Type.GetMetadata().IconURI;
         public SortDirection SortDirection => Type.GetMetadata().SortDirection;

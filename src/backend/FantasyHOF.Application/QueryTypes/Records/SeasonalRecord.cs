@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.Application.Enums;
+using FantasyHOF.Application.QueryTypes.Records;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public int Year { get; init; }
 
-        public SeasonalRecord(FantasyMember member, RecordTypeId type, int year, decimal value)
-            : base(member, type, value) 
+        public SeasonalRecord(FantasyMember member, RecordTypeId type, int year, RecordMetric metric)
+            : base(member, type, metric) 
         {
             Year = year;        
         }

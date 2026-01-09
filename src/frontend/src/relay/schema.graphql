@@ -16,11 +16,11 @@ interface Node {
 interface Record {
   type: RecordTypeId!
   member: FantasyMember!
-  value: Decimal!
+  metric: RecordMetric!
   displayName: String!
   category: RecordCategoryId!
   sentiment: RecordSentiment!
-  metric: RecordMetricId!
+  metricId: RecordMetricId!
   metricType: RecordMetricType!
   iconURI: String!
   sortDirection: SortDirection!
@@ -125,11 +125,11 @@ type LeagueMember {
 type LeagueRecord implements Record {
   type: RecordTypeId!
   member: FantasyMember!
-  value: Decimal!
+  metric: RecordMetric!
   displayName: String!
   category: RecordCategoryId!
   sentiment: RecordSentiment!
-  metric: RecordMetricId!
+  metricId: RecordMetricId!
   metricType: RecordMetricType!
   iconURI: String!
   sortDirection: SortDirection!
@@ -280,11 +280,11 @@ type PlayerRecord implements Record {
   year: Int!
   type: RecordTypeId!
   member: FantasyMember!
-  value: Decimal!
+  metric: RecordMetric!
   displayName: String!
   category: RecordCategoryId!
   sentiment: RecordSentiment!
-  metric: RecordMetricId!
+  metricId: RecordMetricId!
   metricType: RecordMetricType!
   iconURI: String!
   sortDirection: SortDirection!
@@ -332,8 +332,9 @@ type RecordMetadata {
   type: RecordTypeId!
   displayName: String!
   category: RecordCategoryId!
+  categoryDisplayName: String!
   sentiment: RecordSentiment!
-  metric: RecordMetricId!
+  metricId: RecordMetricId!
   metricType: RecordMetricType!
   iconURI: String!
   sortDirection: SortDirection!
@@ -349,11 +350,11 @@ type SeasonalRecord implements Record {
   year: Int!
   type: RecordTypeId!
   member: FantasyMember!
-  value: Decimal!
+  metric: RecordMetric!
   displayName: String!
   category: RecordCategoryId!
   sentiment: RecordSentiment!
-  metric: RecordMetricId!
+  metricId: RecordMetricId!
   metricType: RecordMetricType!
   iconURI: String!
   sortDirection: SortDirection!
@@ -424,11 +425,11 @@ type WeeklyRecord implements Record {
   year: Int!
   type: RecordTypeId!
   member: FantasyMember!
-  value: Decimal!
+  metric: RecordMetric!
   displayName: String!
   category: RecordCategoryId!
   sentiment: RecordSentiment!
-  metric: RecordMetricId!
+  metricId: RecordMetricId!
   metricType: RecordMetricType!
   iconURI: String!
   sortDirection: SortDirection!

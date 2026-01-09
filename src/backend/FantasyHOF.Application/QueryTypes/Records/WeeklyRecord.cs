@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.Application.Enums;
+using FantasyHOF.Application.QueryTypes.Records;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace FantasyHOF.Domain.Types.Records
     {
         public int Week { get; init; }
 
-        public WeeklyRecord(FantasyMember member, RecordTypeId type, int year, int week, decimal value) 
-            : base(member, type, year, value)
+        public WeeklyRecord(FantasyMember member, RecordTypeId type, int year, int week, RecordMetric metric) 
+            : base(member, type, year, metric)
         {
             Week = week;
         }

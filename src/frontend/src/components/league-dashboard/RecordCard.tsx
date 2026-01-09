@@ -17,9 +17,16 @@ const RecordCardFragment = graphql`
   fragment RecordCardFragment on Record {
     displayName
     iconURI
-    metric
-    isPercentage
-    value
+    metric {
+      ... on RatioRecordMetric {
+        __typename
+      }
+      ... on ScalarRecordMetric {
+        __typename
+      }
+      value
+      unit
+    }
     type
   }
 `;
@@ -27,10 +34,13 @@ const RecordCardFragment = graphql`
 export function RecordCard({ recordKey, titleDescription, footerText }: Props) {
   const record = useFragment(RecordCardFragment, recordKey);
 
-  const roundedValue = parseFloat(record.value.toFixed(2));
-  const formattedValue = record.isPercentage
-    ? new Intl.NumberFormat("en-US", { style: "percent" }).format(roundedValue)
-    : roundedValue;
+  const roundedValue = parseFloat(record.metric.value.toFixed(2));
+  const formattedValue =
+    record.metric.__typename === "RatioRecordMetric"
+      ? new Intl.NumberFormat("en-US", { style: "percent" }).format(
+          roundedValue,
+        )
+      : roundedValue;
 
   return (
     <Card className="px-4 pt-2">
@@ -60,7 +70,7 @@ export function RecordCard({ recordKey, titleDescription, footerText }: Props) {
       <CardContent className="px-2 space-y-4 -mt-4">
         <div className="space-x-2">
           <span className="text-4xl font-bold">{formattedValue}</span>
-          <span className="text-lg">{record.metric}</span>
+          <span className="text-lg">{record.metric.unit}</span>
         </div>
         <p className="text-muted-foreground">{footerText}</p>
       </CardContent>

@@ -138,7 +138,7 @@ namespace FantasyHOF.Domain.Types
             return new LeagueRecord(
                 winnerStats.MemberDetails.Member, 
                 recordType,
-                projector.GetMetric(winnerStats).Value
+                projector.GetMetric(winnerStats)
             );
         }
 
@@ -154,7 +154,7 @@ namespace FantasyHOF.Domain.Types
                 winnerStats.MemberDetails.Member, 
                 recordType,
                 winnerStats.Year, 
-                projector.GetMetric(winnerStats).Value
+                projector.GetMetric(winnerStats)
             );
         }
 
@@ -171,7 +171,7 @@ namespace FantasyHOF.Domain.Types
                 recordType,
                 winnerStats.Year,
                 winnerStats.Week, 
-                projector.GetMetric(winnerStats).Value
+                projector.GetMetric(winnerStats)
             );
         }
 
@@ -189,7 +189,7 @@ namespace FantasyHOF.Domain.Types
                 winnerStats.Player,
                 winnerStats.Year,
                 winnerStats.Week, 
-                projector.GetMetric(winnerStats).Value
+                projector.GetMetric(winnerStats)
             );
         }
     }
