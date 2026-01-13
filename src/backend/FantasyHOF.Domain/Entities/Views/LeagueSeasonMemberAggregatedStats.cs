@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FantasyHOF.Domain.Entities.Views
+﻿namespace FantasyHOF.Domain.Entities.Views
 {
     public class LeagueSeasonMemberAggregatedStats
     {
@@ -21,7 +15,7 @@ namespace FantasyHOF.Domain.Entities.Views
         public int Losses { get; private set; }
         public decimal WinPercentage { get; private set; }
         public int TopWeeks { get; private set; }
-        public decimal TopWeekPercentage{ get; private set; }
+        public decimal TopWeekPercentage { get; private set; }
         public int BottomWeeks { get; private set; }
         public decimal BottomWeekPercentage { get; private set; }
         public int BlowoutWins { get; private set; }

@@ -1,14 +1,9 @@
 ﻿using FantasyHOF.Application.Configuration;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
@@ -19,7 +14,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
             public async Task<IEnumerable<League>> Handle(GetDemoLeaguesQuery request, CancellationToken cancellationToken)
             {
                 User adminUser = await database.Users.Where(x => x.ClerkId == appConfig.Value.AdminClerkUserId).SingleAsync();
-                
+
                 return database.Leagues
                     .AsNoTracking()
                     .Where(league => league.UserId == adminUser.Id);

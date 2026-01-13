@@ -1,27 +1,27 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonScoringSettingsQueries
 {
-	public sealed record GetLeagueSeasonScoringSettingsByIdsQuery(IEnumerable<int> LeagueSeasonScoringSettingsIds)
-		: IRequest<IEnumerable<LeagueSeasonScoringSettings>>
-	{
-		public sealed class GetLeagueSeasonScoringSettingsByIdsQueryHandler(FantasyHOFDBContext context)
-						: IRequestHandler<GetLeagueSeasonScoringSettingsByIdsQuery, IEnumerable<LeagueSeasonScoringSettings>>
-		{
-			private readonly FantasyHOFDBContext _context = context;
+    public sealed record GetLeagueSeasonScoringSettingsByIdsQuery(IEnumerable<int> LeagueSeasonScoringSettingsIds)
+        : IRequest<IEnumerable<LeagueSeasonScoringSettings>>
+    {
+        public sealed class GetLeagueSeasonScoringSettingsByIdsQueryHandler(FantasyHOFDBContext context)
+                        : IRequestHandler<GetLeagueSeasonScoringSettingsByIdsQuery, IEnumerable<LeagueSeasonScoringSettings>>
+        {
+            private readonly FantasyHOFDBContext _context = context;
 
-			public async Task<IEnumerable<LeagueSeasonScoringSettings>> Handle(
-				GetLeagueSeasonScoringSettingsByIdsQuery request,
-				CancellationToken cancellationToken)
-			{
-				return await _context.LeagueSeasonScoringSettings
-					.AsNoTracking()
-					.Where(settings => request.LeagueSeasonScoringSettingsIds.Contains(settings.Id))
+            public async Task<IEnumerable<LeagueSeasonScoringSettings>> Handle(
+                GetLeagueSeasonScoringSettingsByIdsQuery request,
+                CancellationToken cancellationToken)
+            {
+                return await _context.LeagueSeasonScoringSettings
+                    .AsNoTracking()
+                    .Where(settings => request.LeagueSeasonScoringSettingsIds.Contains(settings.Id))
                     .ToListAsync();
-			}
-		}
-	}
+            }
+        }
+    }
 }

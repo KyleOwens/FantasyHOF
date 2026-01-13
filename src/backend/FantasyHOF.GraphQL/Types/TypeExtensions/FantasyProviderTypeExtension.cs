@@ -2,11 +2,6 @@
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
@@ -23,7 +18,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
             IMediator mediator,
             CancellationToken cancellationToken)
         {
-            return await mediator.Send(new GetFantasyProviderByIdQuery((FantasyProviderId) id), cancellationToken);
+            return await mediator.Send(new GetFantasyProviderByIdQuery((FantasyProviderId)id), cancellationToken);
         }
     }
 }

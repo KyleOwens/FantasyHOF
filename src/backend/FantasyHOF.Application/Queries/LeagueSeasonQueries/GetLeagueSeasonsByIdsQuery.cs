@@ -1,16 +1,11 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonQueries
 {
-    public sealed record GetLeagueSeasonsByIdsQuery(IEnumerable<int> LeagueSeasonIds) 
+    public sealed record GetLeagueSeasonsByIdsQuery(IEnumerable<int> LeagueSeasonIds)
         : IRequest<IEnumerable<LeagueSeason>>
     {
         public sealed class GetLeagueSeasonsByIdsQueryHandler(FantasyHOFDBContext context)
@@ -19,7 +14,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonQueries
             private readonly FantasyHOFDBContext _context = context;
 
             public async Task<IEnumerable<LeagueSeason>> Handle(
-                GetLeagueSeasonsByIdsQuery request, 
+                GetLeagueSeasonsByIdsQuery request,
                 CancellationToken cancellationToken)
             {
                 return await _context.LeagueSeasons

@@ -15,9 +15,9 @@ namespace FantasyHOF.ESPN.Types.Models
         internal ESPNRoster? RosterForCurrentScoringPeriod { get; init; }
 
         [NotMapped]
-        public ESPNRoster? Roster => 
-            RosterForCurrentScoringPeriod is not null ? 
-            RosterForCurrentScoringPeriod : 
+        public ESPNRoster? Roster =>
+            RosterForCurrentScoringPeriod is not null ?
+            RosterForCurrentScoringPeriod :
             RosterForMatchupPeriod;
     }
 }

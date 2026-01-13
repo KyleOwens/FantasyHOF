@@ -1,21 +1,14 @@
-﻿using FantasyHOF.Application.BackgroundJobs;
-using FantasyHOF.Application.Mappers;
-using FantasyHOF.Application.Queries.ESPNQueries;
+﻿using FantasyHOF.Application.Authentication;
+using FantasyHOF.Application.BackgroundJobs;
 using FantasyHOF.Application.QueryTypes;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
 using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Application.Authentication;
 
 namespace FantasyHOF.Application.Mutations
 {

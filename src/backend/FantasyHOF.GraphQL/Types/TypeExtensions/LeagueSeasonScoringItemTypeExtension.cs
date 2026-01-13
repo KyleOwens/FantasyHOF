@@ -2,18 +2,13 @@
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
     [Node]
-	[ExtendObjectType(typeof(LeagueSeasonScoringItem))]
+    [ExtendObjectType(typeof(LeagueSeasonScoringItem))]
     internal class LeagueSeasonScoringItemTypeExtension
-	{
+    {
         [ID<LeagueSeason>]
         public int LeagueSeasonId([Parent] LeagueSeasonScoringItem scoringItem) => scoringItem.LeagueSeasonId;
 
@@ -29,11 +24,11 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
         }
 
         public static async Task<LeagueSeasonScoringItem?> GetLeagueSeasonScoringItemAsync(
-			int id,
-			IMediator mediator,
-			CancellationToken cancellationToken)
-		{
-			return await mediator.Send(new GetLeagueSeasonScoringItemByIdQuery(id), cancellationToken);
-		}
+            int id,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            return await mediator.Send(new GetLeagueSeasonScoringItemByIdQuery(id), cancellationToken);
+        }
     }
 }

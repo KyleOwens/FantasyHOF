@@ -1,15 +1,8 @@
-﻿using FantasyHOF.Application.Mutations;
-using FantasyHOF.EntityFramework;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FantasyHOF.Application.Authentication;
+using FantasyHOF.Application.Mutations;
 using FantasyHOF.Domain.Entities;
-using FantasyHOF.Application.Authentication;
+using MediatR;
+using System.Security.Authentication;
 
 namespace FantasyHOF.Application.Queries.UserQueries
 {
@@ -20,7 +13,7 @@ namespace FantasyHOF.Application.Queries.UserQueries
             public async Task<User> Handle(GetAuthenticatedUserQuery request, CancellationToken cancellationToken)
             {
                 if (!currentUser.IsAuthenticated) throw new AuthenticationException("No authenticated user detected");
-                
+
                 return await mediator.Send(new GetOrCreateUserByClerkIdCommand(currentUser.ClerkUserId));
             }
         }

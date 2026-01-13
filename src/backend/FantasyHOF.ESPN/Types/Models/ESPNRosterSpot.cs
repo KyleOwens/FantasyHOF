@@ -1,6 +1,5 @@
 ﻿
 using FantasyHOF.ESPN.Enums;
-using System.Text.Json.Serialization;
 
 namespace FantasyHOF.ESPN.Types.Models
 {

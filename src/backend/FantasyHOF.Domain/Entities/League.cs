@@ -36,7 +36,7 @@ namespace FantasyHOF.Domain.Entities
         public void SetLeagueMembers(LeagueMember member)
         {
             if (Members.Any(x => x.MemberId == member.MemberId)) return;
-            
+
             Members.Add(member);
         }
     }

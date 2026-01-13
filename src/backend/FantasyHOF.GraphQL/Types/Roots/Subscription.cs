@@ -3,11 +3,6 @@ using FantasyHOF.Domain.Entities;
 using HotChocolate.Authorization;
 using HotChocolate.Execution;
 using HotChocolate.Subscriptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.Roots
 {

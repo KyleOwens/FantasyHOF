@@ -5,19 +5,19 @@ using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
 {
-	internal static class LeagueSeasonScheduleSettingsByLeagueSeasonIdsDataLoaderDefinition
-	{	
-		[DataLoader]
-		public static async Task<Dictionary<int, LeagueSeasonScheduleSettings>> GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsAsync(
-			IReadOnlyList<int> ids,
-			IMediator mediator,
-			CancellationToken cancellationToken)
-		{
-			var settings = await mediator.Send(
-				new GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery(ids),
-				cancellationToken);
+    internal static class LeagueSeasonScheduleSettingsByLeagueSeasonIdsDataLoaderDefinition
+    {
+        [DataLoader]
+        public static async Task<Dictionary<int, LeagueSeasonScheduleSettings>> GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsAsync(
+            IReadOnlyList<int> ids,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            var settings = await mediator.Send(
+                new GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery(ids),
+                cancellationToken);
 
-			return settings.ToDictionary(setting => setting.LeagueSeasonId);
-		}
-	}
+            return settings.ToDictionary(setting => setting.LeagueSeasonId);
+        }
+    }
 }

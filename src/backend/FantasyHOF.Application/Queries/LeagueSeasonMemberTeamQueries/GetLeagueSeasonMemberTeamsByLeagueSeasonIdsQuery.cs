@@ -1,9 +1,9 @@
 ﻿
 using FantasyHOF.Domain.ComplexIds;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
 {
@@ -31,7 +31,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
 
             return unfilteredResults
                 .Where(memberTeam => idSet.Contains(new LeagueSeasonMemberId(memberTeam.LeagueSeasonId, memberTeam.MemberId)));
-                
+
         }
     }
 }

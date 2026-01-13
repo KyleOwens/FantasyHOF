@@ -1,12 +1,7 @@
 ﻿using FantasyHOF.Application.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.Domain.Enums;
+using System.Linq.Expressions;
 
 namespace FantasyHOF.Application.Registries
 {
@@ -28,7 +23,7 @@ namespace FantasyHOF.Application.Registries
             {
                 [RecordMetricId.PlayoffScore] = stats => stats.MatchupTypeId != MatchupTypeId.RegularSeason,
                 [RecordMetricId.VictoryScoreMargin] = stats => stats.MatchupOutcomeId == MatchupOutcomeId.Win,
-                [RecordMetricId.PlayoffVictoryScoreMargin] = stats => stats.MatchupTypeId != MatchupTypeId.RegularSeason && 
+                [RecordMetricId.PlayoffVictoryScoreMargin] = stats => stats.MatchupTypeId != MatchupTypeId.RegularSeason &&
                                                                       stats.MatchupOutcomeId == MatchupOutcomeId.Win,
                 [RecordMetricId.WinScore] = stats => stats.MatchupOutcomeId == MatchupOutcomeId.Win,
                 [RecordMetricId.LossScore] = stats => stats.MatchupOutcomeId == MatchupOutcomeId.Loss,

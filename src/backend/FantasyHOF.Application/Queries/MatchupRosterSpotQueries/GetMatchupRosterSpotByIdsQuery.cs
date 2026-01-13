@@ -1,27 +1,27 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.MatchupRosterSpotQueries
 {
-	public sealed record GetMatchupRosterSpotsByIdsQuery(IEnumerable<int> MatchupRosterSpotIds)
-		: IRequest<IEnumerable<MatchupRosterSpot>>
-	{
-		public sealed class GetMatchupRosterSpotsByIdsQueryHandler(FantasyHOFDBContext context)
-						: IRequestHandler<GetMatchupRosterSpotsByIdsQuery, IEnumerable<MatchupRosterSpot>>
-		{
-			private readonly FantasyHOFDBContext _context = context;
+    public sealed record GetMatchupRosterSpotsByIdsQuery(IEnumerable<int> MatchupRosterSpotIds)
+        : IRequest<IEnumerable<MatchupRosterSpot>>
+    {
+        public sealed class GetMatchupRosterSpotsByIdsQueryHandler(FantasyHOFDBContext context)
+                        : IRequestHandler<GetMatchupRosterSpotsByIdsQuery, IEnumerable<MatchupRosterSpot>>
+        {
+            private readonly FantasyHOFDBContext _context = context;
 
-			public async Task<IEnumerable<MatchupRosterSpot>> Handle(
-				GetMatchupRosterSpotsByIdsQuery request,
-				CancellationToken cancellationToken)
-			{
-				return await _context.MatchupRosterSpots
-					.AsNoTracking()
-					.Where(rosterSpot => request.MatchupRosterSpotIds.Contains(rosterSpot.Id))
+            public async Task<IEnumerable<MatchupRosterSpot>> Handle(
+                GetMatchupRosterSpotsByIdsQuery request,
+                CancellationToken cancellationToken)
+            {
+                return await _context.MatchupRosterSpots
+                    .AsNoTracking()
+                    .Where(rosterSpot => request.MatchupRosterSpotIds.Contains(rosterSpot.Id))
                     .ToListAsync();
-			}
-		}
-	}
+            }
+        }
+    }
 }

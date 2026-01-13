@@ -1,9 +1,4 @@
 ﻿using FantasyHOF.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Entities
 {
@@ -29,7 +24,7 @@ namespace FantasyHOF.Domain.Entities
         {
             Position = position;
         }
-        
+
         public void SetAccumulatedStats(List<AccumulatedStat> accumulatedStats)
         {
             AccumulatedStats = accumulatedStats;

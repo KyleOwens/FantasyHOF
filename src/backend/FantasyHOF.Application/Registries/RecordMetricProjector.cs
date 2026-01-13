@@ -1,12 +1,6 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.QueryTypes.Records;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FantasyHOF.Application.Registries
 {

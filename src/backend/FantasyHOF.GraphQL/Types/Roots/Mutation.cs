@@ -8,12 +8,6 @@ using FantasyHOF.ESPN.Types.Inputs;
 using HotChocolate.Authorization;
 using HotChocolate.Subscriptions;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.Roots
 {
@@ -27,9 +21,9 @@ namespace FantasyHOF.GraphQL.Types.Roots
         [Error(typeof(ESPNInvalidYearException))]
         [Authorize]
         public static async Task<AddLeagueMutationPayload> AddESPNLeagueToUserAsync(
-            string leagueId, 
-            string swid, 
-            string espnS2Id, 
+            string leagueId,
+            string swid,
+            string espnS2Id,
             IMediator mediator,
             CancellationToken cancellationToken)
         {
@@ -38,7 +32,7 @@ namespace FantasyHOF.GraphQL.Types.Roots
                     new ESPNLeagueCredentials(
                         leagueId,
                         swid,
-                        espnS2Id)), 
+                        espnS2Id)),
                 cancellationToken);
         }
 

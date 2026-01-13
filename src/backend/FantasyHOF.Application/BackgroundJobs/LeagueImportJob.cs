@@ -1,19 +1,12 @@
 ﻿using FantasyHOF.Application.Queries.ESPNQueries;
 using FantasyHOF.Application.Services;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN.Types.Inputs;
 using Hangfire;
-using HotChocolate.Subscriptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Enums;
 
 namespace FantasyHOF.Application.BackgroundJobs
 {
@@ -23,9 +16,9 @@ namespace FantasyHOF.Application.BackgroundJobs
     }
 
     public class LeagueImportJob(
-        FantasyHOFDBContext database, 
+        FantasyHOFDBContext database,
         IMediator mediator,
-        ILeagueImportEventSender eventSender) : ILeagueImportJob 
+        ILeagueImportEventSender eventSender) : ILeagueImportJob
     {
         [JobDisplayName("Import ESPN League {1}")]
         public async Task ExecuteAsync(int pendingLeagueId, ESPNLeagueCredentials credentials, IJobCancellationToken jobToken)

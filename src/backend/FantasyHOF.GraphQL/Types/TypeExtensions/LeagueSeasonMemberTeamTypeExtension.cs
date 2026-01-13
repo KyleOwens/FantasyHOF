@@ -1,13 +1,8 @@
 ﻿using FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries;
-using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.ComplexIds;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {

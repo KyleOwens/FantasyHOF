@@ -1,8 +1,5 @@
-﻿
-using FantasyHOF.Application.Queries.LeagueSeasonScoringItemQueries;
-using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Domain.Entities;
 using MediatR;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonScoringItemQueries
 {

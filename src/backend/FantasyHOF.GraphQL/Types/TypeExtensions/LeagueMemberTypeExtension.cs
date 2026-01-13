@@ -2,11 +2,6 @@
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using FantasyHOF.GraphQL.Types.DataLoaders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {

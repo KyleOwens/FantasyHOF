@@ -1,13 +1,7 @@
-﻿using FantasyHOF.EntityFramework;
-using HotChocolate.Subscriptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities;
+﻿using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
+using FantasyHOF.EntityFramework;
+using HotChocolate.Subscriptions;
 
 namespace FantasyHOF.Application.Services
 {
@@ -18,15 +12,15 @@ namespace FantasyHOF.Application.Services
         public Task Complete(LeagueImport import, int leagueId, CancellationToken cancellationToken);
         public Task Error(LeagueImport import, CancellationToken cancellationToken);
     }
-    
+
     public class LeagueImportEventSender(FantasyHOFDBContext database, ITopicEventSender eventSender) : ILeagueImportEventSender
-    { 
+    {
         private async Task SendEvent(LeagueImport import, CancellationToken cancellationToken)
         {
             await database.SaveChangesAsync();
             await eventSender.SendAsync($"{nameof(LeagueImport)}_{import.UserId}", import, cancellationToken);
         }
-        
+
         public async Task StartImport(LeagueImport import, CancellationToken cancellationToken)
         {
             import.StatusId = LeagueImportStatusId.LoadingData;

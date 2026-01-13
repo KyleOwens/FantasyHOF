@@ -1,4 +1,6 @@
 ﻿using FantasyHOF.Application.Mappers;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
@@ -6,13 +8,6 @@ using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Enums;
 
 namespace FantasyHOF.Application.Queries.ESPNQueries
 {
@@ -66,7 +61,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 IEnumerable<ESPNFantasyMember> allEspnMembers = espnMemberDetails
                     .SelectMany(x => x.Members)
                     .DistinctBy(x => x.Id);
-                
+
                 IEnumerable<string> allEspnMemberIds = allEspnMembers
                     .Select(x => x.Id);
 
@@ -117,11 +112,11 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
             private List<LeagueMember> CreateLeagueMembers(League league, IEnumerable<ESPNSeasonalLeagueData> espnSeasons, IEnumerable<ESPNWeeklyLeagueData> espnWeeklyData)
             {
                 List<LeagueMember> leagueMembers = [];
-                
+
                 foreach (FantasyMember member in _importContext.MemberLookup.Values)
                 {
                     IEnumerable<ESPNSeasonalLeagueData> memberSeasons = espnSeasons.Where(x => x.Members.Any(x => x.Id == member.ProviderMemberId));
-                    
+
                     LeagueMember newLeagueMember = new LeagueMember()
                     {
                         Firstyear = memberSeasons.First().Year,
@@ -152,7 +147,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 LeagueSeasonSettings settings = _espnMapper.MapLeagueSeasonSettings(espnSettings);
 
                 settings.SetScheduleSettings(_espnMapper.MapLeagueSeasonScheduleSettings(espnSettings.ScheduleSettings));
-                settings.SetScoringSettings(CreateLeagueSeasonScoringSettings(espnSettings.ScoringSettings));  
+                settings.SetScoringSettings(CreateLeagueSeasonScoringSettings(espnSettings.ScoringSettings));
 
                 return settings;
             }

@@ -1,17 +1,10 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Application.QueryTypes.Records;
-using FantasyHOF.EntityFramework;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using FantasyHOF.GraphQL.Types.DataLoaders;
-using FantasyHOF.GraphQL.Types.Roots;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
@@ -20,11 +13,11 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
     public class LeagueTypeExtension
     {
         [ID<FantasyProvider>]
-        public int FantasyProviderId([Parent] League league) => (int) league.FantasyProviderId;
-        
+        public int FantasyProviderId([Parent] League league) => (int)league.FantasyProviderId;
+
         public async Task<IEnumerable<LeagueSeason>> GetSeasonsAsync(
-            [Parent] League league, 
-            ILeagueSeasonsByLeagueIdsDataLoader leagueSeasons, 
+            [Parent] League league,
+            ILeagueSeasonsByLeagueIdsDataLoader leagueSeasons,
             CancellationToken cancellationToken)
         {
             return await leagueSeasons.LoadAsync(league.Id, cancellationToken) ?? [];

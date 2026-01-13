@@ -13,7 +13,7 @@ namespace FantasyHOF.ApplicationExtensions
                 .AddMutationConventions(applyToAllMutations: true)
                 .AddErrorInterfaceType<ICodedException>()
                 .AddInMemorySubscriptions();
-                
+
             return builder;
         }
     }

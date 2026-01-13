@@ -1,27 +1,27 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.TeamQueries
 {
-	public sealed record GetTeamsByIdsQuery(IEnumerable<int> TeamIds)
-		: IRequest<IEnumerable<Team>>
-	{
-		public sealed class GetTeamsByIdsQueryHandler(FantasyHOFDBContext context)
-						: IRequestHandler<GetTeamsByIdsQuery, IEnumerable<Team>>
-		{
-			private readonly FantasyHOFDBContext _context = context;
+    public sealed record GetTeamsByIdsQuery(IEnumerable<int> TeamIds)
+        : IRequest<IEnumerable<Team>>
+    {
+        public sealed class GetTeamsByIdsQueryHandler(FantasyHOFDBContext context)
+                        : IRequestHandler<GetTeamsByIdsQuery, IEnumerable<Team>>
+        {
+            private readonly FantasyHOFDBContext _context = context;
 
-			public async Task<IEnumerable<Team>> Handle(
-				GetTeamsByIdsQuery request,
-				CancellationToken cancellationToken)
-			{
-				return await _context.Teams
-					.AsNoTracking()
-					.Where(team => request.TeamIds.Contains(team.Id))
+            public async Task<IEnumerable<Team>> Handle(
+                GetTeamsByIdsQuery request,
+                CancellationToken cancellationToken)
+            {
+                return await _context.Teams
+                    .AsNoTracking()
+                    .Where(team => request.TeamIds.Contains(team.Id))
                     .ToListAsync();
-			}
-		}
-	}
+            }
+        }
+    }
 }

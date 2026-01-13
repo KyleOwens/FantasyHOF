@@ -1,8 +1,8 @@
-﻿using MediatR;
+﻿using FantasyHOF.Application.Mutations;
+using FantasyHOF.Domain.Entities;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
-using FantasyHOF.Application.Mutations;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Authentication
 {

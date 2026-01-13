@@ -1,10 +1,10 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.QueryTypes.Records;
 using FantasyHOF.Application.Registries;
+using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using FantasyHOF.Domain.Entities.Views;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
@@ -13,7 +13,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
         public sealed class GetLeagueSingleRecordDetailsQueryHandler(FantasyHOFDBContext database) : IRequestHandler<GetLeagueSingleRecordDetailsQuery, List<RecordDetails>>
         {
             public Task<List<RecordDetails>> Handle(GetLeagueSingleRecordDetailsQuery request, CancellationToken cancellationToken)
-            {                
+            {
                 RecordCategoryId recordCategory = request.RecordType.GetMetadata().Category;
 
                 switch (recordCategory)
@@ -34,7 +34,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
             private async Task<List<RecordDetails>> LoadLeagueRecordDetail(int leagueId, RecordTypeId recordType)
             {
                 RecordMetricProjector<LeagueMemberAggregatedStats> projector = new(recordType);
-                
+
                 IQueryable<LeagueMemberAggregatedStats> baseQuery = database.LeagueMemberAggregatedStats
                     .Where(stats => stats.LeagueId == leagueId)
                     .Include(x => x.MemberDetails)
@@ -116,5 +116,5 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                 return await filteredAndSortedQuery.Take(10).ToListAsync();
             }
         }
-    }    
+    }
 }

@@ -3,18 +3,13 @@ using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
     [Node]
     [ExtendObjectType<LeagueImport>]
     internal class LeagueImportTypeExtension
-	{
+    {
         public async Task<User> GetUserAsync(
             [Parent] LeagueImport import,
             IUsersByIdsDataLoader users,
@@ -24,37 +19,37 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
         }
 
         public async Task<FantasyProvider> GetProviderAsync(
-			[Parent] LeagueImport import, 
-			IFantasyProvidersByIdsDataLoader providers,
-			CancellationToken cancellationToken)
-		{
-			return await providers.LoadRequiredAsync(import.ProviderId, cancellationToken);
-		}
+            [Parent] LeagueImport import,
+            IFantasyProvidersByIdsDataLoader providers,
+            CancellationToken cancellationToken)
+        {
+            return await providers.LoadRequiredAsync(import.ProviderId, cancellationToken);
+        }
 
-		public async Task<LeagueImportStatus> GetStatusAsync(
-			[Parent] LeagueImport import,
-			ILeagueImportStatusesByIdsDataLoader statuses,
-			CancellationToken cancellationToken)
-		{
-			return await statuses.LoadRequiredAsync(import.StatusId, cancellationToken);
-		}
+        public async Task<LeagueImportStatus> GetStatusAsync(
+            [Parent] LeagueImport import,
+            ILeagueImportStatusesByIdsDataLoader statuses,
+            CancellationToken cancellationToken)
+        {
+            return await statuses.LoadRequiredAsync(import.StatusId, cancellationToken);
+        }
 
-		public async Task<League?> GetLeagueAsync(
-			[Parent] LeagueImport import,
-			ILeaguesByIdsDataLoader leagues,
-			CancellationToken cancellationToken)
-		{
-			if (import.LeagueId == null) return null;
-			
-			return await leagues.LoadAsync(import.LeagueId.Value, cancellationToken);
-		}
-		
-		public static async Task<LeagueImport?> GetLeagueImportAsync(
-			int id,
-			IMediator mediator,
-			CancellationToken cancellationToken)
-		{
-			return await mediator.Send(new GetLeagueImportByIdQuery(id), cancellationToken);
-		}
+        public async Task<League?> GetLeagueAsync(
+            [Parent] LeagueImport import,
+            ILeaguesByIdsDataLoader leagues,
+            CancellationToken cancellationToken)
+        {
+            if (import.LeagueId == null) return null;
+
+            return await leagues.LoadAsync(import.LeagueId.Value, cancellationToken);
+        }
+
+        public static async Task<LeagueImport?> GetLeagueImportAsync(
+            int id,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            return await mediator.Send(new GetLeagueImportByIdQuery(id), cancellationToken);
+        }
     }
 }

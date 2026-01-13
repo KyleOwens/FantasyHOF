@@ -1,17 +1,12 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Application.QueryTypes.Records;
+using FantasyHOF.Domain.Entities.Views;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities.Views;
-using FantasyHOF.Application.QueryTypes.Records;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
-    public sealed record GetLeagueRecordSummaryQuery(int LeagueId) : IRequest<LeagueRecordSummary?> 
+    public sealed record GetLeagueRecordSummaryQuery(int LeagueId) : IRequest<LeagueRecordSummary?>
     {
         public sealed class GetLeagueRecordSummaryQueryHandler(FantasyHOFDBContext database) : IRequestHandler<GetLeagueRecordSummaryQuery, LeagueRecordSummary?>
         {

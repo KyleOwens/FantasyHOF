@@ -1,28 +1,28 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.StatQueries
 {
-	public sealed record GetStatsByIdsQuery(IEnumerable<StatId> StatIds)
-		: IRequest<IEnumerable<Stat>>
-	{
-		public sealed class GetStatsByIdsQueryHandler(FantasyHOFDBContext context)
-						: IRequestHandler<GetStatsByIdsQuery, IEnumerable<Stat>>
-		{
-			private readonly FantasyHOFDBContext _context = context;
+    public sealed record GetStatsByIdsQuery(IEnumerable<StatId> StatIds)
+        : IRequest<IEnumerable<Stat>>
+    {
+        public sealed class GetStatsByIdsQueryHandler(FantasyHOFDBContext context)
+                        : IRequestHandler<GetStatsByIdsQuery, IEnumerable<Stat>>
+        {
+            private readonly FantasyHOFDBContext _context = context;
 
-			public async Task<IEnumerable<Stat>> Handle(
-				GetStatsByIdsQuery request,
-				CancellationToken cancellationToken)
-			{
-				return await _context.Stats
-					.AsNoTracking()
-					.Where(stat => request.StatIds.Contains(stat.Id))
+            public async Task<IEnumerable<Stat>> Handle(
+                GetStatsByIdsQuery request,
+                CancellationToken cancellationToken)
+            {
+                return await _context.Stats
+                    .AsNoTracking()
+                    .Where(stat => request.StatIds.Contains(stat.Id))
                     .ToListAsync();
-			}
-		}
-	}
+            }
+        }
+    }
 }

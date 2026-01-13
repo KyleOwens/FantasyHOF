@@ -3,14 +3,9 @@ using FantasyHOF.ESPN.Types.Inputs;
 using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
 using FantasyHOF.ESPN.Types.Responses;
-using FantasyHOF.Infrastructure.Extensions;
-using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http.Json;
-using System.Net.NetworkInformation;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace FantasyHOF.ESPN
 {
@@ -133,8 +128,8 @@ namespace FantasyHOF.ESPN
         {
             ESPNWeeklyStatus matchupWeeks = await LoadSeasonMatchupWeeks(year);
 
-            int lastWeek = year == DateTime.Now.Year ? 
-                matchupWeeks.CurrentMatchupPeriod - 1 : 
+            int lastWeek = year == DateTime.Now.Year ?
+                matchupWeeks.CurrentMatchupPeriod - 1 :
                 matchupWeeks.CurrentMatchupPeriod;
 
             List<Task<WeeklyDataResponse>> matchupTasks = [];

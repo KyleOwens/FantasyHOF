@@ -5,8 +5,6 @@ using FantasyHOF.Application.Registries;
 using FantasyHOF.Application.Services;
 using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.ESPN;
-using Hangfire;
-using Hangfire.PostgreSql;
 
 namespace FantasyHOF.ServiceExtensions
 {
@@ -23,15 +21,15 @@ namespace FantasyHOF.ServiceExtensions
             services.Configure<AppConfig>(appConfigSection);
 
             MetricSelectorRegistry<LeagueMemberAggregatedStats>.Selectors = LeagueMetricSelectorRegistry.Selectors;
-            
+
             MetricSelectorRegistry<LeagueSeasonMemberAggregatedStats>.Selectors = SeasonalMetricSelectorRegistry.Selectors;
-            
+
             MetricSelectorRegistry<WeeklyAggregationData>.Selectors = WeeklyMetricSelectorRegistry.Selectors;
             MetricSelectorRegistry<WeeklyAggregationData>.Filters = WeeklyMetricSelectorRegistry.Filters;
-            
+
             MetricSelectorRegistry<PlayerAggregationData>.Selectors = PlayerMetricSelectorRegistry.Selectors;
             MetricSelectorRegistry<PlayerAggregationData>.Filters = PlayerMetricSelectorRegistry.Filters;
-            
+
             return services;
         }
     }

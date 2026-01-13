@@ -1,17 +1,9 @@
-using FantasyHOF.Application.Mappers;
 using FantasyHOF.ApplicationExtensions;
 using FantasyHOF.EntityFramework;
-using FantasyHOF.ESPN;
-using FantasyHOF.ESPN.Enums;
-using FantasyHOF.Infrastructure.Authentication;
-using FantasyHOF.Infrastructure.Exceptions;
 using FantasyHOF.ServiceExtensions;
 using Hangfire;
 using HotChocolate.Execution;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Path = System.IO.Path;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +22,7 @@ builder.Services.AddFantasyHOFApplicationServices(builder.Configuration.GetSecti
 builder.Services.AddFantasyHOFMediatRServices();
 
 builder.AddFantasyHOFGraphQL();
-    
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -39,7 +31,7 @@ if (app.Environment.IsDevelopment())
     var schemaLocation = Path.Combine(Directory.GetCurrentDirectory(), "../../frontend/src/relay/schema.graphql");
 
     await File.WriteAllTextAsync(schemaLocation, executor.Schema.Print());
-    
+
     using IServiceScope scope = app.Services.CreateScope();
 
     FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();

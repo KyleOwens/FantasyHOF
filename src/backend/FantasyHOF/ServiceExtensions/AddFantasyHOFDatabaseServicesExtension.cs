@@ -24,7 +24,7 @@ namespace FantasyHOF.ServiceExtensions
                .UsePostgreSqlStorage(x => x.UseNpgsqlConnection(connectionString)));
 
             services.AddHangfireServer();
-               
+
             return services;
         }
     }

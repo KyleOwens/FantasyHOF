@@ -5,20 +5,20 @@ using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.DataLoaders
 {
-	internal static class TeamsByIdsDataLoaderDefinition
-	{
-		[DataLoader]
-		public static async Task<Dictionary<int, Team>> GetTeamsByIdsAsync(
-			IReadOnlyList<int> ids,
-			IMediator mediator,
-			CancellationToken cancellationToken)
-		{
-			var teams = await mediator.Send(
-				new GetTeamsByIdsQuery(ids),
-				cancellationToken);
+    internal static class TeamsByIdsDataLoaderDefinition
+    {
+        [DataLoader]
+        public static async Task<Dictionary<int, Team>> GetTeamsByIdsAsync(
+            IReadOnlyList<int> ids,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            var teams = await mediator.Send(
+                new GetTeamsByIdsQuery(ids),
+                cancellationToken);
 
-			return teams.ToDictionary(team => team.Id);
-		}
-	}
+            return teams.ToDictionary(team => team.Id);
+        }
+    }
 }
 

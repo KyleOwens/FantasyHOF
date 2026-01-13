@@ -1,13 +1,8 @@
-﻿using FantasyHOF.EntityFramework.Extensions;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
+using FantasyHOF.EntityFramework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.EntityFramework.Configurations
 {

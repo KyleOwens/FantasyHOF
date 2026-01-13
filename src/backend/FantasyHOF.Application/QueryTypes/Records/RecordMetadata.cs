@@ -1,10 +1,5 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.EntityFramework.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.Application.QueryTypes.Records
 {

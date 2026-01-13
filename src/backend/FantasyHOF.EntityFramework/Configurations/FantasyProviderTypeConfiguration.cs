@@ -1,13 +1,8 @@
-﻿using FantasyHOF.EntityFramework.Extensions;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
+using FantasyHOF.EntityFramework.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.EntityFramework.Configurations
 {
@@ -25,8 +20,8 @@ namespace FantasyHOF.EntityFramework.Configurations
         public string GetProviderLogoURL(FantasyProviderId providerId)
         {
             string folder = "/provider-logos/";
-            
-            switch(providerId)
+
+            switch (providerId)
             {
                 case FantasyProviderId.ESPN:
                     return folder + "/espn-logo.webp";

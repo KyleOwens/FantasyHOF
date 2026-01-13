@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Entities.Views;
+using FantasyHOF.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Reflection;
-using FantasyHOF.Domain.Entities.Views;
-using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Interfaces;
 
 namespace FantasyHOF.EntityFramework
 {

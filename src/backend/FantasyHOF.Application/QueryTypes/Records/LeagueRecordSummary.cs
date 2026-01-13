@@ -1,13 +1,6 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Registries;
 using FantasyHOF.Domain.Entities.Views;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.Application.QueryTypes.Records
 {
@@ -133,7 +126,7 @@ namespace FantasyHOF.Application.QueryTypes.Records
             LeagueMemberAggregatedStats winnerStats = projector.ExtractWinnerFromList(allTimeStats);
 
             return new LeagueRecord(
-                winnerStats.MemberDetails.Member, 
+                winnerStats.MemberDetails.Member,
                 recordType,
                 projector.GetMetric(winnerStats)
             );
@@ -148,9 +141,9 @@ namespace FantasyHOF.Application.QueryTypes.Records
             LeagueSeasonMemberAggregatedStats winnerStats = projector.ExtractWinnerFromList(statsByMemberAndSeason);
 
             return new SeasonalRecord(
-                winnerStats.MemberDetails.Member, 
+                winnerStats.MemberDetails.Member,
                 recordType,
-                winnerStats.Year, 
+                winnerStats.Year,
                 projector.GetMetric(winnerStats)
             );
         }
@@ -164,10 +157,10 @@ namespace FantasyHOF.Application.QueryTypes.Records
             WeeklyAggregationData winnerStats = projector.ExtractWinnerFromList(weeklyAggregationData);
 
             return new WeeklyRecord(
-                winnerStats.MemberDetails.Member, 
+                winnerStats.MemberDetails.Member,
                 recordType,
                 winnerStats.Year,
-                winnerStats.Week, 
+                winnerStats.Week,
                 projector.GetMetric(winnerStats)
             );
         }
@@ -185,7 +178,7 @@ namespace FantasyHOF.Application.QueryTypes.Records
                 recordType,
                 winnerStats.Player,
                 winnerStats.Year,
-                winnerStats.Week, 
+                winnerStats.Week,
                 projector.GetMetric(winnerStats)
             );
         }

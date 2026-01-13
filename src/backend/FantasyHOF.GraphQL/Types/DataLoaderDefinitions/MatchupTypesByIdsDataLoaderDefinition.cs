@@ -6,19 +6,19 @@ using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.DataLoaders
 {
-	internal static class MatchupTypesByIdsDataLoaderDefinition
-	{
-		[DataLoader]
-		public static async Task<Dictionary<MatchupTypeId, MatchupType>> GetMatchupTypesByIdsAsync(
-			IReadOnlyList<MatchupTypeId> ids,
-			IMediator mediator,
-			CancellationToken cancellationToken)
-		{
-			var types = await mediator.Send(
-				new GetMatchupTypesByIdsQuery(ids),
-				cancellationToken);
+    internal static class MatchupTypesByIdsDataLoaderDefinition
+    {
+        [DataLoader]
+        public static async Task<Dictionary<MatchupTypeId, MatchupType>> GetMatchupTypesByIdsAsync(
+            IReadOnlyList<MatchupTypeId> ids,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            var types = await mediator.Send(
+                new GetMatchupTypesByIdsQuery(ids),
+                cancellationToken);
 
-			return types.ToDictionary(type => type.Id);
-		}
-	}
+            return types.ToDictionary(type => type.Id);
+        }
+    }
 }

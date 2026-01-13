@@ -1,12 +1,6 @@
-﻿using FantasyHOF.Application.Queries;
-using FantasyHOF.Application.Queries.LeagueSeasonQueries;
+﻿using FantasyHOF.Application.Queries.LeagueSeasonQueries;
 using FantasyHOF.Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
 {
@@ -25,6 +19,6 @@ namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
             return seasons.GroupBy(season => season.LeagueId)
                 .Select(group => new { group.Key, Items = group.OrderBy(season => season.Year).ToList() })
                 .ToDictionary(entry => entry.Key, entry => entry.Items);
-        } 
+        }
     }
 }

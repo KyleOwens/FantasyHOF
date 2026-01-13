@@ -1,12 +1,7 @@
 ﻿using FantasyHOF.Application.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.Domain.Enums;
+using System.Linq.Expressions;
 
 namespace FantasyHOF.Application.Registries
 {

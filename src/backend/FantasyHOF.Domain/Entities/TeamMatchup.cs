@@ -18,9 +18,9 @@ namespace FantasyHOF.Domain.Entities
         public MatchupTeamDetails OwnerMatchupDetails { get; private set; } = null!;
         public MatchupTeamDetails? OpponentMatchupDetails { get; private set; } = null!;
 
-        public decimal ScoreMargin => 
-            OpponentMatchupDetails != null ? 
-            OwnerMatchupDetails.Score - OpponentMatchupDetails.Score : 
+        public decimal ScoreMargin =>
+            OpponentMatchupDetails != null ?
+            OwnerMatchupDetails.Score - OpponentMatchupDetails.Score :
             0;
 
         public void SetOwnerMathcupDetails(MatchupTeamDetails ownerMatchupDetails)

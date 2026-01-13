@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FantasyHOF.Domain.ComplexIds
+﻿namespace FantasyHOF.Domain.ComplexIds
 {
     public readonly record struct LeagueMemberId(int LeagueId, int MemberId)
     {

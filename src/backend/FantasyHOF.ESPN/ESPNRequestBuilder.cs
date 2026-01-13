@@ -1,13 +1,6 @@
 ﻿using FantasyHOF.ESPN.Types.Headers;
 using FantasyHOF.ESPN.Types.Inputs;
 using FantasyHOF.Infrastructure.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.ESPN
 {
@@ -23,7 +16,7 @@ namespace FantasyHOF.ESPN
         mBoxscore,
         mMatchupScore,
     }
-    
+
     public class ESPNRequestBuilder
     {
         private readonly ESPNLeagueCredentials _credentials;
@@ -41,7 +34,7 @@ namespace FantasyHOF.ESPN
         private string RequestURI => IsLegacyRequest ?
             $"{BaseURL}{_credentials.LeagueId}" :
             $"{BaseURL}{_requestYear}/segments/0/leagues/{_credentials.LeagueId}";
-            
+
         private ESPNRequestBuilder(ESPNLeagueCredentials credentials, int? requestYear)
         {
             _credentials = credentials;
@@ -81,7 +74,7 @@ namespace FantasyHOF.ESPN
         }
 
         private void AddQueryParameters(UriBuilder uriBuilder)
-        {   
+        {
             AddViewParams(uriBuilder);
             AddFilterParams(uriBuilder);
             AddLegacyParams(uriBuilder);

@@ -1,9 +1,4 @@
 ﻿using FantasyHOF.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.Application.QueryTypes.Records
 {
@@ -11,5 +6,5 @@ namespace FantasyHOF.Application.QueryTypes.Records
         : RecordDetails(Rank, Metric, MemberDetails)
     {
         public override string Key => $"l:{MemberDetails.LeagueId}:y:{Year}:w{Week}:p:{player.Id}:m:{MemberDetails.MemberId}";
-}
+    }
 }

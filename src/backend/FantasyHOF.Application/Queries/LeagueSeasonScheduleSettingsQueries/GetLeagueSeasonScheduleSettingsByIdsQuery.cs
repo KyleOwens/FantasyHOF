@@ -1,27 +1,27 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonScheduleSettingsQueries
 {
-	public sealed record GetLeagueSeasonScheduleSettingssByIdsQuery(IEnumerable<int> LeagueSeasonScheduleSettingsIds)
-		: IRequest<IEnumerable<LeagueSeasonScheduleSettings>>
-	{
-		public sealed class GetLeagueSeasonScheduleSettingssByIdsQueryHandler(FantasyHOFDBContext context)
-						: IRequestHandler<GetLeagueSeasonScheduleSettingssByIdsQuery, IEnumerable<LeagueSeasonScheduleSettings>>
-		{
-			private readonly FantasyHOFDBContext _context = context;
+    public sealed record GetLeagueSeasonScheduleSettingssByIdsQuery(IEnumerable<int> LeagueSeasonScheduleSettingsIds)
+        : IRequest<IEnumerable<LeagueSeasonScheduleSettings>>
+    {
+        public sealed class GetLeagueSeasonScheduleSettingssByIdsQueryHandler(FantasyHOFDBContext context)
+                        : IRequestHandler<GetLeagueSeasonScheduleSettingssByIdsQuery, IEnumerable<LeagueSeasonScheduleSettings>>
+        {
+            private readonly FantasyHOFDBContext _context = context;
 
-			public async Task<IEnumerable<LeagueSeasonScheduleSettings>> Handle(
-				GetLeagueSeasonScheduleSettingssByIdsQuery request,
-				CancellationToken cancellationToken)
-			{
-				return await _context.LeagueSeasonScheduleSettings
-					.AsNoTracking()
-					.Where(settings => request.LeagueSeasonScheduleSettingsIds.Contains(settings.Id))
+            public async Task<IEnumerable<LeagueSeasonScheduleSettings>> Handle(
+                GetLeagueSeasonScheduleSettingssByIdsQuery request,
+                CancellationToken cancellationToken)
+            {
+                return await _context.LeagueSeasonScheduleSettings
+                    .AsNoTracking()
+                    .Where(settings => request.LeagueSeasonScheduleSettingsIds.Contains(settings.Id))
                     .ToListAsync();
-			}
-		}
-	}
+            }
+        }
+    }
 }

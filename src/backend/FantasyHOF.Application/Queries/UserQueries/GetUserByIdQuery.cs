@@ -1,20 +1,20 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Application.Authentication;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using FantasyHOF.Domain.Entities;
-using FantasyHOF.Application.Authentication;
 
 namespace FantasyHOF.Application.Queries.UserQueries
 {
     public record GetUserByIdQuery(Guid UserId) : IRequest<User?>
     {
-        public class GetUserByIdQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser) 
+        public class GetUserByIdQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser)
             : IRequestHandler<GetUserByIdQuery, User?>
         {
             public async Task<User?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
             {
                 if (!currentUser.IsAuthenticated) return null;
-                
+
                 Guid currentUserId = await currentUser.GetUserIdAsync(cancellationToken);
 
                 if (currentUserId != request.UserId) return null;

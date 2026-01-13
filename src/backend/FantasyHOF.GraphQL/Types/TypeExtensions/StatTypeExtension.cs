@@ -2,11 +2,6 @@
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
@@ -15,7 +10,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
     internal class StatTypeExtension
     {
         [ID]
-        public int Id([Parent] Stat stat) => (int) stat.Id;
+        public int Id([Parent] Stat stat) => (int)stat.Id;
         public StatId Value([Parent] Stat stat) => stat.Id;
 
         public static async Task<Stat?> GetStatAsync(

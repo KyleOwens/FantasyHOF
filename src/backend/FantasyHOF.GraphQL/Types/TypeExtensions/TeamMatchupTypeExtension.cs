@@ -2,62 +2,57 @@
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
     [Node]
     [ExtendObjectType<TeamMatchup>]
     internal class TeamMatchupTypeExtension
-	{
-		[ID<Team>]
-		public int TeamId([Parent] TeamMatchup teamMatchup) => teamMatchup.TeamId;
+    {
+        [ID<Team>]
+        public int TeamId([Parent] TeamMatchup teamMatchup) => teamMatchup.TeamId;
 
         [ID<MatchupTeamDetails>]
         public int? OwnerMatchupDetailsId([Parent] TeamMatchup teamMatchup) => teamMatchup.OwnerMatchupDetailsId;
 
         [ID<MatchupTeamDetails>]
-		public int? OpponentMatchupDetailsId([Parent] TeamMatchup teamMatchup) => teamMatchup.OpponentMatchupDetailsId;
+        public int? OpponentMatchupDetailsId([Parent] TeamMatchup teamMatchup) => teamMatchup.OpponentMatchupDetailsId;
 
-		[ID<MatchupType>]
-		public int MatchupTypeId([Parent] TeamMatchup teamMatchup) => (int)teamMatchup.MatchupTypeId;
+        [ID<MatchupType>]
+        public int MatchupTypeId([Parent] TeamMatchup teamMatchup) => (int)teamMatchup.MatchupTypeId;
 
-		public async Task<MatchupType> GetMatchupTypeAsync(
-			[Parent] TeamMatchup teamMatchup,
-			IMatchupTypesByIdsDataLoader types,
-			CancellationToken cancellationToken)
-		{
-			return await types.LoadRequiredAsync(teamMatchup.MatchupTypeId, cancellationToken);
-		}
+        public async Task<MatchupType> GetMatchupTypeAsync(
+            [Parent] TeamMatchup teamMatchup,
+            IMatchupTypesByIdsDataLoader types,
+            CancellationToken cancellationToken)
+        {
+            return await types.LoadRequiredAsync(teamMatchup.MatchupTypeId, cancellationToken);
+        }
 
-		public async Task<MatchupTeamDetails> GetOwnerMatchupDetailsAsync(
-			[Parent] TeamMatchup matchup,
-			IMatchupTeamDetailsByIdsDataLoader teamDetails,
-			CancellationToken cancellationToken)
-		{
-			return await teamDetails.LoadRequiredAsync(matchup.OwnerMatchupDetailsId, cancellationToken);
-		}
+        public async Task<MatchupTeamDetails> GetOwnerMatchupDetailsAsync(
+            [Parent] TeamMatchup matchup,
+            IMatchupTeamDetailsByIdsDataLoader teamDetails,
+            CancellationToken cancellationToken)
+        {
+            return await teamDetails.LoadRequiredAsync(matchup.OwnerMatchupDetailsId, cancellationToken);
+        }
 
         public async Task<MatchupTeamDetails?> GetOpponentMatchupDetailsAsync(
             [Parent] TeamMatchup matchup,
             IMatchupTeamDetailsByIdsDataLoader teamDetails,
             CancellationToken cancellationToken)
         {
-			if (matchup.OpponentMatchupDetailsId is null) return null;
-			
-			return await teamDetails.LoadRequiredAsync(matchup.OpponentMatchupDetailsId.Value, cancellationToken);
+            if (matchup.OpponentMatchupDetailsId is null) return null;
+
+            return await teamDetails.LoadRequiredAsync(matchup.OpponentMatchupDetailsId.Value, cancellationToken);
         }
 
         public static async Task<TeamMatchup?> GetTeamMatchupAsync(
-			int id,
-			IMediator mediator,
-			CancellationToken cancellationToken)
-		{
-			return await mediator.Send(new GetTeamMatchupByIdQuery(id), cancellationToken);
-		}
+            int id,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            return await mediator.Send(new GetTeamMatchupByIdQuery(id), cancellationToken);
+        }
     }
 }

@@ -3,11 +3,6 @@ using FantasyHOF.Domain.Enums;
 using FantasyHOF.ESPN.Constants;
 using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.Application.Mappers
 {
@@ -35,10 +30,11 @@ namespace FantasyHOF.Application.Mappers
     {
         public League MapLeague(string leagueId)
         {
-            return new League() {
-                FantasyProviderId = FantasyProviderId.ESPN, 
-                ProviderLeagueId = leagueId, 
-                SportId = SportId.Football  
+            return new League()
+            {
+                FantasyProviderId = FantasyProviderId.ESPN,
+                ProviderLeagueId = leagueId,
+                SportId = SportId.Football
             };
         }
 
@@ -149,7 +145,7 @@ namespace FantasyHOF.Application.Mappers
 
         public TeamMatchup MapTeamMatchup(
             int year,
-            int week, 
+            int week,
             string espnMatchupType)
         {
             MatchupTypeId matchupType = espnMatchupType switch

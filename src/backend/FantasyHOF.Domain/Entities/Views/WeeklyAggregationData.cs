@@ -1,10 +1,4 @@
-﻿using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FantasyHOF.Domain.Enums;
 
 namespace FantasyHOF.Domain.Entities.Views
 {

@@ -1,9 +1,4 @@
 ﻿using FantasyHOF.Domain.ComplexIds;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Entities
 {
@@ -15,7 +10,7 @@ namespace FantasyHOF.Domain.Entities
 
         public LeagueSeasonMember Owner { get; private set; } = null!;
         public Team Team { get; private set; } = null!;
-        
+
         public LeagueSeasonMemberTeamId Id => new(LeagueSeasonId, MemberId, TeamId);
 
         public void SetTeam(Team team)

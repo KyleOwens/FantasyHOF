@@ -14,7 +14,7 @@ namespace FantasyHOF.Domain.Entities
         {
             Id = id;
             Name = name;
-            LogoURL = logoURL; 
+            LogoURL = logoURL;
         }
     }
 }

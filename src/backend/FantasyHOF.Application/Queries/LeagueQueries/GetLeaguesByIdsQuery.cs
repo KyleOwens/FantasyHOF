@@ -1,12 +1,7 @@
-﻿using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
@@ -17,7 +12,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
             private readonly FantasyHOFDBContext _context;
 
             public GetLeaguesByIdsQueryHandler(FantasyHOFDBContext context) => _context = context;
-            
+
             public async Task<IEnumerable<League>> Handle(GetLeaguesByIdsQuery request, CancellationToken cancellationToken)
             {
                 return await _context.Leagues

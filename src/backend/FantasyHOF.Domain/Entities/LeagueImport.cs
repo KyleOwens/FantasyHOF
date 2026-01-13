@@ -1,16 +1,11 @@
 ﻿using FantasyHOF.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FantasyHOF.Domain.Entities
 {
     public class LeagueImport
     {
         public int Id { get; private set; }
-        
+
         public required Guid UserId { get; set; }
         public required FantasyProviderId ProviderId { get; set; }
         public required string ProviderleagueId { get; set; }
