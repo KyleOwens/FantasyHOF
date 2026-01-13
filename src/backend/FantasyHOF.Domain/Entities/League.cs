@@ -1,9 +1,9 @@
-﻿using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Enums;
+﻿using FantasyHOF.Domain.Enums;
+using FantasyHOF.Domain.Interfaces;
 
-namespace FantasyHOF.Domain.Types
+namespace FantasyHOF.Domain.Entities
 {
-    public class League
+    public class League : ITimestamped
     {
         public int Id { get; private set; }
         public Guid UserId { get; private set; }
@@ -19,7 +19,9 @@ namespace FantasyHOF.Domain.Types
         public List<LeagueMember> Members { get; private set; } = [];
         public FantasyProvider FantasyProvider { get; private set; } = null!;
         public Sport Sport { get; private set; } = null!;
-        
+
+        public DateTimeOffset CreatedAt { get; private set; }
+        public DateTimeOffset UpdatedAt { get; private set; }
 
         public void AddSeason(LeagueSeason season)
         {

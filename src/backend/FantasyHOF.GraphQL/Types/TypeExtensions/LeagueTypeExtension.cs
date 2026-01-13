@@ -1,7 +1,6 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Application.QueryTypes.Records;
-using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using FantasyHOF.GraphQL.Types.DataLoaders;
@@ -12,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
@@ -28,6 +28,14 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
             CancellationToken cancellationToken)
         {
             return await leagueSeasons.LoadAsync(league.Id, cancellationToken) ?? [];
+        }
+
+        public async Task<IEnumerable<LeagueMember>> GetMembersAsync(
+            [Parent] League league,
+            ILeagueMembersByLeagueIdsDataLoader leagueMembers,
+            CancellationToken cancellationToken)
+        {
+            return await leagueMembers.LoadAsync(league.Id) ?? [];
         }
 
         public async Task<FantasyProvider> GetFantasyProviderAsync(

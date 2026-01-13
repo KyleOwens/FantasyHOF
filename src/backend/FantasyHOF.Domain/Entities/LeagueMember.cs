@@ -1,4 +1,4 @@
-﻿using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Domain.ComplexIds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,8 @@ namespace FantasyHOF.Domain.Entities
 {
     public class LeagueMember
     {
+        public LeagueMemberId Id => new(LeagueId, MemberId);
+
         public int LeagueId { get; private set; }
         public int MemberId { get; private set; }
 

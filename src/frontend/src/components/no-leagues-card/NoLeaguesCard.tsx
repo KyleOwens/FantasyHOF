@@ -1,12 +1,9 @@
 import { NoLeaguesCardFragment$key } from "@/__generated__/NoLeaguesCardFragment.graphql";
-import { noLeaguesPageQuery as NoLeaguesPageQuery } from "@/__generated__/noLeaguesPageQuery.graphql";
 import { LeagueAdditionModal } from "@/components/league-addition-modal/LeagueAdditionModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { preloadQuery } from "@/relay/helpers";
-import { createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
-import { useFragment, usePreloadedQuery } from "react-relay";
+import { useFragment } from "react-relay";
 import { graphql } from "relay-runtime";
 
 type Props = {

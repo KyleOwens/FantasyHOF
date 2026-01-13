@@ -39,6 +39,13 @@ const leagueCardFragment = graphql`
       name
       logoURL
     }
+    members {
+      memberId
+    }
+    seasons {
+      id
+    }
+    createdAt
   }
 `;
 
@@ -86,16 +93,16 @@ export function LeagueCard({ leagueKey }: Props) {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <Calendar className="size-4" />
-              <span>{11} seasons</span>
+              <span>{league.seasons.length} seasons</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Users className="size-4" />
-              <span>{12} members</span>
+              <span>{league.members.length} members</span>
             </div>
           </div>
           <div className="flex items-center gap-1.5">
             <RefreshCw className="size-3" />
-            <span>Synced {"11/5/2025"}</span>
+            <span>Synced {league.createdAt}</span>
           </div>
         </div>
       </CardContent>

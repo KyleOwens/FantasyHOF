@@ -1,5 +1,5 @@
 ﻿using FantasyHOF.Application.Enums;
-using FantasyHOF.Domain.Types.Views;
+using FantasyHOF.Domain.Entities.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,4 @@
 ﻿using FantasyHOF.Application.Queries.LeagueSeasonMemberQueries;
-using FantasyHOF.Domain.Types;
-using FantasyHOF.Domain.ComplexIds;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FantasyHOF.GraphQL.Types.DataLoaders;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.ComplexIds;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {

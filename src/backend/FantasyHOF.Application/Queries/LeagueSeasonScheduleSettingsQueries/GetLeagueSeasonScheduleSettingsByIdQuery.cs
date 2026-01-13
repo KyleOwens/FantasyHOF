@@ -1,6 +1,6 @@
-﻿using FantasyHOF.Domain.Types;
-using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.EntityFramework;
 using MediatR;
+using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonScheduleSettingsQueries
 {

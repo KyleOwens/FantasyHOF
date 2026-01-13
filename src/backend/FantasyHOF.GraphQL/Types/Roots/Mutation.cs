@@ -1,10 +1,10 @@
-﻿using FantasyHOF.Application.Mutations;
+﻿using FantasyHOF.Application.Authentication;
+using FantasyHOF.Application.Mutations;
 using FantasyHOF.Application.QueryTypes;
 using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.ESPN.Errors;
 using FantasyHOF.ESPN.Types.Inputs;
-using FantasyHOF.Infrastructure.Authentication;
 using HotChocolate.Authorization;
 using HotChocolate.Subscriptions;
 using MediatR;
@@ -48,9 +48,9 @@ namespace FantasyHOF.GraphQL.Types.Roots
             await eventSender.SendAsync($"{nameof(LeagueImport)}_{await currentUser.GetUserIdAsync()}", new LeagueImport
             {
                 Progress = progress,
-                ProviderId = Domain.Enums.FantasyProviderId.ESPN,
+                ProviderId = FantasyProviderId.ESPN,
                 ProviderleagueId = "test lol",
-                StatusId = Domain.Enums.LeagueImportStatusId.SavingData,
+                StatusId = LeagueImportStatusId.SavingData,
                 UserId = await currentUser.GetUserIdAsync()
             });
 

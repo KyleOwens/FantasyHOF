@@ -1,12 +1,12 @@
 ﻿using FantasyHOF.Application.Enums;
-using FantasyHOF.Application.QueryTypes.Records;
+using FantasyHOF.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FantasyHOF.Domain.Types.Records
+namespace FantasyHOF.Application.QueryTypes.Records
 {
     public class LeagueRecord : Record
     {

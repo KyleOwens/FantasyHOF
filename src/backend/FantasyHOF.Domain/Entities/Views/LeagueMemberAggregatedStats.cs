@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FantasyHOF.Domain.Types.Views
+namespace FantasyHOF.Domain.Entities.Views
 {
     public class LeagueMemberAggregatedStats
     {

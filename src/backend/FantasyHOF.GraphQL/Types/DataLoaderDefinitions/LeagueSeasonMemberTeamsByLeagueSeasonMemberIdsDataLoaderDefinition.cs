@@ -1,7 +1,7 @@
 ﻿
 using FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.ComplexIds;
-using FantasyHOF.Domain.Types;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.DataLoaders

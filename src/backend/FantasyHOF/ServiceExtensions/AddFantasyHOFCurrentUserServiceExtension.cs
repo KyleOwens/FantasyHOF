@@ -1,4 +1,4 @@
-﻿using FantasyHOF.Infrastructure.Authentication;
+﻿using FantasyHOF.Application.Authentication;
 
 namespace FantasyHOF.ServiceExtensions
 {

@@ -12,6 +12,6 @@ namespace FantasyHOF.ESPN.Errors
     public class ESPNNoActiveYearsException : CodedException
     {
         public ESPNNoActiveYearsException() 
-            : base(AppErrorCode.ESPNNoActiveYears, "This league has no years to pull data for") { }
+            : base(AppErrorCode.ESPNNoActiveYears, "The provided league has no years to pull data for. Try a different league.") { }
     }
 }

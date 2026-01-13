@@ -1,6 +1,5 @@
 ﻿using FantasyHOF.Application.Queries.LeagueSeasonScoringItemQueries;
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
 using System;

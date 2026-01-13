@@ -1,5 +1,5 @@
 ﻿using FantasyHOF.Application.Queries.LeagueSeasonScoringSettingsQueries;
-using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using MediatR;
 using System;

@@ -1,5 +1,5 @@
 ﻿
-using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Entities;
 using MediatR;
 
 namespace FantasyHOF.Application.Queries.TeamMatchupQueries

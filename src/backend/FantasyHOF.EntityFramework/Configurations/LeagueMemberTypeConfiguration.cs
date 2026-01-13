@@ -14,6 +14,8 @@ namespace FantasyHOF.EntityFramework.Configurations
         public void Configure(EntityTypeBuilder<LeagueMember> builder)
         {
             builder.HasKey(x => new { x.LeagueId, x.MemberId });
+
+            builder.Ignore(x => x.Id);
         }
     }
 }

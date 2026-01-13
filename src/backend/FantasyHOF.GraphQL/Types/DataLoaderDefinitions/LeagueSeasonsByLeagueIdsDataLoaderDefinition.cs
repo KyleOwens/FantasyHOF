@@ -1,6 +1,6 @@
 ﻿using FantasyHOF.Application.Queries;
-using FantasyHOF.Application.Queries.LeagueSeasons;
-using FantasyHOF.Domain.Types;
+using FantasyHOF.Application.Queries.LeagueSeasonQueries;
+using FantasyHOF.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;

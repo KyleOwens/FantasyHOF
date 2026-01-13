@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FantasyHOF.Domain.Types
+namespace FantasyHOF.Domain.Entities
 {
     public class AccumulatedStat
     {

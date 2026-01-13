@@ -1,5 +1,4 @@
-﻿
-using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

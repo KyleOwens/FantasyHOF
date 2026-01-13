@@ -1,6 +1,5 @@
 using FantasyHOF.Application.Mappers;
 using FantasyHOF.ApplicationExtensions;
-using FantasyHOF.Domain.ComplexIds;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Enums;
@@ -30,8 +29,6 @@ builder.Services.AddFantasyHOFCurrentUserService();
 builder.Services.AddFantasyHOFApplicationServices(builder.Configuration.GetSection("Authentication"));
 builder.Services.AddFantasyHOFMediatRServices();
 
-
-
 builder.AddFantasyHOFGraphQL();
     
 var app = builder.Build();
@@ -47,7 +44,7 @@ if (app.Environment.IsDevelopment())
 
     FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
 
-    //context.Database.EnsureDeleted();
+    context.Database.EnsureDeleted();
     context.Database.Migrate();
 
     app.UseHangfireDashboard("/hangfire");

@@ -1,9 +1,6 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Registries;
 using FantasyHOF.Domain.Entities.Views;
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types.Records;
-using FantasyHOF.Domain.Types.Views;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FantasyHOF.Domain.Types
+namespace FantasyHOF.Application.QueryTypes.Records
 {
     public class LeagueRecordSummary
     {

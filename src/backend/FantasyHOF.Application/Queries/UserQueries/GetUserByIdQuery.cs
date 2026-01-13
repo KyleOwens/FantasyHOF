@@ -1,9 +1,8 @@
-﻿
-using FantasyHOF.Domain.Types;
-using FantasyHOF.EntityFramework;
-using FantasyHOF.Infrastructure.Authentication;
+﻿using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Application.Authentication;
 
 namespace FantasyHOF.Application.Queries.UserQueries
 {

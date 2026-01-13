@@ -35,6 +35,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("text")
                         .HasColumnName("error");
 
+                    b.Property<int?>("LeagueId")
+                        .HasColumnType("integer")
+                        .HasColumnName("league_id");
+
                     b.Property<int>("Progress")
                         .HasColumnType("integer")
                         .HasColumnName("progress");
@@ -58,6 +62,9 @@ namespace FantasyHOF.EntityFramework.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_league_imports");
+
+                    b.HasIndex("LeagueId")
+                        .HasDatabaseName("ix_league_imports_league_id");
 
                     b.HasIndex("ProviderId")
                         .HasDatabaseName("ix_league_imports_provider_id");
@@ -340,6 +347,10 @@ namespace FantasyHOF.EntityFramework.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<string>("CurrentLeagueName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -362,6 +373,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("SportId")
                         .HasColumnType("integer")
                         .HasColumnName("sport_id");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -2636,6 +2651,12 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             modelBuilder.Entity("FantasyHOF.Domain.Entities.LeagueImport", b =>
                 {
+                    b.HasOne("FantasyHOF.Domain.Types.League", "League")
+                        .WithMany()
+                        .HasForeignKey("LeagueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_league_imports_leagues_league_id");
+
                     b.HasOne("FantasyHOF.Domain.Types.FantasyProvider", "Provider")
                         .WithMany()
                         .HasForeignKey("ProviderId")
@@ -2656,6 +2677,8 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_league_imports_users_user_id");
+
+                    b.Navigation("League");
 
                     b.Navigation("Provider");
 

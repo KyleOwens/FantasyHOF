@@ -1,6 +1,6 @@
 ﻿
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
 using MediatR;
 
 namespace FantasyHOF.Application.Queries.SportQueries

@@ -1,4 +1,4 @@
-﻿namespace FantasyHOF.Domain.Types
+﻿namespace FantasyHOF.Domain.Entities
 {
     public class LeagueSeasonScoringSettings
     {

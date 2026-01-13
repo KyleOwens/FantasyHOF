@@ -21,6 +21,7 @@ type Props = {
 
 const providerSelectionFragment = graphql`
   fragment ProviderSelectionFragment on FantasyProvider @relay(plural: true) {
+    id
     name
     logoURL
     value
@@ -40,6 +41,7 @@ export function ProviderSelection({ providersKey, onSelectProvider }: Props) {
             variant={"outline"}
             className={!isEnabled ? "opacity-60 grayscale-[0.5]" : ""}
             asChild
+            key={provider.id}
           >
             <button
               className="flex w-full text-left enabled:hover:bg-sidebar-accent "

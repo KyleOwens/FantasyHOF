@@ -4,7 +4,11 @@ import {
   RecordSource,
   Store,
   FetchFunction,
+  SubscribeFunction,
+  Observable,
+  GraphQLResponse,
 } from "relay-runtime";
+import { createClient } from "graphql-sse";
 
 const HTTP_ENDPOINT = "http://localhost:5173/graphql";
 
@@ -36,9 +40,39 @@ const fetchFn: FetchFunction = async (request, variables) => {
   return await resp.json();
 };
 
+const sseClient = createClient({
+  url: HTTP_ENDPOINT,
+  headers: async () => {
+    const token = await getToken();
+    return {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
+  },
+});
+
+const subscribeFn: SubscribeFunction = (request, variables) => {
+  return Observable.create((sink) => {
+    if (!request.text) {
+      return sink.error(new Error("Operation does not have query text."));
+    }
+
+    return sseClient.subscribe(
+      {
+        query: request.text,
+        variables,
+      },
+      {
+        next: (data) => sink.next(data as GraphQLResponse),
+        error: (err) => sink.error(err as Error),
+        complete: () => sink.complete(),
+      },
+    );
+  });
+};
+
 function createRelayEnvironment() {
   return new Environment({
-    network: Network.create(fetchFn),
+    network: Network.create(fetchFn, subscribeFn),
     store: new Store(new RecordSource()),
   });
 }

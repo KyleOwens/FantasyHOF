@@ -1,6 +1,6 @@
 ﻿using FantasyHOF.Application.Queries.StatQueries;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
 using MediatR;
 using System;
 using System.Collections.Generic;

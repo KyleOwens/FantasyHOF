@@ -4,7 +4,6 @@ using FantasyHOF.Application.Mappers;
 using FantasyHOF.Application.Registries;
 using FantasyHOF.Application.Services;
 using FantasyHOF.Domain.Entities.Views;
-using FantasyHOF.Domain.Types.Views;
 using FantasyHOF.ESPN;
 using Hangfire;
 using Hangfire.PostgreSql;

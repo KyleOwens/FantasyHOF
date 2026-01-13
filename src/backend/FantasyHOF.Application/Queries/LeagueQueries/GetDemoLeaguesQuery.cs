@@ -1,5 +1,4 @@
 ﻿using FantasyHOF.Application.Configuration;
-using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {

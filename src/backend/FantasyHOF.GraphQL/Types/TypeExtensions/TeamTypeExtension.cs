@@ -1,5 +1,5 @@
 ﻿using FantasyHOF.Application.Queries.TeamQueries;
-using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
 using System;

@@ -1,7 +1,7 @@
 ﻿
 using FantasyHOF.Application.Queries.MatchupTypeQueries;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.DataLoaders

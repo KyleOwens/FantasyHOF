@@ -1,4 +1,4 @@
-﻿using FantasyHOF.Domain.Types.Views;
+﻿using FantasyHOF.Domain.Entities.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

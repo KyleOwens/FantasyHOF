@@ -5,7 +5,7 @@ using FantasyHOF.Application.Queries.FantasyProviderQueries;
 using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Application.Queries.UserQueries;
 using FantasyHOF.Application.QueryTypes.Records;
-using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Entities;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
 using FantasyHOF.ESPN.Types.Outputs;

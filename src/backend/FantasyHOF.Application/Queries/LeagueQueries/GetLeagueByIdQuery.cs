@@ -1,12 +1,12 @@
-﻿using FantasyHOF.Domain.Types;
-using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using FantasyHOF.Domain.Entities;
 
-namespace FantasyHOF.Application.Queries.Leagues
+namespace FantasyHOF.Application.Queries.LeagueQueries
 {
     public sealed record GetLeagueByIdQuery(int leagueId) : IRequest<League?>;
 

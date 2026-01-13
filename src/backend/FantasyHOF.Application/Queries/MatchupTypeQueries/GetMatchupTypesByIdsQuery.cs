@@ -1,9 +1,8 @@
-﻿
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
-using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
 
 namespace FantasyHOF.Application.Queries.MatchupTypeQueries
 {

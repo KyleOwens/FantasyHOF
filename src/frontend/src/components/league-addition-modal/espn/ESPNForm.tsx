@@ -9,16 +9,32 @@ import {
   FieldSet,
 } from "../../ui/field";
 import { Input } from "../../ui/input";
-import { ArrowLeft, Check, Cookie, IdCard, Info } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowLeft,
+  Check,
+  Cookie,
+  IdCard,
+  Info,
+} from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
 import { CookieGuide } from "./CookieGuide";
 import { Label } from "../../ui/label";
 import { LeagueIdGuide } from "./LeagueIdGuide";
-import { graphql } from "relay-runtime";
-import { FormEvent } from "react";
+import { graphql, RecordSourceSelectorProxy } from "relay-runtime";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-relay";
-import { ESPNFormAddLeagueMutation } from "@/__generated__/ESPNFormAddLeagueMutation.graphql";
+import {
+  ESPNFormAddLeagueMutation,
+  ESPNFormAddLeagueMutation$data,
+} from "@/__generated__/ESPNFormAddLeagueMutation.graphql";
+import { Spinner } from "@/components/ui/spinner";
+
+type Props = {
+  resetEntry: () => void;
+  onCompletion: () => void;
+};
 
 const espnSchema = z.object({
   leagueId: z
@@ -40,8 +56,12 @@ const addESPNLeagueMutation = graphql`
     $espnCredentials: AddESPNLeagueToUserInput!
   ) {
     addESPNLeagueToUser(input: $espnCredentials) {
-      league {
-        id
+      addLeagueMutationPayload {
+        jobId
+        import {
+          id
+          ...PendingLeagueCardFragment
+        }
       }
       errors {
         ... on ICodedException {
@@ -53,10 +73,12 @@ const addESPNLeagueMutation = graphql`
   }
 `;
 
-export function ESPNForm() {
-  const [addESPNLeague, isPending] = useMutation<ESPNFormAddLeagueMutation>(
-    addESPNLeagueMutation,
-  );
+export function ESPNForm({ resetEntry, onCompletion }: Props) {
+  const [serverErrors, setServerErrors] = useState<string[]>([]);
+  const [commitNewLeague, newLeagueIsPending] =
+    useMutation<ESPNFormAddLeagueMutation>(addESPNLeagueMutation);
+
+  const errorTopRef = useRef<HTMLDivElement>(null);
 
   const form = useForm({
     defaultValues: {
@@ -66,11 +88,12 @@ export function ESPNForm() {
     },
     validators: {
       onBlur: espnSchema,
+      onSubmit: espnSchema,
     },
     onSubmit: (form) => {
-      console.log(form.value.swid);
+      setServerErrors([]);
 
-      addESPNLeague({
+      commitNewLeague({
         variables: {
           espnCredentials: {
             leagueId: form.value.leagueId.toString(),
@@ -78,12 +101,54 @@ export function ESPNForm() {
             swid: form.value.swid,
           },
         },
-        onCompleted: (response, errors) => {
-          if (errors) console.error("GraphQL errors: ", errors);
+        updater: (
+          store: RecordSourceSelectorProxy<ESPNFormAddLeagueMutation$data>,
+        ) => {
+          const payload = store.getRootField("addESPNLeagueToUser");
+
+          if (!payload) return;
+
+          const mutationPayload = payload.getLinkedRecord(
+            "addLeagueMutationPayload",
+          );
+
+          const newImport = mutationPayload?.getLinkedRecord("import");
+          const me = store.getRoot().getLinkedRecord("me");
+
+          if (!newImport || !me) return;
+
+          const currentImports = me.getLinkedRecords("leagueImports") || [];
+
+          me.setLinkedRecords([...currentImports, newImport], "leagueImports");
+        },
+        onCompleted: (response, _) => {
+          console.log(response);
+          if (
+            response.addESPNLeagueToUser.errors &&
+            response.addESPNLeagueToUser.errors.length > 0
+          ) {
+            setServerErrors(
+              response.addESPNLeagueToUser.errors.map(
+                (error) => error.message ?? "",
+              ),
+            );
+          } else {
+            onCompletion();
+          }
         },
       });
     },
   });
+
+  useEffect(() => {
+    if (serverErrors.length > 0 && errorTopRef.current) {
+      // Scroll to the top of the modal/form smoothly
+      errorTopRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [serverErrors]);
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -93,7 +158,25 @@ export function ESPNForm() {
   };
 
   return (
-    <form className="flex flex-col gap-6" onSubmit={onFormSubmit}>
+    <form className="relative flex flex-col gap-6" onSubmit={onFormSubmit}>
+      <div
+        ref={errorTopRef}
+        className="absolute top-0 left-0 w-0 h-0"
+        aria-hidden="true"
+      />
+      {serverErrors.length > 0 && (
+        <Alert variant="destructive" className="border-destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Import Failed</AlertTitle>
+          <AlertDescription>
+            <ul className="list-disc pl-4">
+              {serverErrors.map((err, i) => (
+                <li key={i}>{err}</li>
+              ))}
+            </ul>
+          </AlertDescription>
+        </Alert>
+      )}
       <FieldGroup>
         <FieldSet>
           <FieldLegend>League Identification</FieldLegend>
@@ -138,7 +221,7 @@ export function ESPNForm() {
           <FieldDescription>
             Credentials to authenticate with ESPN
           </FieldDescription>
-          <Alert>
+          <Alert className="-mt-2">
             <Info className="stroke-sky-400" />
             <AlertTitle>Credentials notice</AlertTitle>
             <AlertDescription>
@@ -205,13 +288,16 @@ export function ESPNForm() {
         </FieldSet>
       </FieldGroup>
       <div className="flex flex-row gap-x-4 *:w-[50%] justify-center">
-        <Button className="bg-muted-foreground hover:bg-muted-foreground/80 ">
+        <Button
+          className="bg-muted-foreground hover:bg-muted-foreground/80"
+          onClick={resetEntry}
+        >
           <ArrowLeft />
           Head back
         </Button>
-        <Button disabled={isPending}>
+        <Button disabled={newLeagueIsPending}>
           Submit
-          <Check />
+          {newLeagueIsPending ? <Spinner /> : <Check />}
         </Button>
       </div>
     </form>

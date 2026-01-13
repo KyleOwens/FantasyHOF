@@ -1,13 +1,13 @@
-﻿using FantasyHOF.Domain.Types;
-using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.EntityFramework;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FantasyHOF.Domain.Entities;
 
-namespace FantasyHOF.Application.Queries.LeagueSeasons
+namespace FantasyHOF.Application.Queries.LeagueSeasonQueries
 {
     public record GetLeagueSeasonByIdQuery(int LeagueSeasonId) : IRequest<LeagueSeason?>
     {

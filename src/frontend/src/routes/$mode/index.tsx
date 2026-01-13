@@ -4,7 +4,7 @@ import { RelayEnvironment } from "@/relay/RelayEnvironment";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { graphql, fetchQuery } from "relay-runtime";
 import { Route as dashboardRoute } from "@/routes/$mode/$leagueId/dashboard";
-import { Route as noLeaguesRoute } from "@/routes/$mode/no-leagues";
+import { Route as myLeaguesRoute } from "@/routes/$mode/my-leagues";
 
 const demoLeaguesQuery = graphql`
   query ModeDemoLeaguesQuery {
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/$mode/")({
     const firstLeagueId = await getFirstLeagueIdForMode(params.mode);
 
     if (!firstLeagueId) {
-      throw redirect({ from: Route.fullPath, to: noLeaguesRoute.to }); // We will  make this an add team page soon
+      throw redirect({ from: Route.fullPath, to: myLeaguesRoute.to }); // We will  make this an add team page soon
     }
 
     throw redirect({

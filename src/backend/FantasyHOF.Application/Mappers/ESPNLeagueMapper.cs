@@ -1,5 +1,5 @@
-﻿using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
 using FantasyHOF.ESPN.Constants;
 using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;

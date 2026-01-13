@@ -1,7 +1,4 @@
 ﻿using FantasyHOF.Application.Mappers;
-using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
@@ -14,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
 
 namespace FantasyHOF.Application.Queries.ESPNQueries
 {

@@ -1,5 +1,4 @@
-﻿
-using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +20,7 @@ namespace FantasyHOF.Application.Queries.FantasyMemberQueries
 				return await _context.FantasyMembers
 					.AsNoTracking()
 					.Where(member => request.FantasyMemberIds.Contains(member.Id))
-					.ToListAsync();
+					.ToListAsync(cancellationToken);
 			}
 		}
 	}

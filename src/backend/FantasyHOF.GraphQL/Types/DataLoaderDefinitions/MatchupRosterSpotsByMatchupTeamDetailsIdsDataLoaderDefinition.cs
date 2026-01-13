@@ -1,6 +1,6 @@
 ﻿
 using FantasyHOF.Application.Queries.MatchupRosterSpotQueries;
-using FantasyHOF.Domain.Types;
+using FantasyHOF.Domain.Entities;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.DataLoaders

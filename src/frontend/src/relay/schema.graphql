@@ -55,8 +55,8 @@ type AddESPNLeagueToUserPayload {
 }
 
 type AddLeagueMutationPayload {
-  pendingLeagueId: Int!
   jobId: String!
+  import: LeagueImport!
 }
 
 type ESPNAuthenticationError implements ICodedException {
@@ -114,26 +114,31 @@ type League implements Node {
   members: [LeagueMember!]!
   fantasyProvider: FantasyProvider! @cost(weight: "10")
   sport: Sport! @cost(weight: "10")
+  createdAt: DateTime!
+  updatedAt: DateTime!
   recordSummary: LeagueRecordSummary @cost(weight: "10")
   recordDetails(recordType: RecordTypeId!): [RecordDetails!]! @cost(weight: "10")
 }
 
-type LeagueImport {
-  id: Int!
+type LeagueImport implements Node {
+  id: ID!
   userId: UUID!
   providerId: FantasyProviderId!
   providerleagueId: String!
   statusId: LeagueImportStatusId!
   progress: Int!
   error: String
-  user: User!
-  provider: FantasyProvider!
-  status: LeagueImportStatus!
+  leagueId: Int
+  user: User! @cost(weight: "10")
+  provider: FantasyProvider! @cost(weight: "10")
+  status: LeagueImportStatus! @cost(weight: "10")
+  league: League @cost(weight: "10")
 }
 
-type LeagueImportStatus {
-  id: LeagueImportStatusId!
+type LeagueImportStatus implements Node {
+  id: ID!
   name: String!
+  value: LeagueImportStatusId!
 }
 
 type LeagueMember {
@@ -459,6 +464,7 @@ type User implements Node {
   id: ID!
   clerkId: String!
   leagues: [League!]! @cost(weight: "10")
+  leagueImports: [LeagueImport!]! @cost(weight: "10")
 }
 
 type WeeklyRecord implements Record {
@@ -956,6 +962,9 @@ directive @cost("The `weight` argument defines what value to add to the overall 
 
 "The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
 directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
 
 "The `Decimal` scalar type represents a decimal floating-point number."
 scalar Decimal

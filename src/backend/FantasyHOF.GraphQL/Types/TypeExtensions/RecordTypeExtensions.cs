@@ -1,4 +1,4 @@
-﻿using FantasyHOF.Domain.Types.Records;
+﻿using FantasyHOF.Application.QueryTypes.Records;
 using System;
 using System.Collections.Generic;
 using System.Linq;

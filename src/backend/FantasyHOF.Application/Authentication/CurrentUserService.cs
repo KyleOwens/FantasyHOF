@@ -1,10 +1,10 @@
-﻿using FantasyHOF.Domain.Types;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using FantasyHOF.Application.Mutations;
+using FantasyHOF.Domain.Entities;
 
-namespace FantasyHOF.Infrastructure.Authentication
+namespace FantasyHOF.Application.Authentication
 {
     public interface ICurrentUserService
     {

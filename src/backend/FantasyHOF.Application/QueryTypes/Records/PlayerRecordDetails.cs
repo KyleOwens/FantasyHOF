@@ -1,5 +1,4 @@
 ﻿using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;

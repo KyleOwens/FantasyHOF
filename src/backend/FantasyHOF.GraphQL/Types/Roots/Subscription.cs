@@ -1,5 +1,5 @@
-﻿using FantasyHOF.Domain.Entities;
-using FantasyHOF.Infrastructure.Authentication;
+﻿using FantasyHOF.Application.Authentication;
+using FantasyHOF.Domain.Entities;
 using HotChocolate.Authorization;
 using HotChocolate.Execution;
 using HotChocolate.Subscriptions;

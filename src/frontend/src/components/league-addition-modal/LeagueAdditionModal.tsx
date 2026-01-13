@@ -26,6 +26,7 @@ enum LeagueAdditionStep {
 }
 
 export function LeagueAdditionModal({ children, providersKey }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<LeagueAdditionStep>(
     LeagueAdditionStep.Provider,
   );
@@ -46,19 +47,26 @@ export function LeagueAdditionModal({ children, providersKey }: Props) {
     if (!isOpen) {
       onResetEntry();
     }
+
+    setIsOpen(isOpen);
+  };
+
+  const onCompletion = () => {
+    onResetEntry();
+    setIsOpen(false);
   };
 
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog onOpenChange={onOpenChange} open={isOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="fixed top-[15%] min-w-3xl translate-y-0 overflow-hidden pb-8">
+      <DialogContent className="fixed top-[10%] min-w-3xl translate-y-0 overflow-hidden pb-8">
         <DialogHeader className="mb-4 shrink-0">
           <DialogTitle>Add league</DialogTitle>
           {step === LeagueAdditionStep.Provider && (
             <DialogDescription>Select a provider to continue</DialogDescription>
           )}
         </DialogHeader>
-        <ScrollArea className="-mx-3 max-h-[70vh]">
+        <ScrollArea className="-mx-3 max-h-[75vh]">
           <div className="px-6 ">
             {step === LeagueAdditionStep.Provider && (
               <ProviderSelection
@@ -70,6 +78,7 @@ export function LeagueAdditionModal({ children, providersKey }: Props) {
               <DetailsForm
                 resetEntry={onResetEntry}
                 provider={selectedProvider}
+                onCompletion={onCompletion}
               />
             )}
           </div>

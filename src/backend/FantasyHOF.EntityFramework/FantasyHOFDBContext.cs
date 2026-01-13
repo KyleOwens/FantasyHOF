@@ -1,9 +1,9 @@
-﻿using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Entities.Views;
-using FantasyHOF.Domain.Types;
-using FantasyHOF.Domain.Types.Views;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Reflection;
+using FantasyHOF.Domain.Entities.Views;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Interfaces;
 
 namespace FantasyHOF.EntityFramework
 {
@@ -47,6 +47,38 @@ namespace FantasyHOF.EntityFramework
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
+
+        public override int SaveChanges()
+        {
+            SetTimestamps();
+
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            SetTimestamps();
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void SetTimestamps()
+        {
+            DateTimeOffset now = DateTimeOffset.UtcNow;
+
+            foreach (EntityEntry<ITimestamped> entity in ChangeTracker.Entries<ITimestamped>())
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    entity.Property(x => x.CreatedAt).CurrentValue = now;
+                    entity.Property(x => x.UpdatedAt).CurrentValue = now;
+                }
+                else if (entity.State == EntityState.Modified)
+                {
+                    entity.Property(x => x.UpdatedAt).CurrentValue = now;
+                }
+            }
         }
     }
 }

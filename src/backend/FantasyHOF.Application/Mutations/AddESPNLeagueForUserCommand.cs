@@ -2,13 +2,9 @@
 using FantasyHOF.Application.Mappers;
 using FantasyHOF.Application.Queries.ESPNQueries;
 using FantasyHOF.Application.QueryTypes;
-using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
-using FantasyHOF.Infrastructure.Authentication;
 using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.Enums;
+using FantasyHOF.Application.Authentication;
 
 namespace FantasyHOF.Application.Mutations
 {
@@ -48,7 +47,7 @@ namespace FantasyHOF.Application.Mutations
 
                 string jobId = jobClient.Enqueue<ILeagueImportJob>(job => job.ExecuteAsync(importTracker.Id, request.LeagueCredentials, JobCancellationToken.Null));
 
-                return new(importTracker.Id, jobId);
+                return new(jobId, importTracker);
             }
         }
     }

@@ -1,6 +1,3 @@
-import { AppSidebarQuery } from "@/__generated__/AppSidebarQuery.graphql";
-import { AppSidebar, appSidebarQuery } from "@/components/sidebar/AppSidebar";
-import { preloadQuery } from "@/relay/helpers";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import z from "zod";
 

@@ -1,9 +1,8 @@
-﻿
-using FantasyHOF.Domain.Enums;
-using FantasyHOF.Domain.Types;
-using FantasyHOF.EntityFramework;
+﻿using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using FantasyHOF.Domain.Enums;
+using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Queries.PositionQueries
 {

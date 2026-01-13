@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<28b6b836621d937325097e65a0f1f980>>
+ * @generated SignedSource<<b45bfdb96130b7f8f5a27a4e126f1ab4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from 'relay-runtime';
+import { FragmentRefs } from "relay-runtime";
 export type AppErrorCode = "ESPN_AUTHENTICATION_FAILED" | "ESPN_GENERAL_HTTP_ERROR" | "ESPN_INVALID_YEAR" | "ESPN_LEAGUE_INVALID" | "ESPN_NO_ACTIVE_YEARS" | "%future added value";
 export type AddESPNLeagueToUserInput = {
   espnS2Id: string;
@@ -20,13 +21,17 @@ export type ESPNFormAddLeagueMutation$variables = {
 };
 export type ESPNFormAddLeagueMutation$data = {
   readonly addESPNLeagueToUser: {
+    readonly addLeagueMutationPayload: {
+      readonly import: {
+        readonly id: string;
+        readonly " $fragmentSpreads": FragmentRefs<"PendingLeagueCardFragment">;
+      };
+      readonly jobId: string;
+    } | null | undefined;
     readonly errors: ReadonlyArray<{
       readonly errorCode?: AppErrorCode;
       readonly message?: string;
     }> | null | undefined;
-    readonly league: {
-      readonly id: string;
-    } | null | undefined;
   };
 };
 export type ESPNFormAddLeagueMutation = {
@@ -52,22 +57,18 @@ v1 = [
 v2 = {
   "alias": null,
   "args": null,
-  "concreteType": "League",
-  "kind": "LinkedField",
-  "name": "league",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "id",
-      "storageKey": null
-    }
-  ],
+  "kind": "ScalarField",
+  "name": "jobId",
   "storageKey": null
 },
 v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v4 = {
   "kind": "InlineFragment",
   "selections": [
     {
@@ -87,6 +88,13 @@ v3 = {
   ],
   "type": "ICodedException",
   "abstractKey": "__isICodedException"
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -103,7 +111,35 @@ return {
         "name": "addESPNLeagueToUser",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "AddLeagueMutationPayload",
+            "kind": "LinkedField",
+            "name": "addLeagueMutationPayload",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "LeagueImport",
+                "kind": "LinkedField",
+                "name": "import",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "PendingLeagueCardFragment"
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
           {
             "alias": null,
             "args": null,
@@ -112,7 +148,7 @@ return {
             "name": "errors",
             "plural": true,
             "selections": [
-              (v3/*: any*/)
+              (v4/*: any*/)
             ],
             "storageKey": null
           }
@@ -137,7 +173,91 @@ return {
         "name": "addESPNLeagueToUser",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "AddLeagueMutationPayload",
+            "kind": "LinkedField",
+            "name": "addLeagueMutationPayload",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "LeagueImport",
+                "kind": "LinkedField",
+                "name": "import",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "FantasyProvider",
+                    "kind": "LinkedField",
+                    "name": "provider",
+                    "plural": false,
+                    "selections": [
+                      (v3/*: any*/),
+                      (v5/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "logoURL",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "LeagueImportStatus",
+                    "kind": "LinkedField",
+                    "name": "status",
+                    "plural": false,
+                    "selections": [
+                      (v3/*: any*/),
+                      (v5/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "value",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "progress",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "error",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "providerleagueId",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          },
           {
             "alias": null,
             "args": null,
@@ -153,7 +273,7 @@ return {
                 "name": "__typename",
                 "storageKey": null
               },
-              (v3/*: any*/)
+              (v4/*: any*/)
             ],
             "storageKey": null
           }
@@ -163,16 +283,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0813bb596757fa8290a8fc77ec176841",
+    "cacheID": "e42eced7f857cc4cf78a06667619b71a",
     "id": null,
     "metadata": {},
     "name": "ESPNFormAddLeagueMutation",
     "operationKind": "mutation",
-    "text": "mutation ESPNFormAddLeagueMutation(\n  $espnCredentials: AddESPNLeagueToUserInput!\n) {\n  addESPNLeagueToUser(input: $espnCredentials) {\n    league {\n      id\n    }\n    errors {\n      __typename\n      ... on ICodedException {\n        __isICodedException: __typename\n        errorCode\n        message\n      }\n    }\n  }\n}\n"
+    "text": "mutation ESPNFormAddLeagueMutation(\n  $espnCredentials: AddESPNLeagueToUserInput!\n) {\n  addESPNLeagueToUser(input: $espnCredentials) {\n    addLeagueMutationPayload {\n      jobId\n      import {\n        id\n        ...PendingLeagueCardFragment\n      }\n    }\n    errors {\n      __typename\n      ... on ICodedException {\n        __isICodedException: __typename\n        errorCode\n        message\n      }\n    }\n  }\n}\n\nfragment PendingLeagueCardFragment on LeagueImport {\n  id\n  provider {\n    id\n    name\n    logoURL\n  }\n  status {\n    id\n    name\n    value\n  }\n  progress\n  error\n  providerleagueId\n}\n"
   }
 };
 })();
 
-(node as any).hash = "14db5ed4b8e2ea0d3e55a203d7463431";
+(node as any).hash = "43ffec694435816ce3139f28ddad352a";
 
 export default node;

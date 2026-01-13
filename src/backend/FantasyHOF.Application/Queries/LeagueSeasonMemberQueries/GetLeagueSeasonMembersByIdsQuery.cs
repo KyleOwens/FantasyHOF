@@ -1,9 +1,9 @@
 ﻿
-using FantasyHOF.Domain.ComplexIds;
-using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Domain.ComplexIds;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonMemberQueries
 {
@@ -23,7 +23,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberQueries
 					.AsNoTracking()
 					.Where(seasonMember => request.LeagueSeasonMemberIds
 						.Any(id => id.LeagueSeasonId == seasonMember.LeagueSeasonId && id.MemberId == seasonMember.MemberId))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
 			}
 		}
 	}

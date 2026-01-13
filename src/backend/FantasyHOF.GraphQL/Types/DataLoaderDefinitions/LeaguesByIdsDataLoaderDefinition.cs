@@ -1,5 +1,5 @@
-﻿using FantasyHOF.Application.Queries.Leagues;
-using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Application.Queries.LeagueQueries;
+using FantasyHOF.Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;

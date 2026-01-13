@@ -1,7 +1,5 @@
 ﻿using FantasyHOF.Application.Mutations;
-using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
-using FantasyHOF.Infrastructure.Authentication;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,6 +8,8 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using FantasyHOF.Domain.Entities;
+using FantasyHOF.Application.Authentication;
 
 namespace FantasyHOF.Application.Queries.UserQueries
 {
