@@ -11,7 +11,8 @@ namespace FantasyHOF.ApplicationExtensions
                 .AddFantasyHOFTypes()
                 .AddGlobalObjectIdentification()
                 .AddMutationConventions(applyToAllMutations: true)
-                .AddErrorInterfaceType<ICodedException>();
+                .AddErrorInterfaceType<ICodedException>()
+                .AddInMemorySubscriptions();
                 
             return builder;
         }

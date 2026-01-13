@@ -10,9 +10,9 @@ export type RouterContext = {
 const RootLayout = () => {
   return (
     <>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full min-h-screen">
         <AppHeader />
-        <main className="flex">
+        <main className="flex flex-1">
           <Outlet />
         </main>
       </div>

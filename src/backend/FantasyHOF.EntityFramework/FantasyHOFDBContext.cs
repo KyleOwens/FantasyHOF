@@ -37,6 +37,8 @@ namespace FantasyHOF.EntityFramework
         public DbSet<WeeklyAggregationData> WeeklyAggregationData => Set<WeeklyAggregationData>();
         public DbSet<PlayerAggregationData> PlayerAggregationData => Set<PlayerAggregationData>();
         public DbSet<LeagueMember> LeagueMembers => Set<LeagueMember>();
+        public DbSet<LeagueImport> LeagueImports => Set<LeagueImport>();
+        public DbSet<LeagueImportStatus> LeagueImportStatuses => Set<LeagueImportStatus>();
 
         public FantasyHOFDBContext(DbContextOptions<FantasyHOFDBContext> options) : base(options)
         {

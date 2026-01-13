@@ -1,6 +1,7 @@
 schema {
   query: Query
   mutation: Mutation
+  subscription: Subscription
 }
 
 interface ICodedException {
@@ -49,8 +50,13 @@ type AccumulatedStat implements Node {
 }
 
 type AddESPNLeagueToUserPayload {
-  league: League
+  addLeagueMutationPayload: AddLeagueMutationPayload
   errors: [AddESPNLeagueToUserError!]
+}
+
+type AddLeagueMutationPayload {
+  pendingLeagueId: Int!
+  jobId: String!
 }
 
 type ESPNAuthenticationError implements ICodedException {
@@ -110,6 +116,24 @@ type League implements Node {
   sport: Sport! @cost(weight: "10")
   recordSummary: LeagueRecordSummary @cost(weight: "10")
   recordDetails(recordType: RecordTypeId!): [RecordDetails!]! @cost(weight: "10")
+}
+
+type LeagueImport {
+  id: Int!
+  userId: UUID!
+  providerId: FantasyProviderId!
+  providerleagueId: String!
+  statusId: LeagueImportStatusId!
+  progress: Int!
+  error: String
+  user: User!
+  provider: FantasyProvider!
+  status: LeagueImportStatus!
+}
+
+type LeagueImportStatus {
+  id: LeagueImportStatusId!
+  name: String!
 }
 
 type LeagueMember {
@@ -262,6 +286,7 @@ type MatchupType implements Node {
 
 type Mutation {
   addESPNLeagueToUser(input: AddESPNLeagueToUserInput!): AddESPNLeagueToUserPayload! @authorize @cost(weight: "10")
+  publishTestMessage(input: PublishTestMessageInput!): PublishTestMessagePayload! @authorize @cost(weight: "10")
 }
 
 type Player implements Node {
@@ -306,14 +331,19 @@ type Position implements Node {
   value: PositionId!
 }
 
+type PublishTestMessagePayload {
+  boolean: Boolean
+}
+
 type Query {
   "Fetches an object given its ID."
   node("ID of the object." id: ID!): Node @cost(weight: "10")
   "Lookup nodes by a list of IDs."
   nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
-  me: User! @cost(weight: "10")
+  me: User! @authorize @cost(weight: "10")
   demoLeagues: [League!]! @cost(weight: "10")
   league(id: ID!): League! @cost(weight: "10")
+  fantasyProviders: [FantasyProvider!]! @cost(weight: "10")
   recordMetadata: [RecordMetadata!]! @cost(weight: "10")
 }
 
@@ -381,6 +411,10 @@ type Stat implements Node {
   value: StatId!
 }
 
+type Subscription {
+  leagueImportProgress: LeagueImport! @authorize
+}
+
 type Team implements Node {
   id: ID!
   leagueSeasonId: Int!
@@ -424,7 +458,7 @@ type TeamSeasonStats implements Node {
 type User implements Node {
   id: ID!
   clerkId: String!
-  leagues: [League!]!
+  leagues: [League!]! @cost(weight: "10")
 }
 
 type WeeklyRecord implements Record {
@@ -459,6 +493,10 @@ input AddESPNLeagueToUserInput {
   espnS2Id: String!
 }
 
+input PublishTestMessageInput {
+  progress: Int!
+}
+
 enum AppErrorCode {
   ESPN_AUTHENTICATION_FAILED
   ESPN_INVALID_YEAR
@@ -479,6 +517,18 @@ enum ApplyPolicy {
 
 enum FantasyProviderId {
   ESPN
+  SLEEPER
+  YAHOO
+  NFL
+}
+
+enum LeagueImportStatusId {
+  QUEUED
+  LOADING_DATA
+  FORMATTING_DATA
+  SAVING_DATA
+  COMPLETED
+  FAILED
 }
 
 enum MatchupOutcomeId {

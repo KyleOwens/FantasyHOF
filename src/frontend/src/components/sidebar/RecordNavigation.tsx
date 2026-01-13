@@ -80,6 +80,7 @@ export function RecordNavigation({ recordMetadataKey }: Props) {
               <SidebarRecordCategory
                 categoryDisplayName={category}
                 records={records}
+                key={category}
               />
             ))}
           </SidebarMenu>

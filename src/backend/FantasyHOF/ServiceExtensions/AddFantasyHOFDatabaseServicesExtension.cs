@@ -1,4 +1,6 @@
 ﻿using FantasyHOF.EntityFramework;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.ServiceExtensions
@@ -15,6 +17,14 @@ namespace FantasyHOF.ServiceExtensions
                 options.EnableSensitiveDataLogging();
             });
 
+            services.AddHangfire(config => config
+               .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+               .UseSimpleAssemblyNameTypeSerializer()
+               .UseRecommendedSerializerSettings()
+               .UsePostgreSqlStorage(x => x.UseNpgsqlConnection(connectionString)));
+
+            services.AddHangfireServer();
+               
             return services;
         }
     }

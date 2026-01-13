@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ModeRouteRouteImport } from './routes/$mode/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ModeIndexRouteImport } from './routes/$mode/index'
+import { Route as ModeNoLeaguesRouteImport } from './routes/$mode/no-leagues'
+import { Route as ModeMyLeaguesTestRouteImport } from './routes/$mode/my-leagues-test'
 import { Route as ModeLeagueIdRouteRouteImport } from './routes/$mode/$leagueId/route'
 import { Route as ModeLeagueIdIndexRouteImport } from './routes/$mode/$leagueId/index'
 import { Route as ModeLeagueIdDashboardRouteImport } from './routes/$mode/$leagueId/dashboard'
@@ -30,6 +32,16 @@ const IndexRoute = IndexRouteImport.update({
 const ModeIndexRoute = ModeIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => ModeRouteRoute,
+} as any)
+const ModeNoLeaguesRoute = ModeNoLeaguesRouteImport.update({
+  id: '/no-leagues',
+  path: '/no-leagues',
+  getParentRoute: () => ModeRouteRoute,
+} as any)
+const ModeMyLeaguesTestRoute = ModeMyLeaguesTestRouteImport.update({
+  id: '/my-leagues-test',
+  path: '/my-leagues-test',
   getParentRoute: () => ModeRouteRoute,
 } as any)
 const ModeLeagueIdRouteRoute = ModeLeagueIdRouteRouteImport.update({
@@ -58,6 +70,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$mode': typeof ModeRouteRouteWithChildren
   '/$mode/$leagueId': typeof ModeLeagueIdRouteRouteWithChildren
+  '/$mode/my-leagues-test': typeof ModeMyLeaguesTestRoute
+  '/$mode/no-leagues': typeof ModeNoLeaguesRoute
   '/$mode/': typeof ModeIndexRoute
   '/$mode/$leagueId/$recordTypeId': typeof ModeLeagueIdRecordTypeIdRoute
   '/$mode/$leagueId/dashboard': typeof ModeLeagueIdDashboardRoute
@@ -65,6 +79,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$mode/my-leagues-test': typeof ModeMyLeaguesTestRoute
+  '/$mode/no-leagues': typeof ModeNoLeaguesRoute
   '/$mode': typeof ModeIndexRoute
   '/$mode/$leagueId/$recordTypeId': typeof ModeLeagueIdRecordTypeIdRoute
   '/$mode/$leagueId/dashboard': typeof ModeLeagueIdDashboardRoute
@@ -75,6 +91,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$mode': typeof ModeRouteRouteWithChildren
   '/$mode/$leagueId': typeof ModeLeagueIdRouteRouteWithChildren
+  '/$mode/my-leagues-test': typeof ModeMyLeaguesTestRoute
+  '/$mode/no-leagues': typeof ModeNoLeaguesRoute
   '/$mode/': typeof ModeIndexRoute
   '/$mode/$leagueId/$recordTypeId': typeof ModeLeagueIdRecordTypeIdRoute
   '/$mode/$leagueId/dashboard': typeof ModeLeagueIdDashboardRoute
@@ -86,6 +104,8 @@ export interface FileRouteTypes {
     | '/'
     | '/$mode'
     | '/$mode/$leagueId'
+    | '/$mode/my-leagues-test'
+    | '/$mode/no-leagues'
     | '/$mode/'
     | '/$mode/$leagueId/$recordTypeId'
     | '/$mode/$leagueId/dashboard'
@@ -93,6 +113,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$mode/my-leagues-test'
+    | '/$mode/no-leagues'
     | '/$mode'
     | '/$mode/$leagueId/$recordTypeId'
     | '/$mode/$leagueId/dashboard'
@@ -102,6 +124,8 @@ export interface FileRouteTypes {
     | '/'
     | '/$mode'
     | '/$mode/$leagueId'
+    | '/$mode/my-leagues-test'
+    | '/$mode/no-leagues'
     | '/$mode/'
     | '/$mode/$leagueId/$recordTypeId'
     | '/$mode/$leagueId/dashboard'
@@ -134,6 +158,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/$mode/'
       preLoaderRoute: typeof ModeIndexRouteImport
+      parentRoute: typeof ModeRouteRoute
+    }
+    '/$mode/no-leagues': {
+      id: '/$mode/no-leagues'
+      path: '/no-leagues'
+      fullPath: '/$mode/no-leagues'
+      preLoaderRoute: typeof ModeNoLeaguesRouteImport
+      parentRoute: typeof ModeRouteRoute
+    }
+    '/$mode/my-leagues-test': {
+      id: '/$mode/my-leagues-test'
+      path: '/my-leagues-test'
+      fullPath: '/$mode/my-leagues-test'
+      preLoaderRoute: typeof ModeMyLeaguesTestRouteImport
       parentRoute: typeof ModeRouteRoute
     }
     '/$mode/$leagueId': {
@@ -184,11 +222,15 @@ const ModeLeagueIdRouteRouteWithChildren =
 
 interface ModeRouteRouteChildren {
   ModeLeagueIdRouteRoute: typeof ModeLeagueIdRouteRouteWithChildren
+  ModeMyLeaguesTestRoute: typeof ModeMyLeaguesTestRoute
+  ModeNoLeaguesRoute: typeof ModeNoLeaguesRoute
   ModeIndexRoute: typeof ModeIndexRoute
 }
 
 const ModeRouteRouteChildren: ModeRouteRouteChildren = {
   ModeLeagueIdRouteRoute: ModeLeagueIdRouteRouteWithChildren,
+  ModeMyLeaguesTestRoute: ModeMyLeaguesTestRoute,
+  ModeNoLeaguesRoute: ModeNoLeaguesRoute,
   ModeIndexRoute: ModeIndexRoute,
 }
 

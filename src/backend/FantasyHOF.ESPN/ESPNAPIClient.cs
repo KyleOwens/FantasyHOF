@@ -81,6 +81,16 @@ namespace FantasyHOF.ESPN
             }
         }
 
+        public async Task<bool> ValidateCredentialsAsync()
+        {
+            // this is enough to validate since the years will not be loadable if the authentication or leagueId is wrong.
+            // If this fails, it will throw  exceptions that the caller can handle or allow to pass through
+            // to GraphQL
+            await LoadLeagueYears();
+
+            return true;
+        }
+
         public async Task<IEnumerable<ESPNSeasonalLeagueData>> LoadSeasonalLeagueData()
         {
             IEnumerable<int> leagueYears = await LoadLeagueYears();
@@ -119,7 +129,7 @@ namespace FantasyHOF.ESPN
             return allLeagueWeeklyData;
         }
 
-        public async Task<IEnumerable<ESPNWeeklyLeagueData>> SendWeeklyDataRequestsForYear(int year)
+        private async Task<IEnumerable<ESPNWeeklyLeagueData>> SendWeeklyDataRequestsForYear(int year)
         {
             ESPNWeeklyStatus matchupWeeks = await LoadSeasonMatchupWeeks(year);
 
@@ -152,7 +162,7 @@ namespace FantasyHOF.ESPN
             return (await SendAPIRequestAsync<WeeklyStatusResponse>(request)).Status;
         }
 
-        public Task<WeeklyDataResponse> SendWeeklyDataRequest(int year, int week)
+        private Task<WeeklyDataResponse> SendWeeklyDataRequest(int year, int week)
         {
             HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, year)
                 .WithScoringPeriod(week)

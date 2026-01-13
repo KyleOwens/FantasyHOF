@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Domain.Types;
+﻿using FantasyHOF.Application.Mutations;
+using FantasyHOF.Domain.Types;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.Infrastructure.Authentication;
 using MediatR;
@@ -13,16 +14,16 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
 {
     public sealed record GetUserLeaguesQuery : IRequest<List<League>>
     {
-        public sealed class GetUserLeaguesQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser) : IRequestHandler<GetUserLeaguesQuery, List<League>>
+        public sealed class GetUserLeaguesQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser, IMediator mediator) : IRequestHandler<GetUserLeaguesQuery, List<League>>
         {
             public async Task<List<League>> Handle(GetUserLeaguesQuery request, CancellationToken cancellationToken)
             {
                 if (!currentUser.IsAuthenticated) return [];
 
-                Guid currentUserId = await currentUser.GetUserIdAsync();
+                User user = await mediator.Send(new GetOrCreateUserByClerkIdCommand(currentUser.ClerkUserId));
 
                 return await database.Leagues
-                    .Where(x => x.UserId == currentUserId)
+                    .Where(x => x.UserId == user.Id)
                     .ToListAsync();
             }
         }

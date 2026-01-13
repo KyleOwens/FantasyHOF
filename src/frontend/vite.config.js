@@ -16,6 +16,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/graphql": "http://localhost:5095",
+      "/hangfire": "http://localhost:5095",
     },
   },
   build: {

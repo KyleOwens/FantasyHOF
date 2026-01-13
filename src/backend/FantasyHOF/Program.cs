@@ -7,6 +7,7 @@ using FantasyHOF.ESPN.Enums;
 using FantasyHOF.Infrastructure.Authentication;
 using FantasyHOF.Infrastructure.Exceptions;
 using FantasyHOF.ServiceExtensions;
+using Hangfire;
 using HotChocolate.Execution;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,8 @@ builder.Services.AddFantasyHOFCurrentUserService();
 builder.Services.AddFantasyHOFApplicationServices(builder.Configuration.GetSection("Authentication"));
 builder.Services.AddFantasyHOFMediatRServices();
 
+
+
 builder.AddFantasyHOFGraphQL();
     
 var app = builder.Build();
@@ -46,12 +49,17 @@ if (app.Environment.IsDevelopment())
 
     //context.Database.EnsureDeleted();
     context.Database.Migrate();
+
+    app.UseHangfireDashboard("/hangfire");
 }
+
+
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapGraphQL();
+
 app.RunWithGraphQLCommands(args);
 
 

@@ -78,7 +78,7 @@ export function LeagueNavigation({ leaguesKey }: Props) {
               {leagues.map((league) => (
                 <DropdownMenuItem key={league.id} asChild>
                   <Link
-                    to="."
+                    to="/$mode/$leagueId"
                     search={(prev) => ({ ...prev })}
                     params={{ mode: mode, leagueId: league.id }}
                   >

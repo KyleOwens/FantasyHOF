@@ -24,10 +24,18 @@ namespace FantasyHOF.EntityFramework.Configurations
 
         public string GetProviderLogoURL(FantasyProviderId providerId)
         {
+            string folder = "/provider-logos/";
+            
             switch(providerId)
             {
                 case FantasyProviderId.ESPN:
-                    return "/espn-logo.png";
+                    return folder + "/espn-logo.webp";
+                case FantasyProviderId.Sleeper:
+                    return folder + "/sleeper-logo.webp";
+                case FantasyProviderId.Yahoo:
+                    return folder + "/yahoo-logo.webp";
+                case FantasyProviderId.NFL:
+                    return folder + "/nfl-logo.webp";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(providerId), providerId, null);
             }

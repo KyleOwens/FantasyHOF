@@ -1,9 +1,13 @@
-﻿using FantasyHOF.Application.Configuration;
+﻿using FantasyHOF.Application.BackgroundJobs;
+using FantasyHOF.Application.Configuration;
 using FantasyHOF.Application.Mappers;
 using FantasyHOF.Application.Registries;
+using FantasyHOF.Application.Services;
 using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.Domain.Types.Views;
 using FantasyHOF.ESPN;
+using Hangfire;
+using Hangfire.PostgreSql;
 
 namespace FantasyHOF.ServiceExtensions
 {
@@ -13,6 +17,9 @@ namespace FantasyHOF.ServiceExtensions
         {
             services.AddTransient<IESPNAPIClientBuilder, ESPNAPIClientBuilder>();
             services.AddSingleton<IESPNLeagueMapper, ESPNLeagueMapper>();
+
+            services.AddScoped<ILeagueImportJob, LeagueImportJob>();
+            services.AddScoped<ILeagueImportEventSender, LeagueImportEventSender>();
 
             services.Configure<AppConfig>(appConfigSection);
 

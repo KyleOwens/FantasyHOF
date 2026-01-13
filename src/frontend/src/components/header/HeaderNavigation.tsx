@@ -9,6 +9,7 @@ import {
 import { Route as indexRoute } from "../../routes/index.tsx";
 import { Route as modeRoute } from "../../routes/$mode/index";
 import { Link } from "@tanstack/react-router";
+import { SignedIn } from "@clerk/clerk-react";
 
 const navData = [
   {
@@ -54,6 +55,19 @@ export function HeaderNavigation() {
               </Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
+          <SignedIn>
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link
+                  to={modeRoute.to}
+                  params={{ mode: "me" }}
+                  className="font-medium text-muted-foreground px-4 py-2"
+                >
+                  My leagues
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </SignedIn>
         </NavigationMenuList>
       </NavigationMenu>
     </div>

@@ -14,7 +14,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
     [ExtendObjectType<User>]
     internal class UserTypeExtension
     {
-        public static async Task<IEnumerable<League>> GetLeaguesAsync(IMediator mediator, CancellationToken cancellationToken)
+        public async Task<IEnumerable<League>> GetLeaguesAsync(IMediator mediator, CancellationToken cancellationToken)
         {
             return await mediator.Send(new GetUserLeaguesQuery());
         }

@@ -13,27 +13,5 @@ export const Route = createFileRoute("/$mode")({
     parse: (rawParams) => leagueParamsSchema.parse(rawParams),
     stringify: (params) => ({ mode: params.mode }),
   },
-  loader: ({ params }) => {
-    return preloadQuery<AppSidebarQuery>(appSidebarQuery, {
-      isDemo: params.mode === "demo",
-    });
-  },
-  onLeave: ({ loaderData }) => {
-    loaderData?.dispose();
-  },
-  component: RecordViewerLayout,
+  component: () => <Outlet />,
 });
-
-function RecordViewerLayout() {
-  const { mode } = Route.useParams();
-  const appSidebarQueryRef = Route.useLoaderData();
-
-  return (
-    <>
-      <AppSidebar queryRef={appSidebarQueryRef} mode={mode} />
-      <div className="p-8 flex flex-1">
-        <Outlet />
-      </div>
-    </>
-  );
-}
