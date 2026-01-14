@@ -173,9 +173,9 @@ namespace FantasyHOF.ESPN
 
             List<int> leagueYears = await GetPreviousLeagueYears();
 
-            if (await HasActiveLeagueYear())
+            if (await HasActiveLeagueYear(leagueYears))
             {
-                leagueYears.Add(DateTime.Now.Year);
+                leagueYears.Add(GetActiveFantasyYear());
             }
 
             if (leagueYears.Count == 0) throw new ESPNNoActiveYearsException();
@@ -201,9 +201,13 @@ namespace FantasyHOF.ESPN
             return leagueYears;
         }
 
-        private async Task<bool> HasActiveLeagueYear()
+        private async Task<bool> HasActiveLeagueYear(IEnumerable<int> previousYears)
         {
-            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, DateTime.Now.Year)
+            int currentyear = GetActiveFantasyYear();
+
+            if (previousYears.Contains(currentyear)) return false;
+
+            HttpRequestMessage request = ESPNRequestBuilder.ForLeague(_credentials, currentyear)
                 .Build();
 
             try
@@ -216,6 +220,18 @@ namespace FantasyHOF.ESPN
             {
                 return false;
             }
+        }
+
+        private int GetActiveFantasyYear()
+        {
+            var now = DateTime.Now;
+
+            if (now.Month < 9)
+            {
+                return now.Year - 1;
+            }
+
+            return now.Year;
         }
     }
 }

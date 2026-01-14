@@ -9,6 +9,7 @@ namespace FantasyHOF.Application.Mappers
     public interface IESPNLeagueMapper
     {
         League MapLeague(string leagueId);
+        LeagueMember MapLeagueMember(string ESPNMemberId, IEnumerable<ESPNSeasonalLeagueData> memberSeasons);
         LeagueSeason MapLeagueSeason(ESPNSeasonalLeagueData seasonData);
         LeagueSeasonSettings MapLeagueSeasonSettings(ESPNLeagueSettings espnSettings);
         LeagueSeasonScheduleSettings MapLeagueSeasonScheduleSettings(ESPNScheduleSettings espnSettings);
@@ -35,6 +36,23 @@ namespace FantasyHOF.Application.Mappers
                 FantasyProviderId = FantasyProviderId.ESPN,
                 ProviderLeagueId = leagueId,
                 SportId = SportId.Football
+            };
+        }
+
+        public LeagueMember MapLeagueMember(string ESPNMemberId, IEnumerable<ESPNSeasonalLeagueData> memberSeasons)
+        {
+            IEnumerable<ESPNFantasyTeam> memberTeams = memberSeasons
+                .Last()
+                .Teams.Where(x => x.Owners.Any(ownerId => ownerId == ESPNMemberId));
+
+            string logoUrl = memberTeams.Any() ? memberTeams.Last().Logo ?? "" : "";
+
+            return new LeagueMember()
+            {
+                Firstyear = memberSeasons.First().Year,
+                LastYear = memberSeasons.Last().Year,
+                Tenure = memberSeasons.Count(),
+                CurrentTeamLogoURL = logoUrl
             };
         }
 

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3b70179a26f3bd00de53fbf46d731d6d>>
+ * @generated SignedSource<<80f722b1554cc28cd8ad413a0c81c098>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,7 @@ export type RecordTypeIdDetailsQuery$data = {
   readonly me: {
     readonly league: {
       readonly recordDetails: ReadonlyArray<{
+        readonly __typename: string;
         readonly key: string;
         readonly memberDetails?: {
           readonly firstyear: number;
@@ -34,6 +35,11 @@ export type RecordTypeIdDetailsQuery$data = {
           readonly metricId: RecordMetricId;
           readonly unit: string;
           readonly value: any;
+        };
+        readonly rank: number;
+        readonly recordType: {
+          readonly id: RecordTypeId;
+          readonly name: string;
         };
       }>;
     };
@@ -82,31 +88,64 @@ v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "metricId",
+  "name": "__typename",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "unit",
+  "name": "rank",
   "storageKey": null
 },
 v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "value",
+  "name": "id",
   "storageKey": null
 },
 v7 = {
   "alias": null,
   "args": null,
-  "kind": "ScalarField",
-  "name": "id",
+  "concreteType": "RecordType",
+  "kind": "LinkedField",
+  "name": "recordType",
+  "plural": false,
+  "selections": [
+    (v6/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 },
 v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "metricId",
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "unit",
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "value",
+  "storageKey": null
+},
+v11 = {
   "kind": "InlineFragment",
   "selections": [
     {
@@ -117,7 +156,7 @@ v8 = {
       "name": "memberDetails",
       "plural": false,
       "selections": [
-        (v7/*: any*/),
+        (v6/*: any*/),
         {
           "alias": null,
           "args": null,
@@ -147,7 +186,7 @@ v8 = {
           "name": "member",
           "plural": false,
           "selections": [
-            (v7/*: any*/),
+            (v6/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -164,13 +203,6 @@ v8 = {
   ],
   "type": "LeagueRecordDetails",
   "abstractKey": null
-},
-v9 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "__typename",
-  "storageKey": null
 };
 return {
   "fragment": {
@@ -204,6 +236,9 @@ return {
                 "plural": true,
                 "selections": [
                   (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v7/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -212,13 +247,13 @@ return {
                     "name": "metric",
                     "plural": false,
                     "selections": [
-                      (v4/*: any*/),
-                      (v5/*: any*/),
-                      (v6/*: any*/)
+                      (v8/*: any*/),
+                      (v9/*: any*/),
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  (v8/*: any*/)
+                  (v11/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -262,8 +297,10 @@ return {
                 "name": "recordDetails",
                 "plural": true,
                 "selections": [
-                  (v9/*: any*/),
                   (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v7/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -272,38 +309,38 @@ return {
                     "name": "metric",
                     "plural": false,
                     "selections": [
-                      (v9/*: any*/),
                       (v4/*: any*/),
-                      (v5/*: any*/),
-                      (v6/*: any*/)
+                      (v8/*: any*/),
+                      (v9/*: any*/),
+                      (v10/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  (v8/*: any*/)
+                  (v11/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v7/*: any*/)
+              (v6/*: any*/)
             ],
             "storageKey": null
           },
-          (v7/*: any*/)
+          (v6/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "e8ad5e28c886feb6011bd752e82a5af4",
+    "cacheID": "4536603b7f41acc6a93de8c41da89aa1",
     "id": null,
     "metadata": {},
     "name": "RecordTypeIdDetailsQuery",
     "operationKind": "query",
-    "text": "query RecordTypeIdDetailsQuery(\n  $leagueId: ID!\n  $recordType: RecordTypeId!\n) {\n  me {\n    league(leagueId: $leagueId) {\n      recordDetails(recordType: $recordType) {\n        __typename\n        key\n        metric {\n          __typename\n          metricId\n          unit\n          value\n        }\n        ... on LeagueRecordDetails {\n          memberDetails {\n            id\n            firstyear\n            lastYear\n            tenure\n            member {\n              id\n              fullName\n            }\n          }\n        }\n      }\n      id\n    }\n    id\n  }\n}\n"
+    "text": "query RecordTypeIdDetailsQuery(\n  $leagueId: ID!\n  $recordType: RecordTypeId!\n) {\n  me {\n    league(leagueId: $leagueId) {\n      recordDetails(recordType: $recordType) {\n        key\n        __typename\n        rank\n        recordType {\n          id\n          name\n        }\n        metric {\n          __typename\n          metricId\n          unit\n          value\n        }\n        ... on LeagueRecordDetails {\n          memberDetails {\n            id\n            firstyear\n            lastYear\n            tenure\n            member {\n              id\n              fullName\n            }\n          }\n        }\n      }\n      id\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "67e4d43d83d4a1a99c0213cd3b98c5e3";
+(node as any).hash = "537c5fc1c04ea6fe5b2289d36b435790";
 
 export default node;

@@ -3,6 +3,7 @@ using System;
 using FantasyHOF.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    partial class FantasyHOFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260114182753_TypoFix")]
+    partial class TypoFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -328,11 +331,6 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("MemberId")
                         .HasColumnType("integer")
                         .HasColumnName("member_id");
-
-                    b.Property<string>("CurrentTeamLogoURL")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("current_team_logo_url");
 
                     b.Property<int>("Firstyear")
                         .HasColumnType("integer")

@@ -31,9 +31,9 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                 }
             }
 
-            private async Task<List<RecordDetails>> LoadLeagueRecordDetail(int leagueId, RecordTypeId recordType)
+            private async Task<List<RecordDetails>> LoadLeagueRecordDetail(int leagueId, RecordTypeId recordTypeId)
             {
-                RecordMetricProjector<LeagueMemberAggregatedStats> projector = new(recordType);
+                RecordMetricProjector<LeagueMemberAggregatedStats> projector = new(recordTypeId);
 
                 IQueryable<LeagueMemberAggregatedStats> baseQuery = database.LeagueMemberAggregatedStats
                     .Where(stats => stats.LeagueId == leagueId)
@@ -45,14 +45,14 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     projector);
 
                 return materializedStats
-                    .Select((stat, i) => new LeagueRecordDetails(i, projector.GetMetric(stat), stat.MemberDetails))
+                    .Select((stat, i) => new LeagueRecordDetails(i, new(recordTypeId), projector.GetMetric(stat), stat.MemberDetails))
                     .Cast<RecordDetails>()
                     .ToList();
             }
 
-            private async Task<List<RecordDetails>> LoadSeasonalRecordDetails(int LeagueId, RecordTypeId recordType)
+            private async Task<List<RecordDetails>> LoadSeasonalRecordDetails(int LeagueId, RecordTypeId recordTypeId)
             {
-                RecordMetricProjector<LeagueSeasonMemberAggregatedStats> projector = new(recordType);
+                RecordMetricProjector<LeagueSeasonMemberAggregatedStats> projector = new(recordTypeId);
 
                 IQueryable<LeagueSeasonMemberAggregatedStats> baseQuery = database.LeagueSeasonMemberAggregatedStats
                     .Where(stats => stats.LeagueId == LeagueId)
@@ -64,14 +64,14 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     projector);
 
                 return materializedStats
-                    .Select((stat, i) => new SeasonalRecordDetails(stat.Year, i, projector.GetMetric(stat), stat.MemberDetails))
+                    .Select((stat, i) => new SeasonalRecordDetails(stat.Year, i, new(recordTypeId), projector.GetMetric(stat), stat.MemberDetails))
                     .Cast<RecordDetails>()
                     .ToList();
             }
 
-            private async Task<List<RecordDetails>> LoadWeeklyRecordDetails(int LeagueId, RecordTypeId recordType)
+            private async Task<List<RecordDetails>> LoadWeeklyRecordDetails(int LeagueId, RecordTypeId recordTypeId)
             {
-                RecordMetricProjector<WeeklyAggregationData> projector = new(recordType);
+                RecordMetricProjector<WeeklyAggregationData> projector = new(recordTypeId);
 
                 IQueryable<WeeklyAggregationData> baseQuery = database.WeeklyAggregationData
                     .Where(stats => stats.LeagueId == LeagueId)
@@ -83,14 +83,14 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     projector);
 
                 return materializedStats
-                    .Select((stat, i) => new WeeklyRecordDetails(stat.Year, stat.Week, i, projector.GetMetric(stat), stat.MemberDetails))
+                    .Select((stat, i) => new WeeklyRecordDetails(stat.Year, stat.Week, i, new(recordTypeId), projector.GetMetric(stat), stat.MemberDetails))
                     .Cast<RecordDetails>()
                     .ToList();
             }
 
-            private async Task<List<RecordDetails>> LoadPlayerRecordDetails(int LeagueId, RecordTypeId recordType)
+            private async Task<List<RecordDetails>> LoadPlayerRecordDetails(int LeagueId, RecordTypeId recordTypeId)
             {
-                RecordMetricProjector<PlayerAggregationData> projector = new(recordType);
+                RecordMetricProjector<PlayerAggregationData> projector = new(recordTypeId);
 
                 IQueryable<PlayerAggregationData> baseQuery = database.PlayerAggregationData
                     .Where(stats => stats.LeagueId == LeagueId)
@@ -103,7 +103,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     projector);
 
                 return materializedStats
-                    .Select((stat, i) => new PlayerRecordDetails(stat.Year, stat.Week, i, stat.Player, projector.GetMetric(stat), stat.MemberDetails))
+                    .Select((stat, i) => new PlayerRecordDetails(stat.Year, stat.Week, i, new(recordTypeId), stat.Player, projector.GetMetric(stat), stat.MemberDetails))
                     .Cast<RecordDetails>()
                     .ToList();
             }

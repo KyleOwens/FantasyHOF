@@ -127,14 +127,9 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 {
                     IEnumerable<ESPNSeasonalLeagueData> memberSeasons = espnSeasons.Where(x => x.Members.Any(x => x.Id == member.ProviderMemberId));
 
-                    LeagueMember newLeagueMember = new LeagueMember()
-                    {
-                        Firstyear = memberSeasons.First().Year,
-                        LearYear = memberSeasons.Last().Year,
-                        Tenure = memberSeasons.Count(),
-                        League = league,
-                        Member = member
-                    };
+                    LeagueMember newLeagueMember = _espnMapper.MapLeagueMember(member.ProviderMemberId, memberSeasons);
+                    newLeagueMember.SetMember(member);
+                    newLeagueMember.Setleague(league);
 
                     league.Members.Add(newLeagueMember);
                 }

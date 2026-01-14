@@ -29,6 +29,7 @@ interface Record {
 
 interface RecordDetails {
   rank: Int!
+  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
   key: String!
@@ -160,8 +161,9 @@ type LeagueMember implements Node {
   leagueId: ID!
   memberId: ID!
   firstyear: Int!
-  learYear: Int!
+  lastYear: Int!
   tenure: Int!
+  currentTeamLogoURL: String!
   league: League! @cost(weight: "10")
   member: FantasyMember! @cost(weight: "10")
 }
@@ -187,6 +189,7 @@ type LeagueRecord implements Record {
 type LeagueRecordDetails implements RecordDetails {
   key: String!
   rank: Int!
+  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
 }
@@ -351,6 +354,7 @@ type PlayerRecordDetails implements RecordDetails {
   player: Player!
   key: String!
   rank: Int!
+  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
 }
@@ -397,6 +401,11 @@ type RecordMetadata {
   sortDirection: SortDirection!
 }
 
+type RecordType {
+  id: RecordTypeId!
+  name: String!
+}
+
 type ScalarRecordMetric implements RecordMetric {
   value: Decimal!
   metricId: RecordMetricId!
@@ -421,6 +430,7 @@ type SeasonalRecordDetails implements RecordDetails {
   year: Int!
   key: String!
   rank: Int!
+  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
 }
@@ -486,6 +496,7 @@ type User implements Node {
   id: ID!
   clerkId: String!
   leagues: [League!]! @cost(weight: "10")
+  league(leagueId: ID!): League! @cost(weight: "10")
   leagueImports: [LeagueImport!]! @cost(weight: "10")
 }
 
@@ -509,6 +520,7 @@ type WeeklyRecordDetails implements RecordDetails {
   week: Int!
   key: String!
   rank: Int!
+  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
 }
