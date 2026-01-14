@@ -9,6 +9,7 @@ import { NoLeaguesCard } from "@/components/league-cards/NoLeaguesCard";
 import { LeagueCard } from "@/components/league-cards/LeagueCard";
 import { PendingLeagueCard } from "@/components/league-cards/PendingLeagueCard";
 import { usePendingLeaguesSubscription } from "@/hooks/usePendingLeaguesSubscription";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const Route = createFileRoute("/$mode/my-leagues")({
   component: MyLeaguesPage,
@@ -66,33 +67,60 @@ function MyLeaguesPage() {
         </LeagueAdditionModal>
       </div>
       <div className="flex flex-col gap-8">
-        {validLeagues.length > 0 && (
-          <section>
-            <h3 className="text-lg font-semibold mb-4">
-              Your Leagues ({validLeagues.length})
-            </h3>
-            <div className="flex flex-col gap-4">
+        <section>
+          <h3 className="text-lg font-semibold mb-4">
+            Your Leagues ({validLeagues.length})
+          </h3>
+          <div className="flex flex-col gap-4">
+            <AnimatePresence mode="popLayout">
               {validLeagues.map((league) => (
-                <LeagueCard leagueKey={league} key={league.id} />
+                <motion.div
+                  key={league.id}
+                  layout // This animates the position change
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                >
+                  <LeagueCard leagueKey={league} />
+                </motion.div>
               ))}
-            </div>
-          </section>
-        )}
-        {leagueImports.length > 0 && (
-          <section>
-            <h3 className="text-lg font-semibold mb-4">
-              Pending Leagues ({leagueImports.length})
-            </h3>
-            <div className="flex flex-col gap-4">
-              {leagueImports.map((leagueImport) => (
-                <PendingLeagueCard
-                  importKey={leagueImport}
-                  key={leagueImport.id}
-                />
-              ))}
-            </div>
-          </section>
-        )}
+            </AnimatePresence>
+          </div>
+        </section>
+        <AnimatePresence>
+          {leagueImports.length > 0 && (
+            <motion.section
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <h3 className="text-lg font-semibold mb-4">
+                Pending Leagues ({leagueImports.length})
+              </h3>
+              <div className="flex flex-col gap-4">
+                <AnimatePresence mode="popLayout">
+                  {leagueImports.map((leagueImport) => (
+                    <motion.div
+                      key={leagueImport.id}
+                      layout
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20, scale: 0.9 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
+                    >
+                      <PendingLeagueCard importKey={leagueImport} />
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            </motion.section>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
