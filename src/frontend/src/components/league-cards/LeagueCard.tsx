@@ -4,6 +4,7 @@ import {
   Calendar,
   Users,
   MoreHorizontal,
+  AlertCircle,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -21,9 +22,24 @@ import {
 } from "../ui/dropdown-menu";
 import { graphql } from "relay-runtime";
 import { LeagueCardFragment$key } from "@/__generated__/LeagueCardFragment.graphql";
-import { useFragment } from "react-relay";
+import { useFragment, useMutation } from "react-relay";
 import { Badge } from "../ui/badge";
 import { Link } from "@tanstack/react-router";
+import { LeagueCardDeleteLeagueMutation } from "@/__generated__/LeagueCardDeleteLeagueMutation.graphql";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useState } from "react";
+import { Spinner } from "../ui/spinner";
+import { Route as dashboardRoute } from "@/routes/$mode/$leagueId/dashboard";
+import { Route as myLeaguesRoute } from "@/routes/$mode/my-leagues";
 
 type Props = {
   leagueKey: LeagueCardFragment$key;
@@ -49,69 +65,163 @@ const leagueCardFragment = graphql`
   }
 `;
 
+const leagueCardDeleteLeagueMutation = graphql`
+  mutation LeagueCardDeleteLeagueMutation($input: DeleteUserLeagueInput!) {
+    deleteUserLeague(input: $input) {
+      deleteUserLeagueMutationPayload {
+        leagueId @deleteRecord
+      }
+      errors {
+        ... on ICodedException {
+          errorCode
+          message
+        }
+      }
+    }
+  }
+`;
+
 export function LeagueCard({ leagueKey }: Props) {
   const league = useFragment(leagueCardFragment, leagueKey);
+  const [commitLeagueDeletion, isLeagueDeletionPending] =
+    useMutation<LeagueCardDeleteLeagueMutation>(leagueCardDeleteLeagueMutation);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const handleOpenChange = (open: boolean) => {
+    setShowDeleteDialog(open);
+    if (!open) setDeleteError(null);
+  };
+
+  const handleLeagueDeletion = () => {
+    setDeleteError(null);
+
+    commitLeagueDeletion({
+      variables: {
+        input: {
+          leagueId: league.id,
+        },
+      },
+      onCompleted: (response) => {
+        const errors = response.deleteUserLeague.errors;
+
+        if (errors && errors.length > 0) {
+          setDeleteError(errors[0].message ?? "An unexpected error occurred.");
+        } else {
+          setShowDeleteDialog(false);
+        }
+      },
+      onError: () => {
+        setDeleteError("Network error: Could not reach the server.");
+      },
+    });
+  };
 
   return (
-    <Card key={league.id}>
-      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-        <div className="flex items-center gap-3">
-          <img
-            src={league.fantasyProvider.logoURL}
-            alt={league.fantasyProvider.name}
-            className="size-10 rounded-lg"
-          />
-          <div>
-            <CardTitle className="text-xl">
-              <span>{league.currentLeagueName}</span>
-            </CardTitle>
-            <CardDescription className="flex items-center gap-2 mt-1">
-              <Badge variant={"outline"}>{league.fantasyProvider.name}</Badge>
-              <span className="text-xs">ID: {league.providerLeagueId}</span>
-            </CardDescription>
-          </div>
-        </div>
-        <Button variant={"link"} asChild className="ml-auto">
-          <Link to="/">View records</Link>
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
-              <Trash2 className="size-4 mr-2 text-destructive" />
-              Delete League
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center gap-6 text-sm text-muted-foreground justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="size-4" />
-              <span>{league.seasons.length} seasons</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <Users className="size-4" />
-              <span>{league.members.length} members</span>
+    <>
+      <Card key={league.id}>
+        <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+          <div className="flex items-center gap-3">
+            <img
+              src={league.fantasyProvider.logoURL}
+              alt={league.fantasyProvider.name}
+              className="size-10 rounded-lg"
+            />
+            <div>
+              <CardTitle className="text-xl">
+                <span>{league.currentLeagueName}</span>
+              </CardTitle>
+              <CardDescription className="flex items-center gap-2 mt-1">
+                <Badge variant={"outline"}>{league.fantasyProvider.name}</Badge>
+                <span className="text-xs">ID: {league.providerLeagueId}</span>
+              </CardDescription>
             </div>
           </div>
-          <div className="flex items-center gap-1.5">
-            <RefreshCw className="size-3" />
-            <span>
-              Synced{" "}
-              {new Intl.DateTimeFormat("en-US", {
-                dateStyle: "medium",
-                timeStyle: "short",
-              }).format(new Date(league.createdAt))}
-            </span>
+          <Button variant={"link"} asChild className="ml-auto">
+            <Link
+              from={myLeaguesRoute.fullPath}
+              to={dashboardRoute.to}
+              params={{ leagueId: league.id }}
+            >
+              View records
+            </Link>
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreHorizontal className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onSelect={() => setShowDeleteDialog(true)}
+              >
+                <Trash2 className="size-4 mr-2 text-destructive" />
+                Delete League
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-6 text-sm text-muted-foreground justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="size-4" />
+                <span>{league.seasons.length} seasons</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Users className="size-4" />
+                <span>{league.members.length} members</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <RefreshCw className="size-3" />
+              <span>
+                Synced{" "}
+                {new Intl.DateTimeFormat("en-US", {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                }).format(new Date(league.createdAt))}
+              </span>
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+      <AlertDialog open={showDeleteDialog} onOpenChange={handleOpenChange}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete{" "}
+              <strong>{league.currentLeagueName}</strong>. This action cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          {deleteError && (
+            <div className="bg-destructive/10 border border-destructive/20 text-destructive text-sm p-3 rounded-md flex items-center gap-2">
+              <AlertCircle className="size-4" />
+              {deleteError}
+            </div>
+          )}
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLeagueDeletionPending}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleLeagueDeletion();
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={isLeagueDeletionPending}
+            >
+              <span>Delete League</span>
+              {isLeagueDeletionPending && <Spinner />}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

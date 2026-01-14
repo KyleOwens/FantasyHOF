@@ -11,9 +11,10 @@ import {
   FantasyProviderId,
   ProviderSelectionFragment$key,
 } from "@/__generated__/ProviderSelectionFragment.graphql";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DetailsForm } from "./DetailsForm";
 import { ScrollArea } from "../ui/scroll-area";
+import { ImportSuccessMessage } from "./ImportSuccessMessage";
 
 type Props = {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ type Props = {
 enum LeagueAdditionStep {
   Provider = "Provider",
   Details = "Details",
+  Completed = "Completed",
 }
 
 export function LeagueAdditionModal({ children, providersKey }: Props) {
@@ -44,7 +46,7 @@ export function LeagueAdditionModal({ children, providersKey }: Props) {
   };
 
   const onOpenChange = (isOpen: boolean) => {
-    if (!isOpen) {
+    if (isOpen) {
       onResetEntry();
     }
 
@@ -52,9 +54,17 @@ export function LeagueAdditionModal({ children, providersKey }: Props) {
   };
 
   const onCompletion = () => {
-    onResetEntry();
-    setIsOpen(false);
+    setStep(LeagueAdditionStep.Completed);
   };
+
+  useEffect(() => {
+    if (step === LeagueAdditionStep.Completed) {
+      const timer = setTimeout(() => {
+        setIsOpen(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [step]);
 
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
@@ -82,6 +92,7 @@ export function LeagueAdditionModal({ children, providersKey }: Props) {
               />
             )}
           </div>
+          {step === LeagueAdditionStep.Completed && <ImportSuccessMessage />}
         </ScrollArea>
       </DialogContent>
     </Dialog>

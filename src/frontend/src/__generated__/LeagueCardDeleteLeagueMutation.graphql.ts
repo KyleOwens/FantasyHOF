@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c614524d861b9c06c33e5beab8d11383>>
+ * @generated SignedSource<<ababce5cf7b2db0c5a98ca590ec87033>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,7 @@
 import { ConcreteRequest } from 'relay-runtime';
 export type AppErrorCode = "ESPN_AUTHENTICATION_FAILED" | "ESPN_GENERAL_HTTP_ERROR" | "ESPN_INVALID_YEAR" | "ESPN_LEAGUE_INVALID" | "ESPN_NO_ACTIVE_YEARS" | "FANTASY_HOF_FORBIDDEN" | "FANTASY_HOF_NOT_FOUND" | "%future added value";
 export type DeleteUserLeagueInput = {
-  leagueId: number;
+  leagueId: string;
 };
 export type LeagueCardDeleteLeagueMutation$variables = {
   input: DeleteUserLeagueInput;

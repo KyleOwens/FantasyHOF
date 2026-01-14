@@ -12,7 +12,7 @@ import { Input } from "../../ui/input";
 import {
   AlertCircle,
   ArrowLeft,
-  Check,
+  CloudDownload,
   Cookie,
   IdCard,
   Info,
@@ -30,6 +30,7 @@ import {
   ESPNFormAddLeagueMutation$data,
 } from "@/__generated__/ESPNFormAddLeagueMutation.graphql";
 import { Spinner } from "@/components/ui/spinner";
+import { FormFieldError } from "@/components/shared/FormFieldError";
 
 type Props = {
   resetEntry: () => void;
@@ -82,13 +83,13 @@ export function ESPNForm({ resetEntry, onCompletion }: Props) {
 
   const form = useForm({
     defaultValues: {
-      leagueId: undefined as unknown as number,
-      swid: "",
-      espnS2Id: "",
+      leagueId: 291927,
+      swid: "{2B552365-1B96-4AB6-9FC2-825638611F76}",
+      espnS2Id:
+        "AEBcJaRL9ejJ4YXBKu52KAxehgBoK3U1JprZ0IU9LVwpmTSpP1wjHtljmwWpc7E0ukSCVOShqiNbZR0FVLM6p99f6%2F3lYJ%2F82LExKH%2FGAcGxGP02JJV5%2BDby20j1v4unh7mehK2nrPrj3koKq1TAnVGrF84Ln6YbtaYwcvXqf2dvo2RSTmMIcwtDnlwwegBLKSL4BhCEp2m42XnhZ8POv%2FwZohLkCADZ%2FaVSPSbAssRU7BxliEynoga6IBHPIjIbpuzual845%2FnZKFS2LLweXsSAKVm3JSdOm3z6E2lh0oKnOl8X89pVEadPlv30uwQ7sbg%3D",
     },
     validators: {
-      onBlur: espnSchema,
-      onSubmit: espnSchema,
+      onChange: espnSchema,
     },
     onSubmit: (form) => {
       setServerErrors([]);
@@ -189,14 +190,7 @@ export function ESPNForm({ resetEntry, onCompletion }: Props) {
                   <IdCard className="size-5 text-muted-foreground" /> ESPN
                   League ID
                 </Label>
-                {field.state.meta.isTouched &&
-                  field.state.meta.errors.length > 0 && (
-                    <p className="text-sm text-destructive">
-                      {field.state.meta.errors
-                        .map((x) => x?.message)
-                        .join(", ")}
-                    </p>
-                  )}
+                <FormFieldError field={field} />
                 <Input
                   id={field.name}
                   type="number"
@@ -238,17 +232,10 @@ export function ESPNForm({ resetEntry, onCompletion }: Props) {
                 <div className="flex flex-row gap-2 items-center">
                   <FieldLabel htmlFor="espn-league-id">
                     <Cookie className="size-4 text-muted-foreground" />
-                    League Id
+                    SWID
                   </FieldLabel>
                 </div>
-                {field.state.meta.isTouched &&
-                  field.state.meta.errors.length > 0 && (
-                    <p className="text-sm text-destructive">
-                      {field.state.meta.errors
-                        .map((x) => x?.message)
-                        .join(", ")}
-                    </p>
-                  )}
+                <FormFieldError field={field} />
                 <Input
                   id={field.name}
                   placeholder="{A1234-B456-C789-D012-E01234567890}"
@@ -267,7 +254,8 @@ export function ESPNForm({ resetEntry, onCompletion }: Props) {
                   <Cookie className="size-4 text-muted-foreground" />
                   ESPN S2
                 </FieldLabel>
-                {field.state.meta.isTouched &&
+                {field.state.meta.isBlurred &&
+                  !field.state.meta.isDefaultValue &&
                   field.state.meta.errors.length > 0 && (
                     <p className="text-sm text-destructive">
                       {field.state.meta.errors
@@ -296,8 +284,8 @@ export function ESPNForm({ resetEntry, onCompletion }: Props) {
           Head back
         </Button>
         <Button disabled={newLeagueIsPending}>
-          Submit
-          {newLeagueIsPending ? <Spinner /> : <Check />}
+          Import
+          {newLeagueIsPending ? <Spinner /> : <CloudDownload />}
         </Button>
       </div>
     </form>

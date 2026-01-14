@@ -1,5 +1,4 @@
 ﻿using FantasyHOF.Application.Enums;
-using FantasyHOF.Application.QueryTypes.Records;
 using FantasyHOF.Application.Types.Queries.Records;
 using System.Linq.Expressions;
 

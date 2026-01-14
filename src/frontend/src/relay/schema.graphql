@@ -59,6 +59,15 @@ type AddLeagueMutationPayload {
   import: LeagueImport!
 }
 
+type DeleteUserLeagueMutationPayload {
+  leagueId: ID!
+}
+
+type DeleteUserLeaguePayload {
+  deleteUserLeagueMutationPayload: DeleteUserLeagueMutationPayload
+  errors: [DeleteUserLeagueError!]
+}
+
 type ESPNAuthenticationError implements ICodedException {
   message: String!
   errorCode: AppErrorCode!
@@ -100,6 +109,11 @@ type FantasyProvider implements Node {
   name: String!
   logoURL: String!
   value: FantasyProviderId!
+}
+
+type ForbiddenError implements ICodedException {
+  message: String!
+  errorCode: AppErrorCode!
 }
 
 type League implements Node {
@@ -297,7 +311,12 @@ type MatchupType implements Node {
 
 type Mutation {
   addESPNLeagueToUser(input: AddESPNLeagueToUserInput!): AddESPNLeagueToUserPayload! @authorize @cost(weight: "10")
-  publishTestMessage(input: PublishTestMessageInput!): PublishTestMessagePayload! @authorize @cost(weight: "10")
+  deleteUserLeague(input: DeleteUserLeagueInput!): DeleteUserLeaguePayload! @authorize @cost(weight: "10")
+}
+
+type NotFoundError implements ICodedException {
+  message: String!
+  errorCode: AppErrorCode!
 }
 
 type Player implements Node {
@@ -340,10 +359,6 @@ type Position implements Node {
   id: ID!
   name: String!
   value: PositionId!
-}
-
-type PublishTestMessagePayload {
-  boolean: Boolean
 }
 
 type Query {
@@ -467,6 +482,7 @@ type TeamSeasonStats implements Node {
 }
 
 type User implements Node {
+  removeLeagueIfExists(leagueId: Int!): Boolean!
   id: ID!
   clerkId: String!
   leagues: [League!]! @cost(weight: "10")
@@ -499,17 +515,21 @@ type WeeklyRecordDetails implements RecordDetails {
 
 union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError
 
+union DeleteUserLeagueError = NotFoundError | ForbiddenError
+
 input AddESPNLeagueToUserInput {
   leagueId: String!
   swid: String!
   espnS2Id: String!
 }
 
-input PublishTestMessageInput {
-  progress: Int!
+input DeleteUserLeagueInput {
+  leagueId: ID!
 }
 
 enum AppErrorCode {
+  FANTASY_HOF_FORBIDDEN
+  FANTASY_HOF_NOT_FOUND
   ESPN_AUTHENTICATION_FAILED
   ESPN_INVALID_YEAR
   ESPN_LEAGUE_INVALID

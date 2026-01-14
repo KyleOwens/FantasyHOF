@@ -33,7 +33,7 @@ namespace FantasyHOF.Application.BackgroundJobs
             try
             {
                 await eventSender.StartImport(import, cancellationToken);
-                League newLeague = await mediator.Send(new GetESPNLeagueQuery(credentials), cancellationToken);
+                League newLeague = await mediator.Send(new GetESPNLeagueQuery(credentials, import), cancellationToken);
 
                 await eventSender.StartSaving(import, cancellationToken);
                 import.User.RemoveLeagueIfExists(FantasyProviderId.ESPN, credentials.LeagueId);

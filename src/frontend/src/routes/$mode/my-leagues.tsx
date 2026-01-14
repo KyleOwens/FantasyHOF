@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { LeagueAdditionModal } from "@/components/league-addition-modal/LeagueAdditionModal";
 import { myLeaguesQuery as MyLeaguesQueryType } from "@/__generated__/myLeaguesQuery.graphql";
-import { NoLeaguesCard } from "@/components/no-leagues-card/NoLeaguesCard";
+import { NoLeaguesCard } from "@/components/league-cards/NoLeaguesCard";
 import { LeagueCard } from "@/components/league-cards/LeagueCard";
 import { PendingLeagueCard } from "@/components/league-cards/PendingLeagueCard";
 import { usePendingLeaguesSubscription } from "@/hooks/usePendingLeaguesSubscription";
 
 export const Route = createFileRoute("/$mode/my-leagues")({
-  component: MyLeaguesTestPage,
+  component: MyLeaguesPage,
 });
 
 const myLeaguesQuery = graphql`
@@ -38,13 +38,15 @@ const myLeaguesQuery = graphql`
   }
 `;
 
-function MyLeaguesTestPage() {
+function MyLeaguesPage() {
   const data = useLazyLoadQuery<MyLeaguesQueryType>(myLeaguesQuery, {});
   usePendingLeaguesSubscription();
 
   const { leagues, leagueImports } = data.me;
 
-  if (leagues.length === 0 && leagueImports.length === 0)
+  const validLeagues = leagues.filter(Boolean);
+
+  if (validLeagues.length === 0 && leagueImports.length === 0)
     return <NoLeaguesCard providersKey={data} />;
 
   return (
@@ -64,13 +66,13 @@ function MyLeaguesTestPage() {
         </LeagueAdditionModal>
       </div>
       <div className="flex flex-col gap-8">
-        {leagues.length > 0 && (
+        {validLeagues.length > 0 && (
           <section>
             <h3 className="text-lg font-semibold mb-4">
-              Your Leagues ({leagues.length})
+              Your Leagues ({validLeagues.length})
             </h3>
             <div className="flex flex-col gap-4">
-              {leagues.map((league) => (
+              {validLeagues.map((league) => (
                 <LeagueCard leagueKey={league} key={league.id} />
               ))}
             </div>

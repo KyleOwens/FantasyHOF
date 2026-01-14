@@ -1,8 +1,11 @@
-﻿namespace FantasyHOF.Application.Exceptions
+﻿using FantasyHOF.Infrastructure.Enums;
+using FantasyHOF.Infrastructure.Exceptions;
+
+namespace FantasyHOF.Application.Exceptions
 {
-    public class NotFoundException : Exception
+    public class NotFoundException : CodedException
     {
         public NotFoundException(string entityName, object id)
-            : base($"{entityName} with ID {id} was not found") { }
+            : base(AppErrorCode.FantasyHOFNotFound, $"{entityName} with ID {id} was not found") { }
     }
 }

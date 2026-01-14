@@ -39,7 +39,7 @@ export function usePendingLeaguesSubscription() {
 
         if (statusValue !== "COMPLETED") return;
 
-        const importId = rootField.getValue("id");
+        const importId = rootField.getDataID();
         const newLeague = rootField.getLinkedRecord("league");
         const me = store.getRoot().getLinkedRecord("me");
 
@@ -48,7 +48,9 @@ export function usePendingLeaguesSubscription() {
         const newExternalId = newLeague.getValue("providerLeagueId");
         const currentLeagues = me.getLinkedRecords("leagues") || [];
         const filteredLeagues = currentLeagues.filter(
-          (league) => league.getValue("providerLeagueId") !== newExternalId,
+          (league) =>
+            league !== null &&
+            league.getValue("providerLeagueId") !== newExternalId,
         );
 
         me.setLinkedRecords([...filteredLeagues, newLeague], "leagues");
@@ -56,7 +58,9 @@ export function usePendingLeaguesSubscription() {
         const pendingImports = me.getLinkedRecords("leagueImports") || [];
 
         me.setLinkedRecords(
-          pendingImports.filter((imp) => imp.getDataID() !== importId),
+          pendingImports.filter(
+            (imp) => imp !== null && imp.getDataID() !== importId,
+          ),
           "leagueImports",
         );
       },

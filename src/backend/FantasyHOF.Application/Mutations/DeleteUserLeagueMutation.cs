@@ -25,7 +25,7 @@ namespace FantasyHOF.Application.Mutations
                 bool success = user.RemoveLeagueIfExists(request.LeagueId);
                 if (!success) throw new NotFoundException(nameof(League), request.LeagueId);
 
-                //await database.SaveChangesAsync();
+                await database.SaveChangesAsync(cancellationToken);
 
                 return new(request.LeagueId);
             }

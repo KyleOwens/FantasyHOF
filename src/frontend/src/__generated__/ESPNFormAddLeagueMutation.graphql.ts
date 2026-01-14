@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b45bfdb96130b7f8f5a27a4e126f1ab4>>
+ * @generated SignedSource<<3bc3ffe8406747368f1241f7e28fab3e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,7 @@
 
 import { ConcreteRequest } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type AppErrorCode = "ESPN_AUTHENTICATION_FAILED" | "ESPN_GENERAL_HTTP_ERROR" | "ESPN_INVALID_YEAR" | "ESPN_LEAGUE_INVALID" | "ESPN_NO_ACTIVE_YEARS" | "%future added value";
+export type AppErrorCode = "ESPN_AUTHENTICATION_FAILED" | "ESPN_GENERAL_HTTP_ERROR" | "ESPN_INVALID_YEAR" | "ESPN_LEAGUE_INVALID" | "ESPN_NO_ACTIVE_YEARS" | "FANTASY_HOF_FORBIDDEN" | "FANTASY_HOF_NOT_FOUND" | "%future added value";
 export type AddESPNLeagueToUserInput = {
   espnS2Id: string;
   leagueId: string;

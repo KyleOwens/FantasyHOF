@@ -1,4 +1,5 @@
 ﻿using FantasyHOF.Application.Mappers;
+using FantasyHOF.Application.Services;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.ESPNQueries
 {
-    public sealed record GetESPNLeagueQuery(ESPNLeagueCredentials Credentials) : IRequest<League>
+    public sealed record GetESPNLeagueQuery(ESPNLeagueCredentials Credentials, LeagueImport Import) : IRequest<League>
     {
         private sealed class ESPNImportContext
         {
@@ -32,32 +33,41 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
             private readonly FantasyHOFDBContext _context;
             private readonly IESPNAPIClientBuilder _espnClientBuilder;
             private readonly IESPNLeagueMapper _espnMapper;
+            private readonly ILeagueImportEventSender _eventSender;
 
             private ESPNImportContext _importContext = null!;
 
-            public GetESPNLeagueQueryHandler(FantasyHOFDBContext context, IESPNAPIClientBuilder espnClientBuilder, IESPNLeagueMapper espnMapper)
+            public GetESPNLeagueQueryHandler(
+                FantasyHOFDBContext context,
+                IESPNAPIClientBuilder espnClientBuilder,
+                IESPNLeagueMapper espnMapper,
+                ILeagueImportEventSender eventSender)
             {
                 _context = context;
                 _espnClientBuilder = espnClientBuilder;
                 _espnMapper = espnMapper;
+                _eventSender = eventSender;
             }
 
             public async Task<League> Handle(GetESPNLeagueQuery request, CancellationToken cancellationToken)
             {
                 ESPNAPIClient espnClient = _espnClientBuilder.Build(request.Credentials);
 
+                await _eventSender.StartLoadingData(request.Import, cancellationToken);
                 IEnumerable<ESPNSeasonalLeagueData> memberDetails = await espnClient.LoadSeasonalLeagueData();
                 IEnumerable<ESPNWeeklyLeagueData> matchupDetails = await espnClient.LoadWeeklyLeagueData();
 
-                await PrepareImportContextAsync(memberDetails, matchupDetails, cancellationToken);
+                await PrepareImportContextAsync(memberDetails, matchupDetails, request.Import, cancellationToken);
 
                 League league = CreateLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
 
                 return league;
             }
 
-            private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, CancellationToken cancellationToken)
+            private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, LeagueImport import, CancellationToken cancellationToken)
             {
+                await _eventSender.StartFormattingData(import, cancellationToken);
+
                 IEnumerable<ESPNFantasyMember> allEspnMembers = espnMemberDetails
                     .SelectMany(x => x.Members)
                     .DistinctBy(x => x.Id);

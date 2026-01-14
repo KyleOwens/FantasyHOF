@@ -8,6 +8,8 @@ namespace FantasyHOF.Application.Services
     public interface ILeagueImportEventSender
     {
         public Task StartImport(LeagueImport import, CancellationToken cancellationToken);
+        public Task StartLoadingData(LeagueImport import, CancellationToken cancellationToken);
+        public Task StartFormattingData(LeagueImport import, CancellationToken cancellationToken);
         public Task StartSaving(LeagueImport import, CancellationToken cancellationToken);
         public Task Complete(LeagueImport import, int leagueId, CancellationToken cancellationToken);
         public Task Error(LeagueImport import, CancellationToken cancellationToken);
@@ -23,16 +25,30 @@ namespace FantasyHOF.Application.Services
 
         public async Task StartImport(LeagueImport import, CancellationToken cancellationToken)
         {
-            import.StatusId = LeagueImportStatusId.LoadingData;
+            import.StatusId = LeagueImportStatusId.Queued;
             import.Progress = 0;
 
             await SendEvent(import, cancellationToken);
         }
 
+        public async Task StartLoadingData(LeagueImport import, CancellationToken cancellationToken)
+        {
+            import.StatusId = LeagueImportStatusId.LoadingData;
+            import.Progress = 5;
+
+            await SendEvent(import, cancellationToken);
+        }
+
+        public async Task StartFormattingData(LeagueImport import, CancellationToken cancellationToken)
+        {
+            import.StatusId = LeagueImportStatusId.FormattingData;
+            import.Progress = 30;
+        }
+
         public async Task StartSaving(LeagueImport import, CancellationToken cancellationToken)
         {
             import.StatusId = LeagueImportStatusId.SavingData;
-            import.Progress = 20;
+            import.Progress = 40;
 
             await SendEvent(import, cancellationToken);
         }

@@ -1,12 +1,10 @@
-﻿using FantasyHOF.Application.Authentication;
+﻿using FantasyHOF.Application.Exceptions;
 using FantasyHOF.Application.Mutations;
 using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
-using FantasyHOF.Domain.Enums;
 using FantasyHOF.ESPN.Errors;
 using FantasyHOF.ESPN.Types.Inputs;
 using HotChocolate.Authorization;
-using HotChocolate.Subscriptions;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.Roots
@@ -36,19 +34,15 @@ namespace FantasyHOF.GraphQL.Types.Roots
                 cancellationToken);
         }
 
+        [Error<NotFoundException>]
+        [Error<ForbiddenException>]
         [Authorize]
-        public static async Task<bool> PublishTestMessage(int progress, ICurrentUserService currentUser, ITopicEventSender eventSender)
+        public static async Task<DeleteUserLeagueMutationPayload> DeleteUserLeagueAsync(
+            [ID<League>] int leagueId,
+            IMediator mediator,
+            CancellationToken cancellationToken)
         {
-            await eventSender.SendAsync($"{nameof(LeagueImport)}_{await currentUser.GetUserIdAsync()}", new LeagueImport
-            {
-                Progress = progress,
-                ProviderId = FantasyProviderId.ESPN,
-                ProviderleagueId = "test lol",
-                StatusId = LeagueImportStatusId.SavingData,
-                UserId = await currentUser.GetUserIdAsync()
-            });
-
-            return true;
+            return await mediator.Send(new DeleteUserLeagueMutation(leagueId), cancellationToken);
         }
     }
 }
