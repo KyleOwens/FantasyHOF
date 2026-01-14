@@ -1,7 +1,7 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Domain.Entities;
 
-namespace FantasyHOF.Application.QueryTypes.Records
+namespace FantasyHOF.Application.Types.Queries.Records
 {
     public class WeeklyRecord : SeasonalRecord
     {

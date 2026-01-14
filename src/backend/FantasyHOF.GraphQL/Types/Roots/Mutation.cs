@@ -1,6 +1,6 @@
 ﻿using FantasyHOF.Application.Authentication;
 using FantasyHOF.Application.Mutations;
-using FantasyHOF.Application.QueryTypes;
+using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using FantasyHOF.ESPN.Errors;

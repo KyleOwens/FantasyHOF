@@ -2,7 +2,7 @@
 using FantasyHOF.Application.Registries;
 using FantasyHOF.Domain.Entities.Views;
 
-namespace FantasyHOF.Application.QueryTypes.Records
+namespace FantasyHOF.Application.Types.Queries.Records
 {
     public class LeagueRecordSummary
     {

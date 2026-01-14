@@ -102,7 +102,13 @@ export function LeagueCard({ leagueKey }: Props) {
           </div>
           <div className="flex items-center gap-1.5">
             <RefreshCw className="size-3" />
-            <span>Synced {league.createdAt}</span>
+            <span>
+              Synced{" "}
+              {new Intl.DateTimeFormat("en-US", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              }).format(new Date(league.createdAt))}
+            </span>
           </div>
         </div>
       </CardContent>

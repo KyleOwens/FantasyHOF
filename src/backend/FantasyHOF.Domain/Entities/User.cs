@@ -14,15 +14,29 @@ namespace FantasyHOF.Domain.Entities
             ClerkId = clerkId;
         }
 
-        public void RemoveLeagueIfExists(FantasyProviderId providerId, string providerLeagueId)
+        public bool RemoveLeagueIfExists(int leagueId)
+        {
+            League? leagueToRemove = Leagues.SingleOrDefault(
+                league => league.Id == leagueId);
+
+            if (leagueToRemove == null) return false;
+
+            Leagues.Remove(leagueToRemove);
+
+            return true;
+        }
+
+        public bool RemoveLeagueIfExists(FantasyProviderId providerId, string providerLeagueId)
         {
             League? leagueToRemove = Leagues.SingleOrDefault(
                 league => league.ProviderLeagueId == providerLeagueId &&
                     league.FantasyProviderId == providerId);
 
-            if (leagueToRemove == null) return;
+            if (leagueToRemove == null) return false;
 
             Leagues.Remove(leagueToRemove);
+
+            return true;
         }
 
         public void AddLeague(League league)

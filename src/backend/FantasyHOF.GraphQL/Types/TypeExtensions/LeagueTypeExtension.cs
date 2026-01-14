@@ -1,6 +1,6 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Queries.LeagueQueries;
-using FantasyHOF.Application.QueryTypes.Records;
+using FantasyHOF.Application.Types.Queries.Records;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using FantasyHOF.GraphQL.Types.DataLoaders;

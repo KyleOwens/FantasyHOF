@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<83f947608da9844afcb544a839d777b7>>
+ * @generated SignedSource<<5392b9e762b7115e05c070833c8a74be>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -198,7 +198,8 @@ return {
                     "kind": "ScalarField",
                     "name": "memberId",
                     "storageKey": null
-                  }
+                  },
+                  (v0/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -230,12 +231,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2486b5a27b57c983832c135b2aae56a2",
+    "cacheID": "85bedd18644091247c828c86a4aac868",
     "id": null,
     "metadata": {},
     "name": "usePendingLeaguesSubscription",
     "operationKind": "subscription",
-    "text": "subscription usePendingLeaguesSubscription {\n  leagueImportProgress {\n    id\n    progress\n    error\n    status {\n      id\n      name\n      value\n    }\n    league {\n      ...LeagueCardFragment\n      id\n    }\n  }\n}\n\nfragment LeagueCardFragment on League {\n  id\n  currentLeagueName\n  providerLeagueId\n  fantasyProvider {\n    id\n    name\n    logoURL\n  }\n  members {\n    memberId\n  }\n  seasons {\n    id\n  }\n  createdAt\n}\n"
+    "text": "subscription usePendingLeaguesSubscription {\n  leagueImportProgress {\n    id\n    progress\n    error\n    status {\n      id\n      name\n      value\n    }\n    league {\n      ...LeagueCardFragment\n      id\n    }\n  }\n}\n\nfragment LeagueCardFragment on League {\n  id\n  currentLeagueName\n  providerLeagueId\n  fantasyProvider {\n    id\n    name\n    logoURL\n  }\n  members {\n    memberId\n    id\n  }\n  seasons {\n    id\n  }\n  createdAt\n}\n"
   }
 };
 })();

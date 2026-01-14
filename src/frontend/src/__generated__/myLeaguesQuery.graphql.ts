@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b086c6a64ff667ea9850c5d5b7b46a4d>>
+ * @generated SignedSource<<7f5805a25c774af2067a1850dcf9452c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -224,7 +224,8 @@ return {
                     "kind": "ScalarField",
                     "name": "memberId",
                     "storageKey": null
-                  }
+                  },
+                  (v0/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -329,12 +330,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "45fefd0f7074a114ac7629360e5b9c58",
+    "cacheID": "3145862114215a11c1e1dccdf6ba84b5",
     "id": null,
     "metadata": {},
     "name": "myLeaguesQuery",
     "operationKind": "query",
-    "text": "query myLeaguesQuery {\n  me {\n    leagues {\n      id\n      ...LeagueCardFragment\n      fantasyProvider {\n        name\n        logoURL\n        id\n      }\n      providerLeagueId\n    }\n    leagueImports {\n      id\n      ...PendingLeagueCardFragment\n    }\n    id\n  }\n  ...NoLeaguesCardFragment\n  fantasyProviders {\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment LeagueCardFragment on League {\n  id\n  currentLeagueName\n  providerLeagueId\n  fantasyProvider {\n    id\n    name\n    logoURL\n  }\n  members {\n    memberId\n  }\n  seasons {\n    id\n  }\n  createdAt\n}\n\nfragment NoLeaguesCardFragment on Query {\n  fantasyProviders {\n    logoURL\n    name\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment PendingLeagueCardFragment on LeagueImport {\n  id\n  provider {\n    id\n    name\n    logoURL\n  }\n  status {\n    id\n    name\n    value\n  }\n  progress\n  error\n  providerleagueId\n}\n\nfragment ProviderSelectionFragment on FantasyProvider {\n  id\n  name\n  logoURL\n  value\n}\n"
+    "text": "query myLeaguesQuery {\n  me {\n    leagues {\n      id\n      ...LeagueCardFragment\n      fantasyProvider {\n        name\n        logoURL\n        id\n      }\n      providerLeagueId\n    }\n    leagueImports {\n      id\n      ...PendingLeagueCardFragment\n    }\n    id\n  }\n  ...NoLeaguesCardFragment\n  fantasyProviders {\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment LeagueCardFragment on League {\n  id\n  currentLeagueName\n  providerLeagueId\n  fantasyProvider {\n    id\n    name\n    logoURL\n  }\n  members {\n    memberId\n    id\n  }\n  seasons {\n    id\n  }\n  createdAt\n}\n\nfragment NoLeaguesCardFragment on Query {\n  fantasyProviders {\n    logoURL\n    name\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment PendingLeagueCardFragment on LeagueImport {\n  id\n  provider {\n    id\n    name\n    logoURL\n  }\n  status {\n    id\n    name\n    value\n  }\n  progress\n  error\n  providerleagueId\n}\n\nfragment ProviderSelectionFragment on FantasyProvider {\n  id\n  name\n  logoURL\n  value\n}\n"
   }
 };
 })();

@@ -1,7 +1,7 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.EntityFramework.Extensions;
 
-namespace FantasyHOF.Application.QueryTypes.Records
+namespace FantasyHOF.Application.Types.Queries.Records
 {
     public sealed record RatioRecordMetric(
         RecordMetricId MetricId,

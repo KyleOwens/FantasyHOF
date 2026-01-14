@@ -1,7 +1,9 @@
-﻿using FantasyHOF.Domain.ComplexIds;
+﻿using FantasyHOF.Application.Queries.LeagueMemberQueries;
+using FantasyHOF.Domain.ComplexIds;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using FantasyHOF.GraphQL.Types.DataLoaders;
+using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions
 {
@@ -32,6 +34,14 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
             CancellationToken cancellationToken)
         {
             return await members.LoadRequiredAsync(member.MemberId, cancellationToken);
+        }
+
+        public static async Task<LeagueMember?> GetLeagueMemberAsync(
+            string id,
+            IMediator mediator,
+            CancellationToken cancellationToken)
+        {
+            return await mediator.Send(new GetLeagueMemberByIdQuery(LeagueMemberId.Parse(id)), cancellationToken);
         }
     }
 }

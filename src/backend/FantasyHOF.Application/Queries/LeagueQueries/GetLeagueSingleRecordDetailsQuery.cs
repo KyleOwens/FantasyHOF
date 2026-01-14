@@ -1,6 +1,7 @@
 ﻿using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.QueryTypes.Records;
 using FantasyHOF.Application.Registries;
+using FantasyHOF.Application.Types.Queries.Records;
 using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.EntityFramework;
 using MediatR;

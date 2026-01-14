@@ -111,7 +111,7 @@ type League implements Node {
   currentLeagueName: String!
   currentLeagueYear: Int!
   seasons: [LeagueSeason!]! @cost(weight: "10")
-  members: [LeagueMember!]!
+  members: [LeagueMember!]! @cost(weight: "10")
   fantasyProvider: FantasyProvider! @cost(weight: "10")
   sport: Sport! @cost(weight: "10")
   createdAt: DateTime!
@@ -141,14 +141,20 @@ type LeagueImportStatus implements Node {
   value: LeagueImportStatusId!
 }
 
-type LeagueMember {
-  leagueId: Int!
-  memberId: Int!
+type LeagueMember implements Node {
+  id: ID!
+  leagueId: ID!
+  memberId: ID!
   firstyear: Int!
   learYear: Int!
   tenure: Int!
-  league: League!
-  member: FantasyMember!
+  league: League! @cost(weight: "10")
+  member: FantasyMember! @cost(weight: "10")
+}
+
+type LeagueMemberId {
+  leagueId: Int!
+  memberId: Int!
 }
 
 type LeagueRecord implements Record {

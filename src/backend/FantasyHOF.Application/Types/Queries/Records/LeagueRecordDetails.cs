@@ -1,6 +1,6 @@
 ﻿using FantasyHOF.Domain.Entities;
 
-namespace FantasyHOF.Application.QueryTypes.Records
+namespace FantasyHOF.Application.Types.Queries.Records
 {
     public sealed record LeagueRecordDetails(int Rank, RecordMetric Metric, LeagueMember MemberDetails)
         : RecordDetails(Rank, Metric, MemberDetails)

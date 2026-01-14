@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bb0afa9bf1c3bc8e29b7af0058b7fe97>>
+ * @generated SignedSource<<f080bf0226c7d787335fb4fbfbd0a607>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,7 +20,7 @@ export type LeagueCardFragment$data = {
   };
   readonly id: string;
   readonly members: ReadonlyArray<{
-    readonly memberId: number;
+    readonly memberId: string;
   }>;
   readonly providerLeagueId: string;
   readonly seasons: ReadonlyArray<{

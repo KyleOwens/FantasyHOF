@@ -2,7 +2,7 @@ using FantasyHOF.Application.Enums;
 using FantasyHOF.Application.Queries.FantasyProviderQueries;
 using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Application.Queries.UserQueries;
-using FantasyHOF.Application.QueryTypes.Records;
+using FantasyHOF.Application.Types.Queries.Records;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using HotChocolate.Authorization;
