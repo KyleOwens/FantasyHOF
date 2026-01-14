@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
-import { useLazyLoadQuery } from "react-relay";
+import { usePreloadedQuery } from "react-relay";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { LeagueAdditionModal } from "@/components/league-addition-modal/LeagueAdditionModal";
@@ -10,9 +10,16 @@ import { LeagueCard } from "@/components/league-cards/LeagueCard";
 import { PendingLeagueCard } from "@/components/league-cards/PendingLeagueCard";
 import { usePendingLeaguesSubscription } from "@/hooks/usePendingLeaguesSubscription";
 import { AnimatePresence, motion } from "framer-motion";
+import { preloadQuery } from "@/relay/helpers";
 
 export const Route = createFileRoute("/$mode/my-leagues")({
   component: MyLeaguesPage,
+  loader: () => {
+    return preloadQuery<MyLeaguesQueryType>(myLeaguesQuery, {});
+  },
+  onLeave: ({ loaderData }) => {
+    loaderData?.dispose();
+  },
 });
 
 const myLeaguesQuery = graphql`
@@ -40,7 +47,8 @@ const myLeaguesQuery = graphql`
 `;
 
 function MyLeaguesPage() {
-  const data = useLazyLoadQuery<MyLeaguesQueryType>(myLeaguesQuery, {});
+  const queryRef = Route.useLoaderData();
+  const data = usePreloadedQuery<MyLeaguesQueryType>(myLeaguesQuery, queryRef);
   usePendingLeaguesSubscription();
 
   const { leagues, leagueImports } = data.me;
