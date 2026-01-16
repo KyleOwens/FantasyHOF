@@ -3,7 +3,6 @@ using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Application.Types.Queries.Records;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
-using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
@@ -61,7 +60,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
             IMediator mediator,
             CancellationToken cancellationToken)
         {
-            return await mediator.Send(new GetLeagueSingleRecordDetailsQuery(league.Id, recordType));
+            return await mediator.Send(new GetLeagueSingleRecordDetailsQuery(league.Id, recordType), cancellationToken);
         }
 
         public static async Task<League?> GetLeagueAsync(

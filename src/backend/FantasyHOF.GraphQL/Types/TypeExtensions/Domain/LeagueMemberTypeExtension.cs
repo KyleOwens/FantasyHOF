@@ -2,7 +2,6 @@
 using FantasyHOF.Domain.ComplexIds;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
-using FantasyHOF.GraphQL.Types.DataLoaders;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain

@@ -10,8 +10,15 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
 {
     public sealed record GetLeagueSingleRecordDetailsQuery(int LeagueId, RecordTypeId RecordType) : IRequest<RecordDetails>
     {
-        public sealed class GetLeagueSingleRecordDetailsQueryHandler(FantasyHOFDBContext database) : IRequestHandler<GetLeagueSingleRecordDetailsQuery, RecordDetails>
+        public sealed class GetLeagueSingleRecordDetailsQueryHandler : IRequestHandler<GetLeagueSingleRecordDetailsQuery, RecordDetails>
         {
+            private FantasyHOFDBContext database;
+
+            public GetLeagueSingleRecordDetailsQueryHandler(IDbContextFactory<FantasyHOFDBContext> dbFactory)
+            {
+                database = dbFactory.CreateDbContext();
+            }
+
             public Task<RecordDetails> Handle(GetLeagueSingleRecordDetailsQuery request, CancellationToken cancellationToken)
             {
                 RecordCategoryId recordCategory = request.RecordType.GetMetadata().Category;
@@ -40,14 +47,13 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member);
 
-                List<LeagueMemberAggregatedStats> materializedStats = await MaterializeFilteredAndSortedStats(
+                IQueryable<LeagueMemberAggregatedStats> filteredAndSortedStats = await FilterAndSortStats(
                     baseQuery,
                     projector);
 
-                List<RecordEntry> entries = materializedStats
-                    .Select((stat, i) => new LeagueRecordEntry(i + 1, projector.GetMetric(stat), stat.MemberDetails))
-                    .Cast<RecordEntry>()
-                    .ToList();
+                IQueryable<RecordEntry> entries = filteredAndSortedStats
+                    .Select((stat) => new LeagueRecordEntry(1, projector.GetMetric(stat), stat.MemberDetails))
+                    .Cast<RecordEntry>();
 
                 RecordMetadata metadata = new(recordTypeId);
 
@@ -63,14 +69,13 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member);
 
-                List<LeagueSeasonMemberAggregatedStats> materializedStats = await MaterializeFilteredAndSortedStats(
+                IQueryable<LeagueSeasonMemberAggregatedStats> filteredAndSortedStats = await FilterAndSortStats(
                     baseQuery,
                     projector);
 
-                List<RecordEntry> entries = materializedStats
-                    .Select((stat, i) => new SeasonalRecordEntry(stat.Year, i + 1, projector.GetMetric(stat), stat.MemberDetails))
-                    .Cast<RecordEntry>()
-                    .ToList();
+                IQueryable<RecordEntry> entries = filteredAndSortedStats
+                    .Select((stat) => new SeasonalRecordEntry(stat.Year, 1, projector.GetMetric(stat), stat.MemberDetails))
+                    .Cast<RecordEntry>();
 
                 RecordMetadata metadata = new(recordTypeId);
 
@@ -86,14 +91,13 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member);
 
-                List<WeeklyAggregationData> materializedStats = await MaterializeFilteredAndSortedStats(
+                IQueryable<WeeklyAggregationData> filteredAndSortedStats = await FilterAndSortStats(
                     baseQuery,
                     projector);
 
-                List<RecordEntry> entries = materializedStats
-                    .Select((stat, i) => new WeeklyRecordEntry(stat.Year, stat.Week, i + 1, projector.GetMetric(stat), stat.MemberDetails))
-                    .Cast<RecordEntry>()
-                    .ToList();
+                IQueryable<RecordEntry> entries = filteredAndSortedStats
+                    .Select((stat) => new WeeklyRecordEntry(stat.Year, stat.Week, 1, projector.GetMetric(stat), stat.MemberDetails))
+                    .Cast<RecordEntry>();
 
                 RecordMetadata metadata = new(recordTypeId);
 
@@ -111,26 +115,25 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     .Include(x => x.Player)
                     .Include(x => x.Position);
 
-                List<PlayerAggregationData> materializedStats = await MaterializeFilteredAndSortedStats(
+                IQueryable<PlayerAggregationData> filteredAndSortedStats = await FilterAndSortStats(
                     baseQuery,
                     projector);
 
-                List<RecordEntry> entries = materializedStats
-                    .Select((stat, i) => new PlayerRecordEntry(stat.Year, stat.Week, i + 1, stat.Player, stat.Position, projector.GetMetric(stat), stat.MemberDetails))
-                    .Cast<RecordEntry>()
-                    .ToList();
+                IQueryable<RecordEntry> entries = filteredAndSortedStats
+                    .Select((stat) => new PlayerRecordEntry(stat.Year, stat.Week, 1, stat.Player, stat.Position, projector.GetMetric(stat), stat.MemberDetails))
+                    .Cast<RecordEntry>();
 
                 RecordMetadata metadata = new(recordTypeId);
 
                 return new(metadata, entries);
             }
 
-            private async Task<List<TEntity>> MaterializeFilteredAndSortedStats<TEntity>(IQueryable<TEntity> baseQuery, RecordMetricProjector<TEntity> projector)
+            private async Task<IQueryable<TEntity>> FilterAndSortStats<TEntity>(IQueryable<TEntity> baseQuery, RecordMetricProjector<TEntity> projector)
             {
                 IQueryable<TEntity> filteredQuery = projector.ApplyFilter(baseQuery);
                 IQueryable<TEntity> filteredAndSortedQuery = projector.ApplySort(filteredQuery);
 
-                return await filteredAndSortedQuery.Take(10).ToListAsync();
+                return filteredAndSortedQuery;
             }
         }
     }

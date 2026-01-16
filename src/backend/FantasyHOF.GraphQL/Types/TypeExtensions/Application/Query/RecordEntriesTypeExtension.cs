@@ -2,13 +2,13 @@
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions.Application.Query
 {
-    public class RecordDetailsTypeExtension : InterfaceType<RecordEntry>;
+    public class RecordEntryTypeExtension : InterfaceType<RecordEntry>;
 
     public class LeagueRecordDetailsTypeExtension : ObjectType<LeagueRecordEntry>
     {
         protected override void Configure(IObjectTypeDescriptor<LeagueRecordEntry> descriptor)
         {
-            descriptor.Implements<RecordDetailsTypeExtension>();
+            descriptor.Implements<RecordEntryTypeExtension>();
         }
     }
 
@@ -16,7 +16,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Application.Query
     {
         protected override void Configure(IObjectTypeDescriptor<SeasonalRecordEntry> descriptor)
         {
-            descriptor.Implements<RecordDetailsTypeExtension>();
+            descriptor.Implements<RecordEntryTypeExtension>();
         }
     }
 
@@ -24,7 +24,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Application.Query
     {
         protected override void Configure(IObjectTypeDescriptor<WeeklyRecordEntry> descriptor)
         {
-            descriptor.Implements<RecordDetailsTypeExtension>();
+            descriptor.Implements<RecordEntryTypeExtension>();
         }
     }
 
@@ -32,7 +32,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Application.Query
     {
         protected override void Configure(IObjectTypeDescriptor<PlayerRecordEntry> descriptor)
         {
-            descriptor.Implements<RecordDetailsTypeExtension>();
+            descriptor.Implements<RecordEntryTypeExtension>();
         }
     }
 }

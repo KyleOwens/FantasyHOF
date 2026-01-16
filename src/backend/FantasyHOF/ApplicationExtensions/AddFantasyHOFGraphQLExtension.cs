@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Infrastructure.Exceptions;
+﻿using FantasyHOF.EntityFramework;
+using FantasyHOF.Infrastructure.Exceptions;
 
 namespace FantasyHOF.ApplicationExtensions
 {
@@ -8,11 +9,13 @@ namespace FantasyHOF.ApplicationExtensions
         {
             builder.AddGraphQL()
                 .AddAuthorization()
+                .RegisterDbContextFactory<FantasyHOFDBContext>()
                 .AddFantasyHOFTypes()
                 .AddGlobalObjectIdentification()
                 .AddMutationConventions(applyToAllMutations: true)
                 .AddErrorInterfaceType<ICodedException>()
-                .AddInMemorySubscriptions();
+                .AddInMemorySubscriptions()
+                ;
 
             return builder;
         }
