@@ -1,9 +1,8 @@
-﻿
-using FantasyHOF.Application.Queries.AccumulatedStatQueries;
+﻿using FantasyHOF.Application.Queries.AccumulatedStatQueries;
 using FantasyHOF.Domain.Entities;
 using MediatR;
 
-namespace FantasyHOF.GraphQL.Types.DataLoaders
+namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
 {
     internal class AccumulatedStatsByMatchupRosterSpotIdsDataLoaderDefinition
     {

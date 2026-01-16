@@ -1,10 +1,9 @@
-﻿
-using FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries;
+﻿using FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries;
 using FantasyHOF.Domain.ComplexIds;
 using FantasyHOF.Domain.Entities;
 using MediatR;
 
-namespace FantasyHOF.GraphQL.Types.DataLoaders
+namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
 {
     internal static class LeagueSeasonMemberTeamByLeagueSeasonMemberIdsDataLoaderDefinition
     {

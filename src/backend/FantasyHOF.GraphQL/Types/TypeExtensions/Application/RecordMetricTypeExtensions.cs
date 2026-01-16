@@ -1,6 +1,6 @@
 ﻿using FantasyHOF.Application.Types.Queries.Records;
 
-namespace FantasyHOF.GraphQL.Types.TypeExtensions
+namespace FantasyHOF.GraphQL.Types.TypeExtensions.Application
 {
     internal class RecordMetricTypeExtension : InterfaceType<RecordMetric>;
 

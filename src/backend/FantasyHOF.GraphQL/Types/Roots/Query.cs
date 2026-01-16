@@ -4,10 +4,8 @@ using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Application.Queries.UserQueries;
 using FantasyHOF.Application.Types.Queries.Records;
 using FantasyHOF.Domain.Entities;
-using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using HotChocolate.Authorization;
 using MediatR;
-using System.Security.Claims;
 
 namespace FantasyHOF.GraphQL.Types.Roots;
 
@@ -27,15 +25,6 @@ public static class Query
         CancellationToken cancellationToken)
     {
         return await mediator.Send(new GetDemoLeaguesQuery(), cancellationToken);
-    }
-
-    public static async Task<League> GetLeagueAsync(
-        [ID<League>] int id,
-        ClaimsPrincipal claimsPrincipal,
-        ILeaguesByIdsDataLoader leagues,
-        CancellationToken cancellationToken)
-    {
-        return await leagues.LoadRequiredAsync(id, cancellationToken);
     }
 
     public static async Task<IEnumerable<FantasyProvider>> GetFantasyProvidersAsync(

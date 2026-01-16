@@ -3,7 +3,7 @@ using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using MediatR;
 
-namespace FantasyHOF.GraphQL.Types.TypeExtensions
+namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
 {
     [Node]
     [ExtendObjectType<FantasyProvider>]

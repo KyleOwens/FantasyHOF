@@ -1,9 +1,8 @@
-﻿
-using FantasyHOF.Application.Queries.MatchupRosterSpotQueries;
+﻿using FantasyHOF.Application.Queries.MatchupRosterSpotQueries;
 using FantasyHOF.Domain.Entities;
 using MediatR;
 
-namespace FantasyHOF.GraphQL.Types.DataLoaders
+namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
 {
     internal class MatchupRosterSpotsByMatchupTeamDetailsIdsDataLoaderDefinition
     {

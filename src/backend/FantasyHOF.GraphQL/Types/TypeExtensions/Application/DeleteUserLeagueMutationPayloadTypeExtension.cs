@@ -1,7 +1,7 @@
 ﻿using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
 
-namespace FantasyHOF.GraphQL.Types.TypeExtensions
+namespace FantasyHOF.GraphQL.Types.TypeExtensions.Application
 {
     [ExtendObjectType<DeleteUserLeagueMutationPayload>]
     internal class DeleteUserLeagueMutationPayloadTypeExtension

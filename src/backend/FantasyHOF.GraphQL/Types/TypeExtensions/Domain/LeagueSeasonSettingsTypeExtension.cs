@@ -3,7 +3,7 @@ using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
 using MediatR;
 
-namespace FantasyHOF.GraphQL.Types.TypeExtensions
+namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
 {
     [Node]
     [ExtendObjectType(typeof(LeagueSeasonSettings))]

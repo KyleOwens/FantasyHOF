@@ -1,10 +1,9 @@
-﻿
-using FantasyHOF.Application.Queries.PositionQueries;
+﻿using FantasyHOF.Application.Queries.PositionQueries;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using MediatR;
 
-namespace FantasyHOF.GraphQL.Types.DataLoaders
+namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
 {
     internal static class PositionsByIdsDataLoaderDefinition
     {
