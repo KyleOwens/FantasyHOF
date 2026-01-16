@@ -12,6 +12,14 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions
         [ID<FantasyProvider>]
         public int ProviderId([Parent] Player player) => (int)player.ProviderId;
 
+        public string PlayerImageURL(
+            [Parent] Player player,
+            int width = 96,
+            int height = 70)
+        {
+            return player.PlayerImageURL(width, height);
+        }
+
         public async Task<FantasyProvider> GetProviderAsync(
             [Parent] Player player,
             IFantasyProvidersByIdsDataLoader providers,

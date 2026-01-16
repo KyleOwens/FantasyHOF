@@ -27,9 +27,8 @@ interface Record {
   sortDirection: SortDirection!
 }
 
-interface RecordDetails {
+interface RecordEntry {
   rank: Int!
-  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
   key: String!
@@ -132,7 +131,7 @@ type League implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   recordSummary: LeagueRecordSummary @cost(weight: "10")
-  recordDetails(recordType: RecordTypeId!): [RecordDetails!]! @cost(weight: "10")
+  recordDetails(recordType: RecordTypeId!): RecordDetails! @cost(weight: "10")
 }
 
 type LeagueImport implements Node {
@@ -163,6 +162,7 @@ type LeagueMember implements Node {
   firstyear: Int!
   lastYear: Int!
   tenure: Int!
+  currentTeamName: String!
   currentTeamLogoURL: String!
   league: League! @cost(weight: "10")
   member: FantasyMember! @cost(weight: "10")
@@ -186,10 +186,9 @@ type LeagueRecord implements Record {
   sortDirection: SortDirection!
 }
 
-type LeagueRecordDetails implements RecordDetails {
+type LeagueRecordEntry implements RecordEntry {
   key: String!
   rank: Int!
-  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
 }
@@ -323,6 +322,7 @@ type NotFoundError implements ICodedException {
 }
 
 type Player implements Node {
+  playerImageURL(width: Int! = 96 height: Int! = 70): String!
   id: ID!
   providerId: ID!
   providerPlayerId: Int!
@@ -348,13 +348,13 @@ type PlayerRecord implements Record {
   sortDirection: SortDirection!
 }
 
-type PlayerRecordDetails implements RecordDetails {
+type PlayerRecordEntry implements RecordEntry {
   year: Int!
   week: Int!
   player: Player!
+  position: Position!
   key: String!
   rank: Int!
-  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
 }
@@ -389,21 +389,23 @@ type RatioRecordMetric implements RecordMetric {
   unit: String!
 }
 
+type RecordDetails {
+  metadata: RecordMetadata!
+  entries: [RecordEntry!]!
+}
+
 type RecordMetadata {
   type: RecordTypeId!
   displayName: String!
+  description: String!
   category: RecordCategoryId!
   categoryDisplayName: String!
   sentiment: RecordSentiment!
   metricId: RecordMetricId!
+  unit: String!
   metricType: RecordMetricType!
   iconURI: String!
   sortDirection: SortDirection!
-}
-
-type RecordType {
-  id: RecordTypeId!
-  name: String!
 }
 
 type ScalarRecordMetric implements RecordMetric {
@@ -426,11 +428,10 @@ type SeasonalRecord implements Record {
   sortDirection: SortDirection!
 }
 
-type SeasonalRecordDetails implements RecordDetails {
+type SeasonalRecordEntry implements RecordEntry {
   year: Int!
   key: String!
   rank: Int!
-  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
 }
@@ -515,12 +516,11 @@ type WeeklyRecord implements Record {
   sortDirection: SortDirection!
 }
 
-type WeeklyRecordDetails implements RecordDetails {
+type WeeklyRecordEntry implements RecordEntry {
   year: Int!
   week: Int!
   key: String!
   rank: Int!
-  recordType: RecordType!
   metric: RecordMetric!
   memberDetails: LeagueMember!
 }

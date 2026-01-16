@@ -7,6 +7,7 @@ import { useFragment } from "react-relay";
 import { Link } from "@tanstack/react-router";
 import { Route as dashboardRoute } from "@/routes/$mode/$leagueId/dashboard";
 import { Route as detailsRoute } from "@/routes/$mode/$leagueId/$recordTypeId";
+import { formatRecordMetricForDisplay } from "@/utilities/utilities";
 
 type Props = {
   recordKey: RecordCardFragment$key;
@@ -35,13 +36,7 @@ const RecordCardFragment = graphql`
 export function RecordCard({ recordKey, titleDescription, footerText }: Props) {
   const record = useFragment(RecordCardFragment, recordKey);
 
-  const roundedValue = parseFloat(record.metric.value.toFixed(2));
-  const formattedValue =
-    record.metric.__typename === "RatioRecordMetric"
-      ? new Intl.NumberFormat("en-US", { style: "percent" }).format(
-          roundedValue,
-        )
-      : roundedValue;
+  const formattedValue = formatRecordMetricForDisplay(record.metric);
 
   return (
     <Card className="px-4 pt-2">

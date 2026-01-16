@@ -14,5 +14,6 @@ namespace FantasyHOF.Domain.Entities.Views
 
         public LeagueMember MemberDetails { get; private set; } = null!;
         public Player Player { get; private set; } = null!;
+        public Position Position { get; private set; } = null!;
     }
 }

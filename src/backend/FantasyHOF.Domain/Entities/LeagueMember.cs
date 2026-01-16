@@ -12,6 +12,7 @@ namespace FantasyHOF.Domain.Entities
         public required int Firstyear { get; init; }
         public required int LastYear { get; init; }
         public required int Tenure { get; init; }
+        public required string CurrentTeamName { get; init; }
         public required string CurrentTeamLogoURL { get; init; }
 
         public League League { get; private set; } = null!;

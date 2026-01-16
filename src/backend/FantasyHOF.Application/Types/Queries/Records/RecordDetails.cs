@@ -1,9 +1,8 @@
-﻿using FantasyHOF.Domain.Entities;
-
-namespace FantasyHOF.Application.Types.Queries.Records
+﻿namespace FantasyHOF.Application.Types.Queries.Records
 {
-    public abstract record RecordDetails(int Rank, RecordType RecordType, RecordMetric Metric, LeagueMember MemberDetails)
+    public class RecordDetails(RecordMetadata metadata, List<RecordEntry> entries)
     {
-        public abstract string Key { get; }
+        public RecordMetadata Metadata { get; private set; } = metadata;
+        public List<RecordEntry> Entries { get; private set; } = entries;
     }
 }

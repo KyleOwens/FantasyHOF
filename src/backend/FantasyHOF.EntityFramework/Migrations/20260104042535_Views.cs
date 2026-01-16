@@ -155,7 +155,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     ,   COALESCE(points_against::decimal/NULLIF(total_matchups, 0), 0)  AS points_against_average
                     ,   COALESCE(wins::decimal/NULLIF(total_matchups, 0), 0)            AS win_percentage
                     ,   COALESCE(top_weeks::decimal/NULLIF(total_matchups, 0), 0)       AS top_week_percentage
-                    ,   COALESCE(bottom_weeks::decimal/NULLIF(bottom_weeks, 0), 0)      AS bottom_week_percentage
+                    ,   COALESCE(bottom_weeks::decimal/NULLIF(total_matchups, 0), 0)    AS bottom_week_percentage
                     ,   COALESCE(championships::decimal/NULLIF(total_seasons, 0), 0)    AS championship_percentage
                     ,   COALESCE(last_places::decimal/NULLIF(total_seasons, 0), 0)      AS last_place_percentage
                     ,   COALESCE(winning_seasons::decimal/NULLIF(total_seasons, 0), 0)  AS winning_season_percentage

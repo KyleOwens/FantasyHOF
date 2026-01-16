@@ -17,6 +17,10 @@ namespace FantasyHOF.EntityFramework.Configurations.Views
             builder.HasOne(x => x.Player)
                 .WithMany()
                 .HasForeignKey(x => x.PlayerId);
+
+            builder.HasOne(x => x.Position)
+                .WithMany()
+                .HasForeignKey(x => x.PositionId);
         }
     }
 }

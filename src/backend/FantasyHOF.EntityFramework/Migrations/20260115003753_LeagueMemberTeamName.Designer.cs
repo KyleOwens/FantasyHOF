@@ -3,6 +3,7 @@ using System;
 using FantasyHOF.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    partial class FantasyHOFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260115003753_LeagueMemberTeamName")]
+    partial class LeagueMemberTeamName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -834,122 +837,122 @@ namespace FantasyHOF.EntityFramework.Migrations
                         new
                         {
                             Id = 0,
-                            Name = "Quarterback"
+                            Name = "QB"
                         },
                         new
                         {
                             Id = 1,
-                            Name = "Team quarterback"
+                            Name = "TQB"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Running back"
+                            Name = "RB"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "Running back or wide receiver"
+                            Name = "RBWR"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "Wide receiver"
+                            Name = "WR"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "Wide receiver or tight end"
+                            Name = "WRTE"
                         },
                         new
                         {
                             Id = 6,
-                            Name = "Tight end"
+                            Name = "TE"
                         },
                         new
                         {
                             Id = 7,
-                            Name = "Offensive player"
+                            Name = "OP"
                         },
                         new
                         {
                             Id = 8,
-                            Name = "Defensive tackle"
+                            Name = "DT"
                         },
                         new
                         {
                             Id = 9,
-                            Name = "Defensive end"
+                            Name = "DE"
                         },
                         new
                         {
                             Id = 10,
-                            Name = "Linebacker"
+                            Name = "LB"
                         },
                         new
                         {
                             Id = 11,
-                            Name = "Defensive line"
+                            Name = "DL"
                         },
                         new
                         {
                             Id = 12,
-                            Name = "Cornerback"
+                            Name = "CB"
                         },
                         new
                         {
                             Id = 13,
-                            Name = "Safety"
+                            Name = "S"
                         },
                         new
                         {
                             Id = 14,
-                            Name = "Defensive back"
+                            Name = "DB"
                         },
                         new
                         {
                             Id = 15,
-                            Name = "Defensive player"
+                            Name = "DP"
                         },
                         new
                         {
                             Id = 16,
-                            Name = "Defense & special teams"
+                            Name = "DST"
                         },
                         new
                         {
                             Id = 17,
-                            Name = "Kicker"
+                            Name = "K"
                         },
                         new
                         {
                             Id = 18,
-                            Name = "Punter"
+                            Name = "P"
                         },
                         new
                         {
                             Id = 19,
-                            Name = "Head coach"
+                            Name = "HC"
                         },
                         new
                         {
                             Id = 20,
-                            Name = "Bench"
+                            Name = "BE"
                         },
                         new
                         {
                             Id = 21,
-                            Name = "Injured reserve"
+                            Name = "IR"
                         },
                         new
                         {
                             Id = 23,
-                            Name = "Flex"
+                            Name = "RBWRTE"
                         },
                         new
                         {
                             Id = 24,
-                            Name = ""
+                            Name = "ER"
                         },
                         new
                         {
@@ -2603,9 +2606,6 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.HasIndex("PlayerId")
                         .HasDatabaseName("ix_player_aggregation_data_player_id");
 
-                    b.HasIndex("PositionId")
-                        .HasDatabaseName("ix_player_aggregation_data_position_id");
-
                     b.HasIndex("LeagueId", "MemberId");
 
                     b.ToTable((string)null);
@@ -3042,13 +3042,6 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_player_aggregation_data_players_player_id");
 
-                    b.HasOne("FantasyHOF.Domain.Entities.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_player_aggregation_data_positions_position_id");
-
                     b.HasOne("FantasyHOF.Domain.Entities.LeagueMember", "MemberDetails")
                         .WithMany()
                         .HasForeignKey("LeagueId", "MemberId")
@@ -3059,8 +3052,6 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Navigation("MemberDetails");
 
                     b.Navigation("Player");
-
-                    b.Navigation("Position");
                 });
 
             modelBuilder.Entity("FantasyHOF.Domain.Entities.Views.WeeklyAggregationData", b =>

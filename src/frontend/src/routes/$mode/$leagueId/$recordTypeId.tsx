@@ -5,6 +5,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
 import z from "zod";
 import { usePreloadedQuery } from "react-relay";
+import { RecordDetailsTable } from "@/components/record-details-tables/RecordDetailsTable";
 
 const recordTypeParamsSchema = z.object({
   recordTypeId: z.custom<RecordTypeId>(),
@@ -32,30 +33,12 @@ const recordDetailsQuery = graphql`
     me {
       league(leagueId: $leagueId) {
         recordDetails(recordType: $recordType) {
-          key
-          __typename
-          rank
-          recordType {
-            id
-            name
+          metadata {
+            displayName
+            description
+            iconURI
           }
-          metric {
-            metricId
-            unit
-            value
-          }
-          ... on LeagueRecordDetails {
-            memberDetails {
-              id
-              firstyear
-              lastYear
-              tenure
-              member {
-                id
-                fullName
-              }
-            }
-          }
+          ...RecordDetailsTableFragment
         }
       }
     }
@@ -71,14 +54,22 @@ function RecordDetails() {
 
   const records = data.me.league.recordDetails;
 
-  if (records.length === 0) return;
-
   return (
-    <div>
-      <h2 className="text-3xl font-semibold">
-        {records.at(0)!.recordType.name}
-      </h2>
-      <span className="text-muted-foreground">League history leaderboard</span>
+    <div className=" w-full max-w-6xl mx-auto">
+      <div className="flex flex-row gap-4">
+        <div className="flex flex-col gap-4">
+          <div>
+            <h2 className="text-3xl font-semibold">
+              {records.metadata.displayName}
+            </h2>
+            <span className="text-muted-foreground">
+              League history leaderboard
+            </span>
+          </div>
+          <p>{records.metadata.description}</p>
+        </div>
+      </div>
+      <RecordDetailsTable recordDetailsKey={records} />
     </div>
   );
 }

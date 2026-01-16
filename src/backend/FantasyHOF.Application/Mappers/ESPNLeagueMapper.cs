@@ -45,14 +45,15 @@ namespace FantasyHOF.Application.Mappers
                 .Last()
                 .Teams.Where(x => x.Owners.Any(ownerId => ownerId == ESPNMemberId));
 
-            string logoUrl = memberTeams.Any() ? memberTeams.Last().Logo ?? "" : "";
+            ESPNFantasyTeam? currentTeam = memberTeams.Any() ? memberTeams.Last() : null;
 
             return new LeagueMember()
             {
                 Firstyear = memberSeasons.First().Year,
                 LastYear = memberSeasons.Last().Year,
                 Tenure = memberSeasons.Count(),
-                CurrentTeamLogoURL = logoUrl
+                CurrentTeamName = currentTeam?.Name ?? "",
+                CurrentTeamLogoURL = currentTeam?.Logo ?? "",
             };
         }
 

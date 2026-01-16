@@ -1,0 +1,276 @@
+import { createColumnHelper } from "@tanstack/react-table";
+
+import { graphql } from "relay-runtime";
+import {
+  RecordDetailsTableFragment$data,
+  RecordDetailsTableFragment$key,
+} from "@/__generated__/RecordDetailsTableFragment.graphql";
+import { useFragment } from "react-relay";
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  getSortedRowModel,
+  SortingState,
+} from "@tanstack/react-table";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useMemo, useState } from "react";
+import { RankCell } from "./RankCell";
+import { RankCellFragment$key } from "@/__generated__/RankCellFragment.graphql";
+import { MemberCell } from "./MemberCell";
+import { MemberCellFragment$key } from "@/__generated__/MemberCellFragment.graphql";
+import { MemberTenureCell } from "./MemberTenureCell";
+import { MemberTenureCellFragment$key } from "@/__generated__/MemberTenureCellFragment.graphql";
+import { RecordValueCell } from "./RecordValueCell";
+import { RecordValueCellFragment$key } from "@/__generated__/RecordValueCellFragment.graphql";
+import { RatioBreakdownCell } from "./RatioBreakdownCell";
+import { RatioBreakdownCellFragment$key } from "@/__generated__/RatioBreakdownCellFragment.graphql";
+import { PlayerCell } from "./PlayerCell";
+import { PlayerCellFragment$key } from "@/__generated__/PlayerCellFragment.graphql";
+
+type Props = {
+  recordDetailsKey: RecordDetailsTableFragment$key;
+};
+
+const recordDetailsTableFragment = graphql`
+  fragment RecordDetailsTableFragment on RecordDetails {
+    metadata {
+      unit
+      category
+      metricType
+    }
+    entries {
+      key
+      rank
+      metric {
+        value
+        unit
+        ... on RatioRecordMetric {
+          numerator
+          numeratorUnit
+          denominator
+          denominatorUnit
+        }
+      }
+      __typename
+      ... on SeasonalRecordEntry {
+        year
+      }
+      ... on WeeklyRecordEntry {
+        year
+        week
+      }
+      ... on PlayerRecordEntry {
+        year
+        week
+        player {
+          fullName
+        }
+      }
+      ...RecordValueCellFragment
+      ...MemberCellFragment
+      ...MemberTenureCellFragment
+      ...RankCellFragment
+      ...RatioBreakdownCellFragment
+      ...PlayerCellFragment
+    }
+  }
+`;
+
+export type RecordEntry = RecordDetailsTableFragment$data["entries"][number] &
+  RankCellFragment$key &
+  MemberCellFragment$key &
+  MemberTenureCellFragment$key &
+  RecordValueCellFragment$key &
+  RatioBreakdownCellFragment$key &
+  PlayerCellFragment$key;
+
+const columnHelper = createColumnHelper<RecordEntry>();
+
+export function RecordDetailsTable({ recordDetailsKey }: Props) {
+  const details = useFragment(recordDetailsTableFragment, recordDetailsKey);
+  const [sorting, setSorting] = useState<SortingState>([]);
+
+  const columns = useMemo(() => {
+    const allColumns = [
+      columnHelper.display({
+        id: "rank",
+        size: 20,
+        maxSize: 10,
+        header: () => <span className="pl-4">Rank</span>,
+        cell: ({ row }) => <RankCell entryKey={row.original} />,
+      }),
+      columnHelper.display({
+        id: "member",
+        header: "Record Holder",
+        cell: ({ row }) => <MemberCell entryKey={row.original} />,
+      }),
+    ];
+
+    const tenureColumn = columnHelper.display({
+      id: "tenure",
+      header: "Tenure",
+      cell: ({ row }) => <MemberTenureCell entryKey={row.original} />,
+    });
+
+    const playerColumn = columnHelper.display({
+      id: "player",
+      header: "Player",
+      cell: ({ row }) => <PlayerCell entryKey={row.original} />,
+    });
+
+    const weekColumn = columnHelper.display({
+      id: "week",
+      header: () => <div className="text-center">Week</div>,
+      cell: ({ row }) => (
+        <div className="font-medium text-center">{row.original.week}</div>
+      ),
+    });
+
+    const seasonColumn = columnHelper.display({
+      id: "season",
+      header: () => <div className="text-center">Season</div>,
+      cell: ({ row }) => (
+        <div className="font-medium text-center">{row.original.year}</div>
+      ),
+    });
+
+    const ratioColumn = columnHelper.display({
+      id: "ratio-breakdown",
+      header: "Breakdown",
+      cell: ({ row }) => <RatioBreakdownCell entryKey={row.original} />,
+    });
+
+    const vauleColumn = columnHelper.display({
+      id: "record.value",
+      header: () => (
+        <div className="text-right capitalize pr-4">
+          {details.metadata.metricType === "RATIO"
+            ? "Frequency"
+            : details.metadata.unit}
+        </div>
+      ),
+      cell: ({ row }) => <RecordValueCell entryKey={row.original} />,
+    });
+
+    const category = details.metadata.category;
+
+    if (category === "LEAGUE") {
+      allColumns.push(tenureColumn);
+      if (details.metadata.metricType === "RATIO") allColumns.push(ratioColumn);
+    } else if (category === "SEASON") {
+      allColumns.push(tenureColumn);
+      allColumns.push(seasonColumn);
+    } else if (category === "WEEK") {
+      allColumns.push(tenureColumn);
+      allColumns.push(weekColumn);
+      allColumns.push(seasonColumn);
+    } else if (category === "PLAYER") {
+      allColumns.push(playerColumn);
+      allColumns.push(weekColumn);
+      allColumns.push(seasonColumn);
+    }
+
+    allColumns.push(vauleColumn);
+
+    return allColumns;
+  }, [details, columnHelper]);
+
+  const table = useReactTable({
+    data: details.entries as RecordEntry[],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+  });
+
+  return (
+    <div className="py-8 mx-auto">
+      <div className="rounded-md border bg-card shadow-sm">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    style={{ width: `${header.getSize()}px` }}
+                    key={header.id}
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => {
+                const isFirst = row.original.rank === 1;
+                return (
+                  <TableRow
+                    key={row.id}
+                    className={`
+            group transition-all
+            ${isFirst ? "bg-emerald-50/40 dark:bg-emerald-500/5 hover:bg-emerald-50/60" : "hover:bg-muted/50"}
+          `}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        className={isFirst ? "py-6" : "py-4"}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })
+            ) : (
+              <></>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  );
+}
+
+function isWeekly(
+  entry: RecordEntry,
+): entry is RecordEntry & { week: number; year: number } {
+  // We use string literal comparison because at runtime,
+  // __typename WILL be the actual string from the server
+  return (entry as any).__typename === "WeeklyRecordEntry";
+}
+
+function isPlayer(entry: RecordEntry): entry is RecordEntry & {
+  player: { readonly fullName: string };
+  week: number;
+} {
+  return (entry as any).__typename === "PlayerRecordEntry";
+}
+
+function isSeasonal(
+  entry: RecordEntry,
+): entry is RecordEntry & { year: number } {
+  return (entry as any).__typename === "SeasonalRecordEntry";
+}
