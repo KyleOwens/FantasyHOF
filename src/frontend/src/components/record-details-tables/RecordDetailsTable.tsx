@@ -1,11 +1,8 @@
 import { createColumnHelper } from "@tanstack/react-table";
 
 import { graphql } from "relay-runtime";
-import {
-  RecordDetailsTableFragment$data,
-  RecordDetailsTableFragment$key,
-} from "@/__generated__/RecordDetailsTableFragment.graphql";
-import { useFragment } from "react-relay";
+import { RecordDetailsTableFragment$key } from "@/__generated__/RecordDetailsTableFragment.graphql";
+import { useFragment, usePaginationFragment } from "react-relay";
 import {
   flexRender,
   getCoreRowModel,
@@ -35,6 +32,11 @@ import { RatioBreakdownCell } from "./RatioBreakdownCell";
 import { RatioBreakdownCellFragment$key } from "@/__generated__/RatioBreakdownCellFragment.graphql";
 import { PlayerCell } from "./PlayerCell";
 import { PlayerCellFragment$key } from "@/__generated__/PlayerCellFragment.graphql";
+import {
+  RecordDetailsTableRefetchableEntryFragment$data,
+  RecordDetailsTableRefetchableEntryFragment$key,
+} from "@/__generated__/RecordDetailsTableRefetchableEntryFragment.graphql";
+import { RecordDetailsRefetchableEntryQuery } from "@/__generated__/RecordDetailsRefetchableEntryQuery.graphql";
 
 type Props = {
   recordDetailsKey: RecordDetailsTableFragment$key;
@@ -47,45 +49,69 @@ const recordDetailsTableFragment = graphql`
       category
       metricType
     }
-    entries {
-      key
-      rank
-      metric {
-        value
-        unit
-        ... on RatioRecordMetric {
-          numerator
-          numeratorUnit
-          denominator
-          denominatorUnit
+    ...RecordDetailsTableRefetchableEntryFragment
+  }
+`;
+
+const recordDetailsRefetchableEntryFragment = graphql`
+  fragment RecordDetailsTableRefetchableEntryFragment on RecordDetails
+  @refetchable(queryName: "RecordDetailsRefetchableEntryQuery")
+  @argumentDefinitions(
+    cursor: { type: "String" }
+    count: { type: "Int", defaultValue: 10 }
+  ) {
+    entries(after: $cursor, first: $count)
+      @connection(key: "recordDetails_entries") {
+      edges {
+        node {
+          key
+          rank
+          metric {
+            value
+            unit
+            ... on RatioRecordMetric {
+              numerator
+              numeratorUnit
+              denominator
+              denominatorUnit
+            }
+          }
+          __typename
+          ... on SeasonalRecordEntry {
+            year
+          }
+          ... on WeeklyRecordEntry {
+            year
+            week
+          }
+          ... on PlayerRecordEntry {
+            year
+            week
+            player {
+              fullName
+            }
+          }
+          ...RecordValueCellFragment
+          ...MemberCellFragment
+          ...MemberTenureCellFragment
+          ...RankCellFragment
+          ...RatioBreakdownCellFragment
+          ...PlayerCellFragment
         }
       }
-      __typename
-      ... on SeasonalRecordEntry {
-        year
-      }
-      ... on WeeklyRecordEntry {
-        year
-        week
-      }
-      ... on PlayerRecordEntry {
-        year
-        week
-        player {
-          fullName
-        }
-      }
-      ...RecordValueCellFragment
-      ...MemberCellFragment
-      ...MemberTenureCellFragment
-      ...RankCellFragment
-      ...RatioBreakdownCellFragment
-      ...PlayerCellFragment
     }
   }
 `;
 
-export type RecordEntry = RecordDetailsTableFragment$data["entries"][number] &
+type RecordEntryNode = NonNullable<
+  NonNullable<
+    NonNullable<
+      RecordDetailsTableRefetchableEntryFragment$data["entries"]
+    >["edges"]
+  >[number]
+>["node"];
+
+export type RecordEntry = RecordEntryNode &
   RankCellFragment$key &
   MemberCellFragment$key &
   MemberTenureCellFragment$key &
@@ -97,6 +123,15 @@ const columnHelper = createColumnHelper<RecordEntry>();
 
 export function RecordDetailsTable({ recordDetailsKey }: Props) {
   const details = useFragment(recordDetailsTableFragment, recordDetailsKey);
+  const { data } = usePaginationFragment<
+    RecordDetailsRefetchableEntryQuery,
+    RecordDetailsTableRefetchableEntryFragment$key
+  >(recordDetailsRefetchableEntryFragment, details);
+
+  const tableData = useMemo(() => {
+    return data.entries?.edges?.map((edge) => edge?.node) ?? [];
+  }, [data.entries?.edges]);
+
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const columns = useMemo(() => {
@@ -185,7 +220,7 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
   }, [details, columnHelper]);
 
   const table = useReactTable({
-    data: details.entries as RecordEntry[],
+    data: tableData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
@@ -254,23 +289,23 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
   );
 }
 
-function isWeekly(
-  entry: RecordEntry,
-): entry is RecordEntry & { week: number; year: number } {
-  // We use string literal comparison because at runtime,
-  // __typename WILL be the actual string from the server
-  return (entry as any).__typename === "WeeklyRecordEntry";
-}
+// function isWeekly(
+//   entry: RecordEntry,
+// ): entry is RecordEntry & { week: number; year: number } {
+//   // We use string literal comparison because at runtime,
+//   // __typename WILL be the actual string from the server
+//   return (entry as any).__typename === "WeeklyRecordEntry";
+// }
 
-function isPlayer(entry: RecordEntry): entry is RecordEntry & {
-  player: { readonly fullName: string };
-  week: number;
-} {
-  return (entry as any).__typename === "PlayerRecordEntry";
-}
+// function isPlayer(entry: RecordEntry): entry is RecordEntry & {
+//   player: { readonly fullName: string };
+//   week: number;
+// } {
+//   return (entry as any).__typename === "PlayerRecordEntry";
+// }
 
-function isSeasonal(
-  entry: RecordEntry,
-): entry is RecordEntry & { year: number } {
-  return (entry as any).__typename === "SeasonalRecordEntry";
-}
+// function isSeasonal(
+//   entry: RecordEntry,
+// ): entry is RecordEntry & { year: number } {
+//   return (entry as any).__typename === "SeasonalRecordEntry";
+// }

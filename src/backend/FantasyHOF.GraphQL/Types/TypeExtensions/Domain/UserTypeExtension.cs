@@ -15,11 +15,13 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
             return await mediator.Send(new GetLeagueByIdQuery(leagueId), cancellationToken);
         }
 
+        [UsePaging]
         public async Task<IEnumerable<League>> GetLeaguesAsync(IMediator mediator, CancellationToken cancellationToken)
         {
             return await mediator.Send(new GetUserLeaguesQuery(), cancellationToken);
         }
 
+        [UsePaging]
         public async Task<IEnumerable<LeagueImport>> GetLeagueImportsAsync(IMediator mediator, CancellationToken cancellationToken)
         {
             return await mediator.Send(new GetLeagueImportsByCurrentUserQuery(), cancellationToken);

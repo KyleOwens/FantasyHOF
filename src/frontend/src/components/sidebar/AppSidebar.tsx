@@ -2,12 +2,11 @@ import { graphql } from "relay-runtime";
 import { Sidebar, SidebarContent, SidebarHeader } from "../ui/sidebar";
 import { LeagueNavigation } from "./LeagueNavigation";
 import { RecordNavigation } from "./RecordNavigation";
-import { PreloadedQuery, usePreloadedQuery } from "react-relay";
+import { useLazyLoadQuery } from "react-relay";
 import { AppSidebarQuery } from "@/__generated__/AppSidebarQuery.graphql";
 
 type Props = {
   mode: "demo" | "me";
-  queryRef: PreloadedQuery<AppSidebarQuery>;
 };
 
 export const appSidebarMetatdataFragment = graphql`
@@ -29,17 +28,27 @@ export const appSidebarQuery = graphql`
       ...LeagueNavigationFragment
     }
     me @skip(if: $isDemo) {
-      leagues {
-        ...LeagueNavigationFragment
+      leagues(first: 10) @connection(key: "my_leagues") {
+        edges {
+          node {
+            id
+            ...LeagueNavigationFragment
+          }
+        }
       }
     }
   }
 `;
 
-export function AppSidebar({ mode, queryRef }: Props) {
-  const data = usePreloadedQuery(appSidebarQuery, queryRef);
+export function AppSidebar({ mode }: Props) {
+  const data = useLazyLoadQuery<AppSidebarQuery>(appSidebarQuery, {
+    isDemo: mode === "demo",
+  });
 
-  const leagues = mode === "demo" ? data.demoLeagues! : data.me!.leagues!;
+  const leagues =
+    (mode === "demo"
+      ? data.demoLeagues
+      : data.me?.leagues?.edges?.map((x) => x.node)) ?? [];
 
   return (
     <Sidebar className="sticky top-[66px] h-[calc(100vh-66px)] w-80">

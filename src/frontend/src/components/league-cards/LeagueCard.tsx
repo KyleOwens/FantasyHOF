@@ -20,7 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { graphql } from "relay-runtime";
+import { ConnectionHandler, graphql } from "relay-runtime";
 import { LeagueCardFragment$key } from "@/__generated__/LeagueCardFragment.graphql";
 import { useFragment, useMutation } from "react-relay";
 import { Badge } from "../ui/badge";
@@ -42,6 +42,7 @@ import { Route as dashboardRoute } from "@/routes/$mode/$leagueId/dashboard";
 import { Route as myLeaguesRoute } from "@/routes/$mode/my-leagues";
 
 type Props = {
+  userId: string;
   leagueKey: LeagueCardFragment$key;
 };
 
@@ -66,10 +67,13 @@ const leagueCardFragment = graphql`
 `;
 
 const leagueCardDeleteLeagueMutation = graphql`
-  mutation LeagueCardDeleteLeagueMutation($input: DeleteUserLeagueInput!) {
+  mutation LeagueCardDeleteLeagueMutation(
+    $input: DeleteUserLeagueInput!
+    $connections: [ID!]!
+  ) {
     deleteUserLeague(input: $input) {
       deleteUserLeagueMutationPayload {
-        leagueId @deleteRecord
+        leagueId @deleteEdge(connections: $connections)
       }
       errors {
         ... on ICodedException {
@@ -81,7 +85,7 @@ const leagueCardDeleteLeagueMutation = graphql`
   }
 `;
 
-export function LeagueCard({ leagueKey }: Props) {
+export function LeagueCard({ leagueKey, userId }: Props) {
   const league = useFragment(leagueCardFragment, leagueKey);
   const [commitLeagueDeletion, isLeagueDeletionPending] =
     useMutation<LeagueCardDeleteLeagueMutation>(leagueCardDeleteLeagueMutation);
@@ -101,6 +105,7 @@ export function LeagueCard({ leagueKey }: Props) {
         input: {
           leagueId: league.id,
         },
+        connections: [ConnectionHandler.getConnectionID(userId, "my_leagues")],
       },
       onCompleted: (response) => {
         const errors = response.deleteUserLeague.errors;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2fd7a8fea4331bce468e0b55d0c0148e>>
+ * @generated SignedSource<<88d6531500df280c445fe126ca47afe1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,9 +18,14 @@ export type AppSidebarQuery$data = {
     readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationFragment">;
   }>;
   readonly me?: {
-    readonly leagues: ReadonlyArray<{
-      readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationFragment">;
-    }>;
+    readonly leagues: {
+      readonly edges: ReadonlyArray<{
+        readonly node: {
+          readonly id: string;
+          readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationFragment">;
+        };
+      }> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentSpreads": FragmentRefs<"RecordNavigationFragment">;
 };
@@ -37,13 +42,11 @@ var v0 = [
     "name": "isDemo"
   }
 ],
-v1 = [
-  {
-    "args": null,
-    "kind": "FragmentSpread",
-    "name": "LeagueNavigationFragment"
-  }
-],
+v1 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "LeagueNavigationFragment"
+},
 v2 = {
   "alias": null,
   "args": null,
@@ -51,52 +54,95 @@ v2 = {
   "name": "id",
   "storageKey": null
 },
-v3 = [
-  (v2/*: any*/),
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "cursor",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "PageInfo",
+  "kind": "LinkedField",
+  "name": "pageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endCursor",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasNextPage",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "currentLeagueName",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "FantasyProvider",
+  "kind": "LinkedField",
+  "name": "fantasyProvider",
+  "plural": false,
+  "selections": [
+    (v2/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "logoURL",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "Sport",
+  "kind": "LinkedField",
+  "name": "sport",
+  "plural": false,
+  "selections": [
+    (v2/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v9 = [
   {
-    "alias": null,
-    "args": null,
-    "kind": "ScalarField",
-    "name": "currentLeagueName",
-    "storageKey": null
-  },
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "FantasyProvider",
-    "kind": "LinkedField",
-    "name": "fantasyProvider",
-    "plural": false,
-    "selections": [
-      (v2/*: any*/),
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "logoURL",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  },
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "Sport",
-    "kind": "LinkedField",
-    "name": "sport",
-    "plural": false,
-    "selections": [
-      (v2/*: any*/),
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "name",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Literal",
+    "name": "first",
+    "value": 10
   }
 ];
 return {
@@ -123,7 +169,9 @@ return {
             "kind": "LinkedField",
             "name": "demoLeagues",
             "plural": true,
-            "selections": (v1/*: any*/),
+            "selections": [
+              (v1/*: any*/)
+            ],
             "storageKey": null
           }
         ]
@@ -142,13 +190,41 @@ return {
             "plural": false,
             "selections": [
               {
-                "alias": null,
+                "alias": "leagues",
                 "args": null,
-                "concreteType": "League",
+                "concreteType": "LeaguesConnection",
                 "kind": "LinkedField",
-                "name": "leagues",
-                "plural": true,
-                "selections": (v1/*: any*/),
+                "name": "__my_leagues_connection",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "LeaguesEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "League",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          (v1/*: any*/),
+                          (v3/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      (v4/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v5/*: any*/)
+                ],
                 "storageKey": null
               }
             ],
@@ -217,7 +293,12 @@ return {
             "kind": "LinkedField",
             "name": "demoLeagues",
             "plural": true,
-            "selections": (v3/*: any*/),
+            "selections": [
+              (v2/*: any*/),
+              (v6/*: any*/),
+              (v7/*: any*/),
+              (v8/*: any*/)
+            ],
             "storageKey": null
           }
         ]
@@ -237,13 +318,52 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": null,
-                "concreteType": "League",
+                "args": (v9/*: any*/),
+                "concreteType": "LeaguesConnection",
                 "kind": "LinkedField",
                 "name": "leagues",
-                "plural": true,
-                "selections": (v3/*: any*/),
-                "storageKey": null
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "LeaguesEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "League",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          (v6/*: any*/),
+                          (v7/*: any*/),
+                          (v8/*: any*/),
+                          (v3/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      (v4/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v5/*: any*/)
+                ],
+                "storageKey": "leagues(first:10)"
+              },
+              {
+                "alias": null,
+                "args": (v9/*: any*/),
+                "filters": null,
+                "handle": "connection",
+                "key": "my_leagues",
+                "kind": "LinkedHandle",
+                "name": "leagues"
               },
               (v2/*: any*/)
             ],
@@ -254,16 +374,28 @@ return {
     ]
   },
   "params": {
-    "cacheID": "db9791ed56c1ea520bc00111abee1b26",
+    "cacheID": "2a03eedb7b3c9b8b95756b1e61d26a46",
     "id": null,
-    "metadata": {},
+    "metadata": {
+      "connection": [
+        {
+          "count": null,
+          "cursor": null,
+          "direction": "forward",
+          "path": [
+            "me",
+            "leagues"
+          ]
+        }
+      ]
+    },
     "name": "AppSidebarQuery",
     "operationKind": "query",
-    "text": "query AppSidebarQuery(\n  $isDemo: Boolean!\n) {\n  ...RecordNavigationFragment\n  demoLeagues @include(if: $isDemo) {\n    ...LeagueNavigationFragment\n    id\n  }\n  me @skip(if: $isDemo) {\n    leagues {\n      ...LeagueNavigationFragment\n      id\n    }\n    id\n  }\n}\n\nfragment LeagueNavigationFragment on League {\n  id\n  currentLeagueName\n  fantasyProvider {\n    id\n    logoURL\n  }\n  sport {\n    id\n    name\n  }\n}\n\nfragment RecordNavigationFragment on Query {\n  recordMetadata {\n    type\n    displayName\n    categoryDisplayName\n    sentiment\n  }\n}\n"
+    "text": "query AppSidebarQuery(\n  $isDemo: Boolean!\n) {\n  ...RecordNavigationFragment\n  demoLeagues @include(if: $isDemo) {\n    ...LeagueNavigationFragment\n    id\n  }\n  me @skip(if: $isDemo) {\n    leagues(first: 10) {\n      edges {\n        node {\n          id\n          ...LeagueNavigationFragment\n          __typename\n        }\n        cursor\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    id\n  }\n}\n\nfragment LeagueNavigationFragment on League {\n  id\n  currentLeagueName\n  fantasyProvider {\n    id\n    logoURL\n  }\n  sport {\n    id\n    name\n  }\n}\n\nfragment RecordNavigationFragment on Query {\n  recordMetadata {\n    type\n    displayName\n    categoryDisplayName\n    sentiment\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "316fda5bd15c240e4b17b26facaa7791";
+(node as any).hash = "59219b064359eba5c8c466086c4850b8";
 
 export default node;

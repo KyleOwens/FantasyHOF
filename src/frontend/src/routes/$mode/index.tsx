@@ -17,8 +17,10 @@ const demoLeaguesQuery = graphql`
 const userLeaguesQuery = graphql`
   query ModeUserLeaguesQuery {
     me {
-      leagues {
-        id
+      leagues(first: 50) {
+        nodes {
+          id
+        }
       }
     }
   }
@@ -61,6 +63,6 @@ async function getFirstLeagueIdForMode(
       {},
     ).toPromise();
 
-    return data?.me.leagues.at(0)?.id ?? undefined;
+    return data?.me.leagues?.nodes?.at(0)?.id ?? undefined;
   }
 }

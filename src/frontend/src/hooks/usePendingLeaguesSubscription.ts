@@ -1,7 +1,16 @@
-import { usePendingLeaguesSubscription as UsePendingLeaguesSubscriptionType } from "@/__generated__/usePendingLeaguesSubscription.graphql";
+import {
+  usePendingLeaguesSubscription$data,
+  usePendingLeaguesSubscription as UsePendingLeaguesSubscriptionType,
+} from "@/__generated__/usePendingLeaguesSubscription.graphql";
 import { useMemo } from "react";
 import { useSubscription } from "react-relay";
-import { graphql, GraphQLSubscriptionConfig } from "relay-runtime";
+import {
+  ConnectionHandler,
+  graphql,
+  GraphQLSubscriptionConfig,
+  RecordProxy,
+  RecordSourceSelectorProxy,
+} from "relay-runtime";
 
 const leagueImportSubscription = graphql`
   subscription usePendingLeaguesSubscription {
@@ -9,12 +18,14 @@ const leagueImportSubscription = graphql`
       id
       progress
       error
+      statusId
       status {
         id
         name
         value
       }
       league {
+        id
         ...LeagueCardFragment
       }
     }
@@ -30,43 +41,63 @@ export function usePendingLeaguesSubscription() {
       variables: {},
       updater: (store) => {
         const rootField = store.getRootField("leagueImportProgress");
-
         if (!rootField) return;
 
-        const statusValue = rootField
-          .getLinkedRecord("status")
-          .getValue("value");
+        const statusId = rootField.getValue("statusId");
+        if (statusId !== "COMPLETED") return;
 
-        if (statusValue !== "COMPLETED") return;
-
-        const importId = rootField.getDataID();
-        const newLeague = rootField.getLinkedRecord("league");
         const me = store.getRoot().getLinkedRecord("me");
 
-        if (!me || !newLeague) return;
+        if (!me) return;
 
-        const newExternalId = newLeague.getValue("providerLeagueId");
-        const currentLeagues = me.getLinkedRecords("leagues") || [];
-        const filteredLeagues = currentLeagues.filter(
-          (league) =>
-            league !== null &&
-            league.getValue("providerLeagueId") !== newExternalId,
-        );
-
-        me.setLinkedRecords([...filteredLeagues, newLeague], "leagues");
-
-        const pendingImports = me.getLinkedRecords("leagueImports") || [];
-
-        me.setLinkedRecords(
-          pendingImports.filter(
-            (imp) => imp !== null && imp.getDataID() !== importId,
-          ),
-          "leagueImports",
-        );
+        addLeagueToMyLeaguesConnection(store, rootField, me);
+        removeLeagueImportFromLeagueImportConnection(rootField, me);
       },
     }),
     [],
   );
 
   return useSubscription(subscriptionConfig);
+}
+
+function addLeagueToMyLeaguesConnection(
+  store: RecordSourceSelectorProxy<usePendingLeaguesSubscription$data>,
+  rootField: RecordProxy,
+  me: RecordProxy,
+) {
+  const newLeague = rootField.getLinkedRecord("league");
+
+  if (!newLeague) return;
+
+  const leaguesConnection = ConnectionHandler.getConnection(me, "my_leagues");
+  if (!leaguesConnection) return;
+
+  const existingEdges = leaguesConnection.getLinkedRecords("edges") || [];
+  const alreadyExists = existingEdges.some(
+    (edge) =>
+      edge?.getLinkedRecord("node")?.getDataID() === newLeague.getDataID(),
+  );
+  if (alreadyExists) return;
+
+  const edge = ConnectionHandler.createEdge(
+    store,
+    leaguesConnection,
+    newLeague,
+    "LeagueEdge",
+  );
+  ConnectionHandler.insertEdgeAfter(leaguesConnection, edge);
+}
+
+function removeLeagueImportFromLeagueImportConnection(
+  rootField: RecordProxy,
+  me: RecordProxy,
+) {
+  const importsConnection = ConnectionHandler.getConnection(
+    me,
+    "my_leagueImports",
+  );
+  if (!importsConnection) return;
+
+  const importId = rootField.getDataID();
+  ConnectionHandler.deleteNode(importsConnection, importId);
 }

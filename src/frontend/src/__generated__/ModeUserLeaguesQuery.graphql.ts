@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5767c373589f14feed99afe1cf481b24>>
+ * @generated SignedSource<<6704f0f4d1f36988e6e3aad73c034186>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,9 +12,11 @@ import { ConcreteRequest } from 'relay-runtime';
 export type ModeUserLeaguesQuery$variables = Record<PropertyKey, never>;
 export type ModeUserLeaguesQuery$data = {
   readonly me: {
-    readonly leagues: ReadonlyArray<{
-      readonly id: string;
-    }>;
+    readonly leagues: {
+      readonly nodes: ReadonlyArray<{
+        readonly id: string;
+      }> | null | undefined;
+    } | null | undefined;
   };
 };
 export type ModeUserLeaguesQuery = {
@@ -32,15 +34,32 @@ var v0 = {
 },
 v1 = {
   "alias": null,
-  "args": null,
-  "concreteType": "League",
+  "args": [
+    {
+      "kind": "Literal",
+      "name": "first",
+      "value": 50
+    }
+  ],
+  "concreteType": "LeaguesConnection",
   "kind": "LinkedField",
   "name": "leagues",
-  "plural": true,
+  "plural": false,
   "selections": [
-    (v0/*: any*/)
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "League",
+      "kind": "LinkedField",
+      "name": "nodes",
+      "plural": true,
+      "selections": [
+        (v0/*: any*/)
+      ],
+      "storageKey": null
+    }
   ],
-  "storageKey": null
+  "storageKey": "leagues(first:50)"
 };
 return {
   "fragment": {
@@ -87,16 +106,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d1e726fce69a3a9dba445b0b789f066c",
+    "cacheID": "bfd1718e99b39bfcbab11a47317ed4d5",
     "id": null,
     "metadata": {},
     "name": "ModeUserLeaguesQuery",
     "operationKind": "query",
-    "text": "query ModeUserLeaguesQuery {\n  me {\n    leagues {\n      id\n    }\n    id\n  }\n}\n"
+    "text": "query ModeUserLeaguesQuery {\n  me {\n    leagues(first: 50) {\n      nodes {\n        id\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "8921296ff7d76391a26ec69511ea97cc";
+(node as any).hash = "caae2ad099753e38419804e45cc22f2c";
 
 export default node;

@@ -57,15 +57,15 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
 
                 RecordMetadata metadata = new(recordTypeId);
 
-                return new(metadata, entries);
+                return new(leagueId, metadata, entries);
             }
 
-            private async Task<RecordDetails> LoadSeasonalRecordDetails(int LeagueId, RecordTypeId recordTypeId)
+            private async Task<RecordDetails> LoadSeasonalRecordDetails(int leagueId, RecordTypeId recordTypeId)
             {
                 RecordMetricProjector<LeagueSeasonMemberAggregatedStats> projector = new(recordTypeId);
 
                 IQueryable<LeagueSeasonMemberAggregatedStats> baseQuery = database.LeagueSeasonMemberAggregatedStats
-                    .Where(stats => stats.LeagueId == LeagueId)
+                    .Where(stats => stats.LeagueId == leagueId)
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member);
 
@@ -79,15 +79,15 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
 
                 RecordMetadata metadata = new(recordTypeId);
 
-                return new(metadata, entries);
+                return new(leagueId, metadata, entries);
             }
 
-            private async Task<RecordDetails> LoadWeeklyRecordDetails(int LeagueId, RecordTypeId recordTypeId)
+            private async Task<RecordDetails> LoadWeeklyRecordDetails(int leagueId, RecordTypeId recordTypeId)
             {
                 RecordMetricProjector<WeeklyAggregationData> projector = new(recordTypeId);
 
                 IQueryable<WeeklyAggregationData> baseQuery = database.WeeklyAggregationData
-                    .Where(stats => stats.LeagueId == LeagueId)
+                    .Where(stats => stats.LeagueId == leagueId)
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member);
 
@@ -101,15 +101,15 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
 
                 RecordMetadata metadata = new(recordTypeId);
 
-                return new(metadata, entries);
+                return new(leagueId, metadata, entries);
             }
 
-            private async Task<RecordDetails> LoadPlayerRecordDetails(int LeagueId, RecordTypeId recordTypeId)
+            private async Task<RecordDetails> LoadPlayerRecordDetails(int leagueId, RecordTypeId recordTypeId)
             {
                 RecordMetricProjector<PlayerAggregationData> projector = new(recordTypeId);
 
                 IQueryable<PlayerAggregationData> baseQuery = database.PlayerAggregationData
-                    .Where(stats => stats.LeagueId == LeagueId)
+                    .Where(stats => stats.LeagueId == leagueId)
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
                     .Include(x => x.Player)
@@ -125,7 +125,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
 
                 RecordMetadata metadata = new(recordTypeId);
 
-                return new(metadata, entries);
+                return new(leagueId, metadata, entries);
             }
 
             private async Task<IQueryable<TEntity>> FilterAndSortStats<TEntity>(IQueryable<TEntity> baseQuery, RecordMetricProjector<TEntity> projector)

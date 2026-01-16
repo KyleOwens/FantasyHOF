@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7f5805a25c774af2067a1850dcf9452c>>
+ * @generated SignedSource<<ccecfe56d22791111d01d36074908a03>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,25 +10,40 @@
 
 import { ConcreteRequest } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
+export type LeagueImportStatusId = "COMPLETED" | "FAILED" | "FORMATTING_DATA" | "LOADING_DATA" | "QUEUED" | "SAVING_DATA" | "%future added value";
 export type myLeaguesQuery$variables = Record<PropertyKey, never>;
 export type myLeaguesQuery$data = {
   readonly fantasyProviders: ReadonlyArray<{
     readonly " $fragmentSpreads": FragmentRefs<"ProviderSelectionFragment">;
   }>;
   readonly me: {
-    readonly leagueImports: ReadonlyArray<{
-      readonly id: string;
-      readonly " $fragmentSpreads": FragmentRefs<"PendingLeagueCardFragment">;
-    }>;
-    readonly leagues: ReadonlyArray<{
-      readonly fantasyProvider: {
-        readonly logoURL: string;
-        readonly name: string;
-      };
-      readonly id: string;
-      readonly providerLeagueId: string;
-      readonly " $fragmentSpreads": FragmentRefs<"LeagueCardFragment">;
-    }>;
+    readonly id: string;
+    readonly leagueImports: {
+      readonly edges: ReadonlyArray<{
+        readonly node: {
+          readonly id: string;
+          readonly league: {
+            readonly id: string;
+            readonly " $fragmentSpreads": FragmentRefs<"LeagueCardFragment">;
+          } | null | undefined;
+          readonly statusId: LeagueImportStatusId;
+          readonly " $fragmentSpreads": FragmentRefs<"PendingLeagueCardFragment">;
+        };
+      }> | null | undefined;
+    } | null | undefined;
+    readonly leagues: {
+      readonly edges: ReadonlyArray<{
+        readonly node: {
+          readonly fantasyProvider: {
+            readonly logoURL: string;
+            readonly name: string;
+          };
+          readonly id: string;
+          readonly providerLeagueId: string;
+          readonly " $fragmentSpreads": FragmentRefs<"LeagueCardFragment">;
+        };
+      }> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentSpreads": FragmentRefs<"NoLeaguesCardFragment">;
 };
@@ -46,32 +61,145 @@ var v0 = {
   "storageKey": null
 },
 v1 = {
+  "args": null,
+  "kind": "FragmentSpread",
+  "name": "LeagueCardFragment"
+},
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
 },
-v2 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "logoURL",
   "storageKey": null
 },
-v3 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "providerLeagueId",
   "storageKey": null
 },
-v4 = [
-  (v0/*: any*/),
-  (v1/*: any*/),
-  (v2/*: any*/)
-],
 v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "__typename",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "cursor",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "PageInfo",
+  "kind": "LinkedField",
+  "name": "pageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endCursor",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasNextPage",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "statusId",
+  "storageKey": null
+},
+v9 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 5
+  }
+],
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "currentLeagueName",
+  "storageKey": null
+},
+v11 = [
+  (v0/*: any*/),
+  (v2/*: any*/),
+  (v3/*: any*/)
+],
+v12 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "FantasyProvider",
+  "kind": "LinkedField",
+  "name": "fantasyProvider",
+  "plural": false,
+  "selections": (v11/*: any*/),
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "LeagueMember",
+  "kind": "LinkedField",
+  "name": "members",
+  "plural": true,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "memberId",
+      "storageKey": null
+    },
+    (v0/*: any*/)
+  ],
+  "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "LeagueSeason",
+  "kind": "LinkedField",
+  "name": "seasons",
+  "plural": true,
+  "selections": [
+    (v0/*: any*/)
+  ],
+  "storageKey": null
+},
+v15 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "createdAt",
+  "storageKey": null
+},
+v16 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -93,51 +221,112 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
+          (v0/*: any*/),
           {
-            "alias": null,
+            "alias": "leagues",
             "args": null,
-            "concreteType": "League",
+            "concreteType": "LeaguesConnection",
             "kind": "LinkedField",
-            "name": "leagues",
-            "plural": true,
+            "name": "__my_leagues_connection",
+            "plural": false,
             "selections": [
-              (v0/*: any*/),
-              {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "LeagueCardFragment"
-              },
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "FantasyProvider",
+                "concreteType": "LeaguesEdge",
                 "kind": "LinkedField",
-                "name": "fantasyProvider",
-                "plural": false,
+                "name": "edges",
+                "plural": true,
                 "selections": [
-                  (v1/*: any*/),
-                  (v2/*: any*/)
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "League",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v0/*: any*/),
+                      (v1/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "FantasyProvider",
+                        "kind": "LinkedField",
+                        "name": "fantasyProvider",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          (v3/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      (v4/*: any*/),
+                      (v5/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v6/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v3/*: any*/)
+              (v7/*: any*/)
             ],
             "storageKey": null
           },
           {
-            "alias": null,
+            "alias": "leagueImports",
             "args": null,
-            "concreteType": "LeagueImport",
+            "concreteType": "LeagueImportsConnection",
             "kind": "LinkedField",
-            "name": "leagueImports",
-            "plural": true,
+            "name": "__my_leagueImports_connection",
+            "plural": false,
             "selections": [
-              (v0/*: any*/),
               {
+                "alias": null,
                 "args": null,
-                "kind": "FragmentSpread",
-                "name": "PendingLeagueCardFragment"
-              }
+                "concreteType": "LeagueImportsEdge",
+                "kind": "LinkedField",
+                "name": "edges",
+                "plural": true,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "LeagueImport",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v0/*: any*/),
+                      (v8/*: any*/),
+                      {
+                        "args": null,
+                        "kind": "FragmentSpread",
+                        "name": "PendingLeagueCardFragment"
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "League",
+                        "kind": "LinkedField",
+                        "name": "league",
+                        "plural": false,
+                        "selections": [
+                          (v0/*: any*/),
+                          (v1/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      (v5/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v6/*: any*/)
+                ],
+                "storageKey": null
+              },
+              (v7/*: any*/)
             ],
             "storageKey": null
           }
@@ -183,132 +372,169 @@ return {
         "name": "me",
         "plural": false,
         "selections": [
+          (v0/*: any*/),
           {
             "alias": null,
-            "args": null,
-            "concreteType": "League",
+            "args": (v9/*: any*/),
+            "concreteType": "LeaguesConnection",
             "kind": "LinkedField",
             "name": "leagues",
-            "plural": true,
+            "plural": false,
             "selections": [
-              (v0/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "kind": "ScalarField",
-                "name": "currentLeagueName",
-                "storageKey": null
-              },
-              (v3/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "FantasyProvider",
+                "concreteType": "LeaguesEdge",
                 "kind": "LinkedField",
-                "name": "fantasyProvider",
-                "plural": false,
-                "selections": (v4/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "LeagueMember",
-                "kind": "LinkedField",
-                "name": "members",
+                "name": "edges",
                 "plural": true,
                 "selections": [
                   {
                     "alias": null,
                     "args": null,
-                    "kind": "ScalarField",
-                    "name": "memberId",
+                    "concreteType": "League",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v0/*: any*/),
+                      (v10/*: any*/),
+                      (v4/*: any*/),
+                      (v12/*: any*/),
+                      (v13/*: any*/),
+                      (v14/*: any*/),
+                      (v15/*: any*/),
+                      (v5/*: any*/)
+                    ],
                     "storageKey": null
                   },
-                  (v0/*: any*/)
+                  (v6/*: any*/)
                 ],
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "LeagueSeason",
-                "kind": "LinkedField",
-                "name": "seasons",
-                "plural": true,
-                "selections": [
-                  (v0/*: any*/)
-                ],
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "createdAt",
-                "storageKey": null
-              }
+              (v7/*: any*/)
             ],
-            "storageKey": null
+            "storageKey": "leagues(first:5)"
           },
           {
             "alias": null,
-            "args": null,
-            "concreteType": "LeagueImport",
+            "args": (v9/*: any*/),
+            "filters": null,
+            "handle": "connection",
+            "key": "my_leagues",
+            "kind": "LinkedHandle",
+            "name": "leagues"
+          },
+          {
+            "alias": null,
+            "args": (v9/*: any*/),
+            "concreteType": "LeagueImportsConnection",
             "kind": "LinkedField",
             "name": "leagueImports",
-            "plural": true,
+            "plural": false,
             "selections": [
-              (v0/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "FantasyProvider",
+                "concreteType": "LeagueImportsEdge",
                 "kind": "LinkedField",
-                "name": "provider",
-                "plural": false,
-                "selections": (v4/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "LeagueImportStatus",
-                "kind": "LinkedField",
-                "name": "status",
-                "plural": false,
+                "name": "edges",
+                "plural": true,
                 "selections": [
-                  (v0/*: any*/),
-                  (v1/*: any*/),
-                  (v5/*: any*/)
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "LeagueImport",
+                    "kind": "LinkedField",
+                    "name": "node",
+                    "plural": false,
+                    "selections": [
+                      (v0/*: any*/),
+                      (v8/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "FantasyProvider",
+                        "kind": "LinkedField",
+                        "name": "provider",
+                        "plural": false,
+                        "selections": (v11/*: any*/),
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "LeagueImportStatus",
+                        "kind": "LinkedField",
+                        "name": "status",
+                        "plural": false,
+                        "selections": [
+                          (v0/*: any*/),
+                          (v2/*: any*/),
+                          (v16/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "progress",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "error",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "providerleagueId",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "League",
+                        "kind": "LinkedField",
+                        "name": "league",
+                        "plural": false,
+                        "selections": [
+                          (v0/*: any*/),
+                          (v10/*: any*/),
+                          (v4/*: any*/),
+                          (v12/*: any*/),
+                          (v13/*: any*/),
+                          (v14/*: any*/),
+                          (v15/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      (v5/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v6/*: any*/)
                 ],
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "progress",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "error",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "providerleagueId",
-                "storageKey": null
-              }
+              (v7/*: any*/)
             ],
-            "storageKey": null
+            "storageKey": "leagueImports(first:5)"
           },
-          (v0/*: any*/)
+          {
+            "alias": null,
+            "args": (v9/*: any*/),
+            "filters": null,
+            "handle": "connection",
+            "key": "my_leagueImports",
+            "kind": "LinkedHandle",
+            "name": "leagueImports"
+          }
         ],
         "storageKey": null
       },
@@ -320,26 +546,47 @@ return {
         "name": "fantasyProviders",
         "plural": true,
         "selections": [
+          (v3/*: any*/),
           (v2/*: any*/),
-          (v1/*: any*/),
           (v0/*: any*/),
-          (v5/*: any*/)
+          (v16/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "3145862114215a11c1e1dccdf6ba84b5",
+    "cacheID": "1a40d26d9c27e29307e19f04e8fc763e",
     "id": null,
-    "metadata": {},
+    "metadata": {
+      "connection": [
+        {
+          "count": null,
+          "cursor": null,
+          "direction": "forward",
+          "path": [
+            "me",
+            "leagues"
+          ]
+        },
+        {
+          "count": null,
+          "cursor": null,
+          "direction": "forward",
+          "path": [
+            "me",
+            "leagueImports"
+          ]
+        }
+      ]
+    },
     "name": "myLeaguesQuery",
     "operationKind": "query",
-    "text": "query myLeaguesQuery {\n  me {\n    leagues {\n      id\n      ...LeagueCardFragment\n      fantasyProvider {\n        name\n        logoURL\n        id\n      }\n      providerLeagueId\n    }\n    leagueImports {\n      id\n      ...PendingLeagueCardFragment\n    }\n    id\n  }\n  ...NoLeaguesCardFragment\n  fantasyProviders {\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment LeagueCardFragment on League {\n  id\n  currentLeagueName\n  providerLeagueId\n  fantasyProvider {\n    id\n    name\n    logoURL\n  }\n  members {\n    memberId\n    id\n  }\n  seasons {\n    id\n  }\n  createdAt\n}\n\nfragment NoLeaguesCardFragment on Query {\n  fantasyProviders {\n    logoURL\n    name\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment PendingLeagueCardFragment on LeagueImport {\n  id\n  provider {\n    id\n    name\n    logoURL\n  }\n  status {\n    id\n    name\n    value\n  }\n  progress\n  error\n  providerleagueId\n}\n\nfragment ProviderSelectionFragment on FantasyProvider {\n  id\n  name\n  logoURL\n  value\n}\n"
+    "text": "query myLeaguesQuery {\n  me {\n    id\n    leagues(first: 5) {\n      edges {\n        node {\n          id\n          ...LeagueCardFragment\n          fantasyProvider {\n            name\n            logoURL\n            id\n          }\n          providerLeagueId\n          __typename\n        }\n        cursor\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    leagueImports(first: 5) {\n      edges {\n        node {\n          id\n          statusId\n          ...PendingLeagueCardFragment\n          league {\n            id\n            ...LeagueCardFragment\n          }\n          __typename\n        }\n        cursor\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n  ...NoLeaguesCardFragment\n  fantasyProviders {\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment LeagueCardFragment on League {\n  id\n  currentLeagueName\n  providerLeagueId\n  fantasyProvider {\n    id\n    name\n    logoURL\n  }\n  members {\n    memberId\n    id\n  }\n  seasons {\n    id\n  }\n  createdAt\n}\n\nfragment NoLeaguesCardFragment on Query {\n  fantasyProviders {\n    logoURL\n    name\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment PendingLeagueCardFragment on LeagueImport {\n  id\n  provider {\n    id\n    name\n    logoURL\n  }\n  status {\n    id\n    name\n    value\n  }\n  progress\n  error\n  providerleagueId\n}\n\nfragment ProviderSelectionFragment on FantasyProvider {\n  id\n  name\n  logoURL\n  value\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f36af02eff1ed85481404d67240e491a";
+(node as any).hash = "1921c243cfb9958274ed41b2b0c8633b";
 
 export default node;

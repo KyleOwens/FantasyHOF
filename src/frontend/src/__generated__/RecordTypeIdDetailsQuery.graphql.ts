@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<62055101beadd590ab892b089dc698b1>>
+ * @generated SignedSource<<7194e68ad010cd2422322769c511de0e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -89,42 +89,49 @@ v6 = {
   "name": "unit",
   "storageKey": null
 },
-v7 = {
+v7 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 10
+  }
+],
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "__typename",
   "storageKey": null
 },
-v8 = {
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "value",
   "storageKey": null
 },
-v9 = {
+v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v10 = {
+v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "fullName",
   "storageKey": null
 },
-v11 = {
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "year",
   "storageKey": null
 },
-v12 = {
+v13 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -255,229 +262,293 @@ return {
                   },
                   {
                     "alias": null,
-                    "args": null,
-                    "concreteType": null,
+                    "args": (v7/*: any*/),
+                    "concreteType": "EntriesConnection",
                     "kind": "LinkedField",
                     "name": "entries",
-                    "plural": true,
+                    "plural": false,
                     "selections": [
                       {
                         "alias": null,
                         "args": null,
-                        "kind": "ScalarField",
-                        "name": "key",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "rank",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": null,
+                        "concreteType": "EntriesEdge",
                         "kind": "LinkedField",
-                        "name": "metric",
-                        "plural": false,
+                        "name": "edges",
+                        "plural": true,
                         "selections": [
-                          (v7/*: any*/),
-                          (v8/*: any*/),
-                          (v6/*: any*/),
                           {
-                            "kind": "InlineFragment",
+                            "alias": null,
+                            "args": null,
+                            "concreteType": null,
+                            "kind": "LinkedField",
+                            "name": "node",
+                            "plural": false,
                             "selections": [
                               {
                                 "alias": null,
                                 "args": null,
                                 "kind": "ScalarField",
-                                "name": "numerator",
+                                "name": "key",
                                 "storageKey": null
                               },
                               {
                                 "alias": null,
                                 "args": null,
                                 "kind": "ScalarField",
-                                "name": "numeratorUnit",
+                                "name": "rank",
                                 "storageKey": null
                               },
                               {
                                 "alias": null,
                                 "args": null,
-                                "kind": "ScalarField",
-                                "name": "denominator",
+                                "concreteType": null,
+                                "kind": "LinkedField",
+                                "name": "metric",
+                                "plural": false,
+                                "selections": [
+                                  (v8/*: any*/),
+                                  (v9/*: any*/),
+                                  (v6/*: any*/),
+                                  {
+                                    "kind": "InlineFragment",
+                                    "selections": [
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "numerator",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "numeratorUnit",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "denominator",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "denominatorUnit",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "type": "RatioRecordMetric",
+                                    "abstractKey": null
+                                  }
+                                ],
                                 "storageKey": null
                               },
-                              {
-                                "alias": null,
-                                "args": null,
-                                "kind": "ScalarField",
-                                "name": "denominatorUnit",
-                                "storageKey": null
-                              }
-                            ],
-                            "type": "RatioRecordMetric",
-                            "abstractKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      },
-                      (v7/*: any*/),
-                      {
-                        "kind": "TypeDiscriminator",
-                        "abstractKey": "__isRecordEntry"
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "LeagueMember",
-                        "kind": "LinkedField",
-                        "name": "memberDetails",
-                        "plural": false,
-                        "selections": [
-                          (v9/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "currentTeamName",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "currentTeamLogoURL",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "FantasyMember",
-                            "kind": "LinkedField",
-                            "name": "member",
-                            "plural": false,
-                            "selections": [
-                              (v10/*: any*/),
-                              (v9/*: any*/)
-                            ],
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "firstyear",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "lastYear",
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "tenure",
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      },
-                      {
-                        "kind": "InlineFragment",
-                        "selections": [
-                          (v11/*: any*/)
-                        ],
-                        "type": "SeasonalRecordEntry",
-                        "abstractKey": null
-                      },
-                      {
-                        "kind": "InlineFragment",
-                        "selections": [
-                          (v11/*: any*/),
-                          (v12/*: any*/)
-                        ],
-                        "type": "WeeklyRecordEntry",
-                        "abstractKey": null
-                      },
-                      {
-                        "kind": "InlineFragment",
-                        "selections": [
-                          (v11/*: any*/),
-                          (v12/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "Player",
-                            "kind": "LinkedField",
-                            "name": "player",
-                            "plural": false,
-                            "selections": [
-                              (v10/*: any*/),
-                              (v9/*: any*/),
-                              {
-                                "alias": null,
-                                "args": null,
-                                "kind": "ScalarField",
-                                "name": "playerImageURL",
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "Position",
-                            "kind": "LinkedField",
-                            "name": "position",
-                            "plural": false,
-                            "selections": [
-                              (v9/*: any*/),
                               (v8/*: any*/),
                               {
+                                "kind": "TypeDiscriminator",
+                                "abstractKey": "__isRecordEntry"
+                              },
+                              {
                                 "alias": null,
                                 "args": null,
-                                "kind": "ScalarField",
-                                "name": "name",
+                                "concreteType": "LeagueMember",
+                                "kind": "LinkedField",
+                                "name": "memberDetails",
+                                "plural": false,
+                                "selections": [
+                                  (v10/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "currentTeamName",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "currentTeamLogoURL",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "FantasyMember",
+                                    "kind": "LinkedField",
+                                    "name": "member",
+                                    "plural": false,
+                                    "selections": [
+                                      (v11/*: any*/),
+                                      (v10/*: any*/)
+                                    ],
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "firstyear",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "lastYear",
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "tenure",
+                                    "storageKey": null
+                                  }
+                                ],
                                 "storageKey": null
+                              },
+                              {
+                                "kind": "InlineFragment",
+                                "selections": [
+                                  (v12/*: any*/)
+                                ],
+                                "type": "SeasonalRecordEntry",
+                                "abstractKey": null
+                              },
+                              {
+                                "kind": "InlineFragment",
+                                "selections": [
+                                  (v12/*: any*/),
+                                  (v13/*: any*/)
+                                ],
+                                "type": "WeeklyRecordEntry",
+                                "abstractKey": null
+                              },
+                              {
+                                "kind": "InlineFragment",
+                                "selections": [
+                                  (v12/*: any*/),
+                                  (v13/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Player",
+                                    "kind": "LinkedField",
+                                    "name": "player",
+                                    "plural": false,
+                                    "selections": [
+                                      (v11/*: any*/),
+                                      (v10/*: any*/),
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "playerImageURL",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  },
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "Position",
+                                    "kind": "LinkedField",
+                                    "name": "position",
+                                    "plural": false,
+                                    "selections": [
+                                      (v10/*: any*/),
+                                      (v9/*: any*/),
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "name",
+                                        "storageKey": null
+                                      }
+                                    ],
+                                    "storageKey": null
+                                  }
+                                ],
+                                "type": "PlayerRecordEntry",
+                                "abstractKey": null
                               }
                             ],
                             "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "cursor",
+                            "storageKey": null
                           }
                         ],
-                        "type": "PlayerRecordEntry",
-                        "abstractKey": null
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "PageInfo",
+                        "kind": "LinkedField",
+                        "name": "pageInfo",
+                        "plural": false,
+                        "selections": [
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "endCursor",
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "kind": "ScalarField",
+                            "name": "hasNextPage",
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
                       }
                     ],
-                    "storageKey": null
-                  }
+                    "storageKey": "entries(first:10)"
+                  },
+                  {
+                    "alias": null,
+                    "args": (v7/*: any*/),
+                    "filters": null,
+                    "handle": "connection",
+                    "key": "recordDetails_entries",
+                    "kind": "LinkedHandle",
+                    "name": "entries"
+                  },
+                  (v10/*: any*/)
                 ],
                 "storageKey": null
               },
-              (v9/*: any*/)
+              (v10/*: any*/)
             ],
             "storageKey": null
           },
-          (v9/*: any*/)
+          (v10/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "73eec4c751f1be188f7aa82e8f3bf912",
+    "cacheID": "5004ce69d1fefee8289dcba29281da92",
     "id": null,
     "metadata": {},
     "name": "RecordTypeIdDetailsQuery",
     "operationKind": "query",
-    "text": "query RecordTypeIdDetailsQuery(\n  $leagueId: ID!\n  $recordType: RecordTypeId!\n) {\n  me {\n    league(leagueId: $leagueId) {\n      recordDetails(recordType: $recordType) {\n        metadata {\n          displayName\n          description\n          iconURI\n        }\n        ...RecordDetailsTableFragment\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment MemberCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  memberDetails {\n    id\n    currentTeamName\n    currentTeamLogoURL\n    member {\n      fullName\n      id\n    }\n  }\n}\n\nfragment MemberTenureCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  memberDetails {\n    firstyear\n    lastYear\n    tenure\n    id\n  }\n}\n\nfragment PlayerCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  ... on PlayerRecordEntry {\n    position {\n      id\n      value\n      name\n    }\n    player {\n      fullName\n      playerImageURL\n      id\n    }\n  }\n}\n\nfragment RankCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  rank\n}\n\nfragment RatioBreakdownCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  metric {\n    __typename\n    ... on RatioRecordMetric {\n      numerator\n      numeratorUnit\n      denominator\n      denominatorUnit\n    }\n  }\n}\n\nfragment RecordDetailsTableFragment on RecordDetails {\n  metadata {\n    unit\n    category\n    metricType\n  }\n  entries {\n    key\n    rank\n    metric {\n      __typename\n      value\n      unit\n      ... on RatioRecordMetric {\n        numerator\n        numeratorUnit\n        denominator\n        denominatorUnit\n      }\n    }\n    __typename\n    ... on SeasonalRecordEntry {\n      year\n    }\n    ... on WeeklyRecordEntry {\n      year\n      week\n    }\n    ... on PlayerRecordEntry {\n      year\n      week\n      player {\n        fullName\n        id\n      }\n    }\n    ...RecordValueCellFragment\n    ...MemberCellFragment\n    ...MemberTenureCellFragment\n    ...RankCellFragment\n    ...RatioBreakdownCellFragment\n    ...PlayerCellFragment\n  }\n}\n\nfragment RecordValueCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  rank\n  metric {\n    __typename\n    value\n    unit\n    ... on RatioRecordMetric {\n      __typename\n      numerator\n      denominator\n    }\n  }\n}\n"
+    "text": "query RecordTypeIdDetailsQuery(\n  $leagueId: ID!\n  $recordType: RecordTypeId!\n) {\n  me {\n    league(leagueId: $leagueId) {\n      recordDetails(recordType: $recordType) {\n        metadata {\n          displayName\n          description\n          iconURI\n        }\n        ...RecordDetailsTableFragment\n        id\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment MemberCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  memberDetails {\n    id\n    currentTeamName\n    currentTeamLogoURL\n    member {\n      fullName\n      id\n    }\n  }\n}\n\nfragment MemberTenureCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  memberDetails {\n    firstyear\n    lastYear\n    tenure\n    id\n  }\n}\n\nfragment PlayerCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  ... on PlayerRecordEntry {\n    position {\n      id\n      value\n      name\n    }\n    player {\n      fullName\n      playerImageURL\n      id\n    }\n  }\n}\n\nfragment RankCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  rank\n}\n\nfragment RatioBreakdownCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  metric {\n    __typename\n    ... on RatioRecordMetric {\n      numerator\n      numeratorUnit\n      denominator\n      denominatorUnit\n    }\n  }\n}\n\nfragment RecordDetailsTableFragment on RecordDetails {\n  metadata {\n    unit\n    category\n    metricType\n  }\n  ...RecordDetailsTableRefetchableEntryFragment\n}\n\nfragment RecordDetailsTableRefetchableEntryFragment on RecordDetails {\n  entries(first: 10) {\n    edges {\n      node {\n        key\n        rank\n        metric {\n          __typename\n          value\n          unit\n          ... on RatioRecordMetric {\n            numerator\n            numeratorUnit\n            denominator\n            denominatorUnit\n          }\n        }\n        __typename\n        ... on SeasonalRecordEntry {\n          year\n        }\n        ... on WeeklyRecordEntry {\n          year\n          week\n        }\n        ... on PlayerRecordEntry {\n          year\n          week\n          player {\n            fullName\n            id\n          }\n        }\n        ...RecordValueCellFragment\n        ...MemberCellFragment\n        ...MemberTenureCellFragment\n        ...RankCellFragment\n        ...RatioBreakdownCellFragment\n        ...PlayerCellFragment\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n\nfragment RecordValueCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  rank\n  metric {\n    __typename\n    value\n    unit\n    ... on RatioRecordMetric {\n      __typename\n      numerator\n      denominator\n    }\n  }\n}\n"
   }
 };
 })();

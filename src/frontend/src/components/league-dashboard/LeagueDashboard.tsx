@@ -14,20 +14,22 @@ type Props = {
 
 export const leagueDashboardQuery = graphql`
   query LeagueDashboardQuery($leagueId: ID!) {
-    league(id: $leagueId) {
-      currentLeagueName
-      recordSummary {
-        leagueRecords {
-          ...RecordSectionFragment
-        }
-        seasonalRecords {
-          ...RecordSectionFragment
-        }
-        weeklyRecords {
-          ...RecordSectionFragment
-        }
-        playerRecords {
-          ...RecordSectionFragment
+    me {
+      league(leagueId: $leagueId) {
+        currentLeagueName
+        recordSummary {
+          leagueRecords {
+            ...RecordSectionFragment
+          }
+          seasonalRecords {
+            ...RecordSectionFragment
+          }
+          weeklyRecords {
+            ...RecordSectionFragment
+          }
+          playerRecords {
+            ...RecordSectionFragment
+          }
         }
       }
     }
@@ -40,7 +42,7 @@ export function LeagueDashboard({ queryRef }: Props) {
   });
   const navigate = useNavigate({ from: demoDashboardRoute.fullPath });
 
-  const league = usePreloadedQuery(leagueDashboardQuery, queryRef).league;
+  const league = usePreloadedQuery(leagueDashboardQuery, queryRef).me.league;
 
   if (!league.recordSummary) return;
 

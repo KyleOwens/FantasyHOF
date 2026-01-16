@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5392b9e762b7115e05c070833c8a74be>>
+ * @generated SignedSource<<a8723e26392c9e888d47a96ac4077fe3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,6 +17,7 @@ export type usePendingLeaguesSubscription$data = {
     readonly error: string | null | undefined;
     readonly id: string;
     readonly league: {
+      readonly id: string;
       readonly " $fragmentSpreads": FragmentRefs<"LeagueCardFragment">;
     } | null | undefined;
     readonly progress: number;
@@ -25,6 +26,7 @@ export type usePendingLeaguesSubscription$data = {
       readonly name: string;
       readonly value: LeagueImportStatusId;
     };
+    readonly statusId: LeagueImportStatusId;
   };
 };
 export type usePendingLeaguesSubscription = {
@@ -58,10 +60,17 @@ v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "name",
+  "name": "statusId",
   "storageKey": null
 },
 v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v5 = {
   "alias": null,
   "args": null,
   "concreteType": "LeagueImportStatus",
@@ -70,7 +79,7 @@ v4 = {
   "plural": false,
   "selections": [
     (v0/*: any*/),
-    (v3/*: any*/),
+    (v4/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -99,7 +108,8 @@ return {
           (v0/*: any*/),
           (v1/*: any*/),
           (v2/*: any*/),
-          (v4/*: any*/),
+          (v3/*: any*/),
+          (v5/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -108,6 +118,7 @@ return {
             "name": "league",
             "plural": false,
             "selections": [
+              (v0/*: any*/),
               {
                 "args": null,
                 "kind": "FragmentSpread",
@@ -140,7 +151,8 @@ return {
           (v0/*: any*/),
           (v1/*: any*/),
           (v2/*: any*/),
-          (v4/*: any*/),
+          (v3/*: any*/),
+          (v5/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -173,7 +185,7 @@ return {
                 "plural": false,
                 "selections": [
                   (v0/*: any*/),
-                  (v3/*: any*/),
+                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -231,16 +243,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "85bedd18644091247c828c86a4aac868",
+    "cacheID": "d6df15304ccb7a59e49e2f2afea7c00b",
     "id": null,
     "metadata": {},
     "name": "usePendingLeaguesSubscription",
     "operationKind": "subscription",
-    "text": "subscription usePendingLeaguesSubscription {\n  leagueImportProgress {\n    id\n    progress\n    error\n    status {\n      id\n      name\n      value\n    }\n    league {\n      ...LeagueCardFragment\n      id\n    }\n  }\n}\n\nfragment LeagueCardFragment on League {\n  id\n  currentLeagueName\n  providerLeagueId\n  fantasyProvider {\n    id\n    name\n    logoURL\n  }\n  members {\n    memberId\n    id\n  }\n  seasons {\n    id\n  }\n  createdAt\n}\n"
+    "text": "subscription usePendingLeaguesSubscription {\n  leagueImportProgress {\n    id\n    progress\n    error\n    statusId\n    status {\n      id\n      name\n      value\n    }\n    league {\n      id\n      ...LeagueCardFragment\n    }\n  }\n}\n\nfragment LeagueCardFragment on League {\n  id\n  currentLeagueName\n  providerLeagueId\n  fantasyProvider {\n    id\n    name\n    logoURL\n  }\n  members {\n    memberId\n    id\n  }\n  seasons {\n    id\n  }\n  createdAt\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ca9396ccc435e66963955c95069dd837";
+(node as any).hash = "32aeb43bc689c29546a20501688f5b11";
 
 export default node;

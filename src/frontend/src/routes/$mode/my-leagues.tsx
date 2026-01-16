@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
-import { usePreloadedQuery } from "react-relay";
+import { useLazyLoadQuery } from "react-relay";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { LeagueAdditionModal } from "@/components/league-addition-modal/LeagueAdditionModal";
@@ -10,33 +10,40 @@ import { LeagueCard } from "@/components/league-cards/LeagueCard";
 import { PendingLeagueCard } from "@/components/league-cards/PendingLeagueCard";
 import { usePendingLeaguesSubscription } from "@/hooks/usePendingLeaguesSubscription";
 import { AnimatePresence, motion } from "framer-motion";
-import { preloadQuery } from "@/relay/helpers";
 
 export const Route = createFileRoute("/$mode/my-leagues")({
   component: MyLeaguesPage,
-  loader: () => {
-    return preloadQuery<MyLeaguesQueryType>(myLeaguesQuery, {});
-  },
-  onLeave: ({ loaderData }) => {
-    loaderData?.dispose();
-  },
 });
 
 const myLeaguesQuery = graphql`
   query myLeaguesQuery {
     me {
-      leagues {
-        id
-        ...LeagueCardFragment
-        fantasyProvider {
-          name
-          logoURL
+      id
+      leagues(first: 5) @connection(key: "my_leagues") {
+        edges {
+          node {
+            id
+            ...LeagueCardFragment
+            fantasyProvider {
+              name
+              logoURL
+            }
+            providerLeagueId
+          }
         }
-        providerLeagueId
       }
-      leagueImports {
-        id
-        ...PendingLeagueCardFragment
+      leagueImports(first: 5) @connection(key: "my_leagueImports") {
+        edges {
+          node {
+            id
+            statusId
+            ...PendingLeagueCardFragment
+            league {
+              id
+              ...LeagueCardFragment
+            }
+          }
+        }
       }
     }
     ...NoLeaguesCardFragment
@@ -47,16 +54,18 @@ const myLeaguesQuery = graphql`
 `;
 
 function MyLeaguesPage() {
-  const queryRef = Route.useLoaderData();
-  const data = usePreloadedQuery<MyLeaguesQueryType>(myLeaguesQuery, queryRef);
+  const data = useLazyLoadQuery<MyLeaguesQueryType>(myLeaguesQuery, {});
   usePendingLeaguesSubscription();
 
   const { leagues, leagueImports } = data.me;
+  if (!leagues?.edges || !leagueImports?.edges)
+    return <NoLeaguesCard providersKey={data} userId={data.me.id} />;
 
-  const validLeagues = leagues.filter(Boolean);
+  if (leagues.edges.length === 0 && leagueImports.edges.length === 0)
+    return <NoLeaguesCard providersKey={data} userId={data.me.id} />;
 
-  if (validLeagues.length === 0 && leagueImports.length === 0)
-    return <NoLeaguesCard providersKey={data} />;
+  const completedLeagues = leagues.edges.map((x) => x.node);
+  const importingLeagues = leagueImports.edges.map((x) => x.node);
 
   return (
     <div className="container max-w-4xl mx-auto py-6">
@@ -67,7 +76,10 @@ function MyLeaguesPage() {
             Manage your fantasy football leagues
           </p>
         </div>
-        <LeagueAdditionModal providersKey={data.fantasyProviders}>
+        <LeagueAdditionModal
+          providersKey={data.fantasyProviders}
+          userId={data.me.id}
+        >
           <Button>
             <Plus className="size-4 mr-2" />
             Add League
@@ -77,11 +89,11 @@ function MyLeaguesPage() {
       <div className="flex flex-col gap-8">
         <section>
           <h3 className="text-lg font-semibold mb-4">
-            Your Leagues ({validLeagues.length})
+            Your Leagues ({completedLeagues.length})
           </h3>
           <div className="flex flex-col gap-4">
             <AnimatePresence mode="popLayout">
-              {validLeagues.map((league) => (
+              {completedLeagues.map((league) => (
                 <motion.div
                   key={league.id}
                   layout // This animates the position change
@@ -90,25 +102,25 @@ function MyLeaguesPage() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 >
-                  <LeagueCard leagueKey={league} />
+                  <LeagueCard leagueKey={league} userId={data.me.id} />
                 </motion.div>
               ))}
             </AnimatePresence>
           </div>
         </section>
         <AnimatePresence>
-          {leagueImports.length > 0 && (
+          {importingLeagues.length > 0 && (
             <motion.section
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
               <h3 className="text-lg font-semibold mb-4">
-                Pending Leagues ({leagueImports.length})
+                Pending Leagues ({importingLeagues.length})
               </h3>
               <div className="flex flex-col gap-4">
                 <AnimatePresence mode="popLayout">
-                  {leagueImports.map((leagueImport) => (
+                  {importingLeagues.map((leagueImport) => (
                     <motion.div
                       key={leagueImport.id}
                       layout

@@ -8,6 +8,7 @@ import { graphql } from "relay-runtime";
 
 type Props = {
   providersKey: NoLeaguesCardFragment$key;
+  userId: string;
 };
 
 const noLeaguesCardFragment = graphql`
@@ -20,7 +21,7 @@ const noLeaguesCardFragment = graphql`
   }
 `;
 
-export function NoLeaguesCard({ providersKey }: Props) {
+export function NoLeaguesCard({ providersKey, userId }: Props) {
   const fantasyProviders = useFragment(
     noLeaguesCardFragment,
     providersKey,
@@ -43,7 +44,10 @@ export function NoLeaguesCard({ providersKey }: Props) {
                 To start exploring your records, you'll need to help us get
                 connected to your fantasy provider. Click below to get started.
               </p>
-              <LeagueAdditionModal providersKey={fantasyProviders}>
+              <LeagueAdditionModal
+                providersKey={fantasyProviders}
+                userId={userId}
+              >
                 <Button size={"lg"} className="mt-4 text-base max-w-fit">
                   <Plus /> Add fantasy League
                 </Button>

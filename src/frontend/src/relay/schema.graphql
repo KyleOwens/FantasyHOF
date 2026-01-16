@@ -173,6 +173,24 @@ type LeagueImportStatus implements Node {
   value: LeagueImportStatusId!
 }
 
+"A connection to a list of items."
+type LeagueImportsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [LeagueImportsEdge!]
+  "A flattened list of the nodes."
+  nodes: [LeagueImport!]
+}
+
+"An edge in a connection."
+type LeagueImportsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: LeagueImport!
+}
+
 type LeagueMember implements Node {
   id: ID!
   leagueId: ID!
@@ -294,6 +312,24 @@ type LeagueSeasonSettings implements Node {
   leagueName: String!
   scheduleSettings: LeagueSeasonScheduleSettings! @cost(weight: "10")
   scoringSettings: LeagueSeasonScoringSettings! @cost(weight: "10")
+}
+
+"A connection to a list of items."
+type LeaguesConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [LeaguesEdge!]
+  "A flattened list of the nodes."
+  nodes: [League!]
+}
+
+"An edge in a connection."
+type LeaguesEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: League!
 }
 
 type MatchupOutcome implements Node {
@@ -418,7 +454,8 @@ type RatioRecordMetric implements RecordMetric {
   unit: String!
 }
 
-type RecordDetails {
+type RecordDetails implements Node {
+  id: ID!
   metadata: RecordMetadata!
   entries("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): EntriesConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
 }
@@ -525,9 +562,9 @@ type User implements Node {
   removeLeagueIfExists(leagueId: Int!): Boolean!
   id: ID!
   clerkId: String!
-  leagues: [League!]! @cost(weight: "10")
+  leagues("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): LeaguesConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
   league(leagueId: ID!): League! @cost(weight: "10")
-  leagueImports: [LeagueImport!]! @cost(weight: "10")
+  leagueImports("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): LeagueImportsConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
 }
 
 type WeeklyRecord implements Record {

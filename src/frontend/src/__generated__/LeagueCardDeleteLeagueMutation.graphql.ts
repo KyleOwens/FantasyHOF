@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ababce5cf7b2db0c5a98ca590ec87033>>
+ * @generated SignedSource<<c7bd0feb4c85c0b8147cf2c350ba4c02>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,6 +14,7 @@ export type DeleteUserLeagueInput = {
   leagueId: string;
 };
 export type LeagueCardDeleteLeagueMutation$variables = {
+  connections: ReadonlyArray<string>;
   input: DeleteUserLeagueInput;
 };
 export type LeagueCardDeleteLeagueMutation$data = {
@@ -33,28 +34,31 @@ export type LeagueCardDeleteLeagueMutation = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "input"
-  }
-],
-v1 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "connections"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "input"
+},
+v2 = [
   {
     "kind": "Variable",
     "name": "input",
     "variableName": "input"
   }
 ],
-v2 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "leagueId",
   "storageKey": null
 },
-v3 = {
+v4 = {
   "kind": "InlineFragment",
   "selections": [
     {
@@ -77,14 +81,17 @@ v3 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "LeagueCardDeleteLeagueMutation",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "DeleteUserLeaguePayload",
         "kind": "LinkedField",
         "name": "deleteUserLeague",
@@ -98,7 +105,7 @@ return {
             "name": "deleteUserLeagueMutationPayload",
             "plural": false,
             "selections": [
-              (v2/*: any*/)
+              (v3/*: any*/)
             ],
             "storageKey": null
           },
@@ -110,7 +117,7 @@ return {
             "name": "errors",
             "plural": true,
             "selections": [
-              (v3/*: any*/)
+              (v4/*: any*/)
             ],
             "storageKey": null
           }
@@ -123,13 +130,16 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "LeagueCardDeleteLeagueMutation",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "DeleteUserLeaguePayload",
         "kind": "LinkedField",
         "name": "deleteUserLeague",
@@ -143,15 +153,22 @@ return {
             "name": "deleteUserLeagueMutationPayload",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
                 "filters": null,
-                "handle": "deleteRecord",
+                "handle": "deleteEdge",
                 "key": "",
                 "kind": "ScalarHandle",
-                "name": "leagueId"
+                "name": "leagueId",
+                "handleArgs": [
+                  {
+                    "kind": "Variable",
+                    "name": "connections",
+                    "variableName": "connections"
+                  }
+                ]
               }
             ],
             "storageKey": null
@@ -171,7 +188,7 @@ return {
                 "name": "__typename",
                 "storageKey": null
               },
-              (v3/*: any*/)
+              (v4/*: any*/)
             ],
             "storageKey": null
           }
@@ -191,6 +208,6 @@ return {
 };
 })();
 
-(node as any).hash = "b71ce91113f4db1c4a30336be1435515";
+(node as any).hash = "c6a960ff9786aec2e14ebff2c5bd1227";
 
 export default node;

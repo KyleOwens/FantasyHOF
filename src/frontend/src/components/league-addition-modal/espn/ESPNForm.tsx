@@ -21,20 +21,18 @@ import { Alert, AlertDescription, AlertTitle } from "../../ui/alert";
 import { CookieGuide } from "./CookieGuide";
 import { Label } from "../../ui/label";
 import { LeagueIdGuide } from "./LeagueIdGuide";
-import { graphql, RecordSourceSelectorProxy } from "relay-runtime";
+import { ConnectionHandler, graphql } from "relay-runtime";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "react-relay";
-import {
-  ESPNFormAddLeagueMutation,
-  ESPNFormAddLeagueMutation$data,
-} from "@/__generated__/ESPNFormAddLeagueMutation.graphql";
+import { ESPNFormAddLeagueMutation } from "@/__generated__/ESPNFormAddLeagueMutation.graphql";
 import { Spinner } from "@/components/ui/spinner";
 import { FormFieldError } from "@/components/shared/FormFieldError";
 
 type Props = {
   resetEntry: () => void;
   onCompletion: () => void;
+  userId: string;
 };
 
 const espnSchema = z.object({
@@ -55,11 +53,16 @@ const espnSchema = z.object({
 const addESPNLeagueMutation = graphql`
   mutation ESPNFormAddLeagueMutation(
     $espnCredentials: AddESPNLeagueToUserInput!
+    $connections: [ID!]!
   ) {
     addESPNLeagueToUser(input: $espnCredentials) {
       addLeagueMutationPayload {
         jobId
-        import {
+        import
+          @appendNode(
+            connections: $connections
+            edgeTypeName: "LeagueImportsEdge"
+          ) {
           id
           ...PendingLeagueCardFragment
         }
@@ -74,7 +77,7 @@ const addESPNLeagueMutation = graphql`
   }
 `;
 
-export function ESPNForm({ resetEntry, onCompletion }: Props) {
+export function ESPNForm({ resetEntry, onCompletion, userId }: Props) {
   const [serverErrors, setServerErrors] = useState<string[]>([]);
   const [commitNewLeague, newLeagueIsPending] =
     useMutation<ESPNFormAddLeagueMutation>(addESPNLeagueMutation);
@@ -101,26 +104,9 @@ export function ESPNForm({ resetEntry, onCompletion }: Props) {
             espnS2Id: form.value.espnS2Id,
             swid: form.value.swid,
           },
-        },
-        updater: (
-          store: RecordSourceSelectorProxy<ESPNFormAddLeagueMutation$data>,
-        ) => {
-          const payload = store.getRootField("addESPNLeagueToUser");
-
-          if (!payload) return;
-
-          const mutationPayload = payload.getLinkedRecord(
-            "addLeagueMutationPayload",
-          );
-
-          const newImport = mutationPayload?.getLinkedRecord("import");
-          const me = store.getRoot().getLinkedRecord("me");
-
-          if (!newImport || !me) return;
-
-          const currentImports = me.getLinkedRecords("leagueImports") || [];
-
-          me.setLinkedRecords([...currentImports, newImport], "leagueImports");
+          connections: [
+            ConnectionHandler.getConnectionID(userId, "my_leagueImports"),
+          ],
         },
         onCompleted: (response, _) => {
           console.log(response);
@@ -143,7 +129,6 @@ export function ESPNForm({ resetEntry, onCompletion }: Props) {
 
   useEffect(() => {
     if (serverErrors.length > 0 && errorTopRef.current) {
-      // Scroll to the top of the modal/form smoothly
       errorTopRef.current.scrollIntoView({
         behavior: "smooth",
         block: "start",

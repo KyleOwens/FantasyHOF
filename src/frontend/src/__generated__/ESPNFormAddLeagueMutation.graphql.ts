@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3bc3ffe8406747368f1241f7e28fab3e>>
+ * @generated SignedSource<<ed39caf08337b489d9a432318fc545e1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,6 +17,7 @@ export type AddESPNLeagueToUserInput = {
   swid: string;
 };
 export type ESPNFormAddLeagueMutation$variables = {
+  connections: ReadonlyArray<string>;
   espnCredentials: AddESPNLeagueToUserInput;
 };
 export type ESPNFormAddLeagueMutation$data = {
@@ -40,35 +41,38 @@ export type ESPNFormAddLeagueMutation = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "espnCredentials"
-  }
-],
-v1 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "connections"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "espnCredentials"
+},
+v2 = [
   {
     "kind": "Variable",
     "name": "input",
     "variableName": "espnCredentials"
   }
 ],
-v2 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "jobId",
   "storageKey": null
 },
-v3 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v4 = {
+v5 = {
   "kind": "InlineFragment",
   "selections": [
     {
@@ -89,7 +93,7 @@ v4 = {
   "type": "ICodedException",
   "abstractKey": "__isICodedException"
 },
-v5 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -98,14 +102,17 @@ v5 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "ESPNFormAddLeagueMutation",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "AddESPNLeagueToUserPayload",
         "kind": "LinkedField",
         "name": "addESPNLeagueToUser",
@@ -119,7 +126,7 @@ return {
             "name": "addLeagueMutationPayload",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -128,7 +135,7 @@ return {
                 "name": "import",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/),
+                  (v4/*: any*/),
                   {
                     "args": null,
                     "kind": "FragmentSpread",
@@ -148,7 +155,7 @@ return {
             "name": "errors",
             "plural": true,
             "selections": [
-              (v4/*: any*/)
+              (v5/*: any*/)
             ],
             "storageKey": null
           }
@@ -161,13 +168,16 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "ESPNFormAddLeagueMutation",
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "AddESPNLeagueToUserPayload",
         "kind": "LinkedField",
         "name": "addESPNLeagueToUser",
@@ -181,7 +191,7 @@ return {
             "name": "addLeagueMutationPayload",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -190,7 +200,7 @@ return {
                 "name": "import",
                 "plural": false,
                 "selections": [
-                  (v3/*: any*/),
+                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -199,8 +209,8 @@ return {
                     "name": "provider",
                     "plural": false,
                     "selections": [
-                      (v3/*: any*/),
-                      (v5/*: any*/),
+                      (v4/*: any*/),
+                      (v6/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -219,8 +229,8 @@ return {
                     "name": "status",
                     "plural": false,
                     "selections": [
-                      (v3/*: any*/),
-                      (v5/*: any*/),
+                      (v4/*: any*/),
+                      (v6/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -254,6 +264,27 @@ return {
                   }
                 ],
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "filters": null,
+                "handle": "appendNode",
+                "key": "",
+                "kind": "LinkedHandle",
+                "name": "import",
+                "handleArgs": [
+                  {
+                    "kind": "Variable",
+                    "name": "connections",
+                    "variableName": "connections"
+                  },
+                  {
+                    "kind": "Literal",
+                    "name": "edgeTypeName",
+                    "value": "LeagueImportsEdge"
+                  }
+                ]
               }
             ],
             "storageKey": null
@@ -273,7 +304,7 @@ return {
                 "name": "__typename",
                 "storageKey": null
               },
-              (v4/*: any*/)
+              (v5/*: any*/)
             ],
             "storageKey": null
           }
@@ -293,6 +324,6 @@ return {
 };
 })();
 
-(node as any).hash = "43ffec694435816ce3139f28ddad352a";
+(node as any).hash = "05f81239b242db83f8b83d36577c4959";
 
 export default node;

@@ -19,6 +19,7 @@ import { ImportSuccessMessage } from "./ImportSuccessMessage";
 type Props = {
   children: React.ReactNode;
   providersKey: ProviderSelectionFragment$key;
+  userId: string;
 };
 
 enum LeagueAdditionStep {
@@ -27,7 +28,7 @@ enum LeagueAdditionStep {
   Completed = "Completed",
 }
 
-export function LeagueAdditionModal({ children, providersKey }: Props) {
+export function LeagueAdditionModal({ children, providersKey, userId }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<LeagueAdditionStep>(
     LeagueAdditionStep.Provider,
@@ -89,6 +90,7 @@ export function LeagueAdditionModal({ children, providersKey }: Props) {
                 resetEntry={onResetEntry}
                 provider={selectedProvider}
                 onCompletion={onCompletion}
+                userId={userId}
               />
             )}
           </div>
