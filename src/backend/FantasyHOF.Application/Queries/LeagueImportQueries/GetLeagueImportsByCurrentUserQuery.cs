@@ -13,7 +13,7 @@ namespace FantasyHOF.Application.Queries.LeagueImportQueries
         public sealed class GetLeagueImportsByCurrentUserQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser)
             : IRequestHandler<GetLeagueImportsByCurrentUserQuery, IQueryable<LeagueImport>>
         {
-            public async Task<IQueryable<LeagueImport>> Handle(GetLeagueImportsByCurrentUserQuery request, CancellationToken cancellationToken)
+            public async Task<IQueryable<LeagueImport>> Handle(GetLeagueImportsByCurrentUserQuery request, CancellationToken ct)
             {
                 if (!currentUser.IsAuthenticated) throw new ForbiddenException();
 

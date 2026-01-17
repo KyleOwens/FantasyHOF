@@ -14,12 +14,12 @@ namespace FantasyHOF.Application.Queries.MatchupTypeQueries
         {
             public async Task<IEnumerable<MatchupType>> Handle(
                 GetMatchupTypesByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await database.MatchupTypes
                     .AsNoTracking()
                     .Where(type => request.MatchupTypeIds.Contains(type.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

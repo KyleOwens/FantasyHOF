@@ -10,9 +10,9 @@ namespace FantasyHOF.Application.Queries.LeagueMemberQueries
         public class GetLeagueMemberByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetLeagueMemberByIdQuery, LeagueMember?>
         {
-            public async Task<LeagueMember?> Handle(GetLeagueMemberByIdQuery request, CancellationToken cancellationToken)
+            public async Task<LeagueMember?> Handle(GetLeagueMemberByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetLeagueMembersByIdsQuery([request.LeagueMemberId]), cancellationToken))
+                return (await mediator.Send(new GetLeagueMembersByIdsQuery([request.LeagueMemberId]), ct))
                     .FirstOrDefault();
             }
         }

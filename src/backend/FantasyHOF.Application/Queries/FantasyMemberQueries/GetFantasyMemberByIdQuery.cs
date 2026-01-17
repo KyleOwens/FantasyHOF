@@ -11,9 +11,9 @@ namespace FantasyHOF.Application.Queries.FantasyMemberQueries
         {
             private readonly IMediator _mediator = mediator;
 
-            public async Task<FantasyMember?> Handle(GetFantasyMemberByIdQuery request, CancellationToken cancellationToken)
+            public async Task<FantasyMember?> Handle(GetFantasyMemberByIdQuery request, CancellationToken ct)
             {
-                return (await _mediator.Send(new GetFantasyMembersByIdsQuery([request.FantasyMemberId]), cancellationToken))
+                return (await _mediator.Send(new GetFantasyMembersByIdsQuery([request.FantasyMemberId]), ct))
                     .FirstOrDefault();
             }
         }

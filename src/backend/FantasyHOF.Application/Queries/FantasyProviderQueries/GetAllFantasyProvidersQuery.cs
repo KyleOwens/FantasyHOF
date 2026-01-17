@@ -11,11 +11,11 @@ namespace FantasyHOF.Application.Queries.FantasyProviderQueries
         public sealed class GetAllFantasyProvidersQueryHandler(FantasyHOFDBContext database)
             : IRequestHandler<GetAllFantasyProvidersQuery, List<FantasyProvider>>
         {
-            public async Task<List<FantasyProvider>> Handle(GetAllFantasyProvidersQuery request, CancellationToken cancellationToken)
+            public async Task<List<FantasyProvider>> Handle(GetAllFantasyProvidersQuery request, CancellationToken ct)
             {
                 return await database.FantasyProviders
                     .AsNoTracking()
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

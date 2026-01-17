@@ -13,16 +13,16 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
         public sealed class GetDemoLeaguesQueryHandler(FantasyHOFDBContext database, IOptions<AppConfig> appConfig)
             : IRequestHandler<GetDemoLeaguesQuery, IEnumerable<League>>
         {
-            public async Task<IEnumerable<League>> Handle(GetDemoLeaguesQuery request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<League>> Handle(GetDemoLeaguesQuery request, CancellationToken ct)
             {
                 User adminUser = await database.Users
                     .Where(x => x.ClerkId == appConfig.Value.AdminClerkUserId)
-                    .SingleAsync(cancellationToken);
+                    .SingleAsync(ct);
 
                 return await database.Leagues
                     .AsNoTracking()
                     .Where(league => league.UserId == adminUser.Id)
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

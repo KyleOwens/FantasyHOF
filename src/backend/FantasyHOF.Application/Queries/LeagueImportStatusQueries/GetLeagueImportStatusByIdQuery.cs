@@ -11,9 +11,9 @@ namespace FantasyHOF.Application.Queries.LeagueImportStatusQueries
         public class GetLeagueImportStatusByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetLeagueImportStatusByIdQuery, LeagueImportStatus?>
         {
-            public async Task<LeagueImportStatus?> Handle(GetLeagueImportStatusByIdQuery request, CancellationToken cancellationToken)
+            public async Task<LeagueImportStatus?> Handle(GetLeagueImportStatusByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetLeagueImportStatusesByIdsQuery([request.LeagueImportStatusId]), cancellationToken))
+                return (await mediator.Send(new GetLeagueImportStatusesByIdsQuery([request.LeagueImportStatusId]), ct))
                     .FirstOrDefault();
             }
         }

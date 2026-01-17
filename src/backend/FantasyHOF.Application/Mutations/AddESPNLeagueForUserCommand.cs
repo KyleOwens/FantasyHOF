@@ -22,12 +22,12 @@ namespace FantasyHOF.Application.Mutations
             IESPNAPIClientBuilder espnClientBuilder
         ) : IRequestHandler<AddESPNLeagueForUserCommand, AddLeagueMutationPayload>
         {
-            public async Task<AddLeagueMutationPayload> Handle(AddESPNLeagueForUserCommand request, CancellationToken cancellationToken)
+            public async Task<AddLeagueMutationPayload> Handle(AddESPNLeagueForUserCommand request, CancellationToken ct)
             {
-                Guid authenticatedUserId = await currentUser.GetUserIdAsync(cancellationToken);
+                Guid authenticatedUserId = await currentUser.GetUserIdAsync(ct);
                 User user = await database.Users
                     .Include(user => user.Leagues)
-                    .SingleAsync(user => user.Id == authenticatedUserId, cancellationToken);
+                    .SingleAsync(user => user.Id == authenticatedUserId, ct);
 
                 ESPNAPIClient client = espnClientBuilder.Build(request.LeagueCredentials);
                 await client.ValidateCredentialsAsync();
@@ -42,7 +42,7 @@ namespace FantasyHOF.Application.Mutations
                 };
 
                 database.LeagueImports.Add(importTracker);
-                await database.SaveChangesAsync(cancellationToken);
+                await database.SaveChangesAsync(ct);
 
                 string jobId = jobClient.Enqueue<ILeagueImportJob>(
                     job => job.ExecuteAsync(importTracker.Id, request.LeagueCredentials, JobCancellationToken.Null));

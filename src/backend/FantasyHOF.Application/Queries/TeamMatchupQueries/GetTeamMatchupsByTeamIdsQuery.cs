@@ -11,12 +11,12 @@ namespace FantasyHOF.Application.Queries.TeamMatchupQueries
         public sealed class GetTeamMatchupsByTeamIdsQueryHandler(FantasyHOFDBContext database)
             : IRequestHandler<GetTeamMatchupsByTeamIdsQuery, IEnumerable<TeamMatchup>>
         {
-            public async Task<IEnumerable<TeamMatchup>> Handle(GetTeamMatchupsByTeamIdsQuery request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<TeamMatchup>> Handle(GetTeamMatchupsByTeamIdsQuery request, CancellationToken ct)
             {
                 return await database.TeamMatchups
                     .AsNoTracking()
                     .Where(matchup => request.TeamIds.Contains(matchup.TeamId))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

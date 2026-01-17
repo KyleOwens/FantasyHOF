@@ -10,9 +10,9 @@ namespace FantasyHOF.Application.Queries.TeamMatchupQueries
         public class GetTeamMatchupByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetTeamMatchupByIdQuery, TeamMatchup?>
         {
-            public async Task<TeamMatchup?> Handle(GetTeamMatchupByIdQuery request, CancellationToken cancellationToken)
+            public async Task<TeamMatchup?> Handle(GetTeamMatchupByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetTeamMatchupsByIdsQuery([request.TeamMatchupId]), cancellationToken))
+                return (await mediator.Send(new GetTeamMatchupsByIdsQuery([request.TeamMatchupId]), ct))
                     .FirstOrDefault();
             }
         }

@@ -11,12 +11,12 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonScheduleSettingsQueries
         public sealed class GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQueryHandler(FantasyHOFDBContext database)
             : IRequestHandler<GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery, IEnumerable<LeagueSeasonScheduleSettings>>
         {
-            public async Task<IEnumerable<LeagueSeasonScheduleSettings>> Handle(GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery request, CancellationToken cancellationToken)
+            public async Task<IEnumerable<LeagueSeasonScheduleSettings>> Handle(GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery request, CancellationToken ct)
             {
                 return await database.LeagueSeasonScheduleSettings
                     .AsNoTracking()
                     .Where(settings => request.LeagueSeasonIds.Contains(settings.LeagueSeasonId))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

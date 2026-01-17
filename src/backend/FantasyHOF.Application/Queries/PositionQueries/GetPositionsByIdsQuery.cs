@@ -14,12 +14,12 @@ namespace FantasyHOF.Application.Queries.PositionQueries
         {
             public async Task<IEnumerable<Position>> Handle(
                 GetPositionsByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await database.Positions
                     .AsNoTracking()
                     .Where(position => request.PositionIds.Contains(position.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

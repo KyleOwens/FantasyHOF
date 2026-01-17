@@ -13,9 +13,9 @@ namespace FantasyHOF.Application.Queries.MatchupOutcomeQueries
         {
             private readonly IMediator _mediator = mediator;
 
-            public async Task<MatchupOutcome?> Handle(GetMatchupOutcomeByIdQuery request, CancellationToken cancellationToken)
+            public async Task<MatchupOutcome?> Handle(GetMatchupOutcomeByIdQuery request, CancellationToken ct)
             {
-                return (await _mediator.Send(new GetMatchupOutcomesByIdsQuery([request.MatchupOutcomeId]), cancellationToken))
+                return (await _mediator.Send(new GetMatchupOutcomesByIdsQuery([request.MatchupOutcomeId]), ct))
                     .FirstOrDefault();
             }
         }

@@ -14,12 +14,12 @@ namespace FantasyHOF.Application.Queries.LeagueImportStatusQueries
         {
             public async Task<IEnumerable<LeagueImportStatus>> Handle(
                 GetLeagueImportStatusesByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await database.LeagueImportStatuses
                     .AsNoTracking()
                     .Where(status => request.LeagueImportStatusIds.Contains(status.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

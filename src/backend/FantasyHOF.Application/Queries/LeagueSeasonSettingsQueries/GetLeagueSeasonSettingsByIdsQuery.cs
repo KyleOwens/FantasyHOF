@@ -13,12 +13,12 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonSettingsQueries
         {
             public async Task<IEnumerable<LeagueSeasonSettings>> Handle(
                 GetLeagueSeasonSettingsByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await database.LeagueSeasonSettings
                     .AsNoTracking()
                     .Where(settings => request.LeagueSeasonSettingsIds.Contains(settings.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

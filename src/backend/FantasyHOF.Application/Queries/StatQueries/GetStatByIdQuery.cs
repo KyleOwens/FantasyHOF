@@ -10,9 +10,9 @@ namespace FantasyHOF.Application.Queries.StatQueries
         public class GetStatByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetStatByIdQuery, Stat?>
         {
-            public async Task<Stat?> Handle(GetStatByIdQuery request, CancellationToken cancellationToken)
+            public async Task<Stat?> Handle(GetStatByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetStatsByIdsQuery([request.StatId]), cancellationToken))
+                return (await mediator.Send(new GetStatsByIdsQuery([request.StatId]), ct))
                     .FirstOrDefault();
             }
         }

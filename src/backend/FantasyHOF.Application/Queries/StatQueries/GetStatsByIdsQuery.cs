@@ -14,12 +14,12 @@ namespace FantasyHOF.Application.Queries.StatQueries
         {
             public async Task<IEnumerable<Stat>> Handle(
                 GetStatsByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await database.Stats
                     .AsNoTracking()
                     .Where(stat => request.StatIds.Contains(stat.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

@@ -13,7 +13,7 @@ namespace FantasyHOF.Application.Mutations
         {
             private readonly FantasyHOFDBContext _context = database;
 
-            public async Task<User> Handle(GetOrCreateUserByClerkIdCommand request, CancellationToken cancellationToken)
+            public async Task<User> Handle(GetOrCreateUserByClerkIdCommand request, CancellationToken ct)
             {
                 User? existingUser = await _context.Users
                     .SingleOrDefaultAsync(user => user.ClerkId == request.ClerkUserId);
@@ -26,12 +26,12 @@ namespace FantasyHOF.Application.Mutations
 
                 try
                 {
-                    await _context.SaveChangesAsync(cancellationToken);
+                    await _context.SaveChangesAsync(ct);
                 }
                 catch (DbUpdateException)
                 {
                     user = await _context.Users
-                        .SingleAsync(user => user.ClerkId == request.ClerkUserId, cancellationToken);
+                        .SingleAsync(user => user.ClerkId == request.ClerkUserId, ct);
                 }
 
                 return user;

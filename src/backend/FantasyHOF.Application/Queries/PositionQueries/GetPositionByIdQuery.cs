@@ -11,9 +11,9 @@ namespace FantasyHOF.Application.Queries.PositionQueries
         public class GetPositionByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetPositionByIdQuery, Position?>
         {
-            public async Task<Position?> Handle(GetPositionByIdQuery request, CancellationToken cancellationToken)
+            public async Task<Position?> Handle(GetPositionByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetPositionsByIdsQuery([request.PositionId]), cancellationToken))
+                return (await mediator.Send(new GetPositionsByIdsQuery([request.PositionId]), ct))
                     .FirstOrDefault();
             }
         }

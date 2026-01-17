@@ -9,9 +9,9 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonSettingsQueries
         public class GetLeagueSeasonSettingsByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetLeagueSeasonSettingsByIdQuery, LeagueSeasonSettings?>
         {
-            public async Task<LeagueSeasonSettings?> Handle(GetLeagueSeasonSettingsByIdQuery request, CancellationToken cancellationToken)
+            public async Task<LeagueSeasonSettings?> Handle(GetLeagueSeasonSettingsByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetLeagueSeasonSettingsByIdsQuery([request.LeagueSeasonSettingsId]), cancellationToken))
+                return (await mediator.Send(new GetLeagueSeasonSettingsByIdsQuery([request.LeagueSeasonSettingsId]), ct))
                     .FirstOrDefault();
             }
         }

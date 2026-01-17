@@ -12,7 +12,7 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
 {
     public interface ILeagueImportJob
     {
-        Task ExecuteAsync(int pendingLeagueId, ESPNLeagueCredentials credentials, IJobCancellationToken cancellationToken);
+        Task ExecuteAsync(int pendingLeagueId, ESPNLeagueCredentials credentials, IJobCancellationToken ct);
     }
 
     public class LeagueImportJob(
@@ -23,28 +23,28 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
         [JobDisplayName("Import ESPN League {1}")]
         public async Task ExecuteAsync(int pendingLeagueId, ESPNLeagueCredentials credentials, IJobCancellationToken jobToken)
         {
-            CancellationToken cancellationToken = jobToken.ShutdownToken;
+            CancellationToken ct = jobToken.ShutdownToken;
 
             LeagueImport? import = await database.LeagueImports
                 .Include(x => x.User)
                     .ThenInclude(x => x.Leagues)
-                .SingleAsync(x => x.Id == pendingLeagueId, cancellationToken);
+                .SingleAsync(x => x.Id == pendingLeagueId, ct);
 
             try
             {
-                await eventSender.StartImport(import, cancellationToken);
-                League newLeague = await mediator.Send(new GetESPNLeagueQuery(credentials, import), cancellationToken);
+                await eventSender.StartImport(import, ct);
+                League newLeague = await mediator.Send(new GetESPNLeagueQuery(credentials, import), ct);
 
-                await eventSender.StartSaving(import, cancellationToken);
+                await eventSender.StartSaving(import, ct);
                 import.User.RemoveLeagueIfExists(FantasyProviderId.ESPN, credentials.LeagueId);
                 import.User.AddLeague(newLeague);
-                await database.SaveChangesAsync(cancellationToken);
+                await database.SaveChangesAsync(ct);
 
-                await eventSender.Complete(import, newLeague.Id, cancellationToken);
+                await eventSender.Complete(import, newLeague.Id, ct);
             }
             catch
             {
-                await eventSender.Error(import, cancellationToken);
+                await eventSender.Error(import, ct);
             }
         }
     }

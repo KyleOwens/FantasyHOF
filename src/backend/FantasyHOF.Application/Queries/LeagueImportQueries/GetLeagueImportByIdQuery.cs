@@ -11,10 +11,10 @@ namespace FantasyHOF.Application.Queries.LeagueImportQueries
         public class GetLeagueImportByIdQueryHandler(FantasyHOFDBContext database)
             : IRequestHandler<GetLeagueImportByIdQuery, LeagueImport?>
         {
-            public async Task<LeagueImport?> Handle(GetLeagueImportByIdQuery request, CancellationToken cancellationToken)
+            public async Task<LeagueImport?> Handle(GetLeagueImportByIdQuery request, CancellationToken ct)
             {
                 return await database.LeagueImports
-                    .SingleAsync(x => x.Id == request.LeagueImportId, cancellationToken);
+                    .SingleAsync(x => x.Id == request.LeagueImportId, ct);
             }
         }
     }

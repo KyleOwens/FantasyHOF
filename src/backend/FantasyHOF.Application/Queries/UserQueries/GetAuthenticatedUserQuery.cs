@@ -10,11 +10,11 @@ namespace FantasyHOF.Application.Queries.UserQueries
     {
         public sealed class GetAuthenticatedUserQueryHandler(ICurrentUserService currentUser, IMediator mediator) : IRequestHandler<GetAuthenticatedUserQuery, User>
         {
-            public async Task<User> Handle(GetAuthenticatedUserQuery request, CancellationToken cancellationToken)
+            public async Task<User> Handle(GetAuthenticatedUserQuery request, CancellationToken ct)
             {
                 if (!currentUser.IsAuthenticated) throw new AuthenticationException("No authenticated user detected");
 
-                return await mediator.Send(new GetOrCreateUserByClerkIdCommand(currentUser.ClerkUserId), cancellationToken);
+                return await mediator.Send(new GetOrCreateUserByClerkIdCommand(currentUser.ClerkUserId), ct);
             }
         }
     }

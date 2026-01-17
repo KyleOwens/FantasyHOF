@@ -12,28 +12,28 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
         public sealed class GetLeagueRecordSummaryQueryHandler(FantasyHOFDBContext database)
             : IRequestHandler<GetLeagueRecordSummaryQuery, LeagueRecordSummary?>
         {
-            public async Task<LeagueRecordSummary?> Handle(GetLeagueRecordSummaryQuery request, CancellationToken cancellationToken)
+            public async Task<LeagueRecordSummary?> Handle(GetLeagueRecordSummaryQuery request, CancellationToken ct)
             {
                 List<LeagueMemberAggregatedStats> allTimeStatsByMember = await database.LeagueMemberAggregatedStats
                    .AsNoTracking()
                    .Where(x => x.LeagueId == request.LeagueId)
                    .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
-                   .ToListAsync(cancellationToken);
+                   .ToListAsync(ct);
 
                 List<LeagueSeasonMemberAggregatedStats> statsByMemberAndSeason = await database.LeagueSeasonMemberAggregatedStats
                     .AsNoTracking()
                     .Where(x => x.LeagueId == request.LeagueId)
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
 
                 List<WeeklyAggregationData> weeklyAggregationData = await database.WeeklyAggregationData
                     .AsNoTracking()
                     .Where(x => x.LeagueId == request.LeagueId)
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
 
                 List<PlayerAggregationData> playerAggregationData = await database.PlayerAggregationData
                     .AsNoTracking()
@@ -41,7 +41,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
                     .Include(x => x.Player)
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
 
                 if (allTimeStatsByMember.Count == 0) return null;
 

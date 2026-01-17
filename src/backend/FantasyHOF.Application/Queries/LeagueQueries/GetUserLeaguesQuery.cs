@@ -12,14 +12,14 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
         public sealed class GetUserLeaguesQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser)
             : IRequestHandler<GetUserLeaguesQuery, IQueryable<League>>
         {
-            public async Task<IQueryable<League>> Handle(GetUserLeaguesQuery request, CancellationToken cancellationToken)
+            public async Task<IQueryable<League>> Handle(GetUserLeaguesQuery request, CancellationToken ct)
             {
                 if (!currentUser.IsAuthenticated) throw new UnauthorizedAccessException();
 
                 Guid userId = await currentUser
-                    .GetUserIdAsync(cancellationToken);
+                    .GetUserIdAsync(ct);
                 User user = await database.Users
-                    .SingleAsync(x => x.ClerkId == currentUser.ClerkUserId, cancellationToken);
+                    .SingleAsync(x => x.ClerkId == currentUser.ClerkUserId, ct);
 
                 return database.Leagues
                     .Where(x => x.UserId == user.Id)

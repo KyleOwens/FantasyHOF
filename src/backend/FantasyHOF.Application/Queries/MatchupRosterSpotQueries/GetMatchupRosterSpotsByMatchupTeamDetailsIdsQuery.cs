@@ -11,12 +11,12 @@ namespace FantasyHOF.Application.Queries.MatchupRosterSpotQueries
     public sealed class GetMatchupRosterSpotsByMatchupTeamDetailsIdsQueryHandler(FantasyHOFDBContext database)
         : IRequestHandler<GetMatchupRosterSpotsByMatchupTeamDetailsIdsQuery, IEnumerable<MatchupRosterSpot>>
     {
-        public async Task<IEnumerable<MatchupRosterSpot>> Handle(GetMatchupRosterSpotsByMatchupTeamDetailsIdsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<MatchupRosterSpot>> Handle(GetMatchupRosterSpotsByMatchupTeamDetailsIdsQuery request, CancellationToken ct)
         {
             return await database.MatchupRosterSpots
                 .AsNoTracking()
                 .Where(rosterSpot => request.MatchupTeamDetailsIds.Contains(rosterSpot.MatchupTeamDetailsId))
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
         }
     }
 }

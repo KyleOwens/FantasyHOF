@@ -15,7 +15,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
         {
             public async Task<IEnumerable<LeagueSeasonMemberTeam>> Handle(
                 GetLeagueSeasonMemberTeamsByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await database.LeagueSeasonMemberTeams
                     .AsNoTracking()
@@ -23,7 +23,7 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
                         .Any(id => id.LeagueSeasonId == memberTeam.LeagueSeasonId &&
                                     id.MemberId == memberTeam.MemberId &&
                                     id.TeamId == memberTeam.TeamId))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

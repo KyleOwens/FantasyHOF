@@ -11,12 +11,12 @@ namespace FantasyHOF.Application.Queries.AccumulatedStatQueries
     public sealed class GetAccumulatedStatsByMatchupRosterSpotIdsQueryHandler(FantasyHOFDBContext database)
         : IRequestHandler<GetAccumulatedStatsByMatchupRosterSpotIdsQuery, IEnumerable<AccumulatedStat>>
     {
-        public async Task<IEnumerable<AccumulatedStat>> Handle(GetAccumulatedStatsByMatchupRosterSpotIdsQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<AccumulatedStat>> Handle(GetAccumulatedStatsByMatchupRosterSpotIdsQuery request, CancellationToken ct)
         {
             return await database.AccumulatedStats
                 .AsNoTracking()
                 .Where(item => request.MatchupRosterSpotIds.Contains(item.MatchupRosterSpotId))
-                .ToListAsync(cancellationToken);
+                .ToListAsync(ct);
         }
     }
 }

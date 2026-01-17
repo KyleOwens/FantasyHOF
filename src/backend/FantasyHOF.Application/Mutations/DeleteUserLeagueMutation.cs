@@ -14,11 +14,11 @@ namespace FantasyHOF.Application.Mutations
         public sealed class DeleteUserLeagueMutationHandler(FantasyHOFDBContext database, ICurrentUserService currentUser)
             : IRequestHandler<DeleteUserLeagueMutation, DeleteUserLeagueMutationPayload>
         {
-            public async Task<DeleteUserLeagueMutationPayload> Handle(DeleteUserLeagueMutation request, CancellationToken cancellationToken)
+            public async Task<DeleteUserLeagueMutationPayload> Handle(DeleteUserLeagueMutation request, CancellationToken ct)
             {
                 if (!currentUser.IsAuthenticated) throw new ForbiddenException();
 
-                Guid userId = await currentUser.GetUserIdAsync(cancellationToken);
+                Guid userId = await currentUser.GetUserIdAsync(ct);
 
                 User user = await database.Users
                     .Include(x => x.Leagues)
@@ -27,7 +27,7 @@ namespace FantasyHOF.Application.Mutations
                 bool success = user.RemoveLeagueIfExists(request.LeagueId);
                 if (!success) throw new NotFoundException(nameof(League), request.LeagueId);
 
-                await database.SaveChangesAsync(cancellationToken);
+                await database.SaveChangesAsync(ct);
 
                 return new(request.LeagueId);
             }

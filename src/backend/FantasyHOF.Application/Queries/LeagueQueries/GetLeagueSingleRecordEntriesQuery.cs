@@ -14,7 +14,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
         public sealed class GetLeagueSingleRecordEntriesQueryHandler(FantasyHOFDBContext database)
             : IRequestHandler<GetLeagueSingleRecordEntriesQuery, IQueryable<RecordEntry>>
         {
-            public Task<IQueryable<RecordEntry>> Handle(GetLeagueSingleRecordEntriesQuery request, CancellationToken cancellationToken)
+            public Task<IQueryable<RecordEntry>> Handle(GetLeagueSingleRecordEntriesQuery request, CancellationToken ct)
             {
                 RecordCategoryId recordCategory = request.RecordType.GetMetadata().Category;
 

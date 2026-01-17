@@ -15,12 +15,12 @@ namespace FantasyHOF.Application.Queries.FantasyMemberQueries
 
             public async Task<IEnumerable<FantasyMember>> Handle(
                 GetFantasyMembersByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await _context.FantasyMembers
                     .AsNoTracking()
                     .Where(member => request.FantasyMemberIds.Contains(member.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

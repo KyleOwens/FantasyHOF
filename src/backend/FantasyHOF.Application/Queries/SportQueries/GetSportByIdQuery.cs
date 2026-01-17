@@ -11,9 +11,9 @@ namespace FantasyHOF.Application.Queries.SportQueries
         public class GetSportByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetSportByIdQuery, Sport?>
         {
-            public async Task<Sport?> Handle(GetSportByIdQuery request, CancellationToken cancellationToken)
+            public async Task<Sport?> Handle(GetSportByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetSportsByIdsQuery([request.SportId]), cancellationToken))
+                return (await mediator.Send(new GetSportsByIdsQuery([request.SportId]), ct))
                     .FirstOrDefault();
             }
         }

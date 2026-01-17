@@ -9,9 +9,9 @@ namespace FantasyHOF.Application.Queries.AccumulatedStatQueries
         public class GetAccumulatedStatByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetAccumulatedStatByIdQuery, AccumulatedStat?>
         {
-            public async Task<AccumulatedStat?> Handle(GetAccumulatedStatByIdQuery request, CancellationToken cancellationToken)
+            public async Task<AccumulatedStat?> Handle(GetAccumulatedStatByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetAccumulatedStatsByIdsQuery([request.AccumulatedStatId]), cancellationToken))
+                return (await mediator.Send(new GetAccumulatedStatsByIdsQuery([request.AccumulatedStatId]), ct))
                     .FirstOrDefault();
             }
         }

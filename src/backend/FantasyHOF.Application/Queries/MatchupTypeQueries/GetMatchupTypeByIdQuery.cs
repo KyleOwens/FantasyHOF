@@ -11,9 +11,9 @@ namespace FantasyHOF.Application.Queries.MatchupTypeQueries
         public class GetMatchupTypeByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetMatchupTypeByIdQuery, MatchupType?>
         {
-            public async Task<MatchupType?> Handle(GetMatchupTypeByIdQuery request, CancellationToken cancellationToken)
+            public async Task<MatchupType?> Handle(GetMatchupTypeByIdQuery request, CancellationToken ct)
             {
-                return (await mediator.Send(new GetMatchupTypesByIdsQuery([request.MatchupTypeId]), cancellationToken))
+                return (await mediator.Send(new GetMatchupTypesByIdsQuery([request.MatchupTypeId]), ct))
                     .FirstOrDefault();
             }
         }

@@ -14,12 +14,12 @@ namespace FantasyHOF.Application.Queries.FantasyProviderQueries
         {
             public async Task<IEnumerable<FantasyProvider>> Handle(
                 GetFantasyProvidersByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await database.FantasyProviders
                     .AsNoTracking()
                     .Where(provider => request.FantasyProviderIds.Contains(provider.Id))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }

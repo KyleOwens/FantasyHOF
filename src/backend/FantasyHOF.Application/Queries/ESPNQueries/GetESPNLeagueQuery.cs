@@ -35,24 +35,24 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
         {
             private ESPNImportContext _importContext = null!;
 
-            public async Task<League> Handle(GetESPNLeagueQuery request, CancellationToken cancellationToken)
+            public async Task<League> Handle(GetESPNLeagueQuery request, CancellationToken ct)
             {
                 ESPNAPIClient espnClient = espnClientBuilder.Build(request.Credentials);
 
-                await eventSender.StartLoadingData(request.Import, cancellationToken);
+                await eventSender.StartLoadingData(request.Import, ct);
                 IEnumerable<ESPNSeasonalLeagueData> memberDetails = await espnClient.LoadSeasonalLeagueData();
                 IEnumerable<ESPNWeeklyLeagueData> matchupDetails = await espnClient.LoadWeeklyLeagueData();
 
-                await PrepareImportContextAsync(memberDetails, matchupDetails, request.Import, cancellationToken);
+                await PrepareImportContextAsync(memberDetails, matchupDetails, request.Import, ct);
 
                 League league = CreateLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
 
                 return league;
             }
 
-            private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, LeagueImport import, CancellationToken cancellationToken)
+            private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, LeagueImport import, CancellationToken ct)
             {
-                await eventSender.StartFormattingData(import, cancellationToken);
+                await eventSender.StartFormattingData(import, ct);
 
                 IEnumerable<ESPNFantasyMember> allEspnMembers = espnMemberDetails
                     .SelectMany(x => x.Members)
@@ -63,7 +63,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 Dictionary<string, FantasyMember> memberLookup = await database.FantasyMembers
                     .Where(member => member.FantasyProviderId == FantasyProviderId.ESPN && allEspnMemberIds.Contains(member.ProviderMemberId))
-                    .ToDictionaryAsync(member => member.ProviderMemberId, cancellationToken);
+                    .ToDictionaryAsync(member => member.ProviderMemberId, ct);
 
                 foreach (ESPNFantasyMember espnMember in allEspnMembers)
                 {
@@ -83,7 +83,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 Dictionary<int, Player> playerLookup = await database.Players
                     .Where(player => player.ProviderId == FantasyProviderId.ESPN && allEspnPlayerIds.Contains(player.ProviderPlayerId))
-                    .ToDictionaryAsync(player => player.ProviderPlayerId, cancellationToken);
+                    .ToDictionaryAsync(player => player.ProviderPlayerId, ct);
 
                 _importContext = new(memberLookup, playerLookup);
             }

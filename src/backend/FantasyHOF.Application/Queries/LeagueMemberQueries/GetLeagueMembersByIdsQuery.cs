@@ -14,13 +14,13 @@ namespace FantasyHOF.Application.Queries.LeagueMemberQueries
         {
             public async Task<IEnumerable<LeagueMember>> Handle(
                 GetLeagueMembersByIdsQuery request,
-                CancellationToken cancellationToken)
+                CancellationToken ct)
             {
                 return await database.LeagueMembers
                     .AsNoTracking()
                     .Where(leagueMember => request.LeagueMemberIds
                         .Any(id => id.LeagueId == leagueMember.LeagueId && id.MemberId == leagueMember.MemberId))
-                    .ToListAsync(cancellationToken);
+                    .ToListAsync(ct);
             }
         }
     }
