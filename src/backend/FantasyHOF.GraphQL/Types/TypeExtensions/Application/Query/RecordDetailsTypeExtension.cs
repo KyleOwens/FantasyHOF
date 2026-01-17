@@ -10,17 +10,21 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Application.Query
     {
         [UsePaging]
         public async Task<IQueryable<RecordEntry>> GetEntriesAsync(
-            [Parent] RecordDetails recordDetails) =>
-             recordDetails.Entries;
-
-        public static async Task<RecordDetails?> GetRecordDetailsAsync(
-            string id,
+            [Parent] RecordDetails recordDetails,
             IMediator mediator,
             CancellationToken cancellationToken)
         {
-            var idParts = RecordDetails.ParseId(id);
+            return await mediator.Send(
+                new GetLeagueSingleRecordEntriesQuery(recordDetails.LeagueId, recordDetails.Metadata.Type)
+                , cancellationToken
+            );
+        }
 
-            return await mediator.Send(new GetLeagueSingleRecordDetailsQuery(idParts.LeagueId, idParts.RecordTypeId), cancellationToken);
+        public static RecordDetails GetRecordDetails(string id)
+        {
+            var (RecordTypeId, LeagueId) = RecordDetails.ParseId(id);
+
+            return new RecordDetails(LeagueId, RecordTypeId);
         }
     }
 }

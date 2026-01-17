@@ -1,7 +1,7 @@
 ﻿using FantasyHOF.Infrastructure.Enums;
 using FantasyHOF.Infrastructure.Exceptions;
 
-namespace FantasyHOF.Application.Exceptions
+namespace FantasyHOF.Application.Types.Exceptions
 {
     public class NotFoundException : CodedException
     {

@@ -1,5 +1,5 @@
-﻿using FantasyHOF.Application.Mappers;
-using FantasyHOF.Application.Services;
+﻿using FantasyHOF.Application.Services.Events;
+using FantasyHOF.Application.Services.Mappers;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;

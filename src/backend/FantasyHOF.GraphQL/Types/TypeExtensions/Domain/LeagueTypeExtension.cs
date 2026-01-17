@@ -54,13 +54,11 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
             return await mediator.Send(new GetLeagueRecordSummaryQuery(league.Id), cancellationToken);
         }
 
-        public async Task<RecordDetails> GetRecordDetailsAsync(
+        public RecordDetails GetRecordDetails(
             [Parent] League league,
-            RecordTypeId recordType,
-            IMediator mediator,
-            CancellationToken cancellationToken)
+            RecordTypeId recordType)
         {
-            return await mediator.Send(new GetLeagueSingleRecordDetailsQuery(league.Id, recordType), cancellationToken);
+            return new RecordDetails(league.Id, recordType);
         }
 
         public static async Task<League?> GetLeagueAsync(

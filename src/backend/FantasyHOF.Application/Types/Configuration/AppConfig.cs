@@ -1,4 +1,4 @@
-﻿namespace FantasyHOF.Application.Configuration
+﻿namespace FantasyHOF.Application.Types.Configuration
 {
     public sealed class AppConfig
     {

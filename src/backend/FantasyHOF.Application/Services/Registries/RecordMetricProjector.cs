@@ -2,7 +2,7 @@
 using FantasyHOF.Application.Types.Queries.Records;
 using System.Linq.Expressions;
 
-namespace FantasyHOF.Application.Registries
+namespace FantasyHOF.Application.Services.Registries
 {
     public class RecordMetricProjector<TEntity>(RecordTypeId recordType)
     {

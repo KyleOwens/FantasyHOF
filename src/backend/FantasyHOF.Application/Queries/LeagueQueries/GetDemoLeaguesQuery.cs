@@ -1,4 +1,4 @@
-﻿using FantasyHOF.Application.Configuration;
+﻿using FantasyHOF.Application.Types.Configuration;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
 using MediatR;

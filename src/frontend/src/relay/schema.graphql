@@ -149,7 +149,7 @@ type League implements Node {
   createdAt: DateTime!
   updatedAt: DateTime!
   recordSummary: LeagueRecordSummary @cost(weight: "10")
-  recordDetails(recordType: RecordTypeId!): RecordDetails! @cost(weight: "10")
+  recordDetails(recordType: RecordTypeId!): RecordDetails!
 }
 
 type LeagueImport implements Node {
@@ -456,6 +456,7 @@ type RatioRecordMetric implements RecordMetric {
 
 type RecordDetails implements Node {
   id: ID!
+  leagueId: Int!
   metadata: RecordMetadata!
   entries("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): EntriesConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
 }

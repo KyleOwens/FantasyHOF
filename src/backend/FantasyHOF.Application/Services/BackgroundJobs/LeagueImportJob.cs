@@ -1,5 +1,5 @@
 ﻿using FantasyHOF.Application.Queries.ESPNQueries;
-using FantasyHOF.Application.Services;
+using FantasyHOF.Application.Services.Events;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;
@@ -8,7 +8,7 @@ using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace FantasyHOF.Application.BackgroundJobs
+namespace FantasyHOF.Application.Services.BackgroundJobs
 {
     public interface ILeagueImportJob
     {

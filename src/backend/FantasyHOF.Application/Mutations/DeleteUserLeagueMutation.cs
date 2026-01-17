@@ -1,5 +1,5 @@
-﻿using FantasyHOF.Application.Authentication;
-using FantasyHOF.Application.Exceptions;
+﻿using FantasyHOF.Application.Services.Authentication;
+using FantasyHOF.Application.Types.Exceptions;
 using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FantasyHOF.Application.Types.Queries.Records;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace FantasyHOF.Application.Enums

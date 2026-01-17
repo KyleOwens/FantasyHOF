@@ -1,5 +1,5 @@
-﻿using FantasyHOF.Application.Exceptions;
-using FantasyHOF.Application.Mutations;
+﻿using FantasyHOF.Application.Mutations;
+using FantasyHOF.Application.Types.Exceptions;
 using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.ESPN.Errors;

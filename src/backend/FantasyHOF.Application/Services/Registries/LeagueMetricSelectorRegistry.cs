@@ -2,7 +2,7 @@
 using FantasyHOF.Domain.Entities.Views;
 using System.Linq.Expressions;
 
-namespace FantasyHOF.Application.Registries
+namespace FantasyHOF.Application.Services.Registries
 {
     public static class LeagueMetricSelectorRegistry
     {

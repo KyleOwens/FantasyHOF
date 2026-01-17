@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 
-namespace FantasyHOF.Application.Registries
+namespace FantasyHOF.Application.Services.Registries
 {
     public static class MetricSelectorRegistry<TEntity>
     {

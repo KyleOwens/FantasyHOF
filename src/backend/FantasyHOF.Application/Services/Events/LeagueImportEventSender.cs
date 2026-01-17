@@ -3,7 +3,7 @@ using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;
 using HotChocolate.Subscriptions;
 
-namespace FantasyHOF.Application.Services
+namespace FantasyHOF.Application.Services.Events
 {
     public interface ILeagueImportEventSender
     {

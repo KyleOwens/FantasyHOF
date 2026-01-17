@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace FantasyHOF.Application.Authentication
+namespace FantasyHOF.Application.Services.Authentication
 {
     public interface ICurrentUserService
     {

@@ -1,5 +1,5 @@
 ﻿using FantasyHOF.Application.Enums;
-using FantasyHOF.Application.Registries;
+using FantasyHOF.Application.Services.Registries;
 using FantasyHOF.Domain.Entities.Views;
 
 namespace FantasyHOF.Application.Types.Queries.Records

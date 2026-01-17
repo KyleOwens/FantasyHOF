@@ -1,8 +1,8 @@
-﻿using FantasyHOF.Application.BackgroundJobs;
-using FantasyHOF.Application.Configuration;
-using FantasyHOF.Application.Mappers;
-using FantasyHOF.Application.Registries;
-using FantasyHOF.Application.Services;
+﻿using FantasyHOF.Application.Services.BackgroundJobs;
+using FantasyHOF.Application.Services.Events;
+using FantasyHOF.Application.Services.Mappers;
+using FantasyHOF.Application.Services.Registries;
+using FantasyHOF.Application.Types.Configuration;
 using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.ESPN;
 using Hangfire;

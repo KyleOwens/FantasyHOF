@@ -1,5 +1,5 @@
-﻿using FantasyHOF.Application.Authentication;
-using FantasyHOF.Application.BackgroundJobs;
+﻿using FantasyHOF.Application.Services.Authentication;
+using FantasyHOF.Application.Services.BackgroundJobs;
 using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
@@ -14,7 +14,12 @@ namespace FantasyHOF.Application.Mutations
 {
     public sealed record AddESPNLeagueForUserCommand(ESPNLeagueCredentials LeagueCredentials) : IRequest<AddLeagueMutationPayload>
     {
-        public sealed class AddESPNLeagueForUserCommandHandler(ICurrentUserService currentUser, FantasyHOFDBContext database, IBackgroundJobClient jobClient, IESPNAPIClientBuilder espnClientBuilder) : IRequestHandler<AddESPNLeagueForUserCommand, AddLeagueMutationPayload>
+        public sealed class AddESPNLeagueForUserCommandHandler(
+            FantasyHOFDBContext database,
+            ICurrentUserService currentUser,
+            IBackgroundJobClient jobClient,
+            IESPNAPIClientBuilder espnClientBuilder
+        ) : IRequestHandler<AddESPNLeagueForUserCommand, AddLeagueMutationPayload>
         {
             public async Task<AddLeagueMutationPayload> Handle(AddESPNLeagueForUserCommand request, CancellationToken cancellationToken)
             {
@@ -36,9 +41,10 @@ namespace FantasyHOF.Application.Mutations
                 };
 
                 database.LeagueImports.Add(importTracker);
-                await database.SaveChangesAsync();
+                await database.SaveChangesAsync(cancellationToken);
 
-                string jobId = jobClient.Enqueue<ILeagueImportJob>(job => job.ExecuteAsync(importTracker.Id, request.LeagueCredentials, JobCancellationToken.Null));
+                string jobId = jobClient.Enqueue<ILeagueImportJob>(
+                    job => job.ExecuteAsync(importTracker.Id, request.LeagueCredentials, JobCancellationToken.Null));
 
                 return new(jobId, importTracker);
             }

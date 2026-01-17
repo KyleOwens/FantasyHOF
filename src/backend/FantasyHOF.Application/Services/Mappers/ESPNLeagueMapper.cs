@@ -4,7 +4,7 @@ using FantasyHOF.ESPN.Constants;
 using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
 
-namespace FantasyHOF.Application.Mappers
+namespace FantasyHOF.Application.Services.Mappers
 {
     public interface IESPNLeagueMapper
     {
