@@ -9,19 +9,17 @@ namespace FantasyHOF.Application.Queries.FantasyProviderQueries
     public sealed record GetFantasyProvidersByIdsQuery(IEnumerable<FantasyProviderId> FantasyProviderIds)
         : IRequest<IEnumerable<FantasyProvider>>
     {
-        public sealed class GetFantasyProvidersByIdsQueryHandler(FantasyHOFDBContext context)
-                        : IRequestHandler<GetFantasyProvidersByIdsQuery, IEnumerable<FantasyProvider>>
+        public sealed class GetFantasyProvidersByIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetFantasyProvidersByIdsQuery, IEnumerable<FantasyProvider>>
         {
-            private readonly FantasyHOFDBContext _context = context;
-
             public async Task<IEnumerable<FantasyProvider>> Handle(
                 GetFantasyProvidersByIdsQuery request,
                 CancellationToken cancellationToken)
             {
-                return await _context.FantasyProviders
+                return await database.FantasyProviders
                     .AsNoTracking()
                     .Where(provider => request.FantasyProviderIds.Contains(provider.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
             }
         }
     }

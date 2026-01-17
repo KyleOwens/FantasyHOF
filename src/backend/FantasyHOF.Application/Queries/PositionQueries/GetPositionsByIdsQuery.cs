@@ -9,19 +9,17 @@ namespace FantasyHOF.Application.Queries.PositionQueries
     public sealed record GetPositionsByIdsQuery(IEnumerable<PositionId> PositionIds)
         : IRequest<IEnumerable<Position>>
     {
-        public sealed class GetPositionsByIdsQueryHandler(FantasyHOFDBContext context)
-                        : IRequestHandler<GetPositionsByIdsQuery, IEnumerable<Position>>
+        public sealed class GetPositionsByIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetPositionsByIdsQuery, IEnumerable<Position>>
         {
-            private readonly FantasyHOFDBContext _context = context;
-
             public async Task<IEnumerable<Position>> Handle(
                 GetPositionsByIdsQuery request,
                 CancellationToken cancellationToken)
             {
-                return await _context.Positions
+                return await database.Positions
                     .AsNoTracking()
                     .Where(position => request.PositionIds.Contains(position.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
             }
         }
     }

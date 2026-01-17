@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.UserQueries
 {
-    public record GetUserByIdQuery(Guid UserId) : IRequest<User?>
+    public record GetUserByIdQuery(Guid UserId)
+        : IRequest<User?>
     {
         public class GetUserByIdQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser)
             : IRequestHandler<GetUserByIdQuery, User?>
@@ -19,7 +20,8 @@ namespace FantasyHOF.Application.Queries.UserQueries
 
                 if (currentUserId != request.UserId) return null;
 
-                return await database.Users.SingleAsync(user => user.ClerkId == currentUser.ClerkUserId);
+                return await database.Users
+                    .SingleAsync(user => user.ClerkId == currentUser.ClerkUserId, cancellationToken);
             }
         }
     }

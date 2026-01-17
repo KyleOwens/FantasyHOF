@@ -3,7 +3,8 @@ using MediatR;
 
 namespace FantasyHOF.Application.Queries.FantasyMemberQueries
 {
-    public record GetFantasyMemberByIdQuery(int FantasyMemberId) : IRequest<FantasyMember?>
+    public record GetFantasyMemberByIdQuery(int FantasyMemberId)
+        : IRequest<FantasyMember?>
     {
         public class GetFantasyMemberByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetFantasyMemberByIdQuery, FantasyMember?>

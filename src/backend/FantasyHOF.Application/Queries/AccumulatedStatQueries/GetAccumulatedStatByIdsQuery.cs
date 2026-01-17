@@ -8,19 +8,17 @@ namespace FantasyHOF.Application.Queries.AccumulatedStatQueries
     public sealed record GetAccumulatedStatsByIdsQuery(IEnumerable<int> AccumulatedStatIds)
         : IRequest<IEnumerable<AccumulatedStat>>
     {
-        public sealed class GetAccumulatedStatsByIdsQueryHandler(FantasyHOFDBContext context)
+        public sealed class GetAccumulatedStatsByIdsQueryHandler(FantasyHOFDBContext database)
                         : IRequestHandler<GetAccumulatedStatsByIdsQuery, IEnumerable<AccumulatedStat>>
         {
-            private readonly FantasyHOFDBContext _context = context;
-
             public async Task<IEnumerable<AccumulatedStat>> Handle(
                 GetAccumulatedStatsByIdsQuery request,
                 CancellationToken cancellationToken)
             {
-                return await _context.AccumulatedStats
+                return await database.AccumulatedStats
                     .AsNoTracking()
                     .Where(stat => request.AccumulatedStatIds.Contains(stat.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
             }
         }
     }

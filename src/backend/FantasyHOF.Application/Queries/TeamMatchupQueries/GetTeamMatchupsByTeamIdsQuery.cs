@@ -5,20 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.TeamMatchupQueries
 {
-    public sealed record GetTeamMatchupsByTeamIdsQuery(IEnumerable<int> TeamIds) : IRequest<IEnumerable<TeamMatchup>>;
-
-    public sealed class GetTeamMatchupsByTeamIdsQueryHandler : IRequestHandler<GetTeamMatchupsByTeamIdsQuery, IEnumerable<TeamMatchup>>
+    public sealed record GetTeamMatchupsByTeamIdsQuery(IEnumerable<int> TeamIds)
+        : IRequest<IEnumerable<TeamMatchup>>
     {
-        private readonly FantasyHOFDBContext _context;
-
-        public GetTeamMatchupsByTeamIdsQueryHandler(FantasyHOFDBContext context) => _context = context;
-
-        public async Task<IEnumerable<TeamMatchup>> Handle(GetTeamMatchupsByTeamIdsQuery request, CancellationToken cancellationToken)
+        public sealed class GetTeamMatchupsByTeamIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetTeamMatchupsByTeamIdsQuery, IEnumerable<TeamMatchup>>
         {
-            return await _context.TeamMatchups
-                .AsNoTracking()
-                .Where(matchup => request.TeamIds.Contains(matchup.TeamId))
-                .ToListAsync();
+            public async Task<IEnumerable<TeamMatchup>> Handle(GetTeamMatchupsByTeamIdsQuery request, CancellationToken cancellationToken)
+            {
+                return await database.TeamMatchups
+                    .AsNoTracking()
+                    .Where(matchup => request.TeamIds.Contains(matchup.TeamId))
+                    .ToListAsync(cancellationToken);
+            }
         }
     }
 }

@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Mutations
 {
-    public record GetOrCreateUserByClerkIdCommand(string ClerkUserId) : IRequest<User>
+    public record GetOrCreateUserByClerkIdCommand(string ClerkUserId)
+        : IRequest<User>
     {
-        public class GetOrCreateUserByClerkIdCommandHandler(FantasyHOFDBContext context)
+        public class GetOrCreateUserByClerkIdCommandHandler(FantasyHOFDBContext database)
             : IRequestHandler<GetOrCreateUserByClerkIdCommand, User>
         {
-            private readonly FantasyHOFDBContext _context = context;
+            private readonly FantasyHOFDBContext _context = database;
 
             public async Task<User> Handle(GetOrCreateUserByClerkIdCommand request, CancellationToken cancellationToken)
             {

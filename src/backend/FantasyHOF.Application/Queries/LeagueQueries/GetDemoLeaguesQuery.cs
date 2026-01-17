@@ -7,17 +7,22 @@ using Microsoft.Extensions.Options;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
-    public sealed record GetDemoLeaguesQuery() : IRequest<IEnumerable<League>>
+    public sealed record GetDemoLeaguesQuery()
+        : IRequest<IEnumerable<League>>
     {
-        public sealed class GetDemoLeaguesQueryHandler(FantasyHOFDBContext database, IOptions<AppConfig> appConfig) : IRequestHandler<GetDemoLeaguesQuery, IEnumerable<League>>
+        public sealed class GetDemoLeaguesQueryHandler(FantasyHOFDBContext database, IOptions<AppConfig> appConfig)
+            : IRequestHandler<GetDemoLeaguesQuery, IEnumerable<League>>
         {
             public async Task<IEnumerable<League>> Handle(GetDemoLeaguesQuery request, CancellationToken cancellationToken)
             {
-                User adminUser = await database.Users.Where(x => x.ClerkId == appConfig.Value.AdminClerkUserId).SingleAsync();
+                User adminUser = await database.Users
+                    .Where(x => x.ClerkId == appConfig.Value.AdminClerkUserId)
+                    .SingleAsync(cancellationToken);
 
-                return database.Leagues
+                return await database.Leagues
                     .AsNoTracking()
-                    .Where(league => league.UserId == adminUser.Id);
+                    .Where(league => league.UserId == adminUser.Id)
+                    .ToListAsync(cancellationToken);
             }
         }
     }

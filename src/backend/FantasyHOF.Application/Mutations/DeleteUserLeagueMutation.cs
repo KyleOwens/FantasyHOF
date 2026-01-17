@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Mutations
 {
-    public sealed record DeleteUserLeagueMutation(int LeagueId) : IRequest<DeleteUserLeagueMutationPayload>
+    public sealed record DeleteUserLeagueMutation(int LeagueId)
+        : IRequest<DeleteUserLeagueMutationPayload>
     {
-        public sealed class DeleteUserLeagueMutationHandler(FantasyHOFDBContext database, ICurrentUserService currentUser) : IRequestHandler<DeleteUserLeagueMutation, DeleteUserLeagueMutationPayload>
+        public sealed class DeleteUserLeagueMutationHandler(FantasyHOFDBContext database, ICurrentUserService currentUser)
+            : IRequestHandler<DeleteUserLeagueMutation, DeleteUserLeagueMutationPayload>
         {
             public async Task<DeleteUserLeagueMutationPayload> Handle(DeleteUserLeagueMutation request, CancellationToken cancellationToken)
             {

@@ -8,18 +8,17 @@ namespace FantasyHOF.Application.Queries.MatchupTeamDetailsQueries
     public sealed record GetMatchupTeamDetailsByIdsQuery(IEnumerable<int> MatchupTeamDetailsIds)
         : IRequest<IEnumerable<MatchupTeamDetails>>
     {
-        public sealed class GetMatchupTeamDetailsByIdsQueryHandler(FantasyHOFDBContext context)
-                        : IRequestHandler<GetMatchupTeamDetailsByIdsQuery, IEnumerable<MatchupTeamDetails>>
+        public sealed class GetMatchupTeamDetailsByIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetMatchupTeamDetailsByIdsQuery, IEnumerable<MatchupTeamDetails>>
         {
-            private readonly FantasyHOFDBContext _context = context;
-
             public async Task<IEnumerable<MatchupTeamDetails>> Handle(
                 GetMatchupTeamDetailsByIdsQuery request,
                 CancellationToken cancellationToken)
             {
-                return _context.MatchupTeamDetails
+                return await database.MatchupTeamDetails
                     .AsNoTracking()
-                    .Where(item => request.MatchupTeamDetailsIds.Contains(item.Id));
+                    .Where(item => request.MatchupTeamDetailsIds.Contains(item.Id))
+                    .ToListAsync(cancellationToken);
             }
         }
     }

@@ -3,16 +3,15 @@ using MediatR;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonSettingsQueries
 {
-    public record GetLeagueSeasonSettingsByIdQuery(int LeagueSeasonSettingsId) : IRequest<LeagueSeasonSettings?>
+    public record GetLeagueSeasonSettingsByIdQuery(int LeagueSeasonSettingsId)
+        : IRequest<LeagueSeasonSettings?>
     {
         public class GetLeagueSeasonSettingsByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetLeagueSeasonSettingsByIdQuery, LeagueSeasonSettings?>
         {
-            private readonly IMediator _mediator = mediator;
-
             public async Task<LeagueSeasonSettings?> Handle(GetLeagueSeasonSettingsByIdQuery request, CancellationToken cancellationToken)
             {
-                return (await _mediator.Send(new GetLeagueSeasonSettingsByIdsQuery([request.LeagueSeasonSettingsId]), cancellationToken))
+                return (await mediator.Send(new GetLeagueSeasonSettingsByIdsQuery([request.LeagueSeasonSettingsId]), cancellationToken))
                     .FirstOrDefault();
             }
         }

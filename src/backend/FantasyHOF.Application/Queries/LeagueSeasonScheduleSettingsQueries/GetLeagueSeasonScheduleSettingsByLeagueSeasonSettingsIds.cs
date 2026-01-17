@@ -5,20 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonScheduleSettingsQueries
 {
-    public sealed record GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery(IEnumerable<int> LeagueSeasonIds) : IRequest<IEnumerable<LeagueSeasonScheduleSettings>>;
-
-    public sealed class GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQueryHandler : IRequestHandler<GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery, IEnumerable<LeagueSeasonScheduleSettings>>
+    public sealed record GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery(IEnumerable<int> LeagueSeasonIds)
+        : IRequest<IEnumerable<LeagueSeasonScheduleSettings>>
     {
-        private readonly FantasyHOFDBContext _context;
-
-        public GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQueryHandler(FantasyHOFDBContext context) => _context = context;
-
-        public async Task<IEnumerable<LeagueSeasonScheduleSettings>> Handle(GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery request, CancellationToken cancellationToken)
+        public sealed class GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery, IEnumerable<LeagueSeasonScheduleSettings>>
         {
-            return await _context.LeagueSeasonScheduleSettings
-                .AsNoTracking()
-                .Where(settings => request.LeagueSeasonIds.Contains(settings.LeagueSeasonId))
-                .ToListAsync();
+            public async Task<IEnumerable<LeagueSeasonScheduleSettings>> Handle(GetLeagueSeasonScheduleSettingsByLeagueSeasonIdsQuery request, CancellationToken cancellationToken)
+            {
+                return await database.LeagueSeasonScheduleSettings
+                    .AsNoTracking()
+                    .Where(settings => request.LeagueSeasonIds.Contains(settings.LeagueSeasonId))
+                    .ToListAsync(cancellationToken);
+            }
         }
     }
 }

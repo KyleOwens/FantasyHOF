@@ -8,19 +8,17 @@ namespace FantasyHOF.Application.Queries.UserQueries
     public sealed record GetUsersByIdsQuery(IEnumerable<Guid> UserIds)
         : IRequest<IEnumerable<User>>
     {
-        public sealed class GetUsersByIdsQueryHandler(FantasyHOFDBContext context)
-                        : IRequestHandler<GetUsersByIdsQuery, IEnumerable<User>>
+        public sealed class GetUsersByIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetUsersByIdsQuery, IEnumerable<User>>
         {
-            private readonly FantasyHOFDBContext _context = context;
-
             public async Task<IEnumerable<User>> Handle(
                 GetUsersByIdsQuery request,
                 CancellationToken cancellationToken)
             {
-                return await _context.Users
+                return await database.Users
                     .AsNoTracking()
                     .Where(user => request.UserIds.Contains(user.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
             }
         }
     }

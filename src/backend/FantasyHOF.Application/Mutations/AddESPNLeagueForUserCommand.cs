@@ -12,7 +12,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Mutations
 {
-    public sealed record AddESPNLeagueForUserCommand(ESPNLeagueCredentials LeagueCredentials) : IRequest<AddLeagueMutationPayload>
+    public sealed record AddESPNLeagueForUserCommand(ESPNLeagueCredentials LeagueCredentials)
+        : IRequest<AddLeagueMutationPayload>
     {
         public sealed class AddESPNLeagueForUserCommandHandler(
             FantasyHOFDBContext database,

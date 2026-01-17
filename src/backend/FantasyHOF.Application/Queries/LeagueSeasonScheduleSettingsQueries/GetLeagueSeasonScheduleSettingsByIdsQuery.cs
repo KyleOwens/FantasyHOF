@@ -8,19 +8,17 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonScheduleSettingsQueries
     public sealed record GetLeagueSeasonScheduleSettingssByIdsQuery(IEnumerable<int> LeagueSeasonScheduleSettingsIds)
         : IRequest<IEnumerable<LeagueSeasonScheduleSettings>>
     {
-        public sealed class GetLeagueSeasonScheduleSettingssByIdsQueryHandler(FantasyHOFDBContext context)
+        public sealed class GetLeagueSeasonScheduleSettingssByIdsQueryHandler(FantasyHOFDBContext database)
                         : IRequestHandler<GetLeagueSeasonScheduleSettingssByIdsQuery, IEnumerable<LeagueSeasonScheduleSettings>>
         {
-            private readonly FantasyHOFDBContext _context = context;
-
             public async Task<IEnumerable<LeagueSeasonScheduleSettings>> Handle(
                 GetLeagueSeasonScheduleSettingssByIdsQuery request,
                 CancellationToken cancellationToken)
             {
-                return await _context.LeagueSeasonScheduleSettings
+                return await database.LeagueSeasonScheduleSettings
                     .AsNoTracking()
                     .Where(settings => request.LeagueSeasonScheduleSettingsIds.Contains(settings.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
             }
         }
     }

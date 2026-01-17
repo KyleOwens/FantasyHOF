@@ -5,20 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.TeamSeasonStatsQueries
 {
-    public sealed record GetTeamSeasonStatsByTeamIdsQuery(IEnumerable<int> TeamIds) : IRequest<IEnumerable<TeamSeasonStats>>;
-
-    public sealed class GetTeamSeasonStatsByTeamIdsQueryHandler : IRequestHandler<GetTeamSeasonStatsByTeamIdsQuery, IEnumerable<TeamSeasonStats>>
+    public sealed record GetTeamSeasonStatsByTeamIdsQuery(IEnumerable<int> TeamIds)
+        : IRequest<IEnumerable<TeamSeasonStats>>
     {
-        private readonly FantasyHOFDBContext _context;
-
-        public GetTeamSeasonStatsByTeamIdsQueryHandler(FantasyHOFDBContext context) => _context = context;
-
-        public async Task<IEnumerable<TeamSeasonStats>> Handle(GetTeamSeasonStatsByTeamIdsQuery request, CancellationToken cancellationToken)
+        public sealed class GetTeamSeasonStatsByTeamIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetTeamSeasonStatsByTeamIdsQuery, IEnumerable<TeamSeasonStats>>
         {
-            return await _context.TeamSeasonStats
-                .AsNoTracking()
-                .Where(stats => request.TeamIds.Contains(stats.TeamId))
-                .ToListAsync();
+            public async Task<IEnumerable<TeamSeasonStats>> Handle(GetTeamSeasonStatsByTeamIdsQuery request, CancellationToken cancellationToken)
+            {
+                return await database.TeamSeasonStats
+                    .AsNoTracking()
+                    .Where(stats => request.TeamIds.Contains(stats.TeamId))
+                    .ToListAsync(cancellationToken);
+            }
         }
     }
 }

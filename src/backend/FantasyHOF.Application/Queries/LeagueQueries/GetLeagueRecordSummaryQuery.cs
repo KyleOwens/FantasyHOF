@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
-    public sealed record GetLeagueRecordSummaryQuery(int LeagueId) : IRequest<LeagueRecordSummary?>
+    public sealed record GetLeagueRecordSummaryQuery(int LeagueId)
+        : IRequest<LeagueRecordSummary?>
     {
-        public sealed class GetLeagueRecordSummaryQueryHandler(FantasyHOFDBContext database) : IRequestHandler<GetLeagueRecordSummaryQuery, LeagueRecordSummary?>
+        public sealed class GetLeagueRecordSummaryQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetLeagueRecordSummaryQuery, LeagueRecordSummary?>
         {
             public async Task<LeagueRecordSummary?> Handle(GetLeagueRecordSummaryQuery request, CancellationToken cancellationToken)
             {
@@ -17,21 +19,21 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                    .Where(x => x.LeagueId == request.LeagueId)
                    .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
-                   .ToListAsync();
+                   .ToListAsync(cancellationToken);
 
                 List<LeagueSeasonMemberAggregatedStats> statsByMemberAndSeason = await database.LeagueSeasonMemberAggregatedStats
                     .AsNoTracking()
                     .Where(x => x.LeagueId == request.LeagueId)
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
 
                 List<WeeklyAggregationData> weeklyAggregationData = await database.WeeklyAggregationData
                     .AsNoTracking()
                     .Where(x => x.LeagueId == request.LeagueId)
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
 
                 List<PlayerAggregationData> playerAggregationData = await database.PlayerAggregationData
                     .AsNoTracking()
@@ -39,7 +41,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     .Include(x => x.MemberDetails)
                         .ThenInclude(x => x.Member)
                     .Include(x => x.Player)
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
 
                 if (allTimeStatsByMember.Count == 0) return null;
 

@@ -7,9 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
-    public sealed record GetLeagueByIdQuery(int LeagueId) : IRequest<League>;
+    public sealed record GetLeagueByIdQuery(int LeagueId)
+        : IRequest<League>;
 
-    public sealed class GetLeagueByIdQueryHandler(ICurrentUserService currentUser, FantasyHOFDBContext database) : IRequestHandler<GetLeagueByIdQuery, League>
+    public sealed class GetLeagueByIdQueryHandler(ICurrentUserService currentUser, FantasyHOFDBContext database)
+        : IRequestHandler<GetLeagueByIdQuery, League>
     {
         public async Task<League> Handle(GetLeagueByIdQuery request, CancellationToken cancellationToken)
         {
@@ -19,7 +21,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
 
             User user = await database.Users
                 .Include(x => x.Leagues)
-                .SingleAsync(x => x.Id == userId);
+                .SingleAsync(x => x.Id == userId, cancellationToken);
 
             return user.Leagues.FirstOrDefault(x => x.Id == request.LeagueId) ??
                 throw new NotFoundException(nameof(League), request.LeagueId);

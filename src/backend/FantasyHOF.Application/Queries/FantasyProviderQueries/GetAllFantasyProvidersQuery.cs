@@ -5,13 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.FantasyProviderQueries
 {
-    public sealed record GetAllFantasyProvidersQuery : IRequest<List<FantasyProvider>>
+    public sealed record GetAllFantasyProvidersQuery
+        : IRequest<List<FantasyProvider>>
     {
-        public sealed class GetAllFantasyProvidersQueryHandler(FantasyHOFDBContext database) : IRequestHandler<GetAllFantasyProvidersQuery, List<FantasyProvider>>
+        public sealed class GetAllFantasyProvidersQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetAllFantasyProvidersQuery, List<FantasyProvider>>
         {
             public async Task<List<FantasyProvider>> Handle(GetAllFantasyProvidersQuery request, CancellationToken cancellationToken)
             {
-                return await database.FantasyProviders.ToListAsync();
+                return await database.FantasyProviders
+                    .AsNoTracking()
+                    .ToListAsync(cancellationToken);
             }
         }
     }

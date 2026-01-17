@@ -9,19 +9,17 @@ namespace FantasyHOF.Application.Queries.StatQueries
     public sealed record GetStatsByIdsQuery(IEnumerable<StatId> StatIds)
         : IRequest<IEnumerable<Stat>>
     {
-        public sealed class GetStatsByIdsQueryHandler(FantasyHOFDBContext context)
-                        : IRequestHandler<GetStatsByIdsQuery, IEnumerable<Stat>>
+        public sealed class GetStatsByIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetStatsByIdsQuery, IEnumerable<Stat>>
         {
-            private readonly FantasyHOFDBContext _context = context;
-
             public async Task<IEnumerable<Stat>> Handle(
                 GetStatsByIdsQuery request,
                 CancellationToken cancellationToken)
             {
-                return await _context.Stats
+                return await database.Stats
                     .AsNoTracking()
                     .Where(stat => request.StatIds.Contains(stat.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
             }
         }
     }

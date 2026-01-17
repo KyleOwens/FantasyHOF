@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
-    public sealed record GetLeagueSingleRecordEntriesQuery(int LeagueId, RecordTypeId RecordType) : IRequest<IQueryable<RecordEntry>>
+    public sealed record GetLeagueSingleRecordEntriesQuery(int LeagueId, RecordTypeId RecordType)
+        : IRequest<IQueryable<RecordEntry>>
     {
         public sealed class GetLeagueSingleRecordEntriesQueryHandler(FantasyHOFDBContext database)
             : IRequestHandler<GetLeagueSingleRecordEntriesQuery, IQueryable<RecordEntry>>
@@ -17,19 +18,14 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
             {
                 RecordCategoryId recordCategory = request.RecordType.GetMetadata().Category;
 
-                switch (recordCategory)
+                return recordCategory switch
                 {
-                    case RecordCategoryId.League:
-                        return LoadLeagueRecordDetail(request.LeagueId, request.RecordType);
-                    case RecordCategoryId.Season:
-                        return LoadSeasonalRecordDetails(request.LeagueId, request.RecordType);
-                    case RecordCategoryId.Week:
-                        return LoadWeeklyRecordDetails(request.LeagueId, request.RecordType);
-                    case RecordCategoryId.Player:
-                        return LoadPlayerRecordDetails(request.LeagueId, request.RecordType);
-                    default:
-                        throw new InvalidOperationException("Record category not yet supported");
-                }
+                    RecordCategoryId.League => LoadLeagueRecordDetail(request.LeagueId, request.RecordType),
+                    RecordCategoryId.Season => LoadSeasonalRecordDetails(request.LeagueId, request.RecordType),
+                    RecordCategoryId.Week => LoadWeeklyRecordDetails(request.LeagueId, request.RecordType),
+                    RecordCategoryId.Player => LoadPlayerRecordDetails(request.LeagueId, request.RecordType),
+                    _ => throw new InvalidOperationException("Record category not yet supported"),
+                };
             }
 
             private async Task<IQueryable<RecordEntry>> LoadLeagueRecordDetail(int leagueId, RecordTypeId recordTypeId)
@@ -106,7 +102,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
                     .Cast<RecordEntry>();
             }
 
-            private async Task<IQueryable<TEntity>> FilterAndSortStats<TEntity>(IQueryable<TEntity> baseQuery, RecordMetricProjector<TEntity> projector)
+            private static async Task<IQueryable<TEntity>> FilterAndSortStats<TEntity>(IQueryable<TEntity> baseQuery, RecordMetricProjector<TEntity> projector)
             {
                 IQueryable<TEntity> filteredQuery = projector.ApplyFilter(baseQuery);
                 IQueryable<TEntity> filteredAndSortedQuery = projector.ApplySort(filteredQuery);

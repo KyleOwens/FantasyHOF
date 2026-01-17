@@ -5,20 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueSeasonMemberQueries
 {
-    public sealed record GetLeagueSeasonMembersByLeagueSeasonIdsQuery(IEnumerable<int> LeagueSeasonIds) : IRequest<IEnumerable<LeagueSeasonMember>>;
+    public sealed record GetLeagueSeasonMembersByLeagueSeasonIdsQuery(IEnumerable<int> LeagueSeasonIds)
+        : IRequest<IEnumerable<LeagueSeasonMember>>;
 
-    public sealed class GetLeagueSeasonMembersByLeagueSeasonIdsQueryHandler : IRequestHandler<GetLeagueSeasonMembersByLeagueSeasonIdsQuery, IEnumerable<LeagueSeasonMember>>
+    public sealed class GetLeagueSeasonMembersByLeagueSeasonIdsQueryHandler(FantasyHOFDBContext database)
+        : IRequestHandler<GetLeagueSeasonMembersByLeagueSeasonIdsQuery, IEnumerable<LeagueSeasonMember>>
     {
-        private readonly FantasyHOFDBContext _context;
-
-        public GetLeagueSeasonMembersByLeagueSeasonIdsQueryHandler(FantasyHOFDBContext context) => _context = context;
-
         public async Task<IEnumerable<LeagueSeasonMember>> Handle(GetLeagueSeasonMembersByLeagueSeasonIdsQuery request, CancellationToken cancellationToken)
         {
-            return await _context.LeagueSeasonMembers
+            return await database.LeagueSeasonMembers
                 .AsNoTracking()
                 .Where(seasonMember => request.LeagueSeasonIds.Contains(seasonMember.LeagueSeasonId))
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
     }
 }

@@ -5,20 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
-    public sealed record GetLeaguesByIdsQuery(IEnumerable<int> LeagueIds) : IRequest<IEnumerable<League>>
+    public sealed record GetLeaguesByIdsQuery(IEnumerable<int> LeagueIds)
+        : IRequest<IEnumerable<League>>
     {
-        public sealed class GetLeaguesByIdsQueryHandler : IRequestHandler<GetLeaguesByIdsQuery, IEnumerable<League>>
+        public sealed class GetLeaguesByIdsQueryHandler(FantasyHOFDBContext database)
+            : IRequestHandler<GetLeaguesByIdsQuery, IEnumerable<League>>
         {
-            private readonly FantasyHOFDBContext _context;
-
-            public GetLeaguesByIdsQueryHandler(FantasyHOFDBContext context) => _context = context;
-
             public async Task<IEnumerable<League>> Handle(GetLeaguesByIdsQuery request, CancellationToken cancellationToken)
             {
-                return await _context.Leagues
+                return await database.Leagues
                     .AsNoTracking()
                     .Where(league => request.LeagueIds.Contains(league.Id))
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
             }
         }
     }

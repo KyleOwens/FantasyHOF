@@ -12,48 +12,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.ESPNQueries
 {
-    public sealed record GetESPNLeagueQuery(ESPNLeagueCredentials Credentials, LeagueImport Import) : IRequest<League>
+    public sealed record GetESPNLeagueQuery(ESPNLeagueCredentials Credentials, LeagueImport Import)
+        : IRequest<League>
     {
-        private sealed class ESPNImportContext
+        private sealed class ESPNImportContext(
+            Dictionary<string, FantasyMember> memberLookup,
+            Dictionary<int, Player> playerLookup
+        )
         {
-            public Dictionary<int, Player> PlayerLookup { get; }
-            public Dictionary<string, FantasyMember> MemberLookup { get; }
+            public Dictionary<int, Player> PlayerLookup { get; } = playerLookup;
+            public Dictionary<string, FantasyMember> MemberLookup { get; } = memberLookup;
             public Dictionary<int, Team> TeamLookup { get; private set; } = [];
             public Dictionary<(int, int), MatchupTeamDetails> MatchupDetailsLookup { get; private set; } = [];
-
-            public ESPNImportContext(Dictionary<string, FantasyMember> memberLookup, Dictionary<int, Player> playerLookup)
-            {
-                PlayerLookup = playerLookup;
-                MemberLookup = memberLookup;
-            }
         }
 
-        public sealed class GetESPNLeagueQueryHandler : IRequestHandler<GetESPNLeagueQuery, League>
+        public sealed class GetESPNLeagueQueryHandler(
+            FantasyHOFDBContext database,
+            IESPNAPIClientBuilder espnClientBuilder,
+            IESPNLeagueMapper espnMapper,
+            ILeagueImportEventSender eventSender
+        ) : IRequestHandler<GetESPNLeagueQuery, League>
         {
-            private readonly FantasyHOFDBContext _context;
-            private readonly IESPNAPIClientBuilder _espnClientBuilder;
-            private readonly IESPNLeagueMapper _espnMapper;
-            private readonly ILeagueImportEventSender _eventSender;
-
             private ESPNImportContext _importContext = null!;
-
-            public GetESPNLeagueQueryHandler(
-                FantasyHOFDBContext context,
-                IESPNAPIClientBuilder espnClientBuilder,
-                IESPNLeagueMapper espnMapper,
-                ILeagueImportEventSender eventSender)
-            {
-                _context = context;
-                _espnClientBuilder = espnClientBuilder;
-                _espnMapper = espnMapper;
-                _eventSender = eventSender;
-            }
 
             public async Task<League> Handle(GetESPNLeagueQuery request, CancellationToken cancellationToken)
             {
-                ESPNAPIClient espnClient = _espnClientBuilder.Build(request.Credentials);
+                ESPNAPIClient espnClient = espnClientBuilder.Build(request.Credentials);
 
-                await _eventSender.StartLoadingData(request.Import, cancellationToken);
+                await eventSender.StartLoadingData(request.Import, cancellationToken);
                 IEnumerable<ESPNSeasonalLeagueData> memberDetails = await espnClient.LoadSeasonalLeagueData();
                 IEnumerable<ESPNWeeklyLeagueData> matchupDetails = await espnClient.LoadWeeklyLeagueData();
 
@@ -66,7 +52,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
             private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, LeagueImport import, CancellationToken cancellationToken)
             {
-                await _eventSender.StartFormattingData(import, cancellationToken);
+                await eventSender.StartFormattingData(import, cancellationToken);
 
                 IEnumerable<ESPNFantasyMember> allEspnMembers = espnMemberDetails
                     .SelectMany(x => x.Members)
@@ -75,7 +61,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 IEnumerable<string> allEspnMemberIds = allEspnMembers
                     .Select(x => x.Id);
 
-                Dictionary<string, FantasyMember> memberLookup = await _context.FantasyMembers
+                Dictionary<string, FantasyMember> memberLookup = await database.FantasyMembers
                     .Where(member => member.FantasyProviderId == FantasyProviderId.ESPN && allEspnMemberIds.Contains(member.ProviderMemberId))
                     .ToDictionaryAsync(member => member.ProviderMemberId, cancellationToken);
 
@@ -83,7 +69,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 {
                     if (!memberLookup.ContainsKey(espnMember.Id))
                     {
-                        memberLookup.Add(espnMember.Id, _espnMapper.MapFantasyMember(espnMember));
+                        memberLookup.Add(espnMember.Id, espnMapper.MapFantasyMember(espnMember));
                     }
                 }
 
@@ -95,7 +81,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                     .Select(espnRosterEntry => espnRosterEntry.PlayerPoolEntry.Player.Id)
                     .Distinct();
 
-                Dictionary<int, Player> playerLookup = await _context.Players
+                Dictionary<int, Player> playerLookup = await database.Players
                     .Where(player => player.ProviderId == FantasyProviderId.ESPN && allEspnPlayerIds.Contains(player.ProviderPlayerId))
                     .ToDictionaryAsync(player => player.ProviderPlayerId, cancellationToken);
 
@@ -104,7 +90,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
             private League CreateLeague(string espnLeagueId, IEnumerable<ESPNSeasonalLeagueData> espnSeasons, IEnumerable<ESPNWeeklyLeagueData> espnWeeklyData)
             {
-                League league = _espnMapper.MapLeague(espnLeagueId);
+                League league = espnMapper.MapLeague(espnLeagueId);
 
                 CreateLeagueMembers(league, espnSeasons, espnWeeklyData);
 
@@ -127,7 +113,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 {
                     IEnumerable<ESPNSeasonalLeagueData> memberSeasons = espnSeasons.Where(x => x.Members.Any(x => x.Id == member.ProviderMemberId));
 
-                    LeagueMember newLeagueMember = _espnMapper.MapLeagueMember(member.ProviderMemberId, memberSeasons);
+                    LeagueMember newLeagueMember = espnMapper.MapLeagueMember(member.ProviderMemberId, memberSeasons);
                     newLeagueMember.SetMember(member);
                     newLeagueMember.Setleague(league);
 
@@ -139,7 +125,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
             private LeagueSeason CreateLeagueSeason(ESPNSeasonalLeagueData espnSeason, IEnumerable<ESPNWeeklyLeagueData> espnSeasonMatchupData)
             {
-                LeagueSeason season = _espnMapper.MapLeagueSeason(espnSeason);
+                LeagueSeason season = espnMapper.MapLeagueSeason(espnSeason);
 
                 season.SetSettings(CreateLeagueSeasonSettings(espnSeason.LeagueSettings));
                 season.SetMembers(CreateLeagueSeasonMembers(season, espnSeason.Members, espnSeason.Teams, espnSeasonMatchupData));
@@ -149,9 +135,9 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
             private LeagueSeasonSettings CreateLeagueSeasonSettings(ESPNLeagueSettings espnSettings)
             {
-                LeagueSeasonSettings settings = _espnMapper.MapLeagueSeasonSettings(espnSettings);
+                LeagueSeasonSettings settings = espnMapper.MapLeagueSeasonSettings(espnSettings);
 
-                settings.SetScheduleSettings(_espnMapper.MapLeagueSeasonScheduleSettings(espnSettings.ScheduleSettings));
+                settings.SetScheduleSettings(espnMapper.MapLeagueSeasonScheduleSettings(espnSettings.ScheduleSettings));
                 settings.SetScoringSettings(CreateLeagueSeasonScoringSettings(espnSettings.ScoringSettings));
 
                 return settings;
@@ -159,7 +145,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
             private LeagueSeasonScoringSettings CreateLeagueSeasonScoringSettings(ESPNScoringSettings espnScoringSettings)
             {
-                LeagueSeasonScoringSettings scoringSettings = _espnMapper.MapLeagueSeasonScoringSettings(espnScoringSettings);
+                LeagueSeasonScoringSettings scoringSettings = espnMapper.MapLeagueSeasonScoringSettings(espnScoringSettings);
 
                 scoringSettings.SetScoringItems(CreateScoringItems(espnScoringSettings.ScoringItems));
 
@@ -172,7 +158,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 foreach (ESPNScoringItem scoringItem in espnScoringItems)
                 {
-                    scoringItems.Add(_espnMapper.MapLeagueSeasonScoringItem(scoringItem));
+                    scoringItems.Add(espnMapper.MapLeagueSeasonScoringItem(scoringItem));
                 }
 
                 return scoringItems;
@@ -187,7 +173,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 foreach (ESPNFantasyMember espnMember in espnMembers)
                 {
-                    LeagueSeasonMember leagueSeasonMember = _espnMapper.MapLeagueSeasonMember(espnMember);
+                    LeagueSeasonMember leagueSeasonMember = espnMapper.MapLeagueSeasonMember(espnMember);
 
                     leagueSeasonMember.SetMember(_importContext.MemberLookup[espnMember.Id]);
                     leagueSeasonMember.SetTeams(CreateLeagueSeasonMemberTeams(espnMember, espnTeams, espnSeasonMatchupData));
@@ -209,10 +195,10 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
             private Team CreateTeam(LeagueSeason season, ESPNFantasyTeam espnTeam)
             {
-                Team team = _espnMapper.MapTeam(espnTeam);
+                Team team = espnMapper.MapTeam(espnTeam);
 
                 team.SetLeagueSeason(season);
-                team.SetSeasonStats(_espnMapper.MapTeamSeasonStats(espnTeam.Record.Overall));
+                team.SetSeasonStats(espnMapper.MapTeamSeasonStats(espnTeam.Record.Overall));
 
                 return team;
             }
@@ -227,7 +213,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                     {
                         if (espnMatchup.Home is not null)
                         {
-                            MatchupTeamDetails matchupTeamDetails = _espnMapper.MapMatchupTeamDetails(
+                            MatchupTeamDetails matchupTeamDetails = espnMapper.MapMatchupTeamDetails(
                                 espnMatchup.Home,
                                 espnMatchup.Winner,
                                 true);
@@ -237,7 +223,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                         if (espnMatchup.Away is not null)
                         {
-                            MatchupTeamDetails matchupTeamDetails = _espnMapper.MapMatchupTeamDetails(
+                            MatchupTeamDetails matchupTeamDetails = espnMapper.MapMatchupTeamDetails(
                                 espnMatchup.Away,
                                 espnMatchup.Winner,
                                 false);
@@ -254,7 +240,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 if (existingMember is not null) return existingMember;
 
-                FantasyMember newMember = _espnMapper.MapFantasyMember(espnMember);
+                FantasyMember newMember = espnMapper.MapFantasyMember(espnMember);
 
                 _importContext.MemberLookup.Add(espnMember.Id, newMember);
 
@@ -274,7 +260,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 foreach (ESPNFantasyTeam espnTeam in espnMemberTeams)
                 {
-                    LeagueSeasonMemberTeam leagueSeasonMemberTeam = _espnMapper.MapLeagueSeasonMemberTeam();
+                    LeagueSeasonMemberTeam leagueSeasonMemberTeam = espnMapper.MapLeagueSeasonMemberTeam();
 
                     IEnumerable<ESPNWeeklyLeagueData> espnTeamMatchups = espnSeasonMatchupData
                         .Select(espnWeek => new ESPNWeeklyLeagueData()
@@ -307,7 +293,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                     ESPNMatchupTeam primaryTeam = isPrimaryTeamHomeTeam ? espnMatchup.Home! : espnMatchup.Away!;
                     ESPNMatchupTeam? opponentTeam = isPrimaryTeamHomeTeam ? espnMatchup.Away : espnMatchup.Home;
 
-                    TeamMatchup matchup = _espnMapper.MapTeamMatchup(espnTeamMatchup.Year, espnTeamMatchup.Week, espnMatchup.PlayoffTierType);
+                    TeamMatchup matchup = espnMapper.MapTeamMatchup(espnTeamMatchup.Year, espnTeamMatchup.Week, espnMatchup.PlayoffTierType);
                     MatchupTeamDetails ownerDetails = _importContext.MatchupDetailsLookup[(espnTeamMatchup.Week, primaryTeam.TeamId)];
 
                     ownerDetails.SetMatchupRosterSpots(CreateMatchupRosterSpots(primaryTeam.Roster, espnTeamMatchup.Year));
@@ -343,7 +329,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 foreach (ESPNRosterSpot espnRosterSpot in espnRoster.Entries)
                 {
-                    MatchupRosterSpot rosterSpot = _espnMapper.MapMatchupRosterSpot(espnRosterSpot, year);
+                    MatchupRosterSpot rosterSpot = espnMapper.MapMatchupRosterSpot(espnRosterSpot, year);
 
                     rosterSpot.SetPlayer(GetOrCreatePlayer(espnRosterSpot.PlayerPoolEntry.Player));
                     rosterSpot.SetAccumulatedStats(CreateAccumulatedStats(espnRosterSpot.PlayerPoolEntry.Player));
@@ -360,7 +346,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 if (existingPlayer is not null) return existingPlayer;
 
-                Player newPlayer = _espnMapper.MapPlayer(espnPlayer);
+                Player newPlayer = espnMapper.MapPlayer(espnPlayer);
 
                 _importContext.PlayerLookup.Add(espnPlayer.Id, newPlayer);
 
@@ -378,7 +364,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
 
                 foreach (int statId in espnLeagueAdjustedStats.AppliedStats.Keys)
                 {
-                    AccumulatedStat accumulatedStat = _espnMapper.MapAccumulatedStat(
+                    AccumulatedStat accumulatedStat = espnMapper.MapAccumulatedStat(
                         statId,
                         espnLeagueAdjustedStats.AppliedStats[statId],
                         espnLeagueAdjustedStats.Stats[statId]);

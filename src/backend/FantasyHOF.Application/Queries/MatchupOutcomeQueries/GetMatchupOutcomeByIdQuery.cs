@@ -5,7 +5,8 @@ using MediatR;
 
 namespace FantasyHOF.Application.Queries.MatchupOutcomeQueries
 {
-    public record GetMatchupOutcomeByIdQuery(MatchupOutcomeId MatchupOutcomeId) : IRequest<MatchupOutcome?>
+    public record GetMatchupOutcomeByIdQuery(MatchupOutcomeId MatchupOutcomeId)
+        : IRequest<MatchupOutcome?>
     {
         public class GetMatchupOutcomeByIdQueryHandler(IMediator mediator)
             : IRequestHandler<GetMatchupOutcomeByIdQuery, MatchupOutcome?>

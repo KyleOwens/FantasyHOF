@@ -14,7 +14,7 @@ namespace FantasyHOF.Application.Queries.UserQueries
             {
                 if (!currentUser.IsAuthenticated) throw new AuthenticationException("No authenticated user detected");
 
-                return await mediator.Send(new GetOrCreateUserByClerkIdCommand(currentUser.ClerkUserId));
+                return await mediator.Send(new GetOrCreateUserByClerkIdCommand(currentUser.ClerkUserId), cancellationToken);
             }
         }
     }
