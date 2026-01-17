@@ -1,5 +1,4 @@
 import { NoLeaguesCardFragment$key } from "@/__generated__/NoLeaguesCardFragment.graphql";
-import { LeagueAdditionModal } from "@/components/league-addition-modal/LeagueAdditionModal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus } from "lucide-react";
@@ -8,7 +7,7 @@ import { graphql } from "relay-runtime";
 
 type Props = {
   providersKey: NoLeaguesCardFragment$key;
-  userId: string;
+  openModal: () => void;
 };
 
 const noLeaguesCardFragment = graphql`
@@ -21,7 +20,7 @@ const noLeaguesCardFragment = graphql`
   }
 `;
 
-export function NoLeaguesCard({ providersKey, userId }: Props) {
+export function NoLeaguesCard({ providersKey, openModal }: Props) {
   const fantasyProviders = useFragment(
     noLeaguesCardFragment,
     providersKey,
@@ -44,14 +43,13 @@ export function NoLeaguesCard({ providersKey, userId }: Props) {
                 To start exploring your records, you'll need to help us get
                 connected to your fantasy provider. Click below to get started.
               </p>
-              <LeagueAdditionModal
-                providersKey={fantasyProviders}
-                userId={userId}
+              <Button
+                onClick={openModal}
+                size={"lg"}
+                className="mt-4 text-base max-w-fit"
               >
-                <Button size={"lg"} className="mt-4 text-base max-w-fit">
-                  <Plus /> Add fantasy League
-                </Button>
-              </LeagueAdditionModal>
+                <Plus /> Add fantasy League
+              </Button>
             </div>
           </div>
         </CardContent>

@@ -4,7 +4,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { ProviderSelection } from "./ProviderSelection";
 import {
@@ -17,9 +16,10 @@ import { ScrollArea } from "../ui/scroll-area";
 import { ImportSuccessMessage } from "./ImportSuccessMessage";
 
 type Props = {
-  children: React.ReactNode;
   providersKey: ProviderSelectionFragment$key;
   userId: string;
+  shouldBeOpen: boolean;
+  onClose: () => void;
 };
 
 enum LeagueAdditionStep {
@@ -28,7 +28,12 @@ enum LeagueAdditionStep {
   Completed = "Completed",
 }
 
-export function LeagueAdditionModal({ children, providersKey, userId }: Props) {
+export function LeagueAdditionModal({
+  shouldBeOpen,
+  onClose,
+  providersKey,
+  userId,
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<LeagueAdditionStep>(
     LeagueAdditionStep.Provider,
@@ -51,6 +56,10 @@ export function LeagueAdditionModal({ children, providersKey, userId }: Props) {
       onResetEntry();
     }
 
+    if (!isOpen) {
+      onClose();
+    }
+
     setIsOpen(isOpen);
   };
 
@@ -59,9 +68,16 @@ export function LeagueAdditionModal({ children, providersKey, userId }: Props) {
   };
 
   useEffect(() => {
+    if (!shouldBeOpen) return;
+    console.log("here");
+    onOpenChange(true);
+  }, [shouldBeOpen]);
+
+  useEffect(() => {
+    console.log(step);
     if (step === LeagueAdditionStep.Completed) {
       const timer = setTimeout(() => {
-        setIsOpen(false);
+        onOpenChange(false);
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -69,7 +85,6 @@ export function LeagueAdditionModal({ children, providersKey, userId }: Props) {
 
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="fixed top-[10%] min-w-3xl translate-y-0 overflow-hidden pb-8">
         <DialogHeader className="mb-4 shrink-0">
           <DialogTitle>Add league</DialogTitle>

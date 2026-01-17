@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<04769aea83ce921898ecddbce0d874a1>>
+ * @generated SignedSource<<9b27c5c16bc0e9355ad49089efbc9d70>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,6 +13,7 @@ import { FragmentRefs } from "relay-runtime";
 export type RecordDetailsTableRefetchableEntryFragment$data = {
   readonly entries: {
     readonly edges: ReadonlyArray<{
+      readonly cursor: string;
       readonly node: {
         readonly __typename: string;
         readonly key: string;
@@ -30,7 +31,7 @@ export type RecordDetailsTableRefetchableEntryFragment$data = {
         readonly rank: number;
         readonly week?: number;
         readonly year?: number;
-        readonly " $fragmentSpreads": FragmentRefs<"MemberCellFragment" | "MemberTenureCellFragment" | "PlayerCellFragment" | "RankCellFragment" | "RatioBreakdownCellFragment" | "RecordValueCellFragment">;
+        readonly " $fragmentSpreads": FragmentRefs<"MemberCellFragment" | "MemberTenureCellFragment" | "PlayerCellFragment" | "RatioBreakdownCellFragment" | "RecordValueCellFragment">;
       };
     }> | null | undefined;
   } | null | undefined;
@@ -65,7 +66,7 @@ v2 = {
 return {
   "argumentDefinitions": [
     {
-      "defaultValue": 10,
+      "defaultValue": 20,
       "kind": "LocalArgument",
       "name": "count"
     },
@@ -122,6 +123,13 @@ return {
           "name": "edges",
           "plural": true,
           "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "cursor",
+              "storageKey": null
+            },
             {
               "alias": null,
               "args": null,
@@ -273,11 +281,6 @@ return {
                 {
                   "args": null,
                   "kind": "FragmentSpread",
-                  "name": "RankCellFragment"
-                },
-                {
-                  "args": null,
-                  "kind": "FragmentSpread",
                   "name": "RatioBreakdownCellFragment"
                 },
                 {
@@ -286,13 +289,6 @@ return {
                   "name": "PlayerCellFragment"
                 }
               ],
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "cursor",
               "storageKey": null
             }
           ],
@@ -339,6 +335,6 @@ return {
 };
 })();
 
-(node as any).hash = "83d9c9aa1d077838f60bf1668df24c95";
+(node as any).hash = "393c3a7995abef5a35a2ad972170c195";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<83d4b221aa95df1ac32942f63cb605a5>>
+ * @generated SignedSource<<ce64ec0ede3e9a736927ff1e510bd7da>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -28,7 +28,7 @@ export type RecordDetailsRefetchableEntryQuery = {
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "defaultValue": 10,
+    "defaultValue": 20,
     "kind": "LocalArgument",
     "name": "count"
   },
@@ -177,6 +177,13 @@ return {
                     "name": "edges",
                     "plural": true,
                     "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "cursor",
+                        "storageKey": null
+                      },
                       {
                         "alias": null,
                         "args": null,
@@ -387,13 +394,6 @@ return {
                           }
                         ],
                         "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "cursor",
-                        "storageKey": null
                       }
                     ],
                     "storageKey": null
@@ -445,16 +445,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f8d8bb3d7e5e9d88953c840ba9f97f4c",
+    "cacheID": "b3604a8805b44563ed0741366fedf56b",
     "id": null,
     "metadata": {},
     "name": "RecordDetailsRefetchableEntryQuery",
     "operationKind": "query",
-    "text": "query RecordDetailsRefetchableEntryQuery(\n  $count: Int = 10\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...RecordDetailsTableRefetchableEntryFragment_1G22uz\n    id\n  }\n}\n\nfragment MemberCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  memberDetails {\n    id\n    currentTeamName\n    currentTeamLogoURL\n    member {\n      fullName\n      id\n    }\n  }\n}\n\nfragment MemberTenureCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  memberDetails {\n    firstyear\n    lastYear\n    tenure\n    id\n  }\n}\n\nfragment PlayerCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  ... on PlayerRecordEntry {\n    position {\n      id\n      value\n      name\n    }\n    player {\n      fullName\n      playerImageURL\n      id\n    }\n  }\n}\n\nfragment RankCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  rank\n}\n\nfragment RatioBreakdownCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  metric {\n    __typename\n    ... on RatioRecordMetric {\n      numerator\n      numeratorUnit\n      denominator\n      denominatorUnit\n    }\n  }\n}\n\nfragment RecordDetailsTableRefetchableEntryFragment_1G22uz on RecordDetails {\n  entries(after: $cursor, first: $count) {\n    edges {\n      node {\n        key\n        rank\n        metric {\n          __typename\n          value\n          unit\n          ... on RatioRecordMetric {\n            numerator\n            numeratorUnit\n            denominator\n            denominatorUnit\n          }\n        }\n        __typename\n        ... on SeasonalRecordEntry {\n          year\n        }\n        ... on WeeklyRecordEntry {\n          year\n          week\n        }\n        ... on PlayerRecordEntry {\n          year\n          week\n          player {\n            fullName\n            id\n          }\n        }\n        ...RecordValueCellFragment\n        ...MemberCellFragment\n        ...MemberTenureCellFragment\n        ...RankCellFragment\n        ...RatioBreakdownCellFragment\n        ...PlayerCellFragment\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n\nfragment RecordValueCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  rank\n  metric {\n    __typename\n    value\n    unit\n    ... on RatioRecordMetric {\n      __typename\n      numerator\n      denominator\n    }\n  }\n}\n"
+    "text": "query RecordDetailsRefetchableEntryQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...RecordDetailsTableRefetchableEntryFragment_1G22uz\n    id\n  }\n}\n\nfragment MemberCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  memberDetails {\n    id\n    currentTeamName\n    currentTeamLogoURL\n    member {\n      fullName\n      id\n    }\n  }\n}\n\nfragment MemberTenureCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  memberDetails {\n    firstyear\n    lastYear\n    tenure\n    id\n  }\n}\n\nfragment PlayerCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  ... on PlayerRecordEntry {\n    position {\n      id\n      value\n      name\n    }\n    player {\n      fullName\n      playerImageURL\n      id\n    }\n  }\n}\n\nfragment RatioBreakdownCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  metric {\n    __typename\n    ... on RatioRecordMetric {\n      numerator\n      numeratorUnit\n      denominator\n      denominatorUnit\n    }\n  }\n}\n\nfragment RecordDetailsTableRefetchableEntryFragment_1G22uz on RecordDetails {\n  entries(after: $cursor, first: $count) {\n    edges {\n      cursor\n      node {\n        key\n        rank\n        metric {\n          __typename\n          value\n          unit\n          ... on RatioRecordMetric {\n            numerator\n            numeratorUnit\n            denominator\n            denominatorUnit\n          }\n        }\n        __typename\n        ... on SeasonalRecordEntry {\n          year\n        }\n        ... on WeeklyRecordEntry {\n          year\n          week\n        }\n        ... on PlayerRecordEntry {\n          year\n          week\n          player {\n            fullName\n            id\n          }\n        }\n        ...RecordValueCellFragment\n        ...MemberCellFragment\n        ...MemberTenureCellFragment\n        ...RatioBreakdownCellFragment\n        ...PlayerCellFragment\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n\nfragment RecordValueCellFragment on RecordEntry {\n  __isRecordEntry: __typename\n  metric {\n    __typename\n    value\n    unit\n    ... on RatioRecordMetric {\n      __typename\n      numerator\n      denominator\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "83d9c9aa1d077838f60bf1668df24c95";
+(node as any).hash = "393c3a7995abef5a35a2ad972170c195";
 
 export default node;

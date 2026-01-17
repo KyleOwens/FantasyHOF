@@ -1,5 +1,4 @@
 import { createColumnHelper } from "@tanstack/react-table";
-
 import { graphql } from "relay-runtime";
 import { RecordDetailsTableFragment$key } from "@/__generated__/RecordDetailsTableFragment.graphql";
 import { useFragment, usePaginationFragment } from "react-relay";
@@ -37,6 +36,7 @@ import {
   RecordDetailsTableRefetchableEntryFragment$key,
 } from "@/__generated__/RecordDetailsTableRefetchableEntryFragment.graphql";
 import { RecordDetailsRefetchableEntryQuery } from "@/__generated__/RecordDetailsRefetchableEntryQuery.graphql";
+import { InfiniteScrollTrigger } from "../shared/InfiniteScrollTrigger";
 
 type Props = {
   recordDetailsKey: RecordDetailsTableFragment$key;
@@ -58,11 +58,12 @@ const recordDetailsRefetchableEntryFragment = graphql`
   @refetchable(queryName: "RecordDetailsRefetchableEntryQuery")
   @argumentDefinitions(
     cursor: { type: "String" }
-    count: { type: "Int", defaultValue: 10 }
+    count: { type: "Int", defaultValue: 20 }
   ) {
     entries(after: $cursor, first: $count)
       @connection(key: "recordDetails_entries") {
       edges {
+        cursor
         node {
           key
           rank
@@ -94,7 +95,6 @@ const recordDetailsRefetchableEntryFragment = graphql`
           ...RecordValueCellFragment
           ...MemberCellFragment
           ...MemberTenureCellFragment
-          ...RankCellFragment
           ...RatioBreakdownCellFragment
           ...PlayerCellFragment
         }
@@ -121,9 +121,11 @@ export type RecordEntry = RecordEntryNode &
 
 const columnHelper = createColumnHelper<RecordEntry>();
 
+const PAGE_SIZE = 20;
+
 export function RecordDetailsTable({ recordDetailsKey }: Props) {
   const details = useFragment(recordDetailsTableFragment, recordDetailsKey);
-  const { data } = usePaginationFragment<
+  const { data, hasNext, loadNext, isLoadingNext } = usePaginationFragment<
     RecordDetailsRefetchableEntryQuery,
     RecordDetailsTableRefetchableEntryFragment$key
   >(recordDetailsRefetchableEntryFragment, details);
@@ -141,7 +143,7 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
         size: 20,
         maxSize: 10,
         header: () => <span className="pl-4">Rank</span>,
-        cell: ({ row }) => <RankCell entryKey={row.original} />,
+        cell: ({ row }) => <RankCell rowNumber={row.index + 1} />,
       }),
       columnHelper.display({
         id: "member",
@@ -193,7 +195,9 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
             : details.metadata.unit}
         </div>
       ),
-      cell: ({ row }) => <RecordValueCell entryKey={row.original} />,
+      cell: ({ row }) => (
+        <RecordValueCell entryKey={row.original} rowNumber={row.index + 1} />
+      ),
     });
 
     const category = details.metadata.category;
@@ -256,14 +260,11 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => {
-                const isFirst = row.original.rank === 1;
+                const isFirst = row.index + 1 === 1;
                 return (
                   <TableRow
                     key={row.id}
-                    className={`
-            group transition-all
-            ${isFirst ? "bg-emerald-50/40 dark:bg-emerald-500/5 hover:bg-emerald-50/60" : "hover:bg-muted/50"}
-          `}
+                    className={`group transition-all ${isFirst && "bg-emerald-50"}`}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
@@ -285,27 +286,11 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
           </TableBody>
         </Table>
       </div>
+      <InfiniteScrollTrigger
+        hasNext={hasNext}
+        isLoadingNext={isLoadingNext}
+        onEndReached={() => loadNext(PAGE_SIZE)}
+      />
     </div>
   );
 }
-
-// function isWeekly(
-//   entry: RecordEntry,
-// ): entry is RecordEntry & { week: number; year: number } {
-//   // We use string literal comparison because at runtime,
-//   // __typename WILL be the actual string from the server
-//   return (entry as any).__typename === "WeeklyRecordEntry";
-// }
-
-// function isPlayer(entry: RecordEntry): entry is RecordEntry & {
-//   player: { readonly fullName: string };
-//   week: number;
-// } {
-//   return (entry as any).__typename === "PlayerRecordEntry";
-// }
-
-// function isSeasonal(
-//   entry: RecordEntry,
-// ): entry is RecordEntry & { year: number } {
-//   return (entry as any).__typename === "SeasonalRecordEntry";
-// }

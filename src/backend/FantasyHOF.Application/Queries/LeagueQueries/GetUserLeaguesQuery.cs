@@ -3,23 +3,22 @@ using FantasyHOF.Application.Mutations;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.LeagueQueries
 {
-    public sealed record GetUserLeaguesQuery : IRequest<List<League>>
+    public sealed record GetUserLeaguesQuery : IRequest<IQueryable<League>>
     {
-        public sealed class GetUserLeaguesQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser, IMediator mediator) : IRequestHandler<GetUserLeaguesQuery, List<League>>
+        public sealed class GetUserLeaguesQueryHandler(FantasyHOFDBContext database, ICurrentUserService currentUser, IMediator mediator) : IRequestHandler<GetUserLeaguesQuery, IQueryable<League>>
         {
-            public async Task<List<League>> Handle(GetUserLeaguesQuery request, CancellationToken cancellationToken)
+            public async Task<IQueryable<League>> Handle(GetUserLeaguesQuery request, CancellationToken cancellationToken)
             {
-                if (!currentUser.IsAuthenticated) return [];
+                if (!currentUser.IsAuthenticated) throw new UnauthorizedAccessException();
 
                 User user = await mediator.Send(new GetOrCreateUserByClerkIdCommand(currentUser.ClerkUserId));
 
-                return await database.Leagues
+                return database.Leagues
                     .Where(x => x.UserId == user.Id)
-                    .ToListAsync();
+                    .OrderBy(x => x.Id);
             }
         }
     }

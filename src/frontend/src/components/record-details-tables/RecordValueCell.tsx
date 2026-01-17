@@ -5,11 +5,11 @@ import { graphql } from "relay-runtime";
 
 type Props = {
   entryKey: RecordValueCellFragment$key;
+  rowNumber: number;
 };
 
 const recordValueCellFragment = graphql`
   fragment RecordValueCellFragment on RecordEntry {
-    rank
     metric {
       value
       unit
@@ -22,7 +22,7 @@ const recordValueCellFragment = graphql`
   }
 `;
 
-export function RecordValueCell({ entryKey }: Props) {
+export function RecordValueCell({ entryKey, rowNumber }: Props) {
   const entry = useFragment(recordValueCellFragment, entryKey);
 
   const displayValue = formatRecordMetricForDisplay(entry.metric);
@@ -30,7 +30,7 @@ export function RecordValueCell({ entryKey }: Props) {
   return (
     <div className="text-right pr-2">
       <div
-        className={`font-bold ${entry.rank === 1 ? "text-2xl text-primary" : "text-xl"}`}
+        className={`font-bold ${rowNumber === 1 ? "text-2xl text-primary" : "text-xl"}`}
       >
         {displayValue}
       </div>

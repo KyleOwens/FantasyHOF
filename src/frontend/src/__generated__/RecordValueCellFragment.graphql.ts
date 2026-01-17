@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d5290bd0cde57b405684c53ac4694d20>>
+ * @generated SignedSource<<155cc64f83bb6c508ad294e7570f4274>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,6 @@ export type RecordValueCellFragment$data = {
     readonly unit: string;
     readonly value: any;
   };
-  readonly rank: number;
   readonly " $fragmentType": "RecordValueCellFragment";
 };
 export type RecordValueCellFragment$key = {
@@ -32,13 +31,6 @@ const node: ReaderFragment = {
   "metadata": null,
   "name": "RecordValueCellFragment",
   "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "rank",
-      "storageKey": null
-    },
     {
       "alias": null,
       "args": null,
@@ -97,6 +89,6 @@ const node: ReaderFragment = {
   "abstractKey": "__isRecordEntry"
 };
 
-(node as any).hash = "5bef95597023346a5de8c38395c4ac57";
+(node as any).hash = "03fc61d37a9b07431d36ce8625158b40";
 
 export default node;
