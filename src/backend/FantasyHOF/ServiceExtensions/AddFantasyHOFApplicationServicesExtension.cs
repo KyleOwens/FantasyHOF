@@ -5,12 +5,14 @@ using FantasyHOF.Application.Registries;
 using FantasyHOF.Application.Services;
 using FantasyHOF.Domain.Entities.Views;
 using FantasyHOF.ESPN;
+using Hangfire;
+using Hangfire.PostgreSql;
 
 namespace FantasyHOF.ServiceExtensions
 {
     public static class AddFantasyHOFApplicationServicesExtension
     {
-        public static IServiceCollection AddFantasyHOFApplicationServices(this IServiceCollection services, IConfigurationSection appConfigSection)
+        public static IServiceCollection AddFantasyHOFApplicationServices(this IServiceCollection services, IConfigurationSection appConfigSection, string connectionString)
         {
             services.AddTransient<IESPNAPIClientBuilder, ESPNAPIClientBuilder>();
             services.AddSingleton<IESPNLeagueMapper, ESPNLeagueMapper>();
@@ -29,6 +31,14 @@ namespace FantasyHOF.ServiceExtensions
 
             MetricSelectorRegistry<PlayerAggregationData>.Selectors = PlayerMetricSelectorRegistry.Selectors;
             MetricSelectorRegistry<PlayerAggregationData>.Filters = PlayerMetricSelectorRegistry.Filters;
+
+            services.AddHangfire(config => config
+               .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+               .UseSimpleAssemblyNameTypeSerializer()
+               .UseRecommendedSerializerSettings()
+               .UsePostgreSqlStorage(x => x.UseNpgsqlConnection(connectionString)));
+
+            services.AddHangfireServer();
 
             return services;
         }

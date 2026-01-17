@@ -1,37 +1,35 @@
-using FantasyHOF.ApplicationExtensions;
+using FantasyHOF.ApplicationBuilderExtensions;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ServiceExtensions;
+using FantasyHOF.WebApplicationExtensions;
 using Hangfire;
-using HotChocolate.Execution;
+
 using Microsoft.EntityFrameworkCore;
-using Path = System.IO.Path;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new Exception("Failed to load connection string from config");
 
 builder.Services.AddFantasyHOFAuthenticationServices(
     builder.Configuration["Authentication:Authority"]
     ?? throw new Exception("Failed to load JWT authority from config"));
 
-builder.Services.AddFantasyHOFDatabaseServices(
-    builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new Exception("Failed to load connection string from config"));
+builder.Services.AddFantasyHOFDatabaseServices(connectionString);
 
 builder.Services.AddFantasyHOFHttpServices();
 builder.Services.AddFantasyHOFCurrentUserService();
-builder.Services.AddFantasyHOFApplicationServices(builder.Configuration.GetSection("Authentication"));
+builder.Services.AddFantasyHOFApplicationServices(builder.Configuration.GetSection("Authentication"), connectionString);
 builder.Services.AddFantasyHOFMediatRServices();
 
-builder.AddFantasyHOFGraphQL();
+await builder.AddFantasyHOFGraphQL();
 
 var app = builder.Build();
 
+await app.AddGraphQLDeveloperToolsAsync();
+
 if (app.Environment.IsDevelopment())
 {
-    var executor = await app.Services.GetRequestExecutorAsync();
-    var schemaLocation = Path.Combine(Directory.GetCurrentDirectory(), "../../frontend/src/relay/schema.graphql");
-
-    await File.WriteAllTextAsync(schemaLocation, executor.Schema.Print());
-
     using IServiceScope scope = app.Services.CreateScope();
 
     FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
@@ -41,8 +39,6 @@ if (app.Environment.IsDevelopment())
 
     app.UseHangfireDashboard("/hangfire");
 }
-
-
 
 app.UseAuthentication();
 app.UseAuthorization();

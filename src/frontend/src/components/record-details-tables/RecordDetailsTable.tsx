@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/table";
 import { useMemo, useState } from "react";
 import { RankCell } from "./RankCell";
-import { RankCellFragment$key } from "@/__generated__/RankCellFragment.graphql";
 import { MemberCell } from "./MemberCell";
 import { MemberCellFragment$key } from "@/__generated__/MemberCellFragment.graphql";
 import { MemberTenureCell } from "./MemberTenureCell";
@@ -112,7 +111,6 @@ type RecordEntryNode = NonNullable<
 >["node"];
 
 export type RecordEntry = RecordEntryNode &
-  RankCellFragment$key &
   MemberCellFragment$key &
   MemberTenureCellFragment$key &
   RecordValueCellFragment$key &
