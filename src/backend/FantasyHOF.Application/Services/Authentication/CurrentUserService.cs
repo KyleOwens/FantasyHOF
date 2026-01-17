@@ -14,22 +14,13 @@ namespace FantasyHOF.Application.Services.Authentication
         Task<Guid> GetUserIdAsync(CancellationToken ct = default);
     }
 
-    public class CurrentUserService : ICurrentUserService
+    public class CurrentUserService(IHttpContextAccessor httpContextAccessor, IMediator mediator)
+        : ICurrentUserService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IMediator _mediator;
         private User? _cachedUser;
 
-        public CurrentUserService(
-            IHttpContextAccessor httpContextAccessor,
-            IMediator mediator)
-        {
-            _httpContextAccessor = httpContextAccessor;
-            _mediator = mediator;
-        }
-
         private ClaimsPrincipal Principal =>
-            _httpContextAccessor.HttpContext?.User
+            httpContextAccessor.HttpContext?.User
             ?? throw new InvalidOperationException("No HttpContext available");
 
         public bool IsAuthenticated =>
@@ -40,7 +31,7 @@ namespace FantasyHOF.Application.Services.Authentication
 
         public string ClerkUserId =>
             Principal.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? throw new UnauthorizedAccessException("Request is not authenticated by Clerk");
+            ?? throw new UnauthorizedAccessException("Request is not authenticated");
 
         public async Task<Guid> GetUserIdAsync(CancellationToken ct = default)
         {
@@ -50,7 +41,7 @@ namespace FantasyHOF.Application.Services.Authentication
             if (_cachedUser != null)
                 return _cachedUser.Id;
 
-            _cachedUser = await _mediator.Send(
+            _cachedUser = await mediator.Send(
                 new GetOrCreateUserByClerkIdCommand(ClerkUserId),
                 ct);
 

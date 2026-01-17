@@ -3,14 +3,9 @@ using FantasyHOF.Domain.Entities;
 
 namespace FantasyHOF.Application.Types.Queries.Records
 {
-    public class SeasonalRecord : LeagueRecord
+    public class SeasonalRecord(FantasyMember member, RecordTypeId type, int year, RecordMetric metric)
+        : LeagueRecord(member, type, metric)
     {
-        public int Year { get; init; }
-
-        public SeasonalRecord(FantasyMember member, RecordTypeId type, int year, RecordMetric metric)
-            : base(member, type, metric)
-        {
-            Year = year;
-        }
+        public int Year { get; init; } = year;
     }
 }

@@ -15,7 +15,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Application.Query
             CancellationToken cancellationToken)
         {
             return await mediator.Send(
-                new GetLeagueSingleRecordEntriesQuery(recordDetails.LeagueId, recordDetails.Metadata.Type)
+                new GetLeagueSingleRecordEntriesQuery(recordDetails.LeagueId, recordDetails.Metadata.RecordTypeId)
                 , cancellationToken
             );
         }

@@ -2,5 +2,5 @@
 
 namespace FantasyHOF.Application.Types.Mutations
 {
-    public sealed record AddLeagueMutationPayload(string jobId, LeagueImport Import);
+    public sealed record AddLeagueMutationPayload(string JobId, LeagueImport Import);
 }

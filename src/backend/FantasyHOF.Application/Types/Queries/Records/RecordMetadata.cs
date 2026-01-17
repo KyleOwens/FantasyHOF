@@ -3,24 +3,19 @@ using FantasyHOF.EntityFramework.Extensions;
 
 namespace FantasyHOF.Application.Types.Queries.Records
 {
-    public class RecordMetadata
+    public class RecordMetadata(RecordTypeId type)
     {
-        public RecordMetadata(RecordTypeId type)
-        {
-            Type = type;
-        }
+        public RecordTypeId RecordTypeId { get; private set; } = type;
 
-        public RecordTypeId Type { get; private set; }
-
-        public string DisplayName => Type.GetMetadata().DisplayName;
-        public string Description => Type.GetMetadata().Description;
-        public RecordCategoryId Category => Type.GetMetadata().Category;
+        public string DisplayName => RecordTypeId.GetMetadata().DisplayName;
+        public string Description => RecordTypeId.GetMetadata().Description;
+        public RecordCategoryId Category => RecordTypeId.GetMetadata().Category;
         public string CategoryDisplayName => Category.GetDisplayName();
-        public RecordSentiment Sentiment => Type.GetMetadata().Sentiment;
-        public RecordMetricId MetricId => Type.GetMetadata().Metric;
+        public RecordSentiment Sentiment => RecordTypeId.GetMetadata().Sentiment;
+        public RecordMetricId MetricId => RecordTypeId.GetMetadata().Metric;
         public string Unit => MetricId.GetDisplayName();
-        public RecordMetricType MetricType => Type.GetMetadata().MetricType;
-        public string IconURI => Type.GetMetadata().IconURI;
-        public SortDirection SortDirection => Type.GetMetadata().SortDirection;
+        public RecordMetricType MetricType => RecordTypeId.GetMetadata().MetricType;
+        public string IconURI => RecordTypeId.GetMetadata().IconURI;
+        public SortDirection SortDirection => RecordTypeId.GetMetadata().SortDirection;
     }
 }

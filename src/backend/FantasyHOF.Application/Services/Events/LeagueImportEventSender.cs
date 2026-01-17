@@ -19,7 +19,7 @@ namespace FantasyHOF.Application.Services.Events
     {
         private async Task SendEvent(LeagueImport import, CancellationToken ct)
         {
-            await database.SaveChangesAsync();
+            await database.SaveChangesAsync(ct);
             await eventSender.SendAsync($"{nameof(LeagueImport)}_{import.UserId}", import, ct);
         }
 

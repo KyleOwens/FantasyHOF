@@ -18,7 +18,8 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
     public class LeagueImportJob(
         FantasyHOFDBContext database,
         IMediator mediator,
-        ILeagueImportEventSender eventSender) : ILeagueImportJob
+        ILeagueImportEventSender eventSender
+    ) : ILeagueImportJob
     {
         [JobDisplayName("Import ESPN League {1}")]
         public async Task ExecuteAsync(int pendingLeagueId, ESPNLeagueCredentials credentials, IJobCancellationToken jobToken)

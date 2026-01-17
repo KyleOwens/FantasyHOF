@@ -4,24 +4,16 @@ using FantasyHOF.Domain.Entities.Views;
 
 namespace FantasyHOF.Application.Types.Queries.Records
 {
-    public class LeagueRecordSummary
+    public class LeagueRecordSummary(
+        List<LeagueRecord> leagueRecords,
+        List<SeasonalRecord> seasonalRecords,
+        List<WeeklyRecord> weeklyRecords,
+        List<PlayerRecord> playerRecords)
     {
-        public IReadOnlyList<LeagueRecord> LeagueRecords { get; }
-        public IReadOnlyList<SeasonalRecord> SeasonalRecords { get; }
-        public IReadOnlyList<WeeklyRecord> WeeklyRecords { get; }
-        public IReadOnlyList<PlayerRecord> PlayerRecords { get; }
-
-        public LeagueRecordSummary(
-            List<LeagueRecord> leagueRecords,
-            List<SeasonalRecord> seasonalRecords,
-            List<WeeklyRecord> weeklyRecords,
-            List<PlayerRecord> playerRecords)
-        {
-            LeagueRecords = leagueRecords;
-            SeasonalRecords = seasonalRecords;
-            WeeklyRecords = weeklyRecords;
-            PlayerRecords = playerRecords;
-        }
+        public IReadOnlyList<LeagueRecord> LeagueRecords { get; } = leagueRecords;
+        public IReadOnlyList<SeasonalRecord> SeasonalRecords { get; } = seasonalRecords;
+        public IReadOnlyList<WeeklyRecord> WeeklyRecords { get; } = weeklyRecords;
+        public IReadOnlyList<PlayerRecord> PlayerRecords { get; } = playerRecords;
 
         public static LeagueRecordSummary? FromAggregateLeagueStats(
             IReadOnlyList<LeagueMemberAggregatedStats> allTimeStatsByMember,

@@ -4,7 +4,7 @@ namespace FantasyHOF.Application.Types.Queries.Records
 {
     public class RecordDetails(int leagueId, RecordTypeId recordTypeId)
     {
-        public string Id => $"{(int)Metadata.Type}:{leagueId}";
+        public string Id => $"{(int)Metadata.RecordTypeId}:{leagueId}";
 
         public int LeagueId => leagueId;
         public RecordMetadata Metadata { get; private set; } = new RecordMetadata(recordTypeId);
