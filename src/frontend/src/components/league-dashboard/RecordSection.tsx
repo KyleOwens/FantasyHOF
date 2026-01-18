@@ -16,7 +16,9 @@ type Props = {
 const RecordSectionFragment = graphql`
   fragment RecordSectionFragment on Record @relay(plural: true) {
     __typename
-    sentiment
+    metadata {
+      sentiment
+    }
     ... on LeagueRecord {
       ...LeagueRecordCardFragment
     }
@@ -36,10 +38,10 @@ export function RecordSection({ recordKey, title, sentiment }: Props) {
   const records = useFragment(RecordSectionFragment, recordKey);
 
   const fameRecords = records.filter(
-    (r) => r.sentiment === RecordSentiment.FAME,
+    (r) => r.metadata.sentiment === RecordSentiment.FAME,
   );
   const shameRecords = records.filter(
-    (r) => r.sentiment === RecordSentiment.SHAME,
+    (r) => r.metadata.sentiment === RecordSentiment.SHAME,
   );
 
   const recordsToDisplay =

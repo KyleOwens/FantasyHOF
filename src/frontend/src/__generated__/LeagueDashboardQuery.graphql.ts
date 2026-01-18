@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5e3dc052858443439d26db4e85368500>>
+ * @generated SignedSource<<956a312ce38a36a5328936cb365acdec>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -108,15 +108,33 @@ v8 = {
     {
       "alias": null,
       "args": null,
-      "kind": "ScalarField",
-      "name": "displayName",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "iconURI",
+      "concreteType": "RecordMetadata",
+      "kind": "LinkedField",
+      "name": "metadata",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "recordTypeId",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "displayName",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "iconURI",
+          "storageKey": null
+        }
+      ],
       "storageKey": null
     },
     {
@@ -143,13 +161,6 @@ v8 = {
           "storageKey": null
         }
       ],
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "type",
       "storageKey": null
     }
   ],
@@ -182,8 +193,19 @@ v12 = [
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "sentiment",
+        "concreteType": "RecordMetadata",
+        "kind": "LinkedField",
+        "name": "metadata",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "sentiment",
+            "storageKey": null
+          }
+        ],
         "storageKey": null
       },
       {
@@ -421,12 +443,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3ec2532233c6ac1ccf27b0f953816851",
+    "cacheID": "f93402256b48310787e9954438428cd1",
     "id": null,
     "metadata": {},
     "name": "LeagueDashboardQuery",
     "operationKind": "query",
-    "text": "query LeagueDashboardQuery(\n  $leagueId: ID!\n) {\n  me {\n    league(leagueId: $leagueId) {\n      currentLeagueName\n      recordSummary {\n        leagueRecords {\n          ...RecordSectionFragment\n        }\n        seasonalRecords {\n          ...RecordSectionFragment\n        }\n        weeklyRecords {\n          ...RecordSectionFragment\n        }\n        playerRecords {\n          ...RecordSectionFragment\n        }\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment LeagueRecordCardFragment on LeagueRecord {\n  ...RecordCardFragment\n  member {\n    id\n    fullName\n  }\n}\n\nfragment PlayerRecordCardFragment on PlayerRecord {\n  year\n  week\n  member {\n    fullName\n    id\n  }\n  player {\n    fullName\n    id\n  }\n  ...RecordCardFragment\n}\n\nfragment RecordCardFragment on Record {\n  __isRecord: __typename\n  displayName\n  iconURI\n  metric {\n    __typename\n    ... on RatioRecordMetric {\n      __typename\n    }\n    ... on ScalarRecordMetric {\n      __typename\n    }\n    value\n    unit\n  }\n  type\n}\n\nfragment RecordSectionFragment on Record {\n  __isRecord: __typename\n  __typename\n  sentiment\n  ... on LeagueRecord {\n    ...LeagueRecordCardFragment\n  }\n  ... on SeasonalRecord {\n    ...SeasonalRecordCardFragment\n  }\n  ... on WeeklyRecord {\n    ...WeeklyRecordCardFragment\n  }\n  ... on PlayerRecord {\n    ...PlayerRecordCardFragment\n  }\n}\n\nfragment SeasonalRecordCardFragment on SeasonalRecord {\n  ...RecordCardFragment\n  year\n  member {\n    id\n    fullName\n  }\n}\n\nfragment WeeklyRecordCardFragment on WeeklyRecord {\n  year\n  week\n  member {\n    id\n    fullName\n  }\n  ...RecordCardFragment\n}\n"
+    "text": "query LeagueDashboardQuery(\n  $leagueId: ID!\n) {\n  me {\n    league(leagueId: $leagueId) {\n      currentLeagueName\n      recordSummary {\n        leagueRecords {\n          ...RecordSectionFragment\n        }\n        seasonalRecords {\n          ...RecordSectionFragment\n        }\n        weeklyRecords {\n          ...RecordSectionFragment\n        }\n        playerRecords {\n          ...RecordSectionFragment\n        }\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment LeagueRecordCardFragment on LeagueRecord {\n  ...RecordCardFragment\n  member {\n    id\n    fullName\n  }\n}\n\nfragment PlayerRecordCardFragment on PlayerRecord {\n  year\n  week\n  member {\n    fullName\n    id\n  }\n  player {\n    fullName\n    id\n  }\n  ...RecordCardFragment\n}\n\nfragment RecordCardFragment on Record {\n  __isRecord: __typename\n  metadata {\n    recordTypeId\n    displayName\n    iconURI\n  }\n  metric {\n    __typename\n    ... on RatioRecordMetric {\n      __typename\n    }\n    ... on ScalarRecordMetric {\n      __typename\n    }\n    value\n    unit\n  }\n}\n\nfragment RecordSectionFragment on Record {\n  __isRecord: __typename\n  __typename\n  metadata {\n    sentiment\n  }\n  ... on LeagueRecord {\n    ...LeagueRecordCardFragment\n  }\n  ... on SeasonalRecord {\n    ...SeasonalRecordCardFragment\n  }\n  ... on WeeklyRecord {\n    ...WeeklyRecordCardFragment\n  }\n  ... on PlayerRecord {\n    ...PlayerRecordCardFragment\n  }\n}\n\nfragment SeasonalRecordCardFragment on SeasonalRecord {\n  ...RecordCardFragment\n  year\n  member {\n    id\n    fullName\n  }\n}\n\nfragment WeeklyRecordCardFragment on WeeklyRecord {\n  year\n  week\n  member {\n    id\n    fullName\n  }\n  ...RecordCardFragment\n}\n"
   }
 };
 })();

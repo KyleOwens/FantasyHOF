@@ -25,7 +25,7 @@ type Props = {
 const recordNavigationFragment = graphql`
   fragment RecordNavigationFragment on Query {
     recordMetadata {
-      type
+      recordTypeId
       displayName
       categoryDisplayName
       sentiment

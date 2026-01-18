@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<26abf46b05608dba3036c2b3e2b43af2>>
+ * @generated SignedSource<<1d833f4acb6199975b306f6c6a36cf7e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,7 +13,9 @@ export type RecordSentiment = "FAME" | "SHAME" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type RecordSectionFragment$data = ReadonlyArray<{
   readonly __typename: string;
-  readonly sentiment: RecordSentiment;
+  readonly metadata: {
+    readonly sentiment: RecordSentiment;
+  };
   readonly " $fragmentSpreads": FragmentRefs<"LeagueRecordCardFragment" | "PlayerRecordCardFragment" | "SeasonalRecordCardFragment" | "WeeklyRecordCardFragment">;
   readonly " $fragmentType": "RecordSectionFragment";
 }>;
@@ -40,8 +42,19 @@ const node: ReaderFragment = {
     {
       "alias": null,
       "args": null,
-      "kind": "ScalarField",
-      "name": "sentiment",
+      "concreteType": "RecordMetadata",
+      "kind": "LinkedField",
+      "name": "metadata",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "sentiment",
+          "storageKey": null
+        }
+      ],
       "storageKey": null
     },
     {
@@ -97,6 +110,6 @@ const node: ReaderFragment = {
   "abstractKey": "__isRecord"
 };
 
-(node as any).hash = "4e7a97a621e17190512e7d3b05c8dc13";
+(node as any).hash = "98b760dfa7c4b4724326050e01b382e8";
 
 export default node;

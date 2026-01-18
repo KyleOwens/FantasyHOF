@@ -15,16 +15,9 @@ interface Node {
 }
 
 interface Record {
-  type: RecordTypeId!
   member: FantasyMember!
   metric: RecordMetric!
-  displayName: String!
-  category: RecordCategoryId!
-  sentiment: RecordSentiment!
-  metricId: RecordMetricId!
-  metricType: RecordMetricType!
-  iconURI: String!
-  sortDirection: SortDirection!
+  metadata: RecordMetadata!
 }
 
 interface RecordEntry {
@@ -210,16 +203,9 @@ type LeagueMemberId {
 }
 
 type LeagueRecord implements Record {
-  type: RecordTypeId!
   member: FantasyMember!
   metric: RecordMetric!
-  displayName: String!
-  category: RecordCategoryId!
-  sentiment: RecordSentiment!
-  metricId: RecordMetricId!
-  metricType: RecordMetricType!
-  iconURI: String!
-  sortDirection: SortDirection!
+  metadata: RecordMetadata!
 }
 
 type LeagueRecordEntry implements RecordEntry {
@@ -402,16 +388,9 @@ type PlayerRecord implements Record {
   player: Player!
   week: Int!
   year: Int!
-  type: RecordTypeId!
   member: FantasyMember!
   metric: RecordMetric!
-  displayName: String!
-  category: RecordCategoryId!
-  sentiment: RecordSentiment!
-  metricId: RecordMetricId!
-  metricType: RecordMetricType!
-  iconURI: String!
-  sortDirection: SortDirection!
+  metadata: RecordMetadata!
 }
 
 type PlayerRecordEntry implements RecordEntry {
@@ -462,7 +441,7 @@ type RecordDetails implements Node {
 }
 
 type RecordMetadata {
-  type: RecordTypeId!
+  recordTypeId: RecordTypeId!
   displayName: String!
   description: String!
   category: RecordCategoryId!
@@ -483,16 +462,9 @@ type ScalarRecordMetric implements RecordMetric {
 
 type SeasonalRecord implements Record {
   year: Int!
-  type: RecordTypeId!
   member: FantasyMember!
   metric: RecordMetric!
-  displayName: String!
-  category: RecordCategoryId!
-  sentiment: RecordSentiment!
-  metricId: RecordMetricId!
-  metricType: RecordMetricType!
-  iconURI: String!
-  sortDirection: SortDirection!
+  metadata: RecordMetadata!
 }
 
 type SeasonalRecordEntry implements RecordEntry {
@@ -571,16 +543,9 @@ type User implements Node {
 type WeeklyRecord implements Record {
   week: Int!
   year: Int!
-  type: RecordTypeId!
   member: FantasyMember!
   metric: RecordMetric!
-  displayName: String!
-  category: RecordCategoryId!
-  sentiment: RecordSentiment!
-  metricId: RecordMetricId!
-  metricType: RecordMetricType!
-  iconURI: String!
-  sortDirection: SortDirection!
+  metadata: RecordMetadata!
 }
 
 type WeeklyRecordEntry implements RecordEntry {

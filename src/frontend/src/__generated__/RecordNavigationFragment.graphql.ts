@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4874ed1d7874e18678d7858dab8db655>>
+ * @generated SignedSource<<efe2edd0499e18488d134f4862dbbd03>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,8 +16,8 @@ export type RecordNavigationFragment$data = {
   readonly recordMetadata: ReadonlyArray<{
     readonly categoryDisplayName: string;
     readonly displayName: string;
+    readonly recordTypeId: RecordTypeId;
     readonly sentiment: RecordSentiment;
-    readonly type: RecordTypeId;
   }>;
   readonly " $fragmentType": "RecordNavigationFragment";
 };
@@ -44,7 +44,7 @@ const node: ReaderFragment = {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "type",
+          "name": "recordTypeId",
           "storageKey": null
         },
         {
@@ -76,6 +76,6 @@ const node: ReaderFragment = {
   "abstractKey": null
 };
 
-(node as any).hash = "52b51fcaec09f0220c5f97db405bf565";
+(node as any).hash = "f0df0ceb16bfa4d0809190a4baa771e8";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<88d6531500df280c445fe126ca47afe1>>
+ * @generated SignedSource<<7d48c809931fff646f109455e368e9fe>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -254,7 +254,7 @@ return {
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "type",
+            "name": "recordTypeId",
             "storageKey": null
           },
           {
@@ -374,7 +374,7 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2a03eedb7b3c9b8b95756b1e61d26a46",
+    "cacheID": "964d654791f2f8ec8e0e14f922d6cdb1",
     "id": null,
     "metadata": {
       "connection": [
@@ -391,7 +391,7 @@ return {
     },
     "name": "AppSidebarQuery",
     "operationKind": "query",
-    "text": "query AppSidebarQuery(\n  $isDemo: Boolean!\n) {\n  ...RecordNavigationFragment\n  demoLeagues @include(if: $isDemo) {\n    ...LeagueNavigationFragment\n    id\n  }\n  me @skip(if: $isDemo) {\n    leagues(first: 10) {\n      edges {\n        node {\n          id\n          ...LeagueNavigationFragment\n          __typename\n        }\n        cursor\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    id\n  }\n}\n\nfragment LeagueNavigationFragment on League {\n  id\n  currentLeagueName\n  fantasyProvider {\n    id\n    logoURL\n  }\n  sport {\n    id\n    name\n  }\n}\n\nfragment RecordNavigationFragment on Query {\n  recordMetadata {\n    type\n    displayName\n    categoryDisplayName\n    sentiment\n  }\n}\n"
+    "text": "query AppSidebarQuery(\n  $isDemo: Boolean!\n) {\n  ...RecordNavigationFragment\n  demoLeagues @include(if: $isDemo) {\n    ...LeagueNavigationFragment\n    id\n  }\n  me @skip(if: $isDemo) {\n    leagues(first: 10) {\n      edges {\n        node {\n          id\n          ...LeagueNavigationFragment\n          __typename\n        }\n        cursor\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    id\n  }\n}\n\nfragment LeagueNavigationFragment on League {\n  id\n  currentLeagueName\n  fantasyProvider {\n    id\n    logoURL\n  }\n  sport {\n    id\n    name\n  }\n}\n\nfragment RecordNavigationFragment on Query {\n  recordMetadata {\n    recordTypeId\n    displayName\n    categoryDisplayName\n    sentiment\n  }\n}\n"
   }
 };
 })();

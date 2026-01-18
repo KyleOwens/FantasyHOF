@@ -15,7 +15,7 @@ export function RecordMenuItem({ recordMetadata }: Props) {
         <Link
           from={leagueRoute.fullPath}
           to={recordRoute.to}
-          params={{ recordTypeId: recordMetadata.type }}
+          params={{ recordTypeId: recordMetadata.recordTypeId }}
           className="text-xs"
         >
           {formatRecordNameForSidebar(recordMetadata.displayName)}

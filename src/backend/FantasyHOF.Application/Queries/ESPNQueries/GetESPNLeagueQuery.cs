@@ -43,12 +43,16 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
                 IEnumerable<ESPNSeasonalLeagueData> memberDetails = await espnClient.LoadSeasonalLeagueData();
                 IEnumerable<ESPNWeeklyLeagueData> matchupDetails = await espnClient.LoadWeeklyLeagueData();
 
+                var memberLookup = CreateMembers()
+
                 await PrepareImportContextAsync(memberDetails, matchupDetails, request.Import, ct);
 
                 League league = CreateLeague(request.Credentials.LeagueId, memberDetails, matchupDetails);
 
                 return league;
             }
+
+            public
 
             private async Task PrepareImportContextAsync(IEnumerable<ESPNSeasonalLeagueData> espnMemberDetails, IEnumerable<ESPNWeeklyLeagueData> espnMatchupDetails, LeagueImport import, CancellationToken ct)
             {

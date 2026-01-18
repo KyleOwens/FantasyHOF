@@ -17,8 +17,11 @@ type Props = {
 
 const RecordCardFragment = graphql`
   fragment RecordCardFragment on Record {
-    displayName
-    iconURI
+    metadata {
+      recordTypeId
+      displayName
+      iconURI
+    }
     metric {
       ... on RatioRecordMetric {
         __typename
@@ -29,7 +32,6 @@ const RecordCardFragment = graphql`
       value
       unit
     }
-    type
   }
 `;
 
@@ -43,13 +45,16 @@ export function RecordCard({ recordKey, titleDescription, footerText }: Props) {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Avatar className="size-16">
-            <AvatarImage src={record.iconURI} alt={record.displayName} />
+            <AvatarImage
+              src={record.metadata.iconURI}
+              alt={record.metadata.displayName}
+            />
             <AvatarFallback>
               <AvatarImage src="MostPointsLeague.png" />
             </AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle>{record.displayName}</CardTitle>
+            <CardTitle>{record.metadata.displayName}</CardTitle>
             <CardDescription>{titleDescription}</CardDescription>
           </div>
         </div>
@@ -57,7 +62,7 @@ export function RecordCard({ recordKey, titleDescription, footerText }: Props) {
           <Link
             from={dashboardRoute.fullPath}
             to={detailsRoute.to}
-            params={{ recordTypeId: record.type }}
+            params={{ recordTypeId: record.metadata.recordTypeId }}
           >
             See more
           </Link>
