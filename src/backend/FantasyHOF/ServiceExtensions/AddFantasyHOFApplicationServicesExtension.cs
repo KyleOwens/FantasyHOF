@@ -1,6 +1,6 @@
 ﻿using FantasyHOF.Application.Services.BackgroundJobs;
-using FantasyHOF.Application.Services.Builders;
 using FantasyHOF.Application.Services.Events;
+using FantasyHOF.Application.Services.ImportPlanBuilders;
 using FantasyHOF.Application.Services.Mappers;
 using FantasyHOF.Application.Services.Registries;
 using FantasyHOF.Application.Types.Configuration;
@@ -17,7 +17,7 @@ namespace FantasyHOF.ServiceExtensions
         {
             services.AddTransient<IESPNAPIClientBuilder, ESPNAPIClientBuilder>();
             services.AddSingleton<IESPNLeagueMapper, ESPNLeagueMapper>();
-            services.AddScoped<IESPNLeagueBuilder, ESPNLeagueBuilder>();
+            services.AddScoped<IESPNImportPlanBuilder, ESPNImportPlanBuilder>();
 
             services.AddScoped<ILeagueImportJob, LeagueImportJob>();
             services.AddScoped<ILeagueImportEventSender, LeagueImportEventSender>();

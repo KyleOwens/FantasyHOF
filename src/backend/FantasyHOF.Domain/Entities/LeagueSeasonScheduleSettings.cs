@@ -3,7 +3,7 @@
     public class LeagueSeasonScheduleSettings
     {
         public int Id { get; private set; }
-        public int LeagueSeasonId { get; private set; }
+        public int LeagueSeasonId { get; set; }
 
         public required int MatchupCount { get; set; }
         public required int MatchupLength { get; set; }

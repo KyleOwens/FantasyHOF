@@ -8,6 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddSimpleConsole(options =>
+{
+    options.SingleLine = true;
+    options.TimestampFormat = "HH:mm:ss";
+});
+
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new Exception("Failed to load connection string from config");
 
@@ -34,7 +42,7 @@ if (app.Environment.IsDevelopment())
 
     FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
 
-    //context.Database.EnsureDeleted();
+    context.Database.EnsureDeleted();
     context.Database.Migrate();
 
     app.UseHangfireDashboard("/hangfire");

@@ -5,12 +5,13 @@ namespace FantasyHOF.Domain.Entities
     public class TeamMatchup
     {
         public int Id { get; private set; }
-        public int TeamId { get; private set; }
-        public int OwnerMatchupDetailsId { get; private set; }
-        public int? OpponentMatchupDetailsId { get; private set; }
+        public int TeamId { get; set; }
+        public int OwnerMatchupDetailsId { get; set; }
+        public int? OpponentMatchupDetailsId { get; set; }
 
         public required int Year { get; init; }
         public required int Week { get; init; }
+        public required int? OpponentProviderTeamId { get; init; }
         public required MatchupTypeId MatchupTypeId { get; init; }
 
         public Team Team { get; private set; } = null!;

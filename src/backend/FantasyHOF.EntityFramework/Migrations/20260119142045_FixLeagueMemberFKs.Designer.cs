@@ -3,6 +3,7 @@ using System;
 using FantasyHOF.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    partial class FantasyHOFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260119142045_FixLeagueMemberFKs")]
+    partial class FixLeagueMemberFKs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,6 +350,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("last_year");
 
+                    b.Property<int>("MemberId1")
+                        .HasColumnType("integer")
+                        .HasColumnName("member_id1");
+
                     b.Property<int>("Tenure")
                         .HasColumnType("integer")
                         .HasColumnName("tenure");
@@ -356,6 +363,9 @@ namespace FantasyHOF.EntityFramework.Migrations
 
                     b.HasIndex("MemberId")
                         .HasDatabaseName("ix_league_members_member_id");
+
+                    b.HasIndex("MemberId1")
+                        .HasDatabaseName("ix_league_members_member_id1");
 
                     b.ToTable("league_members", (string)null);
                 });
@@ -2776,19 +2786,26 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             modelBuilder.Entity("FantasyHOF.Domain.Entities.LeagueMember", b =>
                 {
-                    b.HasOne("FantasyHOF.Domain.Entities.League", "League")
-                        .WithMany("LeagueMembers")
+                    b.HasOne("FantasyHOF.Domain.Entities.League", null)
+                        .WithMany("Members")
                         .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_league_members_leagues_league_id");
 
-                    b.HasOne("FantasyHOF.Domain.Entities.FantasyMember", "Member")
+                    b.HasOne("FantasyHOF.Domain.Entities.League", "League")
                         .WithMany()
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_league_members_fantasy_members_member_id");
+                        .HasConstraintName("fk_league_members_leagues_member_id");
+
+                    b.HasOne("FantasyHOF.Domain.Entities.FantasyMember", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_league_members_fantasy_members_member_id1");
 
                     b.Navigation("League");
 
@@ -3085,7 +3102,7 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             modelBuilder.Entity("FantasyHOF.Domain.Entities.League", b =>
                 {
-                    b.Navigation("LeagueMembers");
+                    b.Navigation("Members");
 
                     b.Navigation("Seasons");
                 });

@@ -3,6 +3,7 @@ using System;
 using FantasyHOF.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FantasyHOF.EntityFramework.Migrations
 {
     [DbContext(typeof(FantasyHOFDBContext))]
-    partial class FantasyHOFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260119142429_FixLeagueMemberFKsForRealsagain")]
+    partial class FixLeagueMemberFKsForRealsagain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -347,12 +350,19 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("last_year");
 
+                    b.Property<int>("LeagueId1")
+                        .HasColumnType("integer")
+                        .HasColumnName("league_id1");
+
                     b.Property<int>("Tenure")
                         .HasColumnType("integer")
                         .HasColumnName("tenure");
 
                     b.HasKey("LeagueId", "MemberId")
                         .HasName("pk_league_members");
+
+                    b.HasIndex("LeagueId1")
+                        .HasDatabaseName("ix_league_members_league_id1");
 
                     b.HasIndex("MemberId")
                         .HasDatabaseName("ix_league_members_member_id");
@@ -2776,12 +2786,19 @@ namespace FantasyHOF.EntityFramework.Migrations
 
             modelBuilder.Entity("FantasyHOF.Domain.Entities.LeagueMember", b =>
                 {
-                    b.HasOne("FantasyHOF.Domain.Entities.League", "League")
+                    b.HasOne("FantasyHOF.Domain.Entities.League", null)
                         .WithMany("LeagueMembers")
                         .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_league_members_leagues_league_id");
+
+                    b.HasOne("FantasyHOF.Domain.Entities.League", "League")
+                        .WithMany()
+                        .HasForeignKey("LeagueId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_league_members_leagues_league_id1");
 
                     b.HasOne("FantasyHOF.Domain.Entities.FantasyMember", "Member")
                         .WithMany()

@@ -8,19 +8,24 @@ using FantasyHOF.ESPN.Types.Models;
 using FantasyHOF.ESPN.Types.Outputs;
 using Microsoft.EntityFrameworkCore;
 
-namespace FantasyHOF.Application.Services.Builders
+namespace FantasyHOF.Application.Services.ImportPlanBuilders
 {
-    public interface IESPNLeagueBuilder
+    public interface IESPNImportPlanBuilder
     {
-        public Task<FlattenedLeagueGraph> BuildNewLeague(
+        public Task<LeagueImportPlan> BuildNewLeague(
             string espnLeagueId,
+            Guid userId,
             LeagueImport import,
             IEnumerable<ESPNSeasonalLeagueData> espnSeasonalData,
             IEnumerable<ESPNWeeklyLeagueData> weeklyLeagueData,
             CancellationToken ct);
     }
 
-    public class ESPNLeagueBuilder(FantasyHOFDBContext database, IESPNLeagueMapper espnMapper, ILeagueImportEventSender eventSender) : IESPNLeagueBuilder
+    public class ESPNImportPlanBuilder(
+        FantasyHOFDBContext database,
+        IESPNLeagueMapper espnMapper,
+        ILeagueImportEventSender eventSender
+    ) : IESPNImportPlanBuilder
     {
         private Dictionary<string, FantasyMember> _membersByProviderId = [];
         private Dictionary<int, Player> _playersByProviderPlayerId = [];
@@ -29,30 +34,66 @@ namespace FantasyHOF.Application.Services.Builders
         private readonly Dictionary<int, LeagueSeasonSettings> _leagueSeasonSettingsByYear = [];
         private readonly Dictionary<int, LeagueSeasonScheduleSettings> _leagueSeasonScheduleSettingsByYear = [];
         private readonly Dictionary<int, LeagueSeasonScoringSettings> _leagueSeasonScoringSettingsByYear = [];
-        private readonly Dictionary<int, IReadOnlyList<LeagueSeasonScoringItem>> _leagueSeasonScoringItemsByYear = [];
-        private readonly Dictionary<int, IReadOnlyList<LeagueSeasonMember>> _leagueSeasonMembersByYear = [];
-        private readonly Dictionary<(string espnMemberId, int year), IReadOnlyList<LeagueSeasonMemberTeam>> _leagueSeasonMemberTeamsLookup = [];
+        private readonly Dictionary<int, List<LeagueSeasonScoringItem>> _leagueSeasonScoringItemsByYear = [];
+        private readonly Dictionary<int, List<LeagueSeasonMember>> _leagueSeasonMembersByYear = [];
+        private readonly Dictionary<(string espnMemberId, int year), List<LeagueSeasonMemberTeam>> _leagueSeasonMemberTeamsLookup = [];
         private readonly Dictionary<(int year, int espnTeamId), Team> _teamsLookup = [];
         private readonly Dictionary<(int year, int espnTeamId), TeamSeasonStats> _teamSeasonStatsLookup = [];
-        private readonly Dictionary<(int year, int espnTeamId), IReadOnlyList<TeamMatchup>> _teamMatchupLookup = [];
+        private readonly Dictionary<(int year, int espnTeamId), List<TeamMatchup>> _teamMatchupLookup = [];
         private readonly Dictionary<(int year, int week, int espnTeamId), MatchupTeamDetails> _matchupTeamDetailsLookup = [];
-        private readonly Dictionary<(int year, int week, int espnTeamId), IReadOnlyList<MatchupRosterSpot>> _matchupRosterSpotsLookup = [];
-        private readonly Dictionary<(int year, int week, int espnTeamId, int playerId), IReadOnlyList<AccumulatedStat>> _accumulatedStatsLookup = [];
+        private readonly Dictionary<(int year, int week, int espnTeamId), List<MatchupRosterSpot>> _matchupRosterSpotsLookup = [];
+        private readonly Dictionary<(int year, int week, int espnTeamId, int playerId), List<AccumulatedStat>> _accumulatedStatsLookup = [];
 
-        public async Task<FlattenedLeagueGraph> BuildNewLeague(
+        private readonly List<Player> _newPlayers = [];
+        private readonly List<FantasyMember> _newMembers = [];
+
+        public async Task<LeagueImportPlan> BuildNewLeague(
             string espnLeagueId,
+            Guid userId,
             LeagueImport import,
             IEnumerable<ESPNSeasonalLeagueData> espnSeasonalData,
             IEnumerable<ESPNWeeklyLeagueData> espnWeeklyData,
             CancellationToken ct)
         {
-            League league = espnMapper.MapLeague(espnLeagueId);
+            ResetBuilder();
 
             await CreateMembers(espnSeasonalData, ct);
             await CreatePlayers(espnWeeklyData, ct);
 
             CreateLeagueMembers(espnSeasonalData);
             ProcessLeagueSeasons(espnSeasonalData, espnWeeklyData);
+
+            League league = espnMapper.MapLeague(
+                espnLeagueId,
+                [.. _leagueSeasonsByYear.Values],
+                [.. _leagueSeasonSettingsByYear.Values]
+            );
+            league.UserId = userId;
+
+            return BuildFlattenedLeagueGraph(league);
+        }
+
+        private void ResetBuilder()
+        {
+            _membersByProviderId = [];
+            _playersByProviderPlayerId = [];
+            _leagueMembersByProviderId.Clear();
+            _leagueSeasonsByYear.Clear();
+            _leagueSeasonSettingsByYear.Clear();
+            _leagueSeasonScheduleSettingsByYear.Clear();
+            _leagueSeasonScoringSettingsByYear.Clear();
+            _leagueSeasonScoringItemsByYear.Clear();
+            _leagueSeasonMembersByYear.Clear();
+            _leagueSeasonMemberTeamsLookup.Clear();
+            _teamsLookup.Clear();
+            _teamSeasonStatsLookup.Clear();
+            _teamMatchupLookup.Clear();
+            _matchupTeamDetailsLookup.Clear();
+            _matchupRosterSpotsLookup.Clear();
+            _accumulatedStatsLookup.Clear();
+
+            _newMembers.Clear();
+            _newPlayers.Clear();
         }
 
         private async Task CreateMembers(IEnumerable<ESPNSeasonalLeagueData> espnSeasonalData, CancellationToken ct)
@@ -69,7 +110,13 @@ namespace FantasyHOF.Application.Services.Builders
 
             foreach (ESPNFantasyMember espnMember in allEspnMembers)
             {
-                _membersByProviderId.TryAdd(espnMember.Id, espnMapper.MapFantasyMember(espnMember));
+                if (!_membersByProviderId.TryGetValue(espnMember.Id, out FantasyMember? member))
+                {
+                    member = espnMapper.MapFantasyMember(espnMember);
+
+                    _membersByProviderId.Add(espnMember.Id, member);
+                    _newMembers.Add(member);
+                }
             }
         }
 
@@ -91,7 +138,13 @@ namespace FantasyHOF.Application.Services.Builders
 
             foreach (ESPNPlayer espnPlayer in allEspnPlayers)
             {
-                _playersByProviderPlayerId.TryAdd(espnPlayer.Id, espnMapper.MapPlayer(espnPlayer));
+                if (!_playersByProviderPlayerId.TryGetValue(espnPlayer.Id, out Player? player))
+                {
+                    player = espnMapper.MapPlayer(espnPlayer);
+
+                    _playersByProviderPlayerId.Add(espnPlayer.Id, player);
+                    _newPlayers.Add(player);
+                }
             }
         }
 
@@ -126,9 +179,30 @@ namespace FantasyHOF.Application.Services.Builders
                 ProcessLeagueSeasonMembers(
                     espnSeason.Members,
                     espnSeason.Teams,
-                    espnWeeklyDataByYear[espnSeason.Year],
                     espnSeason.Year
                 );
+
+                // We do this here because it is possible for teams to be orphaned and not have owners. if we go through
+                // season members/season member teams we can miss teams
+                ProcessAllTeams(espnSeason.Teams, espnSeason.Year, espnWeeklyDataByYear[espnSeason.Year]);
+            }
+        }
+
+        private void ProcessAllTeams(IEnumerable<ESPNFantasyTeam> espnTeams, int year, IEnumerable<ESPNWeeklyLeagueData> espnSeasonWeeklyData)
+        {
+            ILookup<int, ESPNMatchup> espnMatchupsByESPNTeamId = espnSeasonWeeklyData
+              .SelectMany(week => week.Matchups)
+              .SelectMany(matchup => new[]
+              {
+                    new { matchup.Home?.TeamId, Matchup = matchup},
+                    new { matchup.Away?.TeamId, Matchup = matchup}
+              })
+              .Where(x => x.TeamId != null)
+              .ToLookup(x => x.TeamId!.Value, x => x.Matchup);
+
+            foreach (ESPNFantasyTeam espnTeam in espnTeams)
+            {
+                ProcessTeam(espnTeam, espnMatchupsByESPNTeamId[espnTeam.Id], year);
             }
         }
 
@@ -190,7 +264,6 @@ namespace FantasyHOF.Application.Services.Builders
         private void ProcessLeagueSeasonMembers(
             IEnumerable<ESPNFantasyMember> espnSeasonMembers,
             IEnumerable<ESPNFantasyTeam> espnSeasonTeams,
-            IEnumerable<ESPNWeeklyLeagueData> espnSeasonWeeklyData,
             int year)
         {
             ILookup<string, ESPNFantasyTeam> espnTeamsByESPNMemberId = espnSeasonTeams
@@ -201,16 +274,6 @@ namespace FantasyHOF.Application.Services.Builders
                 }))
                 .ToLookup(x => x.ESPNMemberId, x => x.ESPNTeam);
 
-            ILookup<int, ESPNMatchup> espnMatchupsByESPNTeamId = espnSeasonWeeklyData
-                .SelectMany(week => week.Matchups)
-                .SelectMany(matchup => new[]
-                {
-                    new { matchup.Home?.TeamId, Matchup = matchup},
-                    new { matchup.Away?.TeamId, Matchup = matchup}
-                })
-                .Where(x => x.TeamId != null)
-                .ToLookup(x => x.TeamId!.Value, x => x.Matchup);
-
             List<LeagueSeasonMember> seasonMembers = [];
 
             foreach (ESPNFantasyMember espnSeasonMember in espnSeasonMembers)
@@ -220,7 +283,6 @@ namespace FantasyHOF.Application.Services.Builders
                 ProcessLeagueSeasonMemberTeams(
                     espnSeasonMember,
                     espnTeamsByESPNMemberId[espnSeasonMember.Id],
-                    espnMatchupsByESPNTeamId,
                     year
                 );
             }
@@ -231,16 +293,13 @@ namespace FantasyHOF.Application.Services.Builders
         private void ProcessLeagueSeasonMemberTeams(
             ESPNFantasyMember espnSeasonMember,
             IEnumerable<ESPNFantasyTeam> espnSeasonMemberTeams,
-            ILookup<int, ESPNMatchup> espnMatchupsByESPNTeamId,
             int year)
         {
             List<LeagueSeasonMemberTeam> memberTeams = [];
 
             foreach (ESPNFantasyTeam espnMemberTeam in espnSeasonMemberTeams)
             {
-                memberTeams.Add(espnMapper.MapLeagueSeasonMemberTeam());
-
-                ProcessTeam(espnMemberTeam, espnMatchupsByESPNTeamId[espnMemberTeam.Id], year);
+                memberTeams.Add(espnMapper.MapLeagueSeasonMemberTeam(espnSeasonMember.Id, espnMemberTeam.Id));
             }
 
             _leagueSeasonMemberTeamsLookup.TryAdd((espnSeasonMember.Id, year), memberTeams);
@@ -248,6 +307,9 @@ namespace FantasyHOF.Application.Services.Builders
 
         private void ProcessTeam(ESPNFantasyTeam espnTeam, IEnumerable<ESPNMatchup> espnTeamMatchups, int year)
         {
+            // This prevents dual-creating teams that have multiple owners
+            if (_teamsLookup.ContainsKey((year, espnTeam.Id))) return;
+
             CreateTeam(espnTeam, year);
             CreateTeamSeasonStats(espnTeam, year);
 
@@ -270,7 +332,9 @@ namespace FantasyHOF.Application.Services.Builders
 
             foreach (ESPNMatchup espnMatchup in espnTeamMatchups)
             {
-                teamMatchups.Add(espnMapper.MapTeamMatchup(year, espnMatchup.MatchupPeriodId, espnMatchup.PlayoffTierType));
+                int? opponentTeamId = espnTeam.Id == espnMatchup.Home?.TeamId ? espnMatchup.Away?.TeamId : espnMatchup.Home?.TeamId;
+
+                teamMatchups.Add(espnMapper.MapTeamMatchup(year, espnMatchup.MatchupPeriodId, opponentTeamId, espnMatchup.PlayoffTierType));
 
                 ProcessMatchupTeamDetails(espnMatchup, year);
             }
@@ -290,6 +354,7 @@ namespace FantasyHOF.Application.Services.Builders
         private void CreateMatchupTeamDetails(ESPNMatchupTeam? espnMatchupTeam, string matchWinner, bool isHomeTeam, int year, int week)
         {
             if (espnMatchupTeam == null) return;
+            if (_matchupTeamDetailsLookup.ContainsKey((year, week, espnMatchupTeam.TeamId))) return; //  Prevent double-processing 
 
             _matchupTeamDetailsLookup.TryAdd(
                 (year, week, espnMatchupTeam.TeamId),
@@ -299,6 +364,9 @@ namespace FantasyHOF.Application.Services.Builders
         private void ProcessMatchupRosterSpots(ESPNMatchupTeam? espnMatchupTeam, int year, int week)
         {
             if (espnMatchupTeam == null) return;
+
+            // Since we process home and away for each espnMatchup, it's possible the matchup team was already created
+            if (_matchupRosterSpotsLookup.ContainsKey((year, week, espnMatchupTeam.TeamId))) return;
 
             List<MatchupRosterSpot> rosterSpots = [];
 
@@ -314,6 +382,10 @@ namespace FantasyHOF.Application.Services.Builders
 
         private void CreateAccumulatedStats(ESPNPlayer player, int espnTeamId, int year, int week)
         {
+            // This shouldn't be able to happen since a player can onnly be on one team,
+            // but just in case we incude this to prevent double processing
+            if (_accumulatedStatsLookup.ContainsKey((year, week, espnTeamId, player.Id))) return;
+
             List<AccumulatedStat> stats = [];
 
             ESPNPlayerStatProfile? espnLeagueAdjustedStats = player.Stats.FirstOrDefault(espnStatProfile => espnStatProfile.StatSourceId == 0);
@@ -328,6 +400,31 @@ namespace FantasyHOF.Application.Services.Builders
             }
 
             _accumulatedStatsLookup.TryAdd((year, week, espnTeamId, player.Id), stats);
+        }
+
+        private LeagueImportPlan BuildFlattenedLeagueGraph(League league)
+        {
+            return new LeagueImportPlan(
+                league,
+                [.. _newMembers],
+                [.. _newPlayers],
+                _membersByProviderId,
+                _playersByProviderPlayerId,
+                _leagueMembersByProviderId,
+                _leagueSeasonsByYear,
+                _leagueSeasonSettingsByYear,
+                _leagueSeasonScheduleSettingsByYear,
+                _leagueSeasonScoringSettingsByYear,
+                _leagueSeasonScoringItemsByYear,
+                _leagueSeasonMembersByYear,
+                _leagueSeasonMemberTeamsLookup,
+                _teamsLookup,
+                _teamSeasonStatsLookup,
+                _teamMatchupLookup,
+                _matchupTeamDetailsLookup,
+                _matchupRosterSpotsLookup,
+                _accumulatedStatsLookup
+            );
         }
     }
 }

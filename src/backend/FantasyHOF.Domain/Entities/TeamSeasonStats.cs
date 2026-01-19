@@ -3,7 +3,7 @@
     public class TeamSeasonStats
     {
         public int Id { get; private set; }
-        public int TeamId { get; private set; }
+        public int TeamId { get; set; }
 
         public required int Wins { get; set; }
         public required int Losses { get; set; }

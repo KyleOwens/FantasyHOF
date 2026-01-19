@@ -8,7 +8,7 @@ namespace FantasyHOF.Application.Services.Mappers
 {
     public interface IESPNLeagueMapper
     {
-        League MapLeague(string leagueId);
+        League MapLeague(string leagueId, List<LeagueSeason> leagueSeasons, List<LeagueSeasonSettings> settings);
         LeagueMember MapLeagueMember(string ESPNMemberId, IEnumerable<ESPNSeasonalLeagueData> memberSeasons);
         LeagueSeason MapLeagueSeason(ESPNSeasonalLeagueData seasonData);
         LeagueSeasonSettings MapLeagueSeasonSettings(ESPNLeagueSettings espnSettings);
@@ -17,10 +17,10 @@ namespace FantasyHOF.Application.Services.Mappers
         LeagueSeasonScoringItem MapLeagueSeasonScoringItem(ESPNScoringItem espnItem);
         LeagueSeasonMember MapLeagueSeasonMember(ESPNFantasyMember espnMember);
         FantasyMember MapFantasyMember(ESPNFantasyMember espnMember);
-        LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam();
+        LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam(string espnMemberId, int espnTeamId);
         Team MapTeam(ESPNFantasyTeam espnTeam);
         TeamSeasonStats MapTeamSeasonStats(ESPNRecordDetails espnTeamStats);
-        TeamMatchup MapTeamMatchup(int year, int week, string espnMatchupType);
+        TeamMatchup MapTeamMatchup(int year, int week, int? espnOpponentTeamId, string espnMatchupType);
         MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot, int year);
         Player MapPlayer(ESPNPlayer espnPlayer);
         AccumulatedStat MapAccumulatedStat(int statId, decimal statValue, decimal statScore);
@@ -29,13 +29,18 @@ namespace FantasyHOF.Application.Services.Mappers
 
     public class ESPNLeagueMapper : IESPNLeagueMapper
     {
-        public League MapLeague(string leagueId)
+        public League MapLeague(string leagueId, List<LeagueSeason> leagueSeasons, List<LeagueSeasonSettings> settings)
         {
+            LeagueSeason? mostRecentSeason = leagueSeasons.Last();
+            LeagueSeasonSettings? mostRecentSettings = settings.Last();
+
             return new League()
             {
                 FantasyProviderId = FantasyProviderId.ESPN,
                 ProviderLeagueId = leagueId,
-                SportId = SportId.Football
+                SportId = SportId.Football,
+                CurrentLeagueName = mostRecentSettings.LeagueName ?? "",
+                CurrentLeagueYear = mostRecentSeason?.Year ?? 0
             };
         }
 
@@ -115,6 +120,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new LeagueSeasonMember()
             {
+                ProviderMemberId = espnMember.Id,
                 IsLeagueCreator = espnMember.IsLeagueCreator,
                 IsLeagueManager = espnMember.IsLeagueManager
             };
@@ -132,9 +138,13 @@ namespace FantasyHOF.Application.Services.Mappers
             };
         }
 
-        public LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam()
+        public LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam(string espnMemberId, int espnTeamId)
         {
-            return new LeagueSeasonMemberTeam();
+            return new LeagueSeasonMemberTeam
+            {
+                ProviderMemberId = espnMemberId,
+                ProviderTeamId = espnTeamId
+            };
         }
 
         public Team MapTeam(ESPNFantasyTeam espnTeam)
@@ -165,6 +175,7 @@ namespace FantasyHOF.Application.Services.Mappers
         public TeamMatchup MapTeamMatchup(
             int year,
             int week,
+            int? espnOpponentTeamId,
             string espnMatchupType)
         {
             MatchupTypeId matchupType = espnMatchupType switch
@@ -180,6 +191,7 @@ namespace FantasyHOF.Application.Services.Mappers
             {
                 Year = year,
                 Week = week,
+                OpponentProviderTeamId = espnOpponentTeamId,
                 MatchupTypeId = matchupType,
             };
         }
@@ -206,6 +218,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new MatchupRosterSpot()
             {
+                ProviderPlayerId = espnRosterSpot.PlayerPoolEntry.Player.Id,
                 PositionId = leagueYear >= 2018 ? (PositionId)espnRosterSpot.lineupSlotId : PositionId.Unknown,
                 PointsScored = Math.Round(espnRosterSpot.PlayerPoolEntry.AppliedStatTotal, 2, MidpointRounding.AwayFromZero)
             };

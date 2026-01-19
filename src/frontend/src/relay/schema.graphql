@@ -136,11 +136,12 @@ type League implements Node {
   currentLeagueName: String!
   currentLeagueYear: Int!
   seasons: [LeagueSeason!]! @cost(weight: "10")
-  members: [LeagueMember!]! @cost(weight: "10")
+  leagueMembers: [LeagueMember!]!
   fantasyProvider: FantasyProvider! @cost(weight: "10")
   sport: Sport! @cost(weight: "10")
   createdAt: DateTime!
   updatedAt: DateTime!
+  members: [LeagueMember!]! @cost(weight: "10")
   recordSummary: LeagueRecordSummary @cost(weight: "10")
   recordDetails(recordType: RecordTypeId!): RecordDetails!
 }
@@ -235,6 +236,7 @@ type LeagueSeasonMember implements Node {
   memberId: ID!
   isLeagueCreator: Boolean!
   isLeagueManager: Boolean!
+  providerMemberId: String!
   member: FantasyMember! @cost(weight: "10")
   teams: [LeagueSeasonMemberTeam!]! @cost(weight: "10")
   id: ID!
@@ -249,6 +251,8 @@ type LeagueSeasonMemberTeam implements Node {
   leagueSeasonId: ID!
   memberId: ID!
   teamId: ID!
+  providerMemberId: String!
+  providerTeamId: Int!
   owner: LeagueSeasonMember!
   team: Team! @cost(weight: "10")
   id: ID!
@@ -328,6 +332,7 @@ type MatchupRosterSpot implements Node {
   id: ID!
   matchupTeamDetailsId: ID!
   playerId: ID!
+  providerPlayerId: Int!
   positionId: ID!
   pointsScored: Decimal!
   player: Player! @cost(weight: "10")
@@ -512,6 +517,7 @@ type TeamMatchup implements Node {
   opponentMatchupDetailsId: ID
   year: Int!
   week: Int!
+  opponentProviderTeamId: Int
   matchupTypeId: ID!
   team: Team!
   matchupType: MatchupType! @cost(weight: "10")

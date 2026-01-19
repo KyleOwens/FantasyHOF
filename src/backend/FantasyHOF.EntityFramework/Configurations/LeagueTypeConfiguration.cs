@@ -27,8 +27,8 @@ namespace FantasyHOF.EntityFramework.Configurations
                 .HasForeignKey(x => x.LeagueId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(x => x.Members)
-                .WithOne()
+            builder.HasMany(x => x.LeagueMembers)
+                .WithOne(x => x.League)
                 .HasForeignKey(x => x.LeagueId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

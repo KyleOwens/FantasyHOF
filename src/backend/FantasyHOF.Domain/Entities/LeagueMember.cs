@@ -6,8 +6,8 @@ namespace FantasyHOF.Domain.Entities
     {
         public LeagueMemberId Id => new(LeagueId, MemberId);
 
-        public int LeagueId { get; private set; }
-        public int MemberId { get; private set; }
+        public int LeagueId { get; set; }
+        public int MemberId { get; set; }
 
         public required int Firstyear { get; init; }
         public required int LastYear { get; init; }
@@ -17,11 +17,6 @@ namespace FantasyHOF.Domain.Entities
 
         public League League { get; private set; } = null!;
         public FantasyMember Member { get; private set; } = null!;
-
-        public void Setleague(League league)
-        {
-            League = league;
-        }
 
         public void SetMember(FantasyMember member)
         {

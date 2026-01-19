@@ -45,7 +45,7 @@ namespace FantasyHOF.Application.Mutations
                 await database.SaveChangesAsync(ct);
 
                 string jobId = jobClient.Enqueue<ILeagueImportJob>(
-                    job => job.ExecuteAsync(importTracker.Id, request.LeagueCredentials, JobCancellationToken.Null));
+                    job => job.ExecuteAsync(importTracker.Id, authenticatedUserId, request.LeagueCredentials, JobCancellationToken.Null));
 
                 return new(jobId, importTracker);
             }

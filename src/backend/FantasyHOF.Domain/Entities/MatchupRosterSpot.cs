@@ -5,9 +5,10 @@ namespace FantasyHOF.Domain.Entities
     public class MatchupRosterSpot
     {
         public int Id { get; private set; }
-        public int MatchupTeamDetailsId { get; private set; }
-        public int PlayerId { get; private set; }
+        public int MatchupTeamDetailsId { get; set; }
+        public int PlayerId { get; set; }
 
+        public required int ProviderPlayerId { get; init; }
         public required PositionId PositionId { get; set; }
         public required decimal PointsScored { get; set; }
 
@@ -18,11 +19,6 @@ namespace FantasyHOF.Domain.Entities
         public void SetPlayer(Player player)
         {
             Player = player;
-        }
-
-        public void SetPosition(Position position)
-        {
-            Position = position;
         }
 
         public void SetAccumulatedStats(List<AccumulatedStat> accumulatedStats)
