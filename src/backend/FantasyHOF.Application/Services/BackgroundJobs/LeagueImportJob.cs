@@ -9,6 +9,7 @@ using FantasyHOF.ESPN.Types.Inputs;
 using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace FantasyHOF.Application.Services.BackgroundJobs
@@ -40,12 +41,13 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
                 await eventSender.StartImport(import, ct);
 
                 LeagueImportPlan importPlan = await mediator.Send(new GetESPNLeagueImportPlanQuery(userId, credentials, import), ct);
-                await InsertRecords(importPlan, ct);
 
                 await eventSender.StartSaving(import, ct);
 
+                IDbContextTransaction transaction = await database.Database.BeginTransactionAsync();
                 import.User.RemoveLeagueIfExists(FantasyProviderId.ESPN, credentials.LeagueId);
-                import.User.AddLeague(importPlan.League);
+                await InsertRecords(importPlan, import, ct);
+                await transaction.CommitAsync();
 
                 await eventSender.Complete(import, importPlan.League.Id, ct);
             }
@@ -56,7 +58,7 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
             }
         }
 
-        private async Task InsertRecords(LeagueImportPlan flatLeague, CancellationToken ct)
+        private async Task InsertRecords(LeagueImportPlan flatLeague, LeagueImport import, CancellationToken ct)
         {
             var config = new BulkConfig
             {
@@ -64,20 +66,40 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
                 PreserveInsertOrder = true,
             };
 
+            await eventSender.StartSavingMiscellaneousData(import, ct);
+
             await InsertNonDependentEntities(flatLeague, config, ct);
-            await InsertLeagueSeasons(flatLeague, config, ct);
+
+            await eventSender.StartSavingMembers(import, ct);
+
             await InsertLeagueMembers(flatLeague, config, ct);
+
+            await eventSender.StartSavingSeasons(import, ct);
+
+            await InsertLeagueSeasons(flatLeague, config, ct);
             await InsertLeagueSeasonSettings(flatLeague, config, ct);
             await InsertLeagueSeasonScheduleSettings(flatLeague, config, ct);
             await InsertLeagueSeasonScoringSettings(flatLeague, config, ct);
             await InsertLeagueSeasonScoringItems(flatLeague, config, ct);
             await InsertLeagueSeasonMembers(flatLeague, config, ct);
+
+            await eventSender.StartSavingTeams(import, ct);
+
             await InsertTeams(flatLeague, config, ct);
             await InsertLeagueSeasonMemberTeams(flatLeague, config, ct);
             await InsertTeamSeasonStats(flatLeague, config, ct);
+
+            await eventSender.StartSavingMatchups(import, ct);
+
             await InsertMatchupTeamDetails(flatLeague, config, ct);
             await InsertTeamMatchups(flatLeague, config, ct);
+
+            await eventSender.StartSavingRosters(import, ct);
+
             await InsertMatchupRosterSpots(flatLeague, config, ct);
+
+            await eventSender.StartSavingStats(import, ct);
+
             await InsertAccumulatedStats(flatLeague, config, ct);
         }
 

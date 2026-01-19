@@ -1,14 +1,10 @@
-import {
-  LeagueImportStatusId,
-  PendingLeagueCardFragment$key,
-} from "@/__generated__/PendingLeagueCardFragment.graphql";
+import { PendingLeagueCardFragment$key } from "@/__generated__/PendingLeagueCardFragment.graphql";
 import { useFragment } from "react-relay";
 import { graphql } from "relay-runtime";
 import { Card, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Progress } from "../ui/progress";
 import { AlertCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 
 type Props = {
   importKey: PendingLeagueCardFragment$key;
@@ -35,57 +31,13 @@ const PendingLeagueCardFragment = graphql`
 
 export function PendingLeagueCard({ importKey }: Props) {
   const leagueImport = useFragment(PendingLeagueCardFragment, importKey);
-  const [visualProgress, setVisualProgress] = useState(leagueImport.progress);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const statusConfig: Record<
-    LeagueImportStatusId,
-    "secondary" | "destructive" | "default"
-  > = {
-    QUEUED: "secondary",
-    LOADING_DATA: "secondary",
-    SAVING_DATA: "secondary",
-    FAILED: "destructive",
-    COMPLETED: "default",
-    "%future added value": "secondary",
-    FORMATTING_DATA: "secondary",
-  };
-
-  useEffect(() => {
-    const serverProgress = leagueImport.progress;
-    const status = leagueImport.status.value;
-
-    if (
-      serverProgress > visualProgress ||
-      status === "COMPLETED" ||
-      status === "FAILED"
-    ) {
-      setVisualProgress(serverProgress);
-
-      if (timerRef.current) clearInterval(timerRef.current);
-    }
-
-    if (status === "SAVING_DATA") {
-      if (timerRef.current) clearInterval(timerRef.current);
-
-      timerRef.current = setInterval(() => {
-        setVisualProgress((prev) => {
-          if (prev >= 98) {
-            clearInterval(timerRef.current!);
-            return 98;
-          }
-
-          return prev + 0.8;
-        });
-      }, 300);
-    }
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [leagueImport.progress, leagueImport.status.value]);
-
-  const displayProgress = Math.floor(visualProgress);
+  const badgeVariant =
+    leagueImport.status.id === "COMPLETED"
+      ? "default"
+      : leagueImport.status.id === "FAILED"
+        ? "destructive"
+        : "secondary";
 
   return (
     <Card
@@ -105,16 +57,17 @@ export function PendingLeagueCard({ importKey }: Props) {
               {leagueImport.provider.name} League #
               {leagueImport.providerleagueId}
             </span>
-            <Badge variant={statusConfig[leagueImport.status.value]}>
-              {leagueImport.status.name}
-            </Badge>
+            <Badge variant={badgeVariant}>{leagueImport.status.name}</Badge>
           </div>
           {leagueImport.status.value !== "COMPLETED" &&
             leagueImport.status.value !== "FAILED" && (
               <div className="flex items-center gap-3">
-                <Progress value={displayProgress} className="flex-1 h-2" />
+                <Progress
+                  value={leagueImport.progress}
+                  className="flex-1 h-2"
+                />
                 <span className="text-xs text-muted-foreground w-12">
-                  {displayProgress}%
+                  {leagueImport.progress}%
                 </span>
               </div>
             )}

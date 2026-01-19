@@ -69,12 +69,10 @@ export function LeagueAdditionModal({
 
   useEffect(() => {
     if (!shouldBeOpen) return;
-    console.log("here");
     onOpenChange(true);
   }, [shouldBeOpen]);
 
   useEffect(() => {
-    console.log(step);
     if (step === LeagueAdditionStep.Completed) {
       const timer = setTimeout(() => {
         onOpenChange(false);

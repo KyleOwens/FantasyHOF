@@ -1,5 +1,6 @@
 ﻿using FantasyHOF.Application.Services.Authentication;
 using FantasyHOF.Application.Services.BackgroundJobs;
+using FantasyHOF.Application.Types.Exceptions;
 using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
@@ -31,6 +32,14 @@ namespace FantasyHOF.Application.Mutations
 
                 ESPNAPIClient client = espnClientBuilder.Build(request.LeagueCredentials);
                 await client.ValidateCredentialsAsync();
+
+                List<LeagueImport> existingImports = database.LeagueImports
+                    .Where(import => import.UserId == authenticatedUserId)
+                    .Where(import => import.ProviderleagueId == request.LeagueCredentials.LeagueId)
+                    .Where(import => import.StatusId != LeagueImportStatusId.Failed && import.StatusId != LeagueImportStatusId.Completed)
+                    .ToList();
+
+                if (existingImports.Count != 0) throw new LeagueImportExistsException();
 
                 LeagueImport importTracker = new()
                 {

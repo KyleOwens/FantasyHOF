@@ -109,7 +109,6 @@ export function ESPNForm({ resetEntry, onCompletion, userId }: Props) {
           ],
         },
         onCompleted: (response, _) => {
-          console.log(response);
           if (
             response.addESPNLeagueToUser.errors &&
             response.addESPNLeagueToUser.errors.length > 0
@@ -123,6 +122,10 @@ export function ESPNForm({ resetEntry, onCompletion, userId }: Props) {
             onCompletion();
           }
         },
+        onError: (_) =>
+          setServerErrors([
+            "Unexpected error communicating with server. Try again later.",
+          ]),
       });
     },
   });

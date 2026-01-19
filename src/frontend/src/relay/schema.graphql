@@ -161,6 +161,11 @@ type LeagueImport implements Node {
   league: League @cost(weight: "10")
 }
 
+type LeagueImportExistsError implements ICodedException {
+  message: String!
+  errorCode: AppErrorCode!
+}
+
 type LeagueImportStatus implements Node {
   id: ID!
   name: String!
@@ -563,7 +568,7 @@ type WeeklyRecordEntry implements RecordEntry {
   memberDetails: LeagueMember!
 }
 
-union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError
+union AddESPNLeagueToUserError = ESPNAuthenticationError | ESPNHttpError | ESPNLeagueInvalidError | ESPNNoActiveYearsError | ESPNInvalidYearError | LeagueImportExistsError
 
 union DeleteUserLeagueError = NotFoundError | ForbiddenError
 
@@ -580,6 +585,7 @@ input DeleteUserLeagueInput {
 enum AppErrorCode {
   FANTASY_HOF_FORBIDDEN
   FANTASY_HOF_NOT_FOUND
+  FANTASY_HOF_LEAGUE_IMPORT_EXISTS
   ESPN_AUTHENTICATION_FAILED
   ESPN_INVALID_YEAR
   ESPN_LEAGUE_INVALID
@@ -606,9 +612,17 @@ enum FantasyProviderId {
 
 enum LeagueImportStatusId {
   QUEUED
-  LOADING_DATA
+  LOADING_SEASONAL_DATA
+  LOADING_WEEKLYL_DATA
   FORMATTING_DATA
   SAVING_DATA
+  SAVING_MISCELLANEOUS_DATA
+  SAVING_MEMBERS
+  SAVING_SEASONS
+  SAVING_TEAMS
+  SAVING_MATCHUPS
+  SAVING_ROSTERS
+  SAVING_STATS
   COMPLETED
   FAILED
 }

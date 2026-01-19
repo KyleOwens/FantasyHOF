@@ -34,7 +34,11 @@ export function NoLeaguesCard({ providersKey, openModal }: Props) {
           <div className="flex flex-row items-center space-x-16">
             <div className="grid grid-cols-2 gap-8  *:rounded-lg *:size-20">
               {fantasyProviders.map((provider) => (
-                <img src={provider.logoURL} alt={provider.name} />
+                <img
+                  src={provider.logoURL}
+                  alt={provider.name}
+                  key={provider.name}
+                />
               ))}
             </div>
             <div className="flex flex-col gap-y-4 max-w-xl">

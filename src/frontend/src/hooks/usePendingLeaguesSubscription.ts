@@ -66,17 +66,19 @@ function addLeagueToMyLeaguesConnection(
   me: RecordProxy,
 ) {
   const newLeague = rootField.getLinkedRecord("league");
-
   if (!newLeague) return;
+
+  const newProviderId = newLeague.getValue("providerLeagueId");
 
   const leaguesConnection = ConnectionHandler.getConnection(me, "my_leagues");
   if (!leaguesConnection) return;
 
   const existingEdges = leaguesConnection.getLinkedRecords("edges") || [];
-  const alreadyExists = existingEdges.some(
-    (edge) =>
-      edge?.getLinkedRecord("node")?.getDataID() === newLeague.getDataID(),
-  );
+  const alreadyExists = existingEdges.some((edge) => {
+    const node = edge?.getLinkedRecord("node");
+    return node?.getValue("providerLeagueId") === newProviderId;
+  });
+
   if (alreadyExists) return;
 
   const edge = ConnectionHandler.createEdge(

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a8723e26392c9e888d47a96ac4077fe3>>
+ * @generated SignedSource<<6cc3e0b8de32f2739ccad6dde1b35bbb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,7 @@
 
 import { ConcreteRequest } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type LeagueImportStatusId = "COMPLETED" | "FAILED" | "FORMATTING_DATA" | "LOADING_DATA" | "QUEUED" | "SAVING_DATA" | "%future added value";
+export type LeagueImportStatusId = "COMPLETED" | "FAILED" | "FORMATTING_DATA" | "LOADING_SEASONAL_DATA" | "LOADING_WEEKLYL_DATA" | "QUEUED" | "SAVING_DATA" | "SAVING_MATCHUPS" | "SAVING_MEMBERS" | "SAVING_MISCELLANEOUS_DATA" | "SAVING_ROSTERS" | "SAVING_SEASONS" | "SAVING_STATS" | "SAVING_TEAMS" | "%future added value";
 export type usePendingLeaguesSubscription$variables = Record<PropertyKey, never>;
 export type usePendingLeaguesSubscription$data = {
   readonly leagueImportProgress: {

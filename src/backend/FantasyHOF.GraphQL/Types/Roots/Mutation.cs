@@ -17,6 +17,7 @@ namespace FantasyHOF.GraphQL.Types.Roots
         [Error(typeof(ESPNLeagueInvalidException))]
         [Error(typeof(ESPNNoActiveYearsException))]
         [Error(typeof(ESPNInvalidYearException))]
+        [Error<LeagueImportExistsException>]
         [Authorize]
         public static async Task<AddLeagueMutationPayload> AddESPNLeagueToUserAsync(
             string leagueId,

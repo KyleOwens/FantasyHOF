@@ -4,8 +4,9 @@
     {
         FantasyHOFForbidden,
         FantasyHOFNotFound,
+        FantasyHOFLeagueImportExists,
 
-        ESPNAuthenticationFailed,
+        ESPNAuthenticationFailed = 200,
         ESPNInvalidYear,
         ESPNLeagueInvalid,
         ESPNNoActiveYears,

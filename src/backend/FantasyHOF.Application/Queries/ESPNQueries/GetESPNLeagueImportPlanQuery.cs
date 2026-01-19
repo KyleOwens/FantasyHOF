@@ -22,7 +22,7 @@ namespace FantasyHOF.Application.Queries.ESPNQueries
             {
                 ESPNAPIClient espnClient = espnClientBuilder.Build(request.Credentials);
 
-                await eventSender.StartLoadingData(request.Import, ct);
+                await eventSender.StartLoadingSeasonalData(request.Import, ct);
 
                 IEnumerable<ESPNSeasonalLeagueData> espnSeasonalData = await espnClient.LoadSeasonalLeagueData();
                 IEnumerable<ESPNWeeklyLeagueData> espnWeeklyData = await espnClient.LoadWeeklyLeagueData();

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<556f1ed1f7f851cb7271641fee5242ba>>
+ * @generated SignedSource<<a43c44106b97ae3cb39eb1adf8eff0f0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,7 +9,7 @@
 // @ts-nocheck
 
 import { ReaderFragment } from 'relay-runtime';
-export type LeagueImportStatusId = "COMPLETED" | "FAILED" | "FORMATTING_DATA" | "LOADING_DATA" | "QUEUED" | "SAVING_DATA" | "%future added value";
+export type LeagueImportStatusId = "COMPLETED" | "FAILED" | "FORMATTING_DATA" | "LOADING_SEASONAL_DATA" | "LOADING_WEEKLYL_DATA" | "QUEUED" | "SAVING_DATA" | "SAVING_MATCHUPS" | "SAVING_MEMBERS" | "SAVING_MISCELLANEOUS_DATA" | "SAVING_ROSTERS" | "SAVING_SEASONS" | "SAVING_STATS" | "SAVING_TEAMS" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type PendingLeagueCardFragment$data = {
   readonly error: string | null | undefined;

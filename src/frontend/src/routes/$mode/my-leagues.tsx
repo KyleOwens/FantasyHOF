@@ -66,7 +66,6 @@ function MyLeaguesPage() {
   const isEmpty =
     completedLeagues.length === 0 && importingLeagues.length === 0;
 
-  console.log(isModalOpen);
   return (
     <>
       {isEmpty && (
@@ -86,7 +85,6 @@ function MyLeaguesPage() {
             </div>
             <Button
               onClick={() => {
-                console.log("here");
                 setIsModalOpen(true);
               }}
             >
@@ -159,7 +157,6 @@ function MyLeaguesPage() {
       <LeagueAdditionModal
         shouldBeOpen={isModalOpen}
         onClose={() => {
-          console.log("closing");
           setIsModalOpen(false);
         }}
         providersKey={data.fantasyProviders}

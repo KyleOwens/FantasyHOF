@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c7bd0feb4c85c0b8147cf2c350ba4c02>>
+ * @generated SignedSource<<1a4384773bd3a3974084d4d986ba427b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,7 +9,7 @@
 // @ts-nocheck
 
 import { ConcreteRequest } from 'relay-runtime';
-export type AppErrorCode = "ESPN_AUTHENTICATION_FAILED" | "ESPN_GENERAL_HTTP_ERROR" | "ESPN_INVALID_YEAR" | "ESPN_LEAGUE_INVALID" | "ESPN_NO_ACTIVE_YEARS" | "FANTASY_HOF_FORBIDDEN" | "FANTASY_HOF_NOT_FOUND" | "%future added value";
+export type AppErrorCode = "ESPN_AUTHENTICATION_FAILED" | "ESPN_GENERAL_HTTP_ERROR" | "ESPN_INVALID_YEAR" | "ESPN_LEAGUE_INVALID" | "ESPN_NO_ACTIVE_YEARS" | "FANTASY_HOF_FORBIDDEN" | "FANTASY_HOF_LEAGUE_IMPORT_EXISTS" | "FANTASY_HOF_NOT_FOUND" | "%future added value";
 export type DeleteUserLeagueInput = {
   leagueId: string;
 };
