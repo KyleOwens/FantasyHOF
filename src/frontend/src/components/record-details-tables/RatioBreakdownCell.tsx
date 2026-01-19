@@ -22,7 +22,7 @@ const ratioBreakdownCellFragment = graphql`
 export function RatioBreakdownCell({ entryKey }: Props) {
   const metric = useFragment(ratioBreakdownCellFragment, entryKey).metric;
 
-  if (!metric.numerator || !metric.denominator) return null;
+  if (metric.numerator == null || !metric.denominator) return null;
 
   return (
     <div className="flex items-center gap-2 py-2">

@@ -24,8 +24,8 @@ const navData = [
 export function HeaderNavigation() {
   return (
     <div className="flex items-center">
-      <Link to={indexRoute.to}>
-        <img src="/logo.png" className="-mx-2 h-16 w-22" />
+      <Link to={indexRoute.to} className="min-h-16 min-w-20">
+        <img src="/logo.png" className="-mx-2 h-16 w-20" />
       </Link>
       <NavigationMenu viewport={false}>
         <NavigationMenuList>
