@@ -1,11 +1,13 @@
 ﻿using FantasyHOF.Application.Queries.FantasyMemberQueries;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
+using HotChocolate.Authorization;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
 {
     [Node]
+    [Authorize]
     [ExtendObjectType<FantasyMember>]
     internal class FantasyMemberTypeExtension
     {

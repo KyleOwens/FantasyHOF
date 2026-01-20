@@ -1,11 +1,13 @@
 ﻿using FantasyHOF.Application.Queries.LeagueImportQueries;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
+using HotChocolate.Authorization;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
 {
     [Node]
+    [Authorize]
     [ExtendObjectType<LeagueImport>]
     internal class LeagueImportTypeExtension
     {
@@ -42,6 +44,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
 
             return await leagues.LoadAsync(import.LeagueId.Value, cancellationToken);
         }
+
 
         public static async Task<LeagueImport?> GetLeagueImportAsync(
             int id,

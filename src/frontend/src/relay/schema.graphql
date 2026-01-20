@@ -33,7 +33,7 @@ interface RecordMetric {
   unit: String!
 }
 
-type AccumulatedStat implements Node {
+type AccumulatedStat implements Node @authorize {
   id: ID!
   matchupRosterSpotId: ID!
   statId: ID!
@@ -104,7 +104,7 @@ type EntriesEdge {
   node: RecordEntry!
 }
 
-type FantasyMember implements Node {
+type FantasyMember implements Node @authorize {
   id: ID!
   fantasyProviderId: ID!
   providerMemberId: String!

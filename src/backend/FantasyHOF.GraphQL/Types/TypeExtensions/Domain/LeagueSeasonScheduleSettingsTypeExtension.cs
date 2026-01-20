@@ -1,10 +1,12 @@
 ﻿using FantasyHOF.Application.Queries.LeagueSeasonScheduleSettingsQueries;
 using FantasyHOF.Domain.Entities;
+using HotChocolate.Authorization;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
 {
     [Node]
+    [Authorize]
     [ExtendObjectType(typeof(LeagueSeasonScheduleSettings))]
     internal class LeagueSeasonScheduleSettingsTypeExtension
     {
