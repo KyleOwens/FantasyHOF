@@ -14,14 +14,8 @@ namespace FantasyHOF.Application.Queries.UserQueries
         {
             public async Task<User?> Handle(GetUserByIdQuery request, CancellationToken ct)
             {
-                if (!currentUser.IsAuthenticated) return null;
-
-                Guid currentUserId = await currentUser.GetUserIdAsync(ct);
-
-                if (currentUserId != request.UserId) return null;
-
                 return await database.Users
-                    .SingleAsync(user => user.ClerkId == currentUser.ClerkUserId, ct);
+                    .SingleAsync(user => user.Id == currentUser.Id, ct);
             }
         }
     }

@@ -5,7 +5,7 @@
         public int Id { get; private set; }
         public int TeamId { get; set; }
 
-        public required Guid UserId { get; init; }
+        public required string UserId { get; init; }
         public required int Wins { get; init; }
         public required int Losses { get; init; }
         public required int Ties { get; init; }

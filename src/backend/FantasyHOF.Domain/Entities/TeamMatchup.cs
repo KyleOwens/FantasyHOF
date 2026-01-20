@@ -9,7 +9,7 @@ namespace FantasyHOF.Domain.Entities
         public int OwnerMatchupDetailsId { get; set; }
         public int? OpponentMatchupDetailsId { get; set; }
 
-        public required Guid UserId { get; init; }
+        public required string UserId { get; init; }
         public required int Year { get; init; }
         public required int Week { get; init; }
         public required int? OpponentProviderTeamId { get; init; }

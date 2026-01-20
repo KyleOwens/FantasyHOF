@@ -25,16 +25,15 @@ namespace FantasyHOF.Application.Mutations
         {
             public async Task<AddLeagueMutationPayload> Handle(AddESPNLeagueForUserCommand request, CancellationToken ct)
             {
-                Guid authenticatedUserId = await currentUser.GetUserIdAsync(ct);
                 User user = await database.Users
                     .Include(user => user.Leagues)
-                    .SingleAsync(user => user.Id == authenticatedUserId, ct);
+                    .SingleAsync(user => user.Id == currentUser.Id, ct);
 
                 ESPNAPIClient client = espnClientBuilder.Build(request.LeagueCredentials);
                 await client.ValidateCredentialsAsync();
 
                 List<LeagueImport> existingImports = await database.LeagueImports
-                    .Where(import => import.UserId == authenticatedUserId)
+                    .Where(import => import.UserId == currentUser.Id)
                     .Where(import => import.ProviderleagueId == request.LeagueCredentials.LeagueId)
                     .Where(import => import.StatusId != LeagueImportStatusId.Failed && import.StatusId != LeagueImportStatusId.Completed)
                     .ToListAsync(ct);
@@ -54,7 +53,7 @@ namespace FantasyHOF.Application.Mutations
                 await database.SaveChangesAsync(ct);
 
                 string jobId = jobClient.Enqueue<ILeagueImportJob>(
-                    job => job.ExecuteAsync(importTracker.Id, authenticatedUserId, request.LeagueCredentials, JobCancellationToken.Null));
+                    job => job.ExecuteAsync(importTracker.Id, currentUser.Id, request.LeagueCredentials, JobCancellationToken.Null));
 
                 return new(jobId, importTracker);
             }

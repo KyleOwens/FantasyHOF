@@ -7,8 +7,8 @@ namespace FantasyHOF.GraphQL.Types.DataLoaderDefinitions
     internal static class UsersByIdsDataLoaderDefinition
     {
         [DataLoader]
-        public static async Task<Dictionary<Guid, User>> GetUsersByIdsAsync(
-            IReadOnlyList<Guid> ids,
+        public static async Task<Dictionary<string, User>> GetUsersByIdsAsync(
+            IReadOnlyList<string> ids,
             IMediator mediator,
             CancellationToken cancellationToken)
         {

@@ -36,7 +36,7 @@ interface RecordMetric {
 type AccumulatedStat implements Node @authorize {
   id: ID!
   matchupRosterSpotId: ID!
-  userId: UUID!
+  userId: String!
   statId: ID!
   statValue: Decimal!
   pointsScored: Decimal!
@@ -130,7 +130,7 @@ type ForbiddenError implements ICodedException {
 
 type League implements Node @authorize {
   id: ID!
-  userId: UUID!
+  userId: String!
   fantasyProviderId: ID!
   providerLeagueId: String!
   sportId: SportId!
@@ -149,7 +149,7 @@ type League implements Node @authorize {
 
 type LeagueImport implements Node @authorize {
   id: ID!
-  userId: UUID!
+  userId: String!
   providerId: FantasyProviderId!
   providerleagueId: String!
   statusId: LeagueImportStatusId!
@@ -195,7 +195,7 @@ type LeagueMember implements Node @authorize {
   id: ID!
   leagueId: ID!
   memberId: ID!
-  userId: UUID!
+  userId: String!
   firstyear: Int!
   lastYear: Int!
   tenure: Int!
@@ -233,7 +233,7 @@ type LeagueRecordSummary {
 type LeagueSeason implements Node @authorize {
   id: ID!
   leagueId: ID!
-  userId: UUID!
+  userId: String!
   year: Int!
   settings: LeagueSeasonSettings! @cost(weight: "10")
   members: [LeagueSeasonMember!]! @cost(weight: "10")
@@ -242,7 +242,7 @@ type LeagueSeason implements Node @authorize {
 type LeagueSeasonMember implements Node @authorize {
   leagueSeasonId: ID!
   memberId: ID!
-  userId: UUID!
+  userId: String!
   isLeagueCreator: Boolean!
   isLeagueManager: Boolean!
   providerMemberId: String!
@@ -260,7 +260,7 @@ type LeagueSeasonMemberTeam implements Node @authorize {
   leagueSeasonId: ID!
   memberId: ID!
   teamId: ID!
-  userId: UUID!
+  userId: String!
   providerMemberId: String!
   providerTeamId: Int!
   owner: LeagueSeasonMember!
@@ -277,7 +277,7 @@ type LeagueSeasonMemberTeamId {
 type LeagueSeasonScheduleSettings implements Node @authorize {
   id: ID!
   leagueSeasonId: ID!
-  userId: UUID!
+  userId: String!
   matchupCount: Int!
   matchupLength: Int!
   playoffMatchupLength: Int!
@@ -288,7 +288,7 @@ type LeagueSeasonScheduleSettings implements Node @authorize {
 type LeagueSeasonScoringItem implements Node @authorize {
   id: ID!
   leagueSeasonId: ID!
-  userId: UUID!
+  userId: String!
   statId: ID!
   points: Decimal!
   stat: Stat! @cost(weight: "10")
@@ -297,7 +297,7 @@ type LeagueSeasonScoringItem implements Node @authorize {
 type LeagueSeasonScoringSettings implements Node @authorize {
   id: ID!
   leagueSeasonId: ID!
-  userId: UUID!
+  userId: String!
   homeTeamBonusPoints: Int!
   matchupTieRule: String!
   matchupTieRuleBy: Int!
@@ -312,7 +312,7 @@ type LeagueSeasonScoringSettings implements Node @authorize {
 type LeagueSeasonSettings implements Node @authorize {
   id: ID!
   leagueSeasonId: ID!
-  userId: UUID!
+  userId: String!
   leagueName: String!
   scheduleSettings: LeagueSeasonScheduleSettings! @cost(weight: "10")
   scoringSettings: LeagueSeasonScoringSettings! @cost(weight: "10")
@@ -346,7 +346,7 @@ type MatchupRosterSpot implements Node @authorize {
   id: ID!
   matchupTeamDetailsId: ID!
   playerId: ID!
-  userId: UUID!
+  userId: String!
   providerPlayerId: Int!
   positionId: ID!
   pointsScored: Decimal!
@@ -358,7 +358,7 @@ type MatchupRosterSpot implements Node @authorize {
 type MatchupTeamDetails implements Node @authorize {
   id: ID!
   teamId: ID!
-  userId: UUID!
+  userId: String!
   score: Decimal!
   matchupOutcomeId: ID!
   team: Team! @cost(weight: "10")
@@ -515,7 +515,7 @@ type Subscription {
 type Team implements Node @authorize {
   id: ID!
   leagueSeasonId: Int!
-  userId: UUID!
+  userId: String!
   providerTeamId: Int!
   seasonRank: Int!
   abbreviation: String!
@@ -532,7 +532,7 @@ type TeamMatchup implements Node @authorize {
   teamId: ID!
   ownerMatchupDetailsId: ID
   opponentMatchupDetailsId: ID
-  userId: UUID!
+  userId: String!
   year: Int!
   week: Int!
   opponentProviderTeamId: Int
@@ -547,7 +547,7 @@ type TeamMatchup implements Node @authorize {
 type TeamSeasonStats implements Node @authorize {
   id: ID!
   teamId: ID!
-  userId: UUID!
+  userId: String!
   wins: Int!
   losses: Int!
   ties: Int!
@@ -559,7 +559,7 @@ type TeamSeasonStats implements Node @authorize {
 type User implements Node @authorize {
   removeLeagueIfExists(leagueId: Int!): Boolean!
   id: ID!
-  clerkId: String!
+  createdAt: DateTime!
   leagues("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): LeaguesConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
   league(leagueId: ID!): League! @cost(weight: "10")
   leagueImports("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String): LeagueImportsConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
@@ -1075,5 +1075,3 @@ scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time"
 
 "The `Decimal` scalar type represents a decimal floating-point number."
 scalar Decimal
-
-scalar UUID @specifiedBy(url: "https:\/\/tools.ietf.org\/html\/rfc4122")

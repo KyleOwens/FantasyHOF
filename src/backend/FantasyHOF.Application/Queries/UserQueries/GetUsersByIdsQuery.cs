@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FantasyHOF.Application.Queries.UserQueries
 {
-    public sealed record GetUsersByIdsQuery(IEnumerable<Guid> UserIds)
+    public sealed record GetUsersByIdsQuery(IEnumerable<string> UserIds)
         : IRequest<IEnumerable<User>>
     {
         public sealed class GetUsersByIdsQueryHandler(FantasyHOFDBContext database)

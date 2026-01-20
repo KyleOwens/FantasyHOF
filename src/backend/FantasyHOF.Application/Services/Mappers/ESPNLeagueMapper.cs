@@ -6,7 +6,7 @@ using FantasyHOF.ESPN.Types.Outputs;
 
 namespace FantasyHOF.Application.Services.Mappers
 {
-    public class ESPNLeagueMapper(Guid userId)
+    public class ESPNLeagueMapper(string userId)
     {
         public League MapLeague(string leagueId, List<LeagueSeason> leagueSeasons, List<LeagueSeasonSettings> settings)
         {

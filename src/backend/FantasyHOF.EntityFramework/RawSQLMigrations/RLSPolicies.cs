@@ -27,13 +27,25 @@ namespace FantasyHOF.EntityFramework.RawSQLMigrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(@"
-                CREATE OR REPLACE FUNCTION current_app_user_id() RETURNS uuid AS $$
+                CREATE OR REPLACE FUNCTION current_app_user_id() RETURNS text AS $$
                 BEGIN
-                    RETURN NULLIF(current_setting('app.current_user_id', true), '')::uuid;
+                    RETURN NULLIF(current_setting('app.current_user_id', true), '');
                 EXCEPTION
                     WHEN OTHERS THEN RETURN NULL;
                 END;
                 $$ LANGUAGE plpgsql;
+            ");
+
+            migrationBuilder.Sql(@"
+                CREATE OR REPLACE FUNCTION ensure_user_exists(user_id text)
+                RETURNS void
+                LANGUAGE sql
+                SECURITY DEFINER
+                AS $$
+                    INSERT INTO users (id, created_at)
+                    VALUES (user_id, NOW())
+                    ON CONFLICT (user_id) DO NOTHING;
+                $$;
             ");
 
             foreach (string table in _rlsTables)
@@ -63,6 +75,7 @@ namespace FantasyHOF.EntityFramework.RawSQLMigrations
                 migrationBuilder.Sql($"ALTER TABLE {table} DISABLE ROW LEVEL SECURITY;");
             }
 
+            migrationBuilder.Sql("DROP FUNCTION IF EXISTS ensure_user_exists(text);");
             migrationBuilder.Sql("DROP FUNCTION IF EXISTS current_app_user_id();");
         }
     }

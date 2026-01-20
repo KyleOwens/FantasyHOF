@@ -9,7 +9,7 @@ using MediatR;
 
 namespace FantasyHOF.Application.Queries.ESPNQueries
 {
-    public sealed record GetESPNLeagueImportPlanQuery(Guid UserId, ESPNLeagueCredentials Credentials, LeagueImport Import)
+    public sealed record GetESPNLeagueImportPlanQuery(string UserId, ESPNLeagueCredentials Credentials, LeagueImport Import)
         : IRequest<LeagueImportPlan>
     {
         public sealed class GetESPNLeagueImportPlanQueryHandler(

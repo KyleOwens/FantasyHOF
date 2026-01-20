@@ -16,7 +16,7 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
 {
     public interface ILeagueImportJob
     {
-        Task ExecuteAsync(int pendingLeagueId, Guid userid, ESPNLeagueCredentials credentials, IJobCancellationToken ct);
+        Task ExecuteAsync(int pendingLeagueId, string userid, ESPNLeagueCredentials credentials, IJobCancellationToken ct);
     }
 
     public class LeagueImportJob(
@@ -27,7 +27,7 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
     ) : ILeagueImportJob
     {
         [JobDisplayName("Import ESPN League {1}")]
-        public async Task ExecuteAsync(int pendingLeagueId, Guid userId, ESPNLeagueCredentials credentials, IJobCancellationToken jobToken)
+        public async Task ExecuteAsync(int pendingLeagueId, string userId, ESPNLeagueCredentials credentials, IJobCancellationToken jobToken)
         {
             CancellationToken ct = jobToken.ShutdownToken;
 
@@ -55,7 +55,7 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                logger.LogError(ex, "An error occurred while processing the league import");
                 await eventSender.Error(import, ct);
             }
         }

@@ -16,13 +16,9 @@ namespace FantasyHOF.Application.Mutations
         {
             public async Task<DeleteUserLeagueMutationPayload> Handle(DeleteUserLeagueMutation request, CancellationToken ct)
             {
-                if (!currentUser.IsAuthenticated) throw new ForbiddenException();
-
-                Guid userId = await currentUser.GetUserIdAsync(ct);
-
                 User user = await database.Users
                     .Include(x => x.Leagues)
-                    .SingleAsync(x => x.Id == userId, ct);
+                    .SingleAsync(x => x.Id == currentUser.Id, ct);
 
                 bool success = user.RemoveLeagueIfExists(request.LeagueId);
                 if (!success) throw new NotFoundException(nameof(League), request.LeagueId);

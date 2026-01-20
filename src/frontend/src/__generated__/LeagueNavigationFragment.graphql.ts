@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ff09946915277566b5818436a06dcb1e>>
+ * @generated SignedSource<<37b7f47975e7195907ca0fadd2371fec>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,7 +21,7 @@ export type LeagueNavigationFragment$data = ReadonlyArray<{
     readonly id: string;
     readonly name: string;
   };
-  readonly userId: any;
+  readonly userId: string;
   readonly " $fragmentType": "LeagueNavigationFragment";
 }>;
 export type LeagueNavigationFragment$key = ReadonlyArray<{

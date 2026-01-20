@@ -40,10 +40,10 @@ namespace FantasyHOF.EntityFramework
         public DbSet<LeagueImport> LeagueImports => Set<LeagueImport>();
         public DbSet<LeagueImportStatus> LeagueImportStatuses => Set<LeagueImportStatus>();
 
-        private Guid? _rlsUserId;
+        private string? _rlsUserId;
 
-        public Guid? RLSUserId => _rlsUserId;
-        public void SetRLSUserId(Guid? userId)
+        public string? RLSUserId => _rlsUserId;
+        public void SetRLSUserId(string userId)
         {
             _rlsUserId = userId;
         }

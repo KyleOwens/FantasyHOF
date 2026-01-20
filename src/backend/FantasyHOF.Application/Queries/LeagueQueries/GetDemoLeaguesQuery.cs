@@ -15,13 +15,9 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
         {
             public async Task<IEnumerable<League>> Handle(GetDemoLeaguesQuery request, CancellationToken ct)
             {
-                User adminUser = await database.Users
-                    .Where(x => x.ClerkId == appConfig.Value.AdminClerkUserId)
-                    .SingleAsync(ct);
-
                 return await database.Leagues
                     .AsNoTracking()
-                    .Where(league => league.UserId == adminUser.Id)
+                    .Where(league => league.UserId == appConfig.Value.AdminClerkUserId)
                     .ToListAsync(ct);
             }
         }

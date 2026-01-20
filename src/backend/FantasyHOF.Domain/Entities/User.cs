@@ -2,9 +2,10 @@
 
 namespace FantasyHOF.Domain.Entities
 {
-    public class User(string clerkId)
+    public class User(string Id)
     {
-        public string Id { get; private set; } = clerkId;
+        public string Id { get; private set; } = Id;
+        public DateTimeOffset CreatedAt { get; private set; }
 
         public List<League> Leagues { get; private set; } = [];
 

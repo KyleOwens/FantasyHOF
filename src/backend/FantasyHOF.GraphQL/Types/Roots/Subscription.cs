@@ -9,15 +9,14 @@ namespace FantasyHOF.GraphQL.Types.Roots
     [SubscriptionType]
     public class Subscription
     {
-        // This sets up the subscription stream
+        [Authorize]
         public async ValueTask<ISourceStream<LeagueImport>> SubscribeToLeagueImportProgress(
             ICurrentUserService currentUser,
             ITopicEventReceiver receiver,
             CancellationToken ct)
         {
-            Guid userId = await currentUser.GetUserIdAsync(ct);
             return await receiver.SubscribeAsync<LeagueImport>(
-                $"{nameof(LeagueImport)}_{userId}",
+                $"{nameof(LeagueImport)}_{currentUser.Id}",
                 ct);
         }
 

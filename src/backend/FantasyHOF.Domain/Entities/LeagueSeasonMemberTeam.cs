@@ -8,7 +8,7 @@ namespace FantasyHOF.Domain.Entities
         public int MemberId { get; set; }
         public int TeamId { get; set; }
 
-        public required Guid UserId { get; init; }
+        public required string UserId { get; init; }
         public required string ProviderMemberId { get; init; }
         public required int ProviderTeamId { get; init; }
         public LeagueSeasonMember Owner { get; private set; } = null!;

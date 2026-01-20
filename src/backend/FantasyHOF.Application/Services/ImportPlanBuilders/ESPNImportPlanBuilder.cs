@@ -14,7 +14,7 @@ namespace FantasyHOF.Application.Services.ImportPlanBuilders
     {
         public Task<LeagueImportPlan> BuildNewLeague(
             string espnLeagueId,
-            Guid userId,
+            string userId,
             LeagueImport import,
             IEnumerable<ESPNSeasonalLeagueData> espnSeasonalData,
             IEnumerable<ESPNWeeklyLeagueData> weeklyLeagueData,
@@ -50,7 +50,7 @@ namespace FantasyHOF.Application.Services.ImportPlanBuilders
 
         public async Task<LeagueImportPlan> BuildNewLeague(
             string espnLeagueId,
-            Guid userId,
+            string userId,
             LeagueImport import,
             IEnumerable<ESPNSeasonalLeagueData> espnSeasonalData,
             IEnumerable<ESPNWeeklyLeagueData> espnWeeklyData,

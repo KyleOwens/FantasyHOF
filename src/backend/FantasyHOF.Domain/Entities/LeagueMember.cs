@@ -9,7 +9,7 @@ namespace FantasyHOF.Domain.Entities
         public int LeagueId { get; set; }
         public int MemberId { get; set; }
 
-        public required Guid UserId { get; init; }
+        public required string UserId { get; init; }
         public required int Firstyear { get; init; }
         public required int LastYear { get; init; }
         public required int Tenure { get; init; }

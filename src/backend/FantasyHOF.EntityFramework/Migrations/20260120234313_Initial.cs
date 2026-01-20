@@ -103,8 +103,8 @@ namespace FantasyHOF.EntityFramework.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    clerk_id = table.Column<string>(type: "text", nullable: false)
+                    id = table.Column<string>(type: "text", nullable: false),
+                    created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -163,7 +163,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     fantasy_provider_id = table.Column<int>(type: "integer", nullable: false),
                     provider_league_id = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     sport_id = table.Column<int>(type: "integer", nullable: false),
@@ -201,7 +201,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     provider_id = table.Column<int>(type: "integer", nullable: false),
                     providerleague_id = table.Column<string>(type: "text", nullable: false),
                     status_id = table.Column<int>(type: "integer", nullable: false),
@@ -244,7 +244,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                 {
                     league_id = table.Column<int>(type: "integer", nullable: false),
                     member_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     firstyear = table.Column<int>(type: "integer", nullable: false),
                     last_year = table.Column<int>(type: "integer", nullable: false),
                     tenure = table.Column<int>(type: "integer", nullable: false),
@@ -275,7 +275,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     league_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     year = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -295,7 +295,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                 {
                     league_season_id = table.Column<int>(type: "integer", nullable: false),
                     member_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     is_league_creator = table.Column<bool>(type: "boolean", nullable: false),
                     is_league_manager = table.Column<bool>(type: "boolean", nullable: false),
                     provider_member_id = table.Column<string>(type: "text", nullable: false)
@@ -324,7 +324,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     league_season_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     league_name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
@@ -346,7 +346,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     league_season_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     provider_team_id = table.Column<int>(type: "integer", nullable: false),
                     season_rank = table.Column<int>(type: "integer", nullable: false),
                     abbreviation = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
@@ -371,7 +371,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     league_season_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     matchup_count = table.Column<int>(type: "integer", nullable: false),
                     matchup_length = table.Column<int>(type: "integer", nullable: false),
                     playoff_matchup_length = table.Column<int>(type: "integer", nullable: false),
@@ -396,7 +396,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     league_season_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     home_team_bonus_points = table.Column<int>(type: "integer", nullable: false),
                     matchup_tie_rule = table.Column<string>(type: "text", nullable: false),
                     matchup_tie_rule_by = table.Column<int>(type: "integer", nullable: false),
@@ -424,7 +424,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     member_id = table.Column<int>(type: "integer", nullable: false),
                     team_id = table.Column<int>(type: "integer", nullable: false),
                     league_season_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     provider_member_id = table.Column<string>(type: "text", nullable: false),
                     provider_team_id = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -452,7 +452,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     team_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     score = table.Column<decimal>(type: "numeric", nullable: false),
                     matchup_outcome_id = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -480,7 +480,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     team_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     wins = table.Column<int>(type: "integer", nullable: false),
                     losses = table.Column<int>(type: "integer", nullable: false),
                     ties = table.Column<int>(type: "integer", nullable: false),
@@ -506,7 +506,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     league_season_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     stat_id = table.Column<int>(type: "integer", nullable: false),
                     points = table.Column<decimal>(type: "numeric", nullable: false)
                 },
@@ -535,7 +535,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     matchup_team_details_id = table.Column<int>(type: "integer", nullable: false),
                     player_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     provider_player_id = table.Column<int>(type: "integer", nullable: false),
                     position_id = table.Column<int>(type: "integer", nullable: false),
                     points_scored = table.Column<decimal>(type: "numeric", nullable: false)
@@ -572,7 +572,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     team_id = table.Column<int>(type: "integer", nullable: false),
                     owner_matchup_details_id = table.Column<int>(type: "integer", nullable: false),
                     opponent_matchup_details_id = table.Column<int>(type: "integer", nullable: true),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     year = table.Column<int>(type: "integer", nullable: false),
                     week = table.Column<int>(type: "integer", nullable: false),
                     opponent_provider_team_id = table.Column<int>(type: "integer", nullable: true),
@@ -614,7 +614,7 @@ namespace FantasyHOF.EntityFramework.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     matchup_roster_spot_id = table.Column<int>(type: "integer", nullable: false),
-                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<string>(type: "text", nullable: false),
                     stat_id = table.Column<int>(type: "integer", nullable: false),
                     stat_value = table.Column<decimal>(type: "numeric", nullable: false),
                     points_scored = table.Column<decimal>(type: "numeric", nullable: false)
@@ -1130,12 +1130,6 @@ namespace FantasyHOF.EntityFramework.Migrations
                 name: "ix_teams_league_season_id",
                 table: "teams",
                 column: "league_season_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_users_clerk_id",
-                table: "users",
-                column: "clerk_id",
-                unique: true);
         }
 
         /// <inheritdoc />

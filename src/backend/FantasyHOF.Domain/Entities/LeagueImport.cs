@@ -6,7 +6,7 @@ namespace FantasyHOF.Domain.Entities
     {
         public int Id { get; private set; }
 
-        public required Guid UserId { get; init; }
+        public required string UserId { get; init; }
         public required FantasyProviderId ProviderId { get; init; }
         public required string ProviderleagueId { get; init; }
         public required LeagueImportStatusId StatusId { get; set; }

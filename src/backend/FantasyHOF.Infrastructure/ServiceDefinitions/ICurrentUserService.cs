@@ -4,8 +4,6 @@
     {
         bool IsAuthenticated { get; }
         bool IsAdmin { get; }
-        string ClerkUserId { get; }
-        Task<Guid> GetUserIdAsync(CancellationToken ct = default);
-        Task<Guid?> TryGetUserIdAsync(CancellationToken ct = default);
+        string Id { get; }
     }
 }
