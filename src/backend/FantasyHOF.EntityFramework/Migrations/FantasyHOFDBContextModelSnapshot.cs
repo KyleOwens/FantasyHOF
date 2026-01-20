@@ -47,6 +47,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("stat_value");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_accumulated_stats");
 
@@ -391,6 +395,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("tenure");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.HasKey("LeagueId", "MemberId")
                         .HasName("pk_league_members");
 
@@ -412,6 +420,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("LeagueId")
                         .HasColumnType("integer")
                         .HasColumnName("league_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.Property<int>("Year")
                         .HasColumnType("integer")
@@ -449,6 +461,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("text")
                         .HasColumnName("provider_member_id");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.HasKey("LeagueSeasonId", "MemberId")
                         .HasName("pk_league_season_members");
 
@@ -480,6 +496,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("ProviderTeamId")
                         .HasColumnType("integer")
                         .HasColumnName("provider_team_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("MemberId", "TeamId")
                         .HasName("pk_league_season_member_teams");
@@ -522,6 +542,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("playoff_team_count");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.Property<bool>("VariablePlayoffMatchupLength")
                         .HasColumnType("boolean")
                         .HasColumnName("variable_playoff_matchup_length");
@@ -556,6 +580,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("StatId")
                         .HasColumnType("integer")
                         .HasColumnName("stat_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("pk_league_season_scoring_items");
@@ -618,6 +646,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("text")
                         .HasColumnName("scoring_type");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_league_season_scoring_settings");
 
@@ -646,6 +678,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("LeagueSeasonId")
                         .HasColumnType("integer")
                         .HasColumnName("league_season_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("pk_league_season_settings");
@@ -730,6 +766,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("provider_player_id");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_matchup_roster_spots");
 
@@ -765,6 +805,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("TeamId")
                         .HasColumnType("integer")
                         .HasColumnName("team_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
                         .HasName("pk_matchup_team_details");
@@ -2270,6 +2314,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("season_rank");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
                     b.HasKey("Id")
                         .HasName("pk_teams");
 
@@ -2307,6 +2355,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("TeamId")
                         .HasColumnType("integer")
                         .HasColumnName("team_id");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.Property<int>("Week")
                         .HasColumnType("integer")
@@ -2362,6 +2414,10 @@ namespace FantasyHOF.EntityFramework.Migrations
                     b.Property<int>("Ties")
                         .HasColumnType("integer")
                         .HasColumnName("ties");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.Property<decimal>("WinPercentage")
                         .HasColumnType("numeric")

@@ -16,7 +16,7 @@ builder.Logging.AddSimpleConsole(options =>
 
 builder.Logging.SetMinimumLevel(LogLevel.Information);
 
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+string connectionString = builder.Configuration.GetConnectionString("AppConnection")
     ?? throw new Exception("Failed to load connection string from config");
 
 builder.Services.AddFantasyHOFAuthenticationServices(
@@ -43,7 +43,8 @@ if (app.Environment.IsDevelopment())
     FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
 
     //context.Database.EnsureDeleted();
-    context.Database.Migrate();
+    //await context.Database.MigrateAsync();
+    //await context.ApplyPostMigrationScriptsAsync();
 
     app.UseHangfireDashboard("/hangfire");
 }

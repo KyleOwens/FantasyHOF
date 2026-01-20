@@ -2,17 +2,11 @@
 
 namespace FantasyHOF.Domain.Entities
 {
-    public class User
+    public class User(string clerkId)
     {
-        public Guid Id { get; private set; } = Guid.NewGuid();
-        public string ClerkId { get; private set; } = null!;
+        public string Id { get; private set; } = clerkId;
 
         public List<League> Leagues { get; private set; } = [];
-
-        public User(string clerkId)
-        {
-            ClerkId = clerkId;
-        }
 
         public bool RemoveLeagueIfExists(int leagueId)
         {
@@ -37,14 +31,6 @@ namespace FantasyHOF.Domain.Entities
             Leagues.Remove(leagueToRemove);
 
             return true;
-        }
-
-        public void AddLeague(League league)
-        {
-            if (!Leagues.Any(l => l.Id == league.Id))
-            {
-                Leagues.Add(league);
-            }
         }
     }
 }

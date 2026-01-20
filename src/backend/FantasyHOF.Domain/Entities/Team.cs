@@ -5,6 +5,7 @@
         public int Id { get; private set; }
         public int LeagueSeasonId { get; set; }
 
+        public required Guid UserId { get; init; }
         public required int ProviderTeamId { get; init; }
         public required int SeasonRank { get; init; }
         public required string Abbreviation { get; init; }

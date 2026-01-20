@@ -7,6 +7,7 @@ namespace FantasyHOF.Domain.Entities
         public int LeagueSeasonId { get; set; }
         public int MemberId { get; set; }
 
+        public required Guid UserId { get; init; }
         public required bool IsLeagueCreator { get; init; }
         public required bool IsLeagueManager { get; init; }
 
@@ -16,15 +17,5 @@ namespace FantasyHOF.Domain.Entities
         public List<LeagueSeasonMemberTeam> Teams { get; private set; } = null!;
 
         public LeagueSeasonMemberId Id => new(LeagueSeasonId, MemberId);
-
-        public void SetMember(FantasyMember member)
-        {
-            Member = member;
-        }
-
-        public void SetTeams(List<LeagueSeasonMemberTeam> teams)
-        {
-            Teams = teams;
-        }
     }
 }

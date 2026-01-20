@@ -5,20 +5,16 @@
         public int Id { get; private set; }
         public int LeagueSeasonId { get; set; }
 
-        public required int HomeTeamBonusPoints { get; set; }
-        public required string MatchupTieRule { get; set; }
-        public required int MatchupTieRuleBy { get; set; }
-        public required string PlayerRankType { get; set; }
-        public required int PlayoffHomeTeamBonusPoints { get; set; }
-        public required string PlayoffMatchupTieRule { get; set; }
-        public required int PlayoffMatchupTieRuleBy { get; set; }
-        public required string ScoringType { get; set; }
+        public required Guid UserId { get; init; }
+        public required int HomeTeamBonusPoints { get; init; }
+        public required string MatchupTieRule { get; init; }
+        public required int MatchupTieRuleBy { get; init; }
+        public required string PlayerRankType { get; init; }
+        public required int PlayoffHomeTeamBonusPoints { get; init; }
+        public required string PlayoffMatchupTieRule { get; init; }
+        public required int PlayoffMatchupTieRuleBy { get; init; }
+        public required string ScoringType { get; init; }
 
         public List<LeagueSeasonScoringItem> ScoringItems { get; private set; } = null!;
-
-        public void SetScoringItems(List<LeagueSeasonScoringItem> scoringItems)
-        {
-            ScoringItems = scoringItems;
-        }
     }
 }

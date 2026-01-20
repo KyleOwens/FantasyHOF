@@ -1,6 +1,6 @@
-﻿using FantasyHOF.Application.Services.Authentication;
-using FantasyHOF.Domain.Entities;
+﻿using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
+using FantasyHOF.Infrastructure.ServiceDefinitions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

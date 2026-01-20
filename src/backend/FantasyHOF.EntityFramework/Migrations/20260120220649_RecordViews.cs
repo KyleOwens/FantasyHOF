@@ -5,7 +5,7 @@
 namespace FantasyHOF.EntityFramework.Migrations
 {
     /// <inheritdoc />
-    public partial class Views : Migration
+    public partial class RecordViews : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

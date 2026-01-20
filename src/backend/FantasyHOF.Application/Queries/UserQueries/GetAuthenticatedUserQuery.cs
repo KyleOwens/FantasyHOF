@@ -1,6 +1,6 @@
 ﻿using FantasyHOF.Application.Mutations;
-using FantasyHOF.Application.Services.Authentication;
 using FantasyHOF.Domain.Entities;
+using FantasyHOF.Infrastructure.ServiceDefinitions;
 using MediatR;
 using System.Security.Authentication;
 

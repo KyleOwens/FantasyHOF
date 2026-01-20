@@ -7,6 +7,7 @@ namespace FantasyHOF.Domain.Entities
         public int Id { get; private set; }
         public int MatchupRosterSpotId { get; set; }
 
+        public required Guid UserId { get; init; }
         public required StatId StatId { get; init; }
         public required decimal StatValue { get; init; }
         public required decimal PointsScored { get; init; }

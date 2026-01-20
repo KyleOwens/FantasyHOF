@@ -6,8 +6,8 @@ namespace FantasyHOF.Domain.Entities
     public class League : ITimestamped
     {
         public int Id { get; private set; }
-        public Guid UserId { get; set; }
 
+        public required Guid UserId { get; init; }
         public required FantasyProviderId FantasyProviderId { get; init; }
         public required string ProviderLeagueId { get; init; }
         public required SportId SportId { get; init; }

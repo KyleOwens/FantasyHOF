@@ -5,6 +5,7 @@
         public int Id { get; private set; }
         public int LeagueSeasonId { get; set; }
 
+        public required Guid UserId { get; init; }
         public required int MatchupCount { get; set; }
         public required int MatchupLength { get; set; }
         public required int PlayoffMatchupLength { get; set; }

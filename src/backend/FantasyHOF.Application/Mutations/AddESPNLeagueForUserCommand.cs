@@ -1,5 +1,4 @@
-﻿using FantasyHOF.Application.Services.Authentication;
-using FantasyHOF.Application.Services.BackgroundJobs;
+﻿using FantasyHOF.Application.Services.BackgroundJobs;
 using FantasyHOF.Application.Types.Exceptions;
 using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
@@ -7,6 +6,7 @@ using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;
 using FantasyHOF.ESPN;
 using FantasyHOF.ESPN.Types.Inputs;
+using FantasyHOF.Infrastructure.ServiceDefinitions;
 using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -33,11 +33,11 @@ namespace FantasyHOF.Application.Mutations
                 ESPNAPIClient client = espnClientBuilder.Build(request.LeagueCredentials);
                 await client.ValidateCredentialsAsync();
 
-                List<LeagueImport> existingImports = database.LeagueImports
+                List<LeagueImport> existingImports = await database.LeagueImports
                     .Where(import => import.UserId == authenticatedUserId)
                     .Where(import => import.ProviderleagueId == request.LeagueCredentials.LeagueId)
                     .Where(import => import.StatusId != LeagueImportStatusId.Failed && import.StatusId != LeagueImportStatusId.Completed)
-                    .ToList();
+                    .ToListAsync(ct);
 
                 if (existingImports.Count != 0) throw new LeagueImportExistsException();
 

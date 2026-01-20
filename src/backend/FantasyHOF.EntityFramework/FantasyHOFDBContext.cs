@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace FantasyHOF.EntityFramework
 {
-    public class FantasyHOFDBContext : DbContext
+    public class FantasyHOFDBContext(DbContextOptions<FantasyHOFDBContext> options) : DbContext(options)
     {
         public DbSet<League> Leagues => Set<League>();
         public DbSet<FantasyMember> FantasyMembers => Set<FantasyMember>();
@@ -40,8 +40,12 @@ namespace FantasyHOF.EntityFramework
         public DbSet<LeagueImport> LeagueImports => Set<LeagueImport>();
         public DbSet<LeagueImportStatus> LeagueImportStatuses => Set<LeagueImportStatus>();
 
-        public FantasyHOFDBContext(DbContextOptions<FantasyHOFDBContext> options) : base(options)
+        private Guid? _rlsUserId;
+
+        public Guid? RLSUserId => _rlsUserId;
+        public void SetRLSUserId(Guid? userId)
         {
+            _rlsUserId = userId;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

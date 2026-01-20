@@ -1,5 +1,5 @@
-﻿using FantasyHOF.Application.Services.Authentication;
-using FantasyHOF.Domain.Entities;
+﻿using FantasyHOF.Domain.Entities;
+using FantasyHOF.Infrastructure.ServiceDefinitions;
 using HotChocolate.Authorization;
 using HotChocolate.Execution;
 using HotChocolate.Subscriptions;
@@ -13,12 +13,12 @@ namespace FantasyHOF.GraphQL.Types.Roots
         public async ValueTask<ISourceStream<LeagueImport>> SubscribeToLeagueImportProgress(
             ICurrentUserService currentUser,
             ITopicEventReceiver receiver,
-            CancellationToken cancellationToken)
+            CancellationToken ct)
         {
-            Guid userId = await currentUser.GetUserIdAsync();
+            Guid userId = await currentUser.GetUserIdAsync(ct);
             return await receiver.SubscribeAsync<LeagueImport>(
                 $"{nameof(LeagueImport)}_{userId}",
-                cancellationToken);
+                ct);
         }
 
         [Authorize]

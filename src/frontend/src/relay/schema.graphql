@@ -36,6 +36,7 @@ interface RecordMetric {
 type AccumulatedStat implements Node @authorize {
   id: ID!
   matchupRosterSpotId: ID!
+  userId: UUID!
   statId: ID!
   statValue: Decimal!
   pointsScored: Decimal!
@@ -127,7 +128,7 @@ type ForbiddenError implements ICodedException {
   errorCode: AppErrorCode!
 }
 
-type League implements Node {
+type League implements Node @authorize {
   id: ID!
   userId: UUID!
   fantasyProviderId: ID!
@@ -146,7 +147,7 @@ type League implements Node {
   recordDetails(recordType: RecordTypeId!): RecordDetails!
 }
 
-type LeagueImport implements Node {
+type LeagueImport implements Node @authorize {
   id: ID!
   userId: UUID!
   providerId: FantasyProviderId!
@@ -190,10 +191,11 @@ type LeagueImportsEdge {
   node: LeagueImport!
 }
 
-type LeagueMember implements Node {
+type LeagueMember implements Node @authorize {
   id: ID!
   leagueId: ID!
   memberId: ID!
+  userId: UUID!
   firstyear: Int!
   lastYear: Int!
   tenure: Int!
@@ -228,17 +230,19 @@ type LeagueRecordSummary {
   playerRecords: [PlayerRecord!]!
 }
 
-type LeagueSeason implements Node {
+type LeagueSeason implements Node @authorize {
   id: ID!
   leagueId: ID!
+  userId: UUID!
   year: Int!
   settings: LeagueSeasonSettings! @cost(weight: "10")
   members: [LeagueSeasonMember!]! @cost(weight: "10")
 }
 
-type LeagueSeasonMember implements Node {
+type LeagueSeasonMember implements Node @authorize {
   leagueSeasonId: ID!
   memberId: ID!
+  userId: UUID!
   isLeagueCreator: Boolean!
   isLeagueManager: Boolean!
   providerMemberId: String!
@@ -252,10 +256,11 @@ type LeagueSeasonMemberId {
   memberId: Int!
 }
 
-type LeagueSeasonMemberTeam implements Node {
+type LeagueSeasonMemberTeam implements Node @authorize {
   leagueSeasonId: ID!
   memberId: ID!
   teamId: ID!
+  userId: UUID!
   providerMemberId: String!
   providerTeamId: Int!
   owner: LeagueSeasonMember!
@@ -269,9 +274,10 @@ type LeagueSeasonMemberTeamId {
   teamId: Int!
 }
 
-type LeagueSeasonScheduleSettings implements Node {
+type LeagueSeasonScheduleSettings implements Node @authorize {
   id: ID!
   leagueSeasonId: ID!
+  userId: UUID!
   matchupCount: Int!
   matchupLength: Int!
   playoffMatchupLength: Int!
@@ -279,17 +285,19 @@ type LeagueSeasonScheduleSettings implements Node {
   variablePlayoffMatchupLength: Boolean!
 }
 
-type LeagueSeasonScoringItem implements Node {
+type LeagueSeasonScoringItem implements Node @authorize {
   id: ID!
   leagueSeasonId: ID!
+  userId: UUID!
   statId: ID!
   points: Decimal!
   stat: Stat! @cost(weight: "10")
 }
 
-type LeagueSeasonScoringSettings implements Node {
+type LeagueSeasonScoringSettings implements Node @authorize {
   id: ID!
   leagueSeasonId: ID!
+  userId: UUID!
   homeTeamBonusPoints: Int!
   matchupTieRule: String!
   matchupTieRuleBy: Int!
@@ -301,9 +309,10 @@ type LeagueSeasonScoringSettings implements Node {
   scoringItems: [LeagueSeasonScoringItem!]! @cost(weight: "10")
 }
 
-type LeagueSeasonSettings implements Node {
+type LeagueSeasonSettings implements Node @authorize {
   id: ID!
   leagueSeasonId: ID!
+  userId: UUID!
   leagueName: String!
   scheduleSettings: LeagueSeasonScheduleSettings! @cost(weight: "10")
   scoringSettings: LeagueSeasonScoringSettings! @cost(weight: "10")
@@ -333,10 +342,11 @@ type MatchupOutcome implements Node {
   value: MatchupOutcomeId!
 }
 
-type MatchupRosterSpot implements Node {
+type MatchupRosterSpot implements Node @authorize {
   id: ID!
   matchupTeamDetailsId: ID!
   playerId: ID!
+  userId: UUID!
   providerPlayerId: Int!
   positionId: ID!
   pointsScored: Decimal!
@@ -345,9 +355,10 @@ type MatchupRosterSpot implements Node {
   accumulatedStats: [AccumulatedStat!]! @cost(weight: "10")
 }
 
-type MatchupTeamDetails implements Node {
+type MatchupTeamDetails implements Node @authorize {
   id: ID!
   teamId: ID!
+  userId: UUID!
   score: Decimal!
   matchupOutcomeId: ID!
   team: Team! @cost(weight: "10")
@@ -501,9 +512,10 @@ type Subscription {
   leagueImportProgress: LeagueImport! @authorize
 }
 
-type Team implements Node {
+type Team implements Node @authorize {
   id: ID!
   leagueSeasonId: Int!
+  userId: UUID!
   providerTeamId: Int!
   seasonRank: Int!
   abbreviation: String!
@@ -515,11 +527,12 @@ type Team implements Node {
   matchups: [TeamMatchup!]! @cost(weight: "10")
 }
 
-type TeamMatchup implements Node {
+type TeamMatchup implements Node @authorize {
   id: ID!
   teamId: ID!
   ownerMatchupDetailsId: ID
   opponentMatchupDetailsId: ID
+  userId: UUID!
   year: Int!
   week: Int!
   opponentProviderTeamId: Int
@@ -531,9 +544,10 @@ type TeamMatchup implements Node {
   scoreMargin: Decimal!
 }
 
-type TeamSeasonStats implements Node {
+type TeamSeasonStats implements Node @authorize {
   id: ID!
   teamId: ID!
+  userId: UUID!
   wins: Int!
   losses: Int!
   ties: Int!
@@ -542,7 +556,7 @@ type TeamSeasonStats implements Node {
   pointsFor: Decimal!
 }
 
-type User implements Node {
+type User implements Node @authorize {
   removeLeagueIfExists(leagueId: Int!): Boolean!
   id: ID!
   clerkId: String!

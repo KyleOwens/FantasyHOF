@@ -1,7 +1,7 @@
-﻿using FantasyHOF.Application.Services.Authentication;
-using FantasyHOF.Application.Types.Exceptions;
+﻿using FantasyHOF.Application.Types.Exceptions;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
+using FantasyHOF.Infrastructure.ServiceDefinitions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

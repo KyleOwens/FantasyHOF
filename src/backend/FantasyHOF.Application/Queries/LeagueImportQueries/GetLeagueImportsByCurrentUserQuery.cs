@@ -1,8 +1,8 @@
-﻿using FantasyHOF.Application.Services.Authentication;
-using FantasyHOF.Application.Types.Exceptions;
+﻿using FantasyHOF.Application.Types.Exceptions;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.Domain.Enums;
 using FantasyHOF.EntityFramework;
+using FantasyHOF.Infrastructure.ServiceDefinitions;
 using MediatR;
 
 namespace FantasyHOF.Application.Queries.LeagueImportQueries
@@ -17,7 +17,7 @@ namespace FantasyHOF.Application.Queries.LeagueImportQueries
             {
                 if (!currentUser.IsAuthenticated) throw new ForbiddenException();
 
-                Guid userId = await currentUser.GetUserIdAsync();
+                Guid userId = await currentUser.GetUserIdAsync(ct);
 
                 return database.LeagueImports
                     .Where(x => x.UserId == userId)

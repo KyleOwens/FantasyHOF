@@ -1,8 +1,8 @@
-﻿using FantasyHOF.Application.Services.Authentication;
-using FantasyHOF.Application.Types.Exceptions;
+﻿using FantasyHOF.Application.Types.Exceptions;
 using FantasyHOF.Application.Types.Mutations;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.EntityFramework;
+using FantasyHOF.Infrastructure.ServiceDefinitions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +22,7 @@ namespace FantasyHOF.Application.Mutations
 
                 User user = await database.Users
                     .Include(x => x.Leagues)
-                    .SingleAsync(x => x.Id == userId);
+                    .SingleAsync(x => x.Id == userId, ct);
 
                 bool success = user.RemoveLeagueIfExists(request.LeagueId);
                 if (!success) throw new NotFoundException(nameof(League), request.LeagueId);

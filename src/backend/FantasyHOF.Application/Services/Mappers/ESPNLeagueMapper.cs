@@ -6,28 +6,7 @@ using FantasyHOF.ESPN.Types.Outputs;
 
 namespace FantasyHOF.Application.Services.Mappers
 {
-    public interface IESPNLeagueMapper
-    {
-        League MapLeague(string leagueId, List<LeagueSeason> leagueSeasons, List<LeagueSeasonSettings> settings);
-        LeagueMember MapLeagueMember(string ESPNMemberId, IEnumerable<ESPNSeasonalLeagueData> memberSeasons);
-        LeagueSeason MapLeagueSeason(ESPNSeasonalLeagueData seasonData);
-        LeagueSeasonSettings MapLeagueSeasonSettings(ESPNLeagueSettings espnSettings);
-        LeagueSeasonScheduleSettings MapLeagueSeasonScheduleSettings(ESPNScheduleSettings espnSettings);
-        LeagueSeasonScoringSettings MapLeagueSeasonScoringSettings(ESPNScoringSettings espnSettings);
-        LeagueSeasonScoringItem MapLeagueSeasonScoringItem(ESPNScoringItem espnItem);
-        LeagueSeasonMember MapLeagueSeasonMember(ESPNFantasyMember espnMember);
-        FantasyMember MapFantasyMember(ESPNFantasyMember espnMember);
-        LeagueSeasonMemberTeam MapLeagueSeasonMemberTeam(string espnMemberId, int espnTeamId);
-        Team MapTeam(ESPNFantasyTeam espnTeam);
-        TeamSeasonStats MapTeamSeasonStats(ESPNRecordDetails espnTeamStats);
-        TeamMatchup MapTeamMatchup(int year, int week, int? espnOpponentTeamId, string espnMatchupType);
-        MatchupRosterSpot MapMatchupRosterSpot(ESPNRosterSpot espnRosterSpot, int year);
-        Player MapPlayer(ESPNPlayer espnPlayer);
-        AccumulatedStat MapAccumulatedStat(int statId, decimal statValue, decimal statScore);
-        MatchupTeamDetails MapMatchupTeamDetails(ESPNMatchupTeam espnTeam, string matchWinner, bool isHomeTeam);
-    }
-
-    public class ESPNLeagueMapper : IESPNLeagueMapper
+    public class ESPNLeagueMapper(Guid userId)
     {
         public League MapLeague(string leagueId, List<LeagueSeason> leagueSeasons, List<LeagueSeasonSettings> settings)
         {
@@ -36,6 +15,7 @@ namespace FantasyHOF.Application.Services.Mappers
 
             return new League()
             {
+                UserId = userId,
                 FantasyProviderId = FantasyProviderId.ESPN,
                 ProviderLeagueId = leagueId,
                 SportId = SportId.Football,
@@ -54,6 +34,7 @@ namespace FantasyHOF.Application.Services.Mappers
 
             return new LeagueMember()
             {
+                UserId = userId,
                 Firstyear = memberSeasons.First().Year,
                 LastYear = memberSeasons.Last().Year,
                 Tenure = memberSeasons.Count(),
@@ -66,6 +47,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new LeagueSeason()
             {
+                UserId = userId,
                 Year = seasonData.Year,
             };
         }
@@ -74,6 +56,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new LeagueSeasonSettings()
             {
+                UserId = userId,
                 LeagueName = espnSettings.Name,
             };
         }
@@ -82,6 +65,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new LeagueSeasonScheduleSettings()
             {
+                UserId = userId,
                 MatchupCount = espnScheduleSettings.MatchupPeriodCount,
                 MatchupLength = espnScheduleSettings.MatchupPeriodLength,
                 PlayoffMatchupLength = espnScheduleSettings.PlayoffMatchypPeriodLength,
@@ -94,6 +78,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new LeagueSeasonScoringSettings()
             {
+                UserId = userId,
                 HomeTeamBonusPoints = espnScoringSettings.HomeTeamBonus,
                 MatchupTieRule = espnScoringSettings.MatchupTieRule,
                 MatchupTieRuleBy = espnScoringSettings.MatchupTieRuleBy,
@@ -111,6 +96,7 @@ namespace FantasyHOF.Application.Services.Mappers
 
             return new LeagueSeasonScoringItem()
             {
+                UserId = userId,
                 StatId = statId,
                 Points = espnScoringItem.Points,
             };
@@ -120,6 +106,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new LeagueSeasonMember()
             {
+                UserId = userId,
                 ProviderMemberId = espnMember.Id,
                 IsLeagueCreator = espnMember.IsLeagueCreator,
                 IsLeagueManager = espnMember.IsLeagueManager
@@ -142,6 +129,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new LeagueSeasonMemberTeam
             {
+                UserId = userId,
                 ProviderMemberId = espnMemberId,
                 ProviderTeamId = espnTeamId
             };
@@ -151,6 +139,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new Team()
             {
+                UserId = userId,
                 ProviderTeamId = espnTeam.Id,
                 SeasonRank = espnTeam.RankCalculatedFinal,
                 Abbreviation = espnTeam.Abbrev,
@@ -163,6 +152,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new TeamSeasonStats()
             {
+                UserId = userId,
                 Wins = espnTeamStats.Wins,
                 Losses = espnTeamStats.Losses,
                 Ties = espnTeamStats.Ties,
@@ -189,6 +179,7 @@ namespace FantasyHOF.Application.Services.Mappers
 
             return new TeamMatchup()
             {
+                UserId = userId,
                 Year = year,
                 Week = week,
                 OpponentProviderTeamId = espnOpponentTeamId,
@@ -209,6 +200,7 @@ namespace FantasyHOF.Application.Services.Mappers
 
             return new MatchupTeamDetails()
             {
+                UserId = userId,
                 Score = Math.Round(espnTeam.TotalPoints, 2, MidpointRounding.AwayFromZero),
                 MatchupOutcomeId = matchOutcomeId
             };
@@ -218,6 +210,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new MatchupRosterSpot()
             {
+                UserId = userId,
                 ProviderPlayerId = espnRosterSpot.PlayerPoolEntry.Player.Id,
                 PositionId = leagueYear >= 2018 ? (PositionId)espnRosterSpot.lineupSlotId : PositionId.Unknown,
                 PointsScored = Math.Round(espnRosterSpot.PlayerPoolEntry.AppliedStatTotal, 2, MidpointRounding.AwayFromZero)
@@ -240,6 +233,7 @@ namespace FantasyHOF.Application.Services.Mappers
         {
             return new AccumulatedStat()
             {
+                UserId = userId,
                 StatId = (StatId)statId,
                 StatValue = Math.Round(statValue, 2, MidpointRounding.AwayFromZero),
                 PointsScored = Math.Round(statScore, 2, MidpointRounding.AwayFromZero)

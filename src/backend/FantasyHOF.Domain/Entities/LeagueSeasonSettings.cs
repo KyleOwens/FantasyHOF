@@ -5,19 +5,10 @@
         public int Id { get; set; }
         public int LeagueSeasonId { get; set; }
 
-        public required string LeagueName { get; set; }
+        public required Guid UserId { get; init; }
+        public required string LeagueName { get; init; }
 
         public LeagueSeasonScheduleSettings ScheduleSettings { get; private set; } = null!;
         public LeagueSeasonScoringSettings ScoringSettings { get; private set; } = null!;
-
-        public void SetScheduleSettings(LeagueSeasonScheduleSettings scheduleSettings)
-        {
-            ScheduleSettings = scheduleSettings;
-        }
-
-        public void SetScoringSettings(LeagueSeasonScoringSettings scoringSettings)
-        {
-            ScoringSettings = scoringSettings;
-        }
     }
 }

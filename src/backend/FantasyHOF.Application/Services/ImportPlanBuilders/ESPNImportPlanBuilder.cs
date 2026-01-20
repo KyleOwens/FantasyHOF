@@ -23,7 +23,6 @@ namespace FantasyHOF.Application.Services.ImportPlanBuilders
 
     public class ESPNImportPlanBuilder(
         FantasyHOFDBContext database,
-        IESPNLeagueMapper espnMapper,
         ILeagueImportEventSender eventSender
     ) : IESPNImportPlanBuilder
     {
@@ -47,6 +46,8 @@ namespace FantasyHOF.Application.Services.ImportPlanBuilders
         private readonly List<Player> _newPlayers = [];
         private readonly List<FantasyMember> _newMembers = [];
 
+        private ESPNLeagueMapper espnMapper = null!;
+
         public async Task<LeagueImportPlan> BuildNewLeague(
             string espnLeagueId,
             Guid userId,
@@ -55,7 +56,11 @@ namespace FantasyHOF.Application.Services.ImportPlanBuilders
             IEnumerable<ESPNWeeklyLeagueData> espnWeeklyData,
             CancellationToken ct)
         {
+            await eventSender.StartFormattingData(import, ct);
+
             ResetBuilder();
+
+            espnMapper = new ESPNLeagueMapper(userId);
 
             await CreateMembers(espnSeasonalData, ct);
             await CreatePlayers(espnWeeklyData, ct);
@@ -68,7 +73,6 @@ namespace FantasyHOF.Application.Services.ImportPlanBuilders
                 [.. _leagueSeasonsByYear.Values],
                 [.. _leagueSeasonSettingsByYear.Values]
             );
-            league.UserId = userId;
 
             return BuildFlattenedLeagueGraph(league);
         }

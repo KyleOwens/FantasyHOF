@@ -31,6 +31,8 @@ namespace FantasyHOF.Application.Services.BackgroundJobs
         {
             CancellationToken ct = jobToken.ShutdownToken;
 
+            database.SetRLSUserId(userId);
+
             LeagueImport? import = await database.LeagueImports
                 .Include(x => x.User)
                     .ThenInclude(x => x.Leagues)
