@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
-import { useLazyLoadQuery } from "react-relay";
+import { useLazyLoadQuery, usePreloadedQuery } from "react-relay";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { LeagueAdditionModal } from "@/components/league-addition-modal/LeagueAdditionModal";
@@ -10,10 +10,23 @@ import { LeagueCard } from "@/components/league-cards/LeagueCard";
 import { PendingLeagueCard } from "@/components/league-cards/PendingLeagueCard";
 import { usePendingLeaguesSubscription } from "@/hooks/usePendingLeaguesSubscription";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { preloadQuery } from "@/relay/helpers";
 
 export const Route = createFileRoute("/$mode/my-leagues")({
-  component: MyLeaguesPage,
+  component: () => <MyLeaguesPage />,
+  loader: () => {
+    return preloadQuery<MyLeaguesQueryType>(myLeaguesQuery, {});
+  },
+  onLeave: ({ loaderData }) => {
+    loaderData?.dispose();
+  },
+  pendingComponent: () => (
+    <div className="flex items-center justify-center w-full">
+      <Spinner className="size-20 text-primary" />
+    </div>
+  ),
 });
 
 const myLeaguesQuery = graphql`
@@ -56,7 +69,9 @@ const myLeaguesQuery = graphql`
 
 function MyLeaguesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const data = useLazyLoadQuery<MyLeaguesQueryType>(myLeaguesQuery, {});
+  const queryRef = Route.useLoaderData();
+  const data = usePreloadedQuery<MyLeaguesQueryType>(myLeaguesQuery, queryRef);
+
   usePendingLeaguesSubscription();
 
   const completedLeagues = data.me.leagues?.edges?.map((x) => x.node) ?? [];
@@ -155,7 +170,7 @@ function MyLeaguesPage() {
         </div>
       )}
       <LeagueAdditionModal
-        shouldBeOpen={isModalOpen}
+        isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
         }}

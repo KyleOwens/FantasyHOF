@@ -6,7 +6,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { preloadQuery } from "@/relay/helpers";
 import { RecordCategory, RecordSentiment } from "@/types/enums";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 
@@ -33,6 +33,9 @@ export const Route = createFileRoute("/$mode/$leagueId/dashboard")({
     loaderData?.dispose();
   },
   pendingComponent: () => <Spinner className="m-auto size-20 text-primary" />,
+  errorComponent: () => {
+    return <Navigate from={Route.fullPath} to="/$mode" />;
+  },
 });
 
 function RouteComponent() {

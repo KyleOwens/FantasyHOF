@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7d48c809931fff646f109455e368e9fe>>
+ * @generated SignedSource<<d961da2594c612d603df378899a068ad>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,6 +18,7 @@ export type AppSidebarQuery$data = {
     readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationFragment">;
   }>;
   readonly me?: {
+    readonly id: string;
     readonly leagues: {
       readonly edges: ReadonlyArray<{
         readonly node: {
@@ -27,7 +28,7 @@ export type AppSidebarQuery$data = {
       }> | null | undefined;
     } | null | undefined;
   };
-  readonly " $fragmentSpreads": FragmentRefs<"RecordNavigationFragment">;
+  readonly " $fragmentSpreads": FragmentRefs<"LeagueNavigationProviderFragment" | "RecordNavigationFragment">;
 };
 export type AppSidebarQuery = {
   response: AppSidebarQuery$data;
@@ -97,10 +98,24 @@ v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "currentLeagueName",
+  "name": "userId",
   "storageKey": null
 },
 v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "currentLeagueName",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "logoURL",
+  "storageKey": null
+},
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "FantasyProvider",
@@ -109,17 +124,18 @@ v7 = {
   "plural": false,
   "selections": [
     (v2/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "logoURL",
-      "storageKey": null
-    }
+    (v8/*: any*/)
   ],
   "storageKey": null
 },
-v8 = {
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v11 = {
   "alias": null,
   "args": null,
   "concreteType": "Sport",
@@ -128,17 +144,11 @@ v8 = {
   "plural": false,
   "selections": [
     (v2/*: any*/),
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "name",
-      "storageKey": null
-    }
+    (v10/*: any*/)
   ],
   "storageKey": null
 },
-v9 = [
+v12 = [
   {
     "kind": "Literal",
     "name": "first",
@@ -189,6 +199,7 @@ return {
             "name": "me",
             "plural": false,
             "selections": [
+              (v2/*: any*/),
               {
                 "alias": "leagues",
                 "args": null,
@@ -231,6 +242,11 @@ return {
             "storageKey": null
           }
         ]
+      },
+      {
+        "args": null,
+        "kind": "FragmentSpread",
+        "name": "LeagueNavigationProviderFragment"
       }
     ],
     "type": "Query",
@@ -297,7 +313,8 @@ return {
               (v2/*: any*/),
               (v6/*: any*/),
               (v7/*: any*/),
-              (v8/*: any*/)
+              (v9/*: any*/),
+              (v11/*: any*/)
             ],
             "storageKey": null
           }
@@ -316,9 +333,10 @@ return {
             "name": "me",
             "plural": false,
             "selections": [
+              (v2/*: any*/),
               {
                 "alias": null,
-                "args": (v9/*: any*/),
+                "args": (v12/*: any*/),
                 "concreteType": "LeaguesConnection",
                 "kind": "LinkedField",
                 "name": "leagues",
@@ -343,7 +361,8 @@ return {
                           (v2/*: any*/),
                           (v6/*: any*/),
                           (v7/*: any*/),
-                          (v8/*: any*/),
+                          (v9/*: any*/),
+                          (v11/*: any*/),
                           (v3/*: any*/)
                         ],
                         "storageKey": null
@@ -358,23 +377,43 @@ return {
               },
               {
                 "alias": null,
-                "args": (v9/*: any*/),
+                "args": (v12/*: any*/),
                 "filters": null,
                 "handle": "connection",
                 "key": "my_leagues",
                 "kind": "LinkedHandle",
                 "name": "leagues"
-              },
-              (v2/*: any*/)
+              }
             ],
             "storageKey": null
           }
         ]
+      },
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "FantasyProvider",
+        "kind": "LinkedField",
+        "name": "fantasyProviders",
+        "plural": true,
+        "selections": [
+          (v2/*: any*/),
+          (v10/*: any*/),
+          (v8/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "value",
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "964d654791f2f8ec8e0e14f922d6cdb1",
+    "cacheID": "347ca7869ed57f35c9cb98ceff6a7383",
     "id": null,
     "metadata": {
       "connection": [
@@ -391,11 +430,11 @@ return {
     },
     "name": "AppSidebarQuery",
     "operationKind": "query",
-    "text": "query AppSidebarQuery(\n  $isDemo: Boolean!\n) {\n  ...RecordNavigationFragment\n  demoLeagues @include(if: $isDemo) {\n    ...LeagueNavigationFragment\n    id\n  }\n  me @skip(if: $isDemo) {\n    leagues(first: 10) {\n      edges {\n        node {\n          id\n          ...LeagueNavigationFragment\n          __typename\n        }\n        cursor\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    id\n  }\n}\n\nfragment LeagueNavigationFragment on League {\n  id\n  currentLeagueName\n  fantasyProvider {\n    id\n    logoURL\n  }\n  sport {\n    id\n    name\n  }\n}\n\nfragment RecordNavigationFragment on Query {\n  recordMetadata {\n    recordTypeId\n    displayName\n    categoryDisplayName\n    sentiment\n  }\n}\n"
+    "text": "query AppSidebarQuery(\n  $isDemo: Boolean!\n) {\n  ...RecordNavigationFragment\n  demoLeagues @include(if: $isDemo) {\n    ...LeagueNavigationFragment\n    id\n  }\n  me @skip(if: $isDemo) {\n    id\n    leagues(first: 10) {\n      edges {\n        node {\n          id\n          ...LeagueNavigationFragment\n          __typename\n        }\n        cursor\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n  }\n  ...LeagueNavigationProviderFragment\n}\n\nfragment LeagueNavigationFragment on League {\n  id\n  userId\n  currentLeagueName\n  fantasyProvider {\n    id\n    logoURL\n  }\n  sport {\n    id\n    name\n  }\n}\n\nfragment LeagueNavigationProviderFragment on Query {\n  fantasyProviders {\n    ...ProviderSelectionFragment\n    id\n  }\n}\n\nfragment ProviderSelectionFragment on FantasyProvider {\n  id\n  name\n  logoURL\n  value\n}\n\nfragment RecordNavigationFragment on Query {\n  recordMetadata {\n    recordTypeId\n    displayName\n    categoryDisplayName\n    sentiment\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "59219b064359eba5c8c466086c4850b8";
+(node as any).hash = "279c708cc4942d52e2b84b885d286f27";
 
 export default node;

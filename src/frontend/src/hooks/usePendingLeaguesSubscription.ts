@@ -74,6 +74,18 @@ function addLeagueToMyLeaguesConnection(
   if (!leaguesConnection) return;
 
   const existingEdges = leaguesConnection.getLinkedRecords("edges") || [];
+
+  existingEdges.forEach((edge) => {
+    const node = edge.getLinkedRecord("node");
+    if (node?.getValue("providerLeagueId") === newProviderId) {
+      const oldId = node?.getDataID();
+
+      if (!oldId) return;
+
+      ConnectionHandler.deleteNode(leaguesConnection, oldId);
+      store.delete(oldId);
+    }
+  });
   const alreadyExists = existingEdges.some((edge) => {
     const node = edge?.getLinkedRecord("node");
     return node?.getValue("providerLeagueId") === newProviderId;

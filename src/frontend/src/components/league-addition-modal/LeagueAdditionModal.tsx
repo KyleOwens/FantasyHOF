@@ -18,8 +18,9 @@ import { ImportSuccessMessage } from "./ImportSuccessMessage";
 type Props = {
   providersKey: ProviderSelectionFragment$key;
   userId: string;
-  shouldBeOpen: boolean;
+  isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 };
 
 enum LeagueAdditionStep {
@@ -29,12 +30,12 @@ enum LeagueAdditionStep {
 }
 
 export function LeagueAdditionModal({
-  shouldBeOpen,
+  isOpen,
   onClose,
   providersKey,
   userId,
+  onSuccess,
 }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState<LeagueAdditionStep>(
     LeagueAdditionStep.Provider,
   );
@@ -52,15 +53,9 @@ export function LeagueAdditionModal({
   };
 
   const onOpenChange = (isOpen: boolean) => {
-    if (isOpen) {
-      onResetEntry();
-    }
-
     if (!isOpen) {
       onClose();
     }
-
-    setIsOpen(isOpen);
   };
 
   const onCompletion = () => {
@@ -68,14 +63,16 @@ export function LeagueAdditionModal({
   };
 
   useEffect(() => {
-    if (!shouldBeOpen) return;
-    onOpenChange(true);
-  }, [shouldBeOpen]);
+    if (!isOpen) return;
+
+    onResetEntry();
+  }, [isOpen]);
 
   useEffect(() => {
     if (step === LeagueAdditionStep.Completed) {
       const timer = setTimeout(() => {
         onOpenChange(false);
+        onSuccess?.();
       }, 2000);
       return () => clearTimeout(timer);
     }

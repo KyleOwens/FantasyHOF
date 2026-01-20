@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<daffc92b93f0eb5a8a74dc87bf6665d2>>
+ * @generated SignedSource<<ff09946915277566b5818436a06dcb1e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,7 @@ export type LeagueNavigationFragment$data = ReadonlyArray<{
     readonly id: string;
     readonly name: string;
   };
+  readonly userId: any;
   readonly " $fragmentType": "LeagueNavigationFragment";
 }>;
 export type LeagueNavigationFragment$key = ReadonlyArray<{
@@ -45,6 +46,13 @@ return {
   "name": "LeagueNavigationFragment",
   "selections": [
     (v0/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "userId",
+      "storageKey": null
+    },
     {
       "alias": null,
       "args": null,
@@ -96,6 +104,6 @@ return {
 };
 })();
 
-(node as any).hash = "e10fb0cc07b7ffe9bfd624c4b0e7ac25";
+(node as any).hash = "bae138820c84d6e43f5a87a0b6d22d59";
 
 export default node;

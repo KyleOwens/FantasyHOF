@@ -28,6 +28,7 @@ export const appSidebarQuery = graphql`
       ...LeagueNavigationFragment
     }
     me @skip(if: $isDemo) {
+      id
       leagues(first: 10) @connection(key: "my_leagues") {
         edges {
           node {
@@ -37,6 +38,7 @@ export const appSidebarQuery = graphql`
         }
       }
     }
+    ...LeagueNavigationProviderFragment
   }
 `;
 
@@ -44,6 +46,8 @@ export function AppSidebar({ mode }: Props) {
   const data = useLazyLoadQuery<AppSidebarQuery>(appSidebarQuery, {
     isDemo: mode === "demo",
   });
+
+  if (!data.me) return;
 
   const leagues =
     (mode === "demo"
@@ -53,7 +57,11 @@ export function AppSidebar({ mode }: Props) {
   return (
     <Sidebar className="sticky top-[66px] h-[calc(100vh-66px)] w-80">
       <SidebarHeader>
-        <LeagueNavigation leaguesKey={leagues} />
+        <LeagueNavigation
+          leaguesKey={leagues}
+          providersKey={data}
+          userId={data.me?.id}
+        />
       </SidebarHeader>
       <SidebarContent>
         <RecordNavigation recordMetadataKey={data} />

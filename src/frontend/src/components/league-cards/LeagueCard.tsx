@@ -92,6 +92,13 @@ export function LeagueCard({ leagueKey, userId }: Props) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
+  // While league can't be null, this is important because when relay updates
+  // its store after the subscription, this component can rerender before the league
+  // is completely removed
+  if (!league) {
+    return null;
+  }
+
   const handleOpenChange = (open: boolean) => {
     setShowDeleteDialog(open);
     if (!open) setDeleteError(null);
@@ -106,6 +113,9 @@ export function LeagueCard({ leagueKey, userId }: Props) {
           leagueId: league.id,
         },
         connections: [ConnectionHandler.getConnectionID(userId, "my_leagues")],
+      },
+      updater: (store) => {
+        store.delete(league.id);
       },
       onCompleted: (response) => {
         const errors = response.deleteUserLeague.errors;
