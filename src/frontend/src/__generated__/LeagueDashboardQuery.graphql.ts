@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<956a312ce38a36a5328936cb365acdec>>
+ * @generated SignedSource<<27d81477cb59834af105f6b756323425>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,24 +14,22 @@ export type LeagueDashboardQuery$variables = {
   leagueId: string;
 };
 export type LeagueDashboardQuery$data = {
-  readonly me: {
-    readonly league: {
-      readonly currentLeagueName: string;
-      readonly recordSummary: {
-        readonly leagueRecords: ReadonlyArray<{
-          readonly " $fragmentSpreads": FragmentRefs<"RecordSectionFragment">;
-        }>;
-        readonly playerRecords: ReadonlyArray<{
-          readonly " $fragmentSpreads": FragmentRefs<"RecordSectionFragment">;
-        }>;
-        readonly seasonalRecords: ReadonlyArray<{
-          readonly " $fragmentSpreads": FragmentRefs<"RecordSectionFragment">;
-        }>;
-        readonly weeklyRecords: ReadonlyArray<{
-          readonly " $fragmentSpreads": FragmentRefs<"RecordSectionFragment">;
-        }>;
-      } | null | undefined;
-    };
+  readonly league: {
+    readonly currentLeagueName: string;
+    readonly recordSummary: {
+      readonly leagueRecords: ReadonlyArray<{
+        readonly " $fragmentSpreads": FragmentRefs<"RecordSectionFragment">;
+      }>;
+      readonly playerRecords: ReadonlyArray<{
+        readonly " $fragmentSpreads": FragmentRefs<"RecordSectionFragment">;
+      }>;
+      readonly seasonalRecords: ReadonlyArray<{
+        readonly " $fragmentSpreads": FragmentRefs<"RecordSectionFragment">;
+      }>;
+      readonly weeklyRecords: ReadonlyArray<{
+        readonly " $fragmentSpreads": FragmentRefs<"RecordSectionFragment">;
+      }>;
+    } | null | undefined;
   };
 };
 export type LeagueDashboardQuery = {
@@ -282,70 +280,59 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": null,
-        "concreteType": "User",
+        "args": (v1/*: any*/),
+        "concreteType": "League",
         "kind": "LinkedField",
-        "name": "me",
+        "name": "league",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "alias": null,
-            "args": (v1/*: any*/),
-            "concreteType": "League",
+            "args": null,
+            "concreteType": "LeagueRecordSummary",
             "kind": "LinkedField",
-            "name": "league",
+            "name": "recordSummary",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "LeagueRecordSummary",
+                "concreteType": "LeagueRecord",
                 "kind": "LinkedField",
-                "name": "recordSummary",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "LeagueRecord",
-                    "kind": "LinkedField",
-                    "name": "leagueRecords",
-                    "plural": true,
-                    "selections": (v3/*: any*/),
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "SeasonalRecord",
-                    "kind": "LinkedField",
-                    "name": "seasonalRecords",
-                    "plural": true,
-                    "selections": (v3/*: any*/),
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "WeeklyRecord",
-                    "kind": "LinkedField",
-                    "name": "weeklyRecords",
-                    "plural": true,
-                    "selections": (v3/*: any*/),
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "PlayerRecord",
-                    "kind": "LinkedField",
-                    "name": "playerRecords",
-                    "plural": true,
-                    "selections": (v3/*: any*/),
-                    "storageKey": null
-                  }
-                ],
+                "name": "leagueRecords",
+                "plural": true,
+                "selections": (v3/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "SeasonalRecord",
+                "kind": "LinkedField",
+                "name": "seasonalRecords",
+                "plural": true,
+                "selections": (v3/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "WeeklyRecord",
+                "kind": "LinkedField",
+                "name": "weeklyRecords",
+                "plural": true,
+                "selections": (v3/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "PlayerRecord",
+                "kind": "LinkedField",
+                "name": "playerRecords",
+                "plural": true,
+                "selections": (v3/*: any*/),
                 "storageKey": null
               }
             ],
@@ -366,73 +353,61 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": null,
-        "concreteType": "User",
+        "args": (v1/*: any*/),
+        "concreteType": "League",
         "kind": "LinkedField",
-        "name": "me",
+        "name": "league",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "alias": null,
-            "args": (v1/*: any*/),
-            "concreteType": "League",
+            "args": null,
+            "concreteType": "LeagueRecordSummary",
             "kind": "LinkedField",
-            "name": "league",
+            "name": "recordSummary",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "concreteType": "LeagueRecordSummary",
+                "concreteType": "LeagueRecord",
                 "kind": "LinkedField",
-                "name": "recordSummary",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "LeagueRecord",
-                    "kind": "LinkedField",
-                    "name": "leagueRecords",
-                    "plural": true,
-                    "selections": (v12/*: any*/),
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "SeasonalRecord",
-                    "kind": "LinkedField",
-                    "name": "seasonalRecords",
-                    "plural": true,
-                    "selections": (v12/*: any*/),
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "WeeklyRecord",
-                    "kind": "LinkedField",
-                    "name": "weeklyRecords",
-                    "plural": true,
-                    "selections": (v12/*: any*/),
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "PlayerRecord",
-                    "kind": "LinkedField",
-                    "name": "playerRecords",
-                    "plural": true,
-                    "selections": (v12/*: any*/),
-                    "storageKey": null
-                  }
-                ],
+                "name": "leagueRecords",
+                "plural": true,
+                "selections": (v12/*: any*/),
                 "storageKey": null
               },
-              (v5/*: any*/)
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "SeasonalRecord",
+                "kind": "LinkedField",
+                "name": "seasonalRecords",
+                "plural": true,
+                "selections": (v12/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "WeeklyRecord",
+                "kind": "LinkedField",
+                "name": "weeklyRecords",
+                "plural": true,
+                "selections": (v12/*: any*/),
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "PlayerRecord",
+                "kind": "LinkedField",
+                "name": "playerRecords",
+                "plural": true,
+                "selections": (v12/*: any*/),
+                "storageKey": null
+              }
             ],
             "storageKey": null
           },
@@ -443,16 +418,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "f93402256b48310787e9954438428cd1",
+    "cacheID": "fc4410192430797b57c1ad4576c9b60e",
     "id": null,
     "metadata": {},
     "name": "LeagueDashboardQuery",
     "operationKind": "query",
-    "text": "query LeagueDashboardQuery(\n  $leagueId: ID!\n) {\n  me {\n    league(leagueId: $leagueId) {\n      currentLeagueName\n      recordSummary {\n        leagueRecords {\n          ...RecordSectionFragment\n        }\n        seasonalRecords {\n          ...RecordSectionFragment\n        }\n        weeklyRecords {\n          ...RecordSectionFragment\n        }\n        playerRecords {\n          ...RecordSectionFragment\n        }\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment LeagueRecordCardFragment on LeagueRecord {\n  ...RecordCardFragment\n  member {\n    id\n    fullName\n  }\n}\n\nfragment PlayerRecordCardFragment on PlayerRecord {\n  year\n  week\n  member {\n    fullName\n    id\n  }\n  player {\n    fullName\n    id\n  }\n  ...RecordCardFragment\n}\n\nfragment RecordCardFragment on Record {\n  __isRecord: __typename\n  metadata {\n    recordTypeId\n    displayName\n    iconURI\n  }\n  metric {\n    __typename\n    ... on RatioRecordMetric {\n      __typename\n    }\n    ... on ScalarRecordMetric {\n      __typename\n    }\n    value\n    unit\n  }\n}\n\nfragment RecordSectionFragment on Record {\n  __isRecord: __typename\n  __typename\n  metadata {\n    sentiment\n  }\n  ... on LeagueRecord {\n    ...LeagueRecordCardFragment\n  }\n  ... on SeasonalRecord {\n    ...SeasonalRecordCardFragment\n  }\n  ... on WeeklyRecord {\n    ...WeeklyRecordCardFragment\n  }\n  ... on PlayerRecord {\n    ...PlayerRecordCardFragment\n  }\n}\n\nfragment SeasonalRecordCardFragment on SeasonalRecord {\n  ...RecordCardFragment\n  year\n  member {\n    id\n    fullName\n  }\n}\n\nfragment WeeklyRecordCardFragment on WeeklyRecord {\n  year\n  week\n  member {\n    id\n    fullName\n  }\n  ...RecordCardFragment\n}\n"
+    "text": "query LeagueDashboardQuery(\n  $leagueId: ID!\n) {\n  league(leagueId: $leagueId) {\n    currentLeagueName\n    recordSummary {\n      leagueRecords {\n        ...RecordSectionFragment\n      }\n      seasonalRecords {\n        ...RecordSectionFragment\n      }\n      weeklyRecords {\n        ...RecordSectionFragment\n      }\n      playerRecords {\n        ...RecordSectionFragment\n      }\n    }\n    id\n  }\n}\n\nfragment LeagueRecordCardFragment on LeagueRecord {\n  ...RecordCardFragment\n  member {\n    id\n    fullName\n  }\n}\n\nfragment PlayerRecordCardFragment on PlayerRecord {\n  year\n  week\n  member {\n    fullName\n    id\n  }\n  player {\n    fullName\n    id\n  }\n  ...RecordCardFragment\n}\n\nfragment RecordCardFragment on Record {\n  __isRecord: __typename\n  metadata {\n    recordTypeId\n    displayName\n    iconURI\n  }\n  metric {\n    __typename\n    ... on RatioRecordMetric {\n      __typename\n    }\n    ... on ScalarRecordMetric {\n      __typename\n    }\n    value\n    unit\n  }\n}\n\nfragment RecordSectionFragment on Record {\n  __isRecord: __typename\n  __typename\n  metadata {\n    sentiment\n  }\n  ... on LeagueRecord {\n    ...LeagueRecordCardFragment\n  }\n  ... on SeasonalRecord {\n    ...SeasonalRecordCardFragment\n  }\n  ... on WeeklyRecord {\n    ...WeeklyRecordCardFragment\n  }\n  ... on PlayerRecord {\n    ...PlayerRecordCardFragment\n  }\n}\n\nfragment SeasonalRecordCardFragment on SeasonalRecord {\n  ...RecordCardFragment\n  year\n  member {\n    id\n    fullName\n  }\n}\n\nfragment WeeklyRecordCardFragment on WeeklyRecord {\n  year\n  week\n  member {\n    id\n    fullName\n  }\n  ...RecordCardFragment\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b15554a01b7ed476e63b94a38219a12c";
+(node as any).hash = "6ee2b905cb088611a7e51e3a207c6b9b";
 
 export default node;

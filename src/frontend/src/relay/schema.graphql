@@ -33,7 +33,7 @@ interface RecordMetric {
   unit: String!
 }
 
-type AccumulatedStat implements Node @authorize {
+type AccumulatedStat implements Node {
   id: ID!
   matchupRosterSpotId: ID!
   userId: String!
@@ -105,7 +105,7 @@ type EntriesEdge {
   node: RecordEntry!
 }
 
-type FantasyMember implements Node @authorize {
+type FantasyMember implements Node {
   id: ID!
   fantasyProviderId: ID!
   providerMemberId: String!
@@ -147,7 +147,7 @@ type League implements Node {
   recordDetails(recordType: RecordTypeId!): RecordDetails!
 }
 
-type LeagueImport implements Node @authorize {
+type LeagueImport implements Node {
   id: ID!
   userId: String!
   providerId: FantasyProviderId!
@@ -191,7 +191,7 @@ type LeagueImportsEdge {
   node: LeagueImport!
 }
 
-type LeagueMember implements Node @authorize {
+type LeagueMember implements Node {
   id: ID!
   leagueId: ID!
   memberId: ID!
@@ -230,7 +230,7 @@ type LeagueRecordSummary {
   playerRecords: [PlayerRecord!]!
 }
 
-type LeagueSeason implements Node @authorize {
+type LeagueSeason implements Node {
   id: ID!
   leagueId: ID!
   userId: String!
@@ -239,7 +239,7 @@ type LeagueSeason implements Node @authorize {
   members: [LeagueSeasonMember!]! @cost(weight: "10")
 }
 
-type LeagueSeasonMember implements Node @authorize {
+type LeagueSeasonMember implements Node {
   leagueSeasonId: ID!
   memberId: ID!
   userId: String!
@@ -256,7 +256,7 @@ type LeagueSeasonMemberId {
   memberId: Int!
 }
 
-type LeagueSeasonMemberTeam implements Node @authorize {
+type LeagueSeasonMemberTeam implements Node {
   leagueSeasonId: ID!
   memberId: ID!
   teamId: ID!
@@ -274,7 +274,7 @@ type LeagueSeasonMemberTeamId {
   teamId: Int!
 }
 
-type LeagueSeasonScheduleSettings implements Node @authorize {
+type LeagueSeasonScheduleSettings implements Node {
   id: ID!
   leagueSeasonId: ID!
   userId: String!
@@ -285,7 +285,7 @@ type LeagueSeasonScheduleSettings implements Node @authorize {
   variablePlayoffMatchupLength: Boolean!
 }
 
-type LeagueSeasonScoringItem implements Node @authorize {
+type LeagueSeasonScoringItem implements Node {
   id: ID!
   leagueSeasonId: ID!
   userId: String!
@@ -294,7 +294,7 @@ type LeagueSeasonScoringItem implements Node @authorize {
   stat: Stat! @cost(weight: "10")
 }
 
-type LeagueSeasonScoringSettings implements Node @authorize {
+type LeagueSeasonScoringSettings implements Node {
   id: ID!
   leagueSeasonId: ID!
   userId: String!
@@ -309,7 +309,7 @@ type LeagueSeasonScoringSettings implements Node @authorize {
   scoringItems: [LeagueSeasonScoringItem!]! @cost(weight: "10")
 }
 
-type LeagueSeasonSettings implements Node @authorize {
+type LeagueSeasonSettings implements Node {
   id: ID!
   leagueSeasonId: ID!
   userId: String!
@@ -342,7 +342,7 @@ type MatchupOutcome implements Node {
   value: MatchupOutcomeId!
 }
 
-type MatchupRosterSpot implements Node @authorize {
+type MatchupRosterSpot implements Node {
   id: ID!
   matchupTeamDetailsId: ID!
   playerId: ID!
@@ -355,7 +355,7 @@ type MatchupRosterSpot implements Node @authorize {
   accumulatedStats: [AccumulatedStat!]! @cost(weight: "10")
 }
 
-type MatchupTeamDetails implements Node @authorize {
+type MatchupTeamDetails implements Node {
   id: ID!
   teamId: ID!
   userId: String!
@@ -438,6 +438,7 @@ type Query {
   nodes("The list of node IDs." ids: [ID!]!): [Node]! @cost(weight: "10")
   me: User! @authorize @cost(weight: "10")
   demoLeagues: [League!]! @cost(weight: "10")
+  league(leagueId: ID!): League! @cost(weight: "10")
   fantasyProviders: [FantasyProvider!]! @cost(weight: "10")
   recordMetadata: [RecordMetadata!]! @cost(weight: "10")
 }
@@ -512,7 +513,7 @@ type Subscription {
   leagueImportProgress: LeagueImport! @authorize
 }
 
-type Team implements Node @authorize {
+type Team implements Node {
   id: ID!
   leagueSeasonId: Int!
   userId: String!
@@ -527,7 +528,7 @@ type Team implements Node @authorize {
   matchups: [TeamMatchup!]! @cost(weight: "10")
 }
 
-type TeamMatchup implements Node @authorize {
+type TeamMatchup implements Node {
   id: ID!
   teamId: ID!
   ownerMatchupDetailsId: ID
@@ -544,7 +545,7 @@ type TeamMatchup implements Node @authorize {
   scoreMargin: Decimal!
 }
 
-type TeamSeasonStats implements Node @authorize {
+type TeamSeasonStats implements Node {
   id: ID!
   teamId: ID!
   userId: String!

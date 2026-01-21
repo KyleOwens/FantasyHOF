@@ -21,7 +21,7 @@ import { useState } from "react";
 type Props = {
   leaguesKey: LeagueNavigationFragment$key;
   providersKey: LeagueNavigationProviderFragment$key;
-  userId: string;
+  userId?: string;
 };
 
 const leagueNavigationFragment = graphql`
@@ -142,17 +142,19 @@ export function LeagueNavigation({ leaguesKey, providersKey, userId }: Props) {
           </DropdownMenu>
         </SidebarMenuItem>
       </SidebarMenu>
-      <LeagueAdditionModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        providersKey={fantasyProviders}
-        userId={userId}
-        onSuccess={() =>
-          setTimeout(() => {
-            navigate({ to: "/$mode/my-leagues", params: { mode: "me" } });
-          }, 500)
-        }
-      />
+      {userId && (
+        <LeagueAdditionModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          providersKey={fantasyProviders}
+          userId={userId}
+          onSuccess={() =>
+            setTimeout(() => {
+              navigate({ to: "/$mode/my-leagues", params: { mode: "me" } });
+            }, 500)
+          }
+        />
+      )}
     </>
   );
 }

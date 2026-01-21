@@ -2,6 +2,7 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useAuth } from "@clerk/clerk-react";
 import { AppHeader } from "@/components/header/AppHeader";
+import { RootErrorPage } from "@/components/error-pages/RootErrorPage";
 
 export type RouterContext = {
   auth: ReturnType<typeof useAuth>;
@@ -23,4 +24,7 @@ const RootLayout = () => {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootLayout,
+  errorComponent: ({ error, reset }) => (
+    <RootErrorPage error={error} reset={reset} />
+  ),
 });

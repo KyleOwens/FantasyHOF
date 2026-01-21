@@ -27,6 +27,14 @@ public static class Query
         return await mediator.Send(new GetDemoLeaguesQuery(), cancellationToken);
     }
 
+    public static async Task<League> GetLeagueAsync(
+        [ID<League>] int leagueId,
+        IMediator mediator,
+        CancellationToken ct)
+    {
+        return await mediator.Send(new GetLeagueByIdQuery(leagueId), ct);
+    }
+
     public static async Task<IEnumerable<FantasyProvider>> GetFantasyProvidersAsync(
         IMediator mediator,
         CancellationToken cancellationToken)

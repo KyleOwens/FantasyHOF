@@ -47,8 +47,6 @@ export function AppSidebar({ mode }: Props) {
     isDemo: mode === "demo",
   });
 
-  if (!data.me) return;
-
   const leagues =
     (mode === "demo"
       ? data.demoLeagues

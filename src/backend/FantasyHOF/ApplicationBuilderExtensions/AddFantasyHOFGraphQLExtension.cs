@@ -1,4 +1,5 @@
-﻿using FantasyHOF.Infrastructure.Exceptions;
+﻿using FantasyHOF.ErrorFilter;
+using FantasyHOF.Infrastructure.Exceptions;
 
 
 namespace FantasyHOF.ApplicationBuilderExtensions
@@ -13,6 +14,7 @@ namespace FantasyHOF.ApplicationBuilderExtensions
                 .AddGlobalObjectIdentification()
                 .AddMutationConventions(applyToAllMutations: true)
                 .AddErrorInterfaceType<ICodedException>()
+                .AddErrorFilter<CodedExceptionErrorFilter>()
                 .AddInMemorySubscriptions();
 
             return builder;

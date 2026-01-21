@@ -43,6 +43,7 @@ namespace FantasyHOF.EntityFramework
         private string? _rlsUserId;
 
         public string? RLSUserId => _rlsUserId;
+
         public void SetRLSUserId(string userId)
         {
             _rlsUserId = userId;
