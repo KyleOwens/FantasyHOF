@@ -17,13 +17,22 @@ namespace FantasyHOF.Application.Queries.LeagueSeasonMemberTeamQueries
                 GetLeagueSeasonMemberTeamsByIdsQuery request,
                 CancellationToken ct)
             {
-                return await database.LeagueSeasonMemberTeams
+                List<int> leagueSeasonIds = [.. request.LeagueSeasonMemberTeamIds.Select(id => id.LeagueSeasonId).Distinct()];
+                List<int> memberIds = [.. request.LeagueSeasonMemberTeamIds.Select(id => id.MemberId).Distinct()];
+                List<int> teamIds = [.. request.LeagueSeasonMemberTeamIds.Select(id => id.TeamId).Distinct()];
+
+                List<LeagueSeasonMemberTeam> candidates = await database.LeagueSeasonMemberTeams
                     .AsNoTracking()
+                    .Where(memberTeam => leagueSeasonIds.Contains(memberTeam.LeagueSeasonId) &&
+                                         memberIds.Contains(memberTeam.MemberId) &&
+                                         teamIds.Contains(memberTeam.TeamId))
+                    .ToListAsync(ct);
+
+                return [.. candidates
                     .Where(memberTeam => request.LeagueSeasonMemberTeamIds
                         .Any(id => id.LeagueSeasonId == memberTeam.LeagueSeasonId &&
                                     id.MemberId == memberTeam.MemberId &&
-                                    id.TeamId == memberTeam.TeamId))
-                    .ToListAsync(ct);
+                                    id.TeamId == memberTeam.TeamId))];
             }
         }
     }

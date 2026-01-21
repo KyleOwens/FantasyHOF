@@ -30,7 +30,7 @@ namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
         }
 
         public static async Task<User?> GetUserAsync(
-            Guid id,
+            string id,
             IMediator mediator,
             CancellationToken cancellationToken)
         {

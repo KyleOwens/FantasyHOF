@@ -10,6 +10,7 @@ namespace FantasyHOF.EntityFramework.Migrations
         private readonly string[] _rlsTables =
         [
             "leagues",
+            "league_imports",
             "league_seasons",
             "league_members",
             "league_season_members",
@@ -23,7 +24,7 @@ namespace FantasyHOF.EntityFramework.Migrations
             "team_matchups",
             "matchup_team_details",
             "matchup_roster_spots",
-            "accumulated_stats"
+            "accumulated_stats",
         ];
 
         /// <inheritdoc />
@@ -65,6 +66,16 @@ namespace FantasyHOF.EntityFramework.Migrations
                     USING (user_id = current_app_user_id());
                 ");
             }
+
+            migrationBuilder.Sql($"ALTER TABLE users ENABLE ROW LEVEL SECURITY;");
+            migrationBuilder.Sql($"ALTER TABLE users FORCE ROW LEVEL SECURITY;");
+
+            migrationBuilder.Sql($"DROP POLICY IF EXISTS rls_users_user_select_own on users");
+            migrationBuilder.Sql($@"
+                    CREATE POLICY rls_users_user_select_own on users
+                    FOR ALL
+                    USING (id = current_app_user_id());
+                ");
         }
 
         /// <inheritdoc />
@@ -77,6 +88,9 @@ namespace FantasyHOF.EntityFramework.Migrations
                 migrationBuilder.Sql($"DROP POLICY IF EXISTS {policyName} ON {table};");
                 migrationBuilder.Sql($"ALTER TABLE {table} DISABLE ROW LEVEL SECURITY;");
             }
+
+            migrationBuilder.Sql($"DROP POLICY IF EXISTS rls_users_user_select_own ON users;");
+            migrationBuilder.Sql($"ALTER TABLE users DISABLE ROW LEVEL SECURITY;");
 
             migrationBuilder.Sql("DROP FUNCTION IF EXISTS ensure_user_exists(text);");
             migrationBuilder.Sql("DROP FUNCTION IF EXISTS current_app_user_id();");

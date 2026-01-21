@@ -14,7 +14,7 @@ namespace FantasyHOF.Application.Queries.LeagueImportQueries
             public async Task<LeagueImport?> Handle(GetLeagueImportByIdQuery request, CancellationToken ct)
             {
                 return await database.LeagueImports
-                    .SingleAsync(x => x.Id == request.LeagueImportId, ct);
+                    .FirstOrDefaultAsync(x => x.Id == request.LeagueImportId, ct);
             }
         }
     }

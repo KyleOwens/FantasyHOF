@@ -16,11 +16,17 @@ namespace FantasyHOF.Application.Queries.LeagueMemberQueries
                 GetLeagueMembersByIdsQuery request,
                 CancellationToken ct)
             {
-                return await database.LeagueMembers
+                List<int> leagueIds = [.. request.LeagueMemberIds.Select(id => id.LeagueId)];
+                List<int> memberIds = [.. request.LeagueMemberIds.Select(id => id.MemberId)];
+
+                List<LeagueMember> candidates = await database.LeagueMembers
                     .AsNoTracking()
-                    .Where(leagueMember => request.LeagueMemberIds
-                        .Any(id => id.LeagueId == leagueMember.LeagueId && id.MemberId == leagueMember.MemberId))
+                    .Where(lm => leagueIds.Contains(lm.LeagueId) && memberIds.Contains(lm.MemberId))
                     .ToListAsync(ct);
+
+                return [..candidates
+                    .Where(lm => request.LeagueMemberIds
+                        .Any(id => id.LeagueId == lm.LeagueId && id.MemberId == lm.MemberId))];
             }
         }
     }
