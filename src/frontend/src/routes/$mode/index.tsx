@@ -33,7 +33,6 @@ export const Route = createFileRoute("/$mode/")({
     }
 
     const firstLeagueId = await getFirstLeagueIdForMode(params.mode);
-    console.log(firstLeagueId);
     if (!firstLeagueId) {
       throw redirect({ from: Route.fullPath, to: myLeaguesRoute.to }); // We will  make this an add team page soon
     }
@@ -48,8 +47,6 @@ export const Route = createFileRoute("/$mode/")({
 async function getFirstLeagueIdForMode(
   mode: "me" | "demo",
 ): Promise<string | undefined> {
-  console.log(mode);
-
   if (mode === "demo") {
     const data = await fetchQuery<ModeDemoLeaguesQuery>(
       RelayEnvironment,
@@ -57,7 +54,6 @@ async function getFirstLeagueIdForMode(
       {},
     ).toPromise();
 
-    console.log(data);
     return data?.demoLeagues.at(0)?.id ?? undefined;
   } else {
     const data = await fetchQuery<ModeUserLeaguesQuery>(
