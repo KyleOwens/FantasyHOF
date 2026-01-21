@@ -20,7 +20,7 @@ export function HeaderProfile() {
   const matchRoute = useMatchRoute();
 
   const isDashboardActive = matchRoute({
-    to: "/$mode/$leagueId/dashboard",
+    to: "/$mode/$leagueId",
     params: { mode: "me" },
     fuzzy: true,
   });

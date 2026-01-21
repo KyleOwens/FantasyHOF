@@ -74,7 +74,7 @@ export function LeagueNavigation({ leaguesKey, providersKey, userId }: Props) {
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <Avatar className="w-8 h-8 rounded-lg">
+                <Avatar className="w-8 h-8 rounded-none">
                   <AvatarImage src={selectedLeague?.fantasyProvider.logoURL} />
                 </Avatar>
                 <div className="grid flex-1 text-left text-xs leading-tight">

@@ -48,6 +48,7 @@ export function HeaderNavigation() {
               <Link
                 to={modeRoute.to}
                 params={{ mode: "demo" }}
+                activeProps={{ className: "text-primary" }}
                 className="font-medium text-muted-foreground px-4 py-2"
               >
                 Demo

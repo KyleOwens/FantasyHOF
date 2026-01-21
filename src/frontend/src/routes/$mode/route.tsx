@@ -1,5 +1,4 @@
 import { LeagueNotFoundPage } from "@/components/error-pages/LeagueNotFoundPage";
-import { RelayGraphQLError } from "@/types/GraphQLError";
 import { isRelayError } from "@/utilities/errorUtilities";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 import z from "zod";
@@ -21,10 +20,5 @@ export const Route = createFileRoute("/$mode")({
 
     throw error;
   },
-  errorComponent: ({ error }) => {
-    const relayError = error as RelayGraphQLError;
-    const errorCode = relayError.source?.errors?.at(0)?.extensions?.code;
-
-    return <LeagueNotFoundPage />;
-  },
+  errorComponent: LeagueNotFoundPage,
 });
