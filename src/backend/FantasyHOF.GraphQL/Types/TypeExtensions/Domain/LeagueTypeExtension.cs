@@ -3,13 +3,11 @@ using FantasyHOF.Application.Queries.LeagueQueries;
 using FantasyHOF.Application.Types.Queries.Records;
 using FantasyHOF.Domain.Entities;
 using FantasyHOF.GraphQL.Types.DataLoaderDefinitions;
-using HotChocolate.Authorization;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
 {
     [Node]
-    [Authorize]
     [ExtendObjectType(typeof(League))]
     public class LeagueTypeExtension
     {

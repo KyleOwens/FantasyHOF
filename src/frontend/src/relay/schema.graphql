@@ -128,7 +128,7 @@ type ForbiddenError implements ICodedException {
   errorCode: AppErrorCode!
 }
 
-type League implements Node @authorize {
+type League implements Node {
   id: ID!
   userId: String!
   fantasyProviderId: ID!

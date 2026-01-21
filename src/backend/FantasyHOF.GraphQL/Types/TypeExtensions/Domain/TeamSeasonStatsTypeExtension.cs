@@ -1,12 +1,10 @@
 ﻿using FantasyHOF.Application.Queries.TeamSeasonStatsQueries;
 using FantasyHOF.Domain.Entities;
-using HotChocolate.Authorization;
 using MediatR;
 
 namespace FantasyHOF.GraphQL.Types.TypeExtensions.Domain
 {
     [Node]
-    [Authorize]
     [ExtendObjectType<TeamSeasonStats>]
     internal class TeamSeasonStatsTypeExtension
     {
