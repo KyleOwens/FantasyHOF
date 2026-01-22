@@ -14,7 +14,7 @@ namespace FantasyHOF.Application.Queries.LeagueQueries
     {
         public async Task<League> Handle(GetLeagueByIdQuery request, CancellationToken ct)
         {
-            return await database.Leagues.FirstOrDefaultAsync(x => x.Id == request.LeagueId) ??
+            return await database.Leagues.FirstOrDefaultAsync(x => x.Id == request.LeagueId, ct) ??
                 throw new NotFoundException(nameof(League), request.LeagueId);
         }
     }

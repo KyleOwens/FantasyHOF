@@ -109,8 +109,6 @@ namespace FantasyHOF.EntityFramework.RawSQLMigrations
                 string updatePolicyName = $"rls_{table}_user_update";
                 string deletePolicyName = $"rls_{table}_user_delete";
 
-                string idField = table == "users" ? "id" : "user_id";
-
                 migrationBuilder.Sql($"DROP POLICY IF EXISTS {selectPolicyName} ON {table};");
                 migrationBuilder.Sql($"DROP POLICY IF EXISTS {insertPolicyName} ON {table};");
                 migrationBuilder.Sql($"DROP POLICY IF EXISTS {updatePolicyName} ON {table};");

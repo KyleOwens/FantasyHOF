@@ -13,13 +13,14 @@ namespace FantasyHOF.Domain.Entities
         public required SportId SportId { get; init; }
         public required string CurrentLeagueName { get; init; }
         public required int CurrentLeagueYear { get; init; }
+        public required DateTimeOffset CreatedAt { get; init; }
+        public required DateTimeOffset UpdatedAt { get; init; }
 
         public List<LeagueSeason> Seasons { get; set; } = [];
         public List<LeagueMember> LeagueMembers { get; private set; } = [];
         public FantasyProvider FantasyProvider { get; private set; } = null!;
         public Sport Sport { get; private set; } = null!;
 
-        public DateTimeOffset CreatedAt { get; private set; }
-        public DateTimeOffset UpdatedAt { get; private set; }
+
     }
 }

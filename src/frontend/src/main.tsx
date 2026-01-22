@@ -43,7 +43,15 @@ if (!rootElement.innerHTML) {
   root.render(
     <RelayEnvironmentProvider environment={RelayEnvironment}>
       <StrictMode>
-        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+        <ClerkProvider
+          publishableKey={PUBLISHABLE_KEY}
+          signInForceRedirectUrl={
+            import.meta.env.VITE_CLERK_SIGN_IN_FORCE_REDIRECT_URL
+          }
+          signUpForceRedirectUrl={
+            import.meta.env.VITE_CLERK_SIGN_UP_FORCE_REDIRECT_URL
+          }
+        >
           <RelayAuthProvider>
             <SidebarProvider>
               <AppRouter />

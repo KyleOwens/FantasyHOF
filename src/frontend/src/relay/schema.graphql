@@ -136,12 +136,12 @@ type League implements Node {
   sportId: SportId!
   currentLeagueName: String!
   currentLeagueYear: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   seasons: [LeagueSeason!]! @cost(weight: "10")
   leagueMembers: [LeagueMember!]!
   fantasyProvider: FantasyProvider! @cost(weight: "10")
   sport: Sport! @cost(weight: "10")
-  createdAt: DateTime!
-  updatedAt: DateTime!
   members: [LeagueMember!]! @cost(weight: "10")
   recordSummary: LeagueRecordSummary @cost(weight: "10")
   recordDetails(recordType: RecordTypeId!): RecordDetails!

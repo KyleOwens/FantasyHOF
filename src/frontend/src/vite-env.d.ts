@@ -2,6 +2,8 @@
 
 interface ImportMetaEnv {
   readonly VITE_CLERK_PUBLISHABLE_KEY: string;
+  readonly VITE_CLERK_SIGN_IN_FORCE_REDIRECT_URL: string;
+  readonly VITE_CLERK_SIGN_UP_FORCE_REDIRECT_URL: string;
 }
 
 interface ImportMeta {

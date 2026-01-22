@@ -19,11 +19,17 @@ import { Route as dashboardRoute } from "@/routes/$mode";
 export function HeaderProfile() {
   const matchRoute = useMatchRoute();
 
-  const isDashboardActive = matchRoute({
-    to: "/$mode/$leagueId",
+  const isRecordRouteActive = matchRoute({
+    to: "/$mode/$leagueId/$recordTypeId",
     params: { mode: "me" },
-    fuzzy: true,
   });
+
+  const isDashboardRouteActive = matchRoute({
+    to: "/$mode/$leagueId/dashboard",
+    params: { mode: "me" },
+  });
+
+  const dashboardLinkIsActive = isRecordRouteActive || isDashboardRouteActive;
 
   return (
     <div className="flex flex-row space-x-8">
@@ -47,7 +53,7 @@ export function HeaderProfile() {
                 <Link
                   to={dashboardRoute.to}
                   params={{ mode: "me" }}
-                  className={`font-medium text-muted-foreground px-4 py-2 ${isDashboardActive ? "text-primary" : ""}`}
+                  className={`font-medium text-muted-foreground px-4 py-2 ${dashboardLinkIsActive ? "text-primary" : ""}`}
                 >
                   Record dashboard
                 </Link>

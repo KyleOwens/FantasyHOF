@@ -20,7 +20,9 @@ namespace FantasyHOF.Application.Services.Mappers
                 ProviderLeagueId = leagueId,
                 SportId = SportId.Football,
                 CurrentLeagueName = mostRecentSettings.LeagueName ?? "",
-                CurrentLeagueYear = mostRecentSeason?.Year ?? 0
+                CurrentLeagueYear = mostRecentSeason?.Year ?? 0,
+                CreatedAt = DateTimeOffset.UtcNow,
+                UpdatedAt = DateTimeOffset.UtcNow,
             };
         }
 
