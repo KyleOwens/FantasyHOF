@@ -87,7 +87,7 @@ export function RecordNavigation({ recordMetadataKey }: Props) {
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
-      <SidebarGroup>
+      {/* <SidebarGroup>
         <SidebarGroupLabel>Member tools</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
@@ -118,7 +118,7 @@ export function RecordNavigation({ recordMetadataKey }: Props) {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
-      </SidebarGroup>
+      </SidebarGroup> */}
     </>
   );
 }
