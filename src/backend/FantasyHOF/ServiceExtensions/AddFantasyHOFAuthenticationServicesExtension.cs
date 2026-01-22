@@ -5,7 +5,7 @@ namespace FantasyHOF.ServiceExtensions
 {
     public static class AddFantasyHOFAuthenticationServicesExtension
     {
-        public static IServiceCollection AddFantasyHOFAuthenticationServices(this IServiceCollection services, string jwtAuthority)
+        public static IServiceCollection AddFantasyHOFAuthenticationServices(this IServiceCollection services, IWebHostEnvironment environment, string jwtAuthority)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -17,7 +17,7 @@ namespace FantasyHOF.ServiceExtensions
                         ValidateIssuer = true,
                         ValidIssuer = jwtAuthority,
                         ValidateAudience = false,
-                        ValidateLifetime = false
+                        ValidateLifetime = environment.IsDevelopment() ? false : true
                     };
                 });
 

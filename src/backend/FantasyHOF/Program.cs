@@ -1,5 +1,4 @@
 using FantasyHOF.ApplicationBuilderExtensions;
-using FantasyHOF.EntityFramework;
 using FantasyHOF.ServiceExtensions;
 using FantasyHOF.WebApplicationExtensions;
 using Hangfire;
@@ -20,6 +19,7 @@ string connectionString = builder.Configuration.GetConnectionString("AppConnecti
     ?? throw new Exception("Failed to load connection string from config");
 
 builder.Services.AddFantasyHOFAuthenticationServices(
+    builder.Environment,
     builder.Configuration["Authentication:Authority"]
     ?? throw new Exception("Failed to load JWT authority from config"));
 
@@ -38,14 +38,6 @@ await app.AddGraphQLDeveloperToolsAsync();
 
 if (app.Environment.IsDevelopment())
 {
-    using IServiceScope scope = app.Services.CreateScope();
-
-    FantasyHOFDBContext context = scope.ServiceProvider.GetRequiredService<FantasyHOFDBContext>();
-
-    //context.Database.EnsureDeleted();
-    //await context.Database.MigrateAsync();
-    //await context.ApplyPostMigrationScriptsAsync();
-
     app.UseHangfireDashboard("/hangfire");
 }
 
