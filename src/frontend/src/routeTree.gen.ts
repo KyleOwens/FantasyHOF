@@ -12,6 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ModeRouteRouteImport } from './routes/$mode/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ModeIndexRouteImport } from './routes/$mode/index'
+import { Route as SportsFootballRouteImport } from './routes/sports/football'
+import { Route as FeaturesSimpleImportsRouteImport } from './routes/features/simple-imports'
+import { Route as FeaturesRecordsRouteImport } from './routes/features/records'
 import { Route as ModeMyLeaguesRouteImport } from './routes/$mode/my-leagues'
 import { Route as ModeLeagueIdRouteRouteImport } from './routes/$mode/$leagueId/route'
 import { Route as ModeLeagueIdIndexRouteImport } from './routes/$mode/$leagueId/index'
@@ -32,6 +35,21 @@ const ModeIndexRoute = ModeIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ModeRouteRoute,
+} as any)
+const SportsFootballRoute = SportsFootballRouteImport.update({
+  id: '/sports/football',
+  path: '/sports/football',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesSimpleImportsRoute = FeaturesSimpleImportsRouteImport.update({
+  id: '/features/simple-imports',
+  path: '/features/simple-imports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRecordsRoute = FeaturesRecordsRouteImport.update({
+  id: '/features/records',
+  path: '/features/records',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ModeMyLeaguesRoute = ModeMyLeaguesRouteImport.update({
   id: '/my-leagues',
@@ -65,6 +83,9 @@ export interface FileRoutesByFullPath {
   '/$mode': typeof ModeRouteRouteWithChildren
   '/$mode/$leagueId': typeof ModeLeagueIdRouteRouteWithChildren
   '/$mode/my-leagues': typeof ModeMyLeaguesRoute
+  '/features/records': typeof FeaturesRecordsRoute
+  '/features/simple-imports': typeof FeaturesSimpleImportsRoute
+  '/sports/football': typeof SportsFootballRoute
   '/$mode/': typeof ModeIndexRoute
   '/$mode/$leagueId/$recordTypeId': typeof ModeLeagueIdRecordTypeIdRoute
   '/$mode/$leagueId/dashboard': typeof ModeLeagueIdDashboardRoute
@@ -73,6 +94,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$mode/my-leagues': typeof ModeMyLeaguesRoute
+  '/features/records': typeof FeaturesRecordsRoute
+  '/features/simple-imports': typeof FeaturesSimpleImportsRoute
+  '/sports/football': typeof SportsFootballRoute
   '/$mode': typeof ModeIndexRoute
   '/$mode/$leagueId/$recordTypeId': typeof ModeLeagueIdRecordTypeIdRoute
   '/$mode/$leagueId/dashboard': typeof ModeLeagueIdDashboardRoute
@@ -84,6 +108,9 @@ export interface FileRoutesById {
   '/$mode': typeof ModeRouteRouteWithChildren
   '/$mode/$leagueId': typeof ModeLeagueIdRouteRouteWithChildren
   '/$mode/my-leagues': typeof ModeMyLeaguesRoute
+  '/features/records': typeof FeaturesRecordsRoute
+  '/features/simple-imports': typeof FeaturesSimpleImportsRoute
+  '/sports/football': typeof SportsFootballRoute
   '/$mode/': typeof ModeIndexRoute
   '/$mode/$leagueId/$recordTypeId': typeof ModeLeagueIdRecordTypeIdRoute
   '/$mode/$leagueId/dashboard': typeof ModeLeagueIdDashboardRoute
@@ -96,6 +123,9 @@ export interface FileRouteTypes {
     | '/$mode'
     | '/$mode/$leagueId'
     | '/$mode/my-leagues'
+    | '/features/records'
+    | '/features/simple-imports'
+    | '/sports/football'
     | '/$mode/'
     | '/$mode/$leagueId/$recordTypeId'
     | '/$mode/$leagueId/dashboard'
@@ -104,6 +134,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$mode/my-leagues'
+    | '/features/records'
+    | '/features/simple-imports'
+    | '/sports/football'
     | '/$mode'
     | '/$mode/$leagueId/$recordTypeId'
     | '/$mode/$leagueId/dashboard'
@@ -114,6 +147,9 @@ export interface FileRouteTypes {
     | '/$mode'
     | '/$mode/$leagueId'
     | '/$mode/my-leagues'
+    | '/features/records'
+    | '/features/simple-imports'
+    | '/sports/football'
     | '/$mode/'
     | '/$mode/$leagueId/$recordTypeId'
     | '/$mode/$leagueId/dashboard'
@@ -123,6 +159,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ModeRouteRoute: typeof ModeRouteRouteWithChildren
+  FeaturesRecordsRoute: typeof FeaturesRecordsRoute
+  FeaturesSimpleImportsRoute: typeof FeaturesSimpleImportsRoute
+  SportsFootballRoute: typeof SportsFootballRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -147,6 +186,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/$mode/'
       preLoaderRoute: typeof ModeIndexRouteImport
       parentRoute: typeof ModeRouteRoute
+    }
+    '/sports/football': {
+      id: '/sports/football'
+      path: '/sports/football'
+      fullPath: '/sports/football'
+      preLoaderRoute: typeof SportsFootballRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/simple-imports': {
+      id: '/features/simple-imports'
+      path: '/features/simple-imports'
+      fullPath: '/features/simple-imports'
+      preLoaderRoute: typeof FeaturesSimpleImportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features/records': {
+      id: '/features/records'
+      path: '/features/records'
+      fullPath: '/features/records'
+      preLoaderRoute: typeof FeaturesRecordsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/$mode/my-leagues': {
       id: '/$mode/my-leagues'
@@ -220,6 +280,9 @@ const ModeRouteRouteWithChildren = ModeRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ModeRouteRoute: ModeRouteRouteWithChildren,
+  FeaturesRecordsRoute: FeaturesRecordsRoute,
+  FeaturesSimpleImportsRoute: FeaturesSimpleImportsRoute,
+  SportsFootballRoute: SportsFootballRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

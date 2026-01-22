@@ -1,11 +1,15 @@
 import { RecordTypeId } from "@/__generated__/RecordCardFragment.graphql";
-import { RecordTypeIdDetailsQuery } from "@/__generated__/RecordTypeIdDetailsQuery.graphql";
+import {
+  RecordCategoryId,
+  RecordTypeIdDetailsQuery,
+} from "@/__generated__/RecordTypeIdDetailsQuery.graphql";
 import { preloadQuery } from "@/relay/helpers";
 import { createFileRoute } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
 import z from "zod";
 import { usePreloadedQuery } from "react-relay";
 import { RecordDetailsTable } from "@/components/record-details-tables/RecordDetailsTable";
+import { RecordCategory } from "@/types/enums";
 
 const recordTypeParamsSchema = z.object({
   recordTypeId: z.custom<RecordTypeId>(),
@@ -30,16 +34,15 @@ export const Route = createFileRoute("/$mode/$leagueId/$recordTypeId")({
 
 const recordDetailsQuery = graphql`
   query RecordTypeIdDetailsQuery($leagueId: ID!, $recordType: RecordTypeId!) {
-    me {
-      league(leagueId: $leagueId) {
-        recordDetails(recordType: $recordType) {
-          metadata {
-            displayName
-            description
-            iconURI
-          }
-          ...RecordDetailsTableFragment
+    league(leagueId: $leagueId) {
+      recordDetails(recordType: $recordType) {
+        metadata {
+          displayName
+          description
+          iconURI
+          category
         }
+        ...RecordDetailsTableFragment
       }
     }
   }
@@ -52,7 +55,10 @@ function RecordDetails() {
     loaderData,
   );
 
-  const records = data.me.league.recordDetails;
+  const records = data.league.recordDetails;
+  const subheader = getSubheaderDisplayText(
+    data.league.recordDetails.metadata.category,
+  );
 
   return (
     <div className=" w-full max-w-6xl mx-auto">
@@ -62,9 +68,7 @@ function RecordDetails() {
             <h2 className="text-3xl font-semibold">
               {records.metadata.displayName}
             </h2>
-            <span className="text-muted-foreground">
-              League history leaderboard
-            </span>
+            <span className="text-muted-foreground">{subheader}</span>
           </div>
           <p>{records.metadata.description}</p>
         </div>
@@ -72,4 +76,17 @@ function RecordDetails() {
       <RecordDetailsTable recordDetailsKey={records} />
     </div>
   );
+}
+
+function getSubheaderDisplayText(category: RecordCategoryId) {
+  switch (category) {
+    case RecordCategory.LEAGUE:
+      return "League history leaderboard";
+    case RecordCategory.SEASON:
+      return "Single season leaderboard";
+    case RecordCategory.WEEK:
+      return "Single week leaderboard";
+    case RecordCategory.PLAYER:
+      return "Player leaderboard";
+  }
 }

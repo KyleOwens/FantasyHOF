@@ -14,11 +14,11 @@ export const Route = createFileRoute("/$mode")({
   },
   component: () => <Outlet />,
   onCatch: (error) => {
-    if (isRelayError(error)) {
-      return;
-    }
+    if (!isRelayError(error)) throw error;
+    if (error.source?.errors?.at(0)?.extensions?.code !== "FantasyHOFNotFound")
+      throw error;
 
-    throw error;
+    return;
   },
   errorComponent: LeagueNotFoundPage,
 });

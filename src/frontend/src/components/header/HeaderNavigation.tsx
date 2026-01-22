@@ -8,20 +8,29 @@ import {
 } from "../ui/navigation-menu";
 import { Route as indexRoute } from "../../routes/index.tsx";
 import { Route as modeRoute } from "../../routes/$mode/index";
-import { Link } from "@tanstack/react-router";
+import { Route as footballRoute } from "../../routes/sports/football.tsx";
+import { Route as importsRoute } from "@/routes/features/simple-imports.tsx";
+import { Route as recordsFeatureRoute } from "@/routes/features/records.tsx";
+
+import { Link, useNavigate } from "@tanstack/react-router";
 
 const navData = [
   {
     label: "Sports",
-    links: [{ label: "Football", to: indexRoute.to }],
+    links: [{ label: "Football", to: footballRoute.to }],
   },
   {
     label: "Features",
-    links: [{ label: "Records", to: indexRoute.to }],
+    links: [
+      { label: "Simple imports", to: importsRoute.to },
+      { label: "Records", to: recordsFeatureRoute.to },
+    ],
   },
 ];
 
 export function HeaderNavigation() {
+  const navigate = useNavigate();
+
   return (
     <div className="flex items-center">
       <Link to={indexRoute.to} className="min-h-16 min-w-20">
@@ -34,10 +43,17 @@ export function HeaderNavigation() {
               <NavigationMenuTrigger className="font-medium text-muted-foreground">
                 {menu.label}
               </NavigationMenuTrigger>
-              <NavigationMenuContent>
+              <NavigationMenuContent className="w-max">
                 {menu.links.map((link) => (
-                  <NavigationMenuLink key={link.label} asChild>
-                    <Link to={link.to}>{link.label}</Link>
+                  <NavigationMenuLink
+                    key={link.label}
+                    className="cursor-pointer w-full whitespace-nowrap px-4"
+                    onSelect={() => {
+                      console.log("navigating to " + link.to);
+                      navigate({ to: link.to });
+                    }}
+                  >
+                    {link.label}
                   </NavigationMenuLink>
                 ))}
               </NavigationMenuContent>
