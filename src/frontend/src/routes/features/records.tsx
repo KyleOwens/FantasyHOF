@@ -41,7 +41,7 @@ function RouteComponent() {
           </p>
           <div className="rounded-xl border bg-card shadow-2xl overflow-hidden">
             <img
-              src="/records.png"
+              src="/product-pages/records.webp"
               alt="The Record Dashboard showing all-time leaders"
               className="w-full h-auto"
             />
@@ -64,7 +64,7 @@ function RouteComponent() {
           </p>
           <div className="rounded-xl border bg-card shadow-2xl overflow-hidden">
             <img
-              src="/record-details.png"
+              src="/product-pages/record-details.webp"
               alt="The Record Dashboard showing all-time leaders"
               className="w-full h-auto"
             />
