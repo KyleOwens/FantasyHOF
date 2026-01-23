@@ -27,7 +27,7 @@ const navData = [
 
 export function HeaderNavigation() {
   return (
-    <div className="flex items-center">
+    <div className="items-center hidden md:flex">
       <Link to={indexRoute.to} className="min-h-16 min-w-20">
         <img src="/logo.webp" className="-mx-2 h-16 w-20" />
       </Link>

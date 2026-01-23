@@ -4,7 +4,7 @@ type Props = {
 
 export function ProductPage({ children }: Props) {
   return (
-    <div className="flex flex-col min-h-screen max-w-6xl mx-auto divide-y divide-slate-300">
+    <div className="flex flex-col min-h-screen px-4 max-w-6xl mx-auto divide-y divide-slate-300">
       {children}
     </div>
   );

@@ -87,7 +87,7 @@ function MyLeaguesPage() {
     completedLeagues.length === 0 && importingLeagues.length === 0;
 
   return (
-    <>
+    <div className="container py-6 px-4 max-w-5xl mx-auto">
       {isEmpty && (
         <NoLeaguesCard
           providersKey={data}
@@ -95,8 +95,8 @@ function MyLeaguesPage() {
         />
       )}
       {!isEmpty && (
-        <div className="container max-w-4xl mx-auto py-6">
-          <div className="flex items-center justify-between mb-8">
+        <>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
             <div>
               <h2 className="text-3xl font-bold">My Leagues</h2>
               <p className="text-muted-foreground mt-1">
@@ -172,7 +172,7 @@ function MyLeaguesPage() {
               )}
             </AnimatePresence>
           </div>
-        </div>
+        </>
       )}
       <LeagueAdditionModal
         isOpen={isModalOpen}
@@ -182,6 +182,6 @@ function MyLeaguesPage() {
         providersKey={data.fantasyProviders}
         userId={data.me.id}
       />
-    </>
+    </div>
   );
 }

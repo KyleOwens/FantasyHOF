@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="flex flex-col min-h-screen bg-background mx-auto max-w-6xl">
+    <div className="flex flex-col bg-background mx-auto max-w-6xl w-full">
       <section className="px-6 py-12 overflow-hidden border-b">
         <div className="text-center">
           <Badge variant="outline" className="border-primary/50 text-primary">
@@ -46,7 +46,7 @@ function Index() {
           </div>
         </div>
       </section>
-      <section className="container max-w-6xl mx-auto py-24 px-6">
+      <section className="max-w-6xl mx-auto py-24 px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Feature 1: The Record Books */}
           <Card className="border">
@@ -86,7 +86,7 @@ function Index() {
         </div>
       </section>
       <section className="bg-muted/30">
-        <div className="max-col-6xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-12 items-center">
             <div className="flex-1">
               <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">

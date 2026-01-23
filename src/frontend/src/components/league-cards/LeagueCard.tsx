@@ -40,6 +40,7 @@ import { useState } from "react";
 import { Spinner } from "../ui/spinner";
 import { Route as dashboardRoute } from "@/routes/$mode/$leagueId/dashboard";
 import { Route as myLeaguesRoute } from "@/routes/$mode/my-leagues";
+import { Separator } from "../ui/separator";
 
 type Props = {
   userId: string;
@@ -135,24 +136,44 @@ export function LeagueCard({ leagueKey, userId }: Props) {
   return (
     <>
       <Card key={league.id}>
-        <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
-          <div className="flex items-center gap-3">
-            <img
-              src={league.fantasyProvider.logoURL}
-              alt={league.fantasyProvider.name}
-              className="size-10 rounded-lg"
-            />
-            <div>
-              <CardTitle className="text-xl">
-                <span>{league.currentLeagueName}</span>
-              </CardTitle>
-              <CardDescription className="flex items-center gap-2 mt-1">
-                <Badge variant={"outline"}>{league.fantasyProvider.name}</Badge>
-                <span className="text-xs">ID: {league.providerLeagueId}</span>
-              </CardDescription>
+        <CardHeader className="space-y-0">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <img
+                src={league.fantasyProvider.logoURL}
+                alt={league.fantasyProvider.name}
+                className="size-10 rounded-lg"
+              />
+              <div className="min-w-0">
+                <CardTitle className="text-xl truncate">
+                  {league.currentLeagueName}
+                </CardTitle>
+                <CardDescription className="flex items-center gap-2 mt-1">
+                  <Badge variant={"outline"}>
+                    {league.fantasyProvider.name}
+                  </Badge>
+                  <span className="text-xs">ID: {league.providerLeagueId}</span>
+                </CardDescription>
+              </div>
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onSelect={() => setShowDeleteDialog(true)}
+                >
+                  <Trash2 className="size-4 mr-2 text-destructive" />
+                  Delete League
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <Button variant={"link"} asChild className="ml-auto">
+          <Button variant="secondary" asChild className="mt-4 w-full sm:hidden">
             <Link
               from={myLeaguesRoute.fullPath}
               to={dashboardRoute.to}
@@ -161,27 +182,11 @@ export function LeagueCard({ leagueKey, userId }: Props) {
               View records
             </Link>
           </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <MoreHorizontal className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                className="text-destructive focus:text-destructive"
-                onSelect={() => setShowDeleteDialog(true)}
-              >
-                <Trash2 className="size-4 mr-2 text-destructive" />
-                Delete League
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center gap-6 text-sm text-muted-foreground justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-muted-foreground justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 whitespace-nowrap">
                 <Calendar className="size-4" />
                 <span>{league.seasons.length} seasons</span>
               </div>
@@ -190,6 +195,7 @@ export function LeagueCard({ leagueKey, userId }: Props) {
                 <span>{league.members.length} members</span>
               </div>
             </div>
+            <Separator className="sm:hidden" />
             <div className="flex items-center gap-1.5">
               <RefreshCw className="size-3" />
               <span>
@@ -200,6 +206,18 @@ export function LeagueCard({ leagueKey, userId }: Props) {
                 }).format(new Date(league.createdAt))}
               </span>
             </div>
+          </div>
+          <Separator className="hidden sm:block mt-4 mb-2" />
+          <div className="hidden md:block">
+            <Button variant="link" asChild className="h-auto p-0">
+              <Link
+                from={myLeaguesRoute.fullPath}
+                to={dashboardRoute.to}
+                params={{ leagueId: league.id }}
+              >
+                View records →
+              </Link>
+            </Button>
           </div>
         </CardContent>
       </Card>
