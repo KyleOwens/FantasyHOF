@@ -86,7 +86,7 @@ export function ESPNForm({ resetEntry, onCompletion, userId }: Props) {
 
   const form = useForm({
     defaultValues: {
-      leagueId: undefined as unknown as number,
+      leagueId: null as unknown as number,
       swid: "",
       espnS2Id: "",
     },
@@ -202,7 +202,7 @@ export function ESPNForm({ resetEntry, onCompletion, userId }: Props) {
           <FieldDescription>
             Credentials to authenticate with ESPN
           </FieldDescription>
-          <Alert className="-mt-2">
+          <Alert className="-mt-2 bg-slate-50 border-dashed">
             <Info className="stroke-sky-400" />
             <AlertTitle>Credentials notice</AlertTitle>
             <AlertDescription>

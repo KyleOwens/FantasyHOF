@@ -16,7 +16,7 @@ export function InstructionAccordion({ title, children }: Props) {
     <Accordion
       type="single"
       collapsible
-      className="w-full border rounded-lg -mt-2 px-4"
+      className="w-full border rounded-lg -mt-2 px-4 bg-slate-50 border-dashed"
     >
       <AccordionItem value="guide" className="border-none ">
         <AccordionTrigger className="text-xs hover:no-underline ">

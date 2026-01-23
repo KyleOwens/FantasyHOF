@@ -80,7 +80,7 @@ export function LeagueAdditionModal({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
-      <DialogContent className="fixed top-[10%] min-w-3xl translate-y-0 overflow-hidden pb-8">
+      <DialogContent className="fixed top-[10%] translate-y-0 overflow-hidden pb-8 md:max-w-3xl">
         <DialogHeader className="mb-4 shrink-0">
           <DialogTitle>Add league</DialogTitle>
           {step === LeagueAdditionStep.Provider && (

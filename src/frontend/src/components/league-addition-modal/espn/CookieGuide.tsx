@@ -26,8 +26,8 @@ export function CookieGuide() {
       title: `Copy the URL below`,
       description: "",
       additionalContent: (
-        <div className="flex items-center mt-2 gap-2 max-w-xl">
-          <code className="flex-1 border rounded-sm px-2 py-1 text-xs">
+        <div className="flex items-center mt-2 gap-2">
+          <code className="flex-1 border rounded-sm px-2 py-1 text-xs break-all">
             {settingsUrl}
           </code>
           <Button
