@@ -13,6 +13,7 @@ import { Route as importsRoute } from "@/routes/features/simple-imports.tsx";
 import { Route as recordsFeatureRoute } from "@/routes/features/records.tsx";
 
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useMemo } from "react";
 
 const navData = [
   {
@@ -30,6 +31,22 @@ const navData = [
 
 export function HeaderNavigation() {
   const navigate = useNavigate();
+
+  const navData = useMemo(() => {
+    return [
+      {
+        label: "Sports",
+        links: [{ label: "Football", to: footballRoute.to }],
+      },
+      {
+        label: "Features",
+        links: [
+          { label: "Simple imports", to: importsRoute.to },
+          { label: "Records", to: recordsFeatureRoute.to },
+        ],
+      },
+    ];
+  }, [footballRoute, importsRoute, recordsFeatureRoute]);
 
   return (
     <div className="flex items-center">

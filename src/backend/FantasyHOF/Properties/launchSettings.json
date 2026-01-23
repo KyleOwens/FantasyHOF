@@ -2,21 +2,37 @@
   "profiles": {
     "http": {
       "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
       "launchUrl": "http://localhost:5095/graphql",
+      "applicationUrl": "http://localhost:5095",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5095"
-    },
-    "Container (Dockerfile)": {
-      "commandName": "Docker",
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/graphql",
-      "environmentVariables": {
-        "ASPNETCORE_HTTP_PORTS": "8080"
+      "IIS Express": {
+        "commandName": "IISExpress",
+        "launchBrowser": true,
+        "launchUrl": "http://localhost:5095/graphql",
+        "environmentVariables": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
       },
-      "publishAllPorts": true,
-      "useSSL": false
+      "Container (Dockerfile)": {
+        "commandName": "Docker",
+        "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/graphql",
+        "environmentVariables": {
+          "ASPNETCORE_HTTP_PORTS": "8080"
+        },
+        "publishAllPorts": true,
+        "useSSL": false
+      }
+    },
+    "iisSettings": {
+      "windowsAuthentication": false,
+      "anonymousAuthentication": true,
+      "iisExpress": {
+        "applicationUrl": "http://localhost:62052/",
+        "sslPort": 44315
+      }
     }
   }
-}
