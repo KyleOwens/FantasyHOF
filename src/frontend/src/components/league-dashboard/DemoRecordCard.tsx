@@ -1,3 +1,4 @@
+import { User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 
@@ -12,7 +13,7 @@ export function DemoRecordCard() {
               alt={"Most points single player"}
             />
             <AvatarFallback>
-              <AvatarImage src="MostPointsLeague.png" />
+              <User />
             </AvatarFallback>
           </Avatar>
           <div>

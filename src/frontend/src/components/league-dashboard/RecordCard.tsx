@@ -50,7 +50,7 @@ export function RecordCard({ recordKey, titleDescription, footerText }: Props) {
               alt={record.metadata.displayName}
             />
             <AvatarFallback>
-              <AvatarImage src="MostPointsLeague.png" />
+              <AvatarImage src="/record-icons/MostPoints.webp" />
             </AvatarFallback>
           </Avatar>
           <div>
