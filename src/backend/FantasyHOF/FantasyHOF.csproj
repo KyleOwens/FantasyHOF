@@ -43,8 +43,4 @@
     <ProjectReference Include="..\FantasyHOF.ESPN\FantasyHOF.ESPN.csproj" />
     <ProjectReference Include="..\FantasyHOF.GraphQL\FantasyHOF.GraphQL.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-	  <Content Include="wwwroot\**" CopyToPublishDirectory="PreserveNewest" />
-  </ItemGroup>
 </Project>
