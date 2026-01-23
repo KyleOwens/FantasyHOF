@@ -66,7 +66,7 @@ export function LeagueDashboard({ queryRef }: Props) {
 
       <div className="flex flex-col space-y-2 mt-6">
         <Tabs value={recordCategory} onValueChange={onCategoryChange}>
-          <div className="flex items-center space-x-8">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
             <TabsList className="*:data-[state=active]:shadow-none bg-slate-200 ">
               <TabsTrigger value={RecordCategory.LEAGUE}>League</TabsTrigger>
               <TabsTrigger value={RecordCategory.SEASON}>Seasonal</TabsTrigger>
