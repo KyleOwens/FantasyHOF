@@ -31,7 +31,7 @@ builder.Services.AddFantasyHOFDatabaseServices(appConnectionString);
 
 builder.Services.AddFantasyHOFHttpServices();
 builder.Services.AddFantasyHOFCurrentUserService();
-builder.Services.AddFantasyHOFApplicationServices(builder.Configuration.GetSection("Authentication"), appConnectionString);
+builder.Services.AddFantasyHOFApplicationServices(builder.Configuration.GetSection("Authentication"), adminConnectionString);
 builder.Services.AddFantasyHOFMediatRServices();
 
 await builder.AddFantasyHOFGraphQL();
