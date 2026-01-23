@@ -27,7 +27,7 @@ export function NoLeaguesCard({ providersKey, openModal }: Props) {
   ).fantasyProviders;
 
   return (
-    <div className="flex flex-1 flex-col gap-4 items-center pt-28">
+    <div className="flex flex-1 flex-col gap-4 items-center pt-12">
       <h2 className="text-3xl font-bold">Let's get started</h2>
       <Card className="shadow-2xl border-emerald-200">
         <CardContent className="p-8">

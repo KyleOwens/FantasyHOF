@@ -87,7 +87,7 @@ function MyLeaguesPage() {
     completedLeagues.length === 0 && importingLeagues.length === 0;
 
   return (
-    <div className="container py-6 px-4 max-w-5xl mx-auto">
+    <div className="container px-4 py-6 sm:px-8  max-w-5xl mx-auto">
       {isEmpty && (
         <NoLeaguesCard
           providersKey={data}

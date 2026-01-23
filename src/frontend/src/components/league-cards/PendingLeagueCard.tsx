@@ -52,7 +52,7 @@ export function PendingLeagueCard({ importKey }: Props) {
           className="size-10 rounded-lg"
         />
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
             <span className="font-medium">
               {leagueImport.provider.name} League #
               {leagueImport.providerleagueId}
