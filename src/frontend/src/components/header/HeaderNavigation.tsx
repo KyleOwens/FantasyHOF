@@ -12,26 +12,10 @@ import { Route as footballRoute } from "../../routes/sports/football.tsx";
 import { Route as importsRoute } from "@/routes/features/simple-imports.tsx";
 import { Route as recordsFeatureRoute } from "@/routes/features/records.tsx";
 
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 
-const navData = [
-  {
-    label: "Sports",
-    links: [{ label: "Football", to: footballRoute.to }],
-  },
-  {
-    label: "Features",
-    links: [
-      { label: "Simple imports", to: importsRoute.to },
-      { label: "Records", to: recordsFeatureRoute.to },
-    ],
-  },
-];
-
 export function HeaderNavigation() {
-  const navigate = useNavigate();
-
   const navData = useMemo(() => {
     return [
       {
@@ -46,7 +30,7 @@ export function HeaderNavigation() {
         ],
       },
     ];
-  }, [footballRoute, importsRoute, recordsFeatureRoute]);
+  }, []);
 
   return (
     <div className="flex items-center">
@@ -65,12 +49,14 @@ export function HeaderNavigation() {
                   <NavigationMenuLink
                     key={link.label}
                     className="cursor-pointer w-full whitespace-nowrap px-4"
-                    onSelect={() => {
-                      console.log("navigating to " + link.to);
-                      navigate({ to: link.to });
-                    }}
+                    asChild
                   >
-                    {link.label}
+                    <Link
+                      to={link.to}
+                      className="w-full whitespace-nowrap px-4 py-2 cursor-pointer"
+                    >
+                      {link.label}
+                    </Link>
                   </NavigationMenuLink>
                 ))}
               </NavigationMenuContent>
