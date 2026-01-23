@@ -8,30 +8,24 @@ import {
 } from "../ui/navigation-menu";
 import { Route as indexRoute } from "../../routes/index.tsx";
 import { Route as modeRoute } from "../../routes/$mode/index";
-import { Route as footballRoute } from "../../routes/sports/football.tsx";
-import { Route as importsRoute } from "@/routes/features/simple-imports.tsx";
-import { Route as recordsFeatureRoute } from "@/routes/features/records.tsx";
 
 import { Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+
+const navData = [
+  {
+    label: "Sports",
+    links: [{ label: "Football", to: "/sports/football" }],
+  },
+  {
+    label: "Features",
+    links: [
+      { label: "Simple imports", to: "/features/simple-imports" },
+      { label: "Records", to: "/features/records" },
+    ],
+  },
+];
 
 export function HeaderNavigation() {
-  const navData = useMemo(() => {
-    return [
-      {
-        label: "Sports",
-        links: [{ label: "Football", to: footballRoute.to }],
-      },
-      {
-        label: "Features",
-        links: [
-          { label: "Simple imports", to: importsRoute.to },
-          { label: "Records", to: recordsFeatureRoute.to },
-        ],
-      },
-    ];
-  }, []);
-
   return (
     <div className="flex items-center">
       <Link to={indexRoute.to} className="min-h-16 min-w-20">
