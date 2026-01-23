@@ -10,7 +10,9 @@ import {
 } from "relay-runtime";
 import { createClient } from "graphql-sse";
 
-const HTTP_ENDPOINT = "http://localhost:5173/graphql";
+const HTTP_ENDPOINT = import.meta.env.PROD
+  ? "/graphql"
+  : "http://localhost:5173/graphql";
 
 type TokenGetter = () => Promise<string | null>;
 
