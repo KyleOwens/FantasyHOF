@@ -17,6 +17,9 @@ export function RecordMenuItem({ recordMetadata }: Props) {
           to={recordRoute.to}
           params={{ recordTypeId: recordMetadata.recordTypeId }}
           className="text-xs"
+          activeProps={{
+            className: "!text-primary font-medium", // Applied when active
+          }}
         >
           {formatRecordNameForSidebar(recordMetadata.displayName)}
         </Link>

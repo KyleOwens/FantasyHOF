@@ -10,6 +10,7 @@ import z from "zod";
 import { usePreloadedQuery } from "react-relay";
 import { RecordDetailsTable } from "@/components/record-details-tables/RecordDetailsTable";
 import { RecordCategory } from "@/types/enums";
+import { Spinner } from "@/components/ui/spinner";
 
 const recordTypeParamsSchema = z.object({
   recordTypeId: z.custom<RecordTypeId>(),
@@ -17,6 +18,7 @@ const recordTypeParamsSchema = z.object({
 
 export const Route = createFileRoute("/$mode/$leagueId/$recordTypeId")({
   component: RecordDetails,
+  pendingComponent: () => <Spinner className="m-auto size-20 text-primary" />,
   params: {
     parse: (rawParams) => recordTypeParamsSchema.parse(rawParams),
     stringify: (params) => ({ recordTypeId: params.recordTypeId }),

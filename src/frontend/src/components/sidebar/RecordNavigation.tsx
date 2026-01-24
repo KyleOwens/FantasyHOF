@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
-import { Link } from "@tanstack/react-router";
+import { Link, useMatch, useMatchRoute } from "@tanstack/react-router";
 import { graphql } from "relay-runtime";
 import { useFragment } from "react-relay";
 import {
@@ -64,6 +64,9 @@ export function RecordNavigation({ recordMetadataKey }: Props) {
                   from={leagueRoute.fullPath}
                   to={dashboardRoute.to}
                   search={(prev) => prev}
+                  activeProps={{
+                    className: "!text-primary",
+                  }}
                 >
                   <LayoutDashboard />
                   <span>Dashboard</span>
