@@ -22,7 +22,7 @@ export function MobileNav({ navData }: { navData: any[] }) {
         <SheetHeader>
           <SheetTitle className="text-left">Fantasy HOF</SheetTitle>
         </SheetHeader>
-        <div className="flex flex-col gap-6 pt-6">
+        <div className="flex flex-col gap-6">
           {navData.map((menu) => (
             <div key={menu.label} className="flex flex-col">
               <h4 className="mb-2 px-2 text-xs font-bold tracking-widest uppercase text-primary/70">
@@ -42,6 +42,22 @@ export function MobileNav({ navData }: { navData: any[] }) {
               </div>
             </div>
           ))}
+          <div className="flex flex-col">
+            <h4 className="mb-2 px-2 text-xs font-bold tracking-widest uppercase text-primary/70">
+              Demo
+            </h4>
+            <div className="flex flex-col border-l-2 border-muted ml-1">
+              <SheetClose asChild>
+                <Link
+                  to={"/$mode"}
+                  params={{ mode: "demo" }}
+                  className="py-3 px-4 text-base transition-colors hover:bg-muted active:bg-muted rounded-r-md"
+                >
+                  Demo
+                </Link>
+              </SheetClose>
+            </div>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
