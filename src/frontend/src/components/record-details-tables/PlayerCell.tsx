@@ -11,6 +11,11 @@ type Props = {
 
 const playerCellFragment = graphql`
   fragment PlayerCellFragment on RecordEntry {
+    memberDetails {
+      member {
+        fullName
+      }
+    }
     ... on PlayerRecordEntry {
       position {
         id
@@ -21,6 +26,8 @@ const playerCellFragment = graphql`
         fullName
         playerImageURL
       }
+      week
+      year
     }
   }
 `;
@@ -47,6 +54,14 @@ export function PlayerCell({ entryKey }: Props) {
         <span className="text-xs text-muted-foreground">
           {entry.position.value === "UNKNOWN" ? "Starter" : entry.position.name}
         </span>
+        <>
+          <span className="xl:hidden text-xs text-muted-foreground">
+            {entry.memberDetails.member.fullName}
+          </span>
+          <span className="lg:hidden text-xs text-muted-foreground">
+            {entry.year} {entry.week && `• Week ${entry.week}`}
+          </span>
+        </>
       </div>
     </div>
   );

@@ -20,12 +20,9 @@ export function AppHeader() {
   return (
     <header className="sticky top-0 flex flex-row h-[66px] items-center justify-between px-4 shadow border bg-background z-50">
       <div className="flex items-center gap-2">
-        {/* Mobile menu button only shows on small screens */}
         <div className="md:hidden">
           <MobileNav navData={navData} />
         </div>
-
-        {/* NavigationMenu inside HeaderNavigation should get hidden on small screens */}
         <HeaderNavigation />
       </div>
       <HeaderProfile />

@@ -5,8 +5,7 @@ import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
 import { RecordCardFragment$key } from "@/__generated__/RecordCardFragment.graphql";
 import { useFragment } from "react-relay";
 import { Link } from "@tanstack/react-router";
-import { Route as dashboardRoute } from "@/routes/$mode/$leagueId/dashboard";
-import { Route as detailsRoute } from "@/routes/$mode/$leagueId/$recordTypeId";
+import { Route as leagueRoute } from "@/routes/$mode/$leagueId";
 import { formatRecordMetricForDisplay } from "@/utilities/utilities";
 
 type Props = {
@@ -60,8 +59,8 @@ export function RecordCard({ recordKey, titleDescription, footerText }: Props) {
         </div>
         <Button variant={"link"} className="font-bold" asChild>
           <Link
-            from={dashboardRoute.fullPath}
-            to={detailsRoute.to}
+            from={leagueRoute.fullPath}
+            to={"/$mode/$leagueId/$recordTypeId"}
             params={{ recordTypeId: record.metadata.recordTypeId }}
           >
             See more

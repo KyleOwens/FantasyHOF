@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<13c7341fed6959d14acddc5a777b4336>>
+ * @generated SignedSource<<eb7724c039b73a2feef71f79f709a5ab>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,11 +14,16 @@ export type MemberCellFragment$data = {
   readonly memberDetails: {
     readonly currentTeamLogoURL: string;
     readonly currentTeamName: string;
+    readonly firstyear: number;
     readonly id: string;
+    readonly lastYear: number;
     readonly member: {
       readonly fullName: string;
     };
+    readonly tenure: number;
   };
+  readonly week?: number;
+  readonly year?: number;
   readonly " $fragmentType": "MemberCellFragment";
 };
 export type MemberCellFragment$key = {
@@ -26,7 +31,25 @@ export type MemberCellFragment$key = {
   readonly " $fragmentSpreads": FragmentRefs<"MemberCellFragment">;
 };
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "year",
+  "storageKey": null
+},
+v1 = [
+  {
+    "alias": null,
+    "args": null,
+    "kind": "ScalarField",
+    "name": "week",
+    "storageKey": null
+  },
+  (v0/*: any*/)
+];
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
@@ -64,6 +87,27 @@ const node: ReaderFragment = {
         {
           "alias": null,
           "args": null,
+          "kind": "ScalarField",
+          "name": "tenure",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "firstyear",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "lastYear",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
           "concreteType": "FantasyMember",
           "kind": "LinkedField",
           "name": "member",
@@ -81,12 +125,33 @@ const node: ReaderFragment = {
         }
       ],
       "storageKey": null
+    },
+    {
+      "kind": "InlineFragment",
+      "selections": [
+        (v0/*: any*/)
+      ],
+      "type": "SeasonalRecordEntry",
+      "abstractKey": null
+    },
+    {
+      "kind": "InlineFragment",
+      "selections": (v1/*: any*/),
+      "type": "WeeklyRecordEntry",
+      "abstractKey": null
+    },
+    {
+      "kind": "InlineFragment",
+      "selections": (v1/*: any*/),
+      "type": "PlayerRecordEntry",
+      "abstractKey": null
     }
   ],
   "type": "RecordEntry",
   "abstractKey": "__isRecordEntry"
 };
+})();
 
-(node as any).hash = "d1919b33ae52f254151ed04ce0cb1980";
+(node as any).hash = "f07b07ae404cbdbcc39b04804f18862b";
 
 export default node;

@@ -146,6 +146,12 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
       columnHelper.display({
         id: "member",
         header: "Record Holder",
+        meta: {
+          className:
+            details.metadata.category === "PLAYER"
+              ? "hidden xl:table-cell"
+              : "",
+        },
         cell: ({ row }) => <MemberCell entryKey={row.original} />,
       }),
     ];
@@ -153,6 +159,9 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
     const tenureColumn = columnHelper.display({
       id: "tenure",
       header: "Tenure",
+      meta: {
+        className: "hidden lg:table-cell",
+      },
       cell: ({ row }) => <MemberTenureCell entryKey={row.original} />,
     });
 
@@ -164,6 +173,9 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
 
     const weekColumn = columnHelper.display({
       id: "week",
+      meta: {
+        className: "hidden lg:table-cell",
+      },
       header: () => <div className="text-center">Week</div>,
       cell: ({ row }) => (
         <div className="font-medium text-center">{row.original.week}</div>
@@ -172,6 +184,9 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
 
     const seasonColumn = columnHelper.display({
       id: "season",
+      meta: {
+        className: "hidden lg:table-cell",
+      },
       header: () => <div className="text-center">Season</div>,
       cell: ({ row }) => (
         <div className="font-medium text-center">{row.original.year}</div>
@@ -181,6 +196,9 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
     const ratioColumn = columnHelper.display({
       id: "ratio-breakdown",
       header: "Breakdown",
+      meta: {
+        className: "hidden lg:table-cell",
+      },
       cell: ({ row }) => <RatioBreakdownCell entryKey={row.original} />,
     });
 
@@ -239,48 +257,53 @@ export function RecordDetailsTable({ recordDetailsKey }: Props) {
           <TableHeader className="bg-muted/50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead
-                    style={{ width: `${header.getSize()}px` }}
-                    key={header.id}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                ))}
+                {headerGroup.headers.map((header) => {
+                  // Extract the className from meta
+                  const columnMeta = header.column?.columnDef?.meta as {
+                    className?: string;
+                  };
+
+                  return (
+                    <TableHead
+                      key={header.id}
+                      style={{ width: `${header.getSize()}px` }}
+                      // Apply the class here
+                      className={columnMeta?.className}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => {
-                const isFirst = row.index + 1 === 1;
-                return (
-                  <TableRow
-                    key={row.id}
-                    className={`group transition-all ${isFirst && "bg-emerald-50"}`}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className={isFirst ? "py-6" : "py-4"}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })
-            ) : (
-              <></>
-            )}
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => {
+                  const columnMeta = cell.column?.columnDef?.meta as {
+                    className?: string;
+                  };
+
+                  return (
+                    <TableCell
+                      key={cell.id}
+                      className={`${columnMeta?.className ?? ""} ${row.index === 0 ? "py-6" : "py-4"}`}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
