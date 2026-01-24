@@ -58,7 +58,7 @@ export function MemberCell({ entryKey }: Props) {
             ? formatNameShort(memberDetails.member.fullName)
             : memberDetails.member.fullName}
         </span>
-        <span className="text-xs text-muted-foreground items-center">
+        <span className="text-xs text-muted-foreground items-center max-w-[120px] truncate">
           {memberDetails.currentTeamName}
         </span>
         <span className="lg:hidden text-xs text-muted-foreground">{`${memberDetails.tenure} year member`}</span>
