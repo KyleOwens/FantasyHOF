@@ -53,7 +53,11 @@ export function AppSidebar({ mode }: Props) {
       : data.me?.leagues?.edges?.map((x) => x.node)) ?? [];
 
   return (
-    <Sidebar className="sticky top-[66px] h-[calc(100vh-66px)] w-80">
+    <Sidebar
+      collapsible="icon"
+      variant="sidebar"
+      className="sticky top-[66px] h-[calc(100vh-66px)] w-80"
+    >
       <SidebarHeader>
         <LeagueNavigation
           leaguesKey={leagues}
