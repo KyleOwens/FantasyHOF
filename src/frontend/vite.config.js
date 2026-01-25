@@ -20,7 +20,6 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "../backend/FantasyHOF/wwwroot",
     emptyOutDir: true,
   },
   envDir: "./",
