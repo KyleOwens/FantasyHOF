@@ -9,7 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "../ui/sidebar";
 import { graphql, useFragment } from "react-relay";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { LeagueNavigationFragment$key } from "@/__generated__/LeagueNavigationFragment.graphql";
@@ -57,6 +62,7 @@ export function LeagueNavigation({ leaguesKey, providersKey, userId }: Props) {
     providersKey,
   ).fantasyProviders;
   const navigate = useNavigate();
+  const { isMobile } = useSidebar();
 
   const isDemo = mode === "demo";
 
@@ -90,7 +96,7 @@ export function LeagueNavigation({ leaguesKey, providersKey, userId }: Props) {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className=" min-w-56 rounded-lg"
-              side="right"
+              side={isMobile ? "bottom" : "right"}
               align="start"
               sideOffset={4}
             >
