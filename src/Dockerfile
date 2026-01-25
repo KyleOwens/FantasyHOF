@@ -4,7 +4,7 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm ci
 
-COPY fonrtend/ ./
+COPY frontend/ ./
 RUN npm run build
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
