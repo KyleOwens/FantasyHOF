@@ -87,7 +87,7 @@ function Index() {
       </section>
       <section className="bg-muted/30">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row gap-12 items-center pb-28">
+          <div className="flex flex-col md:flex-row gap-12 items-center pb-22">
             <div className="flex-1">
               <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
                 <MessageSquareQuote className="text-primary" />
